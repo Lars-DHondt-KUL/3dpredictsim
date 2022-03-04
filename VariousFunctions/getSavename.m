@@ -98,7 +98,7 @@ if isfield(S,'Foot')
     
     
     % mtj related settings
-    if ~isfield(S.Foot,'Model') || strcmp(S.Foot.Model,'mtj')
+    if ~isfield(S.Foot,'Model') || contains(S.Foot.Model,'mtj')
         if isfield(S.Foot,'mtj_muscles') && S.Foot.mtj_muscles
             savenameparts{end+1} = ['MTJm'];
             casfuncfolparts{end+1} = ['MTJm'];

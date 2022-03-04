@@ -11,7 +11,7 @@ AddCasadiPaths();
 N           = S.N;          % number of mesh intervals
 W           = S.W;          % weights optimization
 
-if strcmp(S.Foot.Model,'mtj')
+if contains(S.Foot.Model,'mtj')
     mtj = 1;
 else
     mtj = 0;

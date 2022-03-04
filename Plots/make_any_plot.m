@@ -40,61 +40,61 @@ S.subject = 'Fal_s1';
 
 
 %% Tracking term
-S.TrackSim = 1;
+% S.TrackSim = 1;
 % S.Track.Q_ankle = 1;
 % S.Track.Q_subt = 1;
 
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp';
+S.Foot.Model = 'mtj';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
 
 % Achilles tendon
-% S.AchillesTendonScaleFactor = 1;
+S.AchillesTendonScaleFactor = 1;
 
 % Tibialis anterior according to Rajagopal et al. (2015)
-% S.tib_ant_Rajagopal2015 = 0;
+S.tib_ant_Rajagopal2015 = 0;
 
 % Use geometry polynomials from old simulation (mtpPin)
-% S.useMtpPinPoly = 0;
+S.useMtpPinPoly = 0;
 
 % Use skeletal dynamics from old simulation (mtpPin)
-% S.useMtpPinExtF = 0;
+S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
 % S.MTparams = 'MTc2';
 
 % Contact spheres
-% S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-% S.Foot.contactSphereOffsetY = 1;    % contact spheres are offset in y-direction to match static trial IK
-% S.Foot.contactSphereOffset45Z = 0.010; % contact spheres 4 and 5 are offset to give wider contact area
-% S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction
+S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
+S.Foot.contactSphereOffsetY = 1;    % contact spheres are offset in y-direction to match static trial IK
+S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
+S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction
 
 %% metatarsophalangeal (mtp) joint
-% S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
-% S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
+S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
 % S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
 % S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 
 %% midtarsal joint 
 % (only used if Model = mtj)
-% S.Foot.mtj_muscles = 1;  % joint interacts with- extrinsic foot muscles
+S.Foot.mtj_muscles = 1;  % joint interacts with- extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
-% S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
-% S.Foot.mtj_stiffness = 'MG_exp_v2_table';
-% S.Foot.mtj_sf = 1; 
+S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
+S.Foot.mtj_stiffness = 'MG_exp_table';
+S.Foot.mtj_sf = 1; 
 
 % S.Foot.kMT_li = 200;        % angular stiffness in case of linear
 % S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 % S.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-% S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
-% S.Foot.PF_sf = 2;
-% S.Foot.PF_slack_length = 0.146; % (m) slack length
+S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_sf = 1;
+S.Foot.PF_slack_length = 0.146; % (m) slack length
 
 % Plantar Intrinsic Muscles represented by and ideal force actuator
 % S.Foot.PIM = 0;             % include PIM actuator
@@ -149,6 +149,16 @@ S.Foot.Scaling = 'custom'; % default, custom, personalised
 %     '\debug\Fal_s1_mtj_sc_cspx10_oy_TrackAnkleQSubtQ_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp_v2_table_d01_PF_Natali2010_ls146_FDB_ig21'
 %     };
 
+% results = {
+%     '\debug\Fal_s1_mtj_sc_cspx10_oy_TrackAnkleQSubtQ_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp_v2_table_d01_PF_Natali2010_ls146_FDB_ig21'
+%     '\debug\Fal_s1_mtjc_sc_cspx10_oy_TrackAnkleQSubtQ_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp_v2_table_d01_PF_Natali2010_ls146_FDB_ig21'
+%     };
+
+results = {
+    '/debug\Fal_s1_mtp_sd_MTPp_k17_d05_ig21'
+    '/debug\Fal_s1_mtp_sc_MTPp_k17_d05_ig21'
+    };
+
 if exist('results','var') && ~isempty(results)
     filteredResults = {length(results)};
     for i=1:length(results)
@@ -166,13 +176,15 @@ else
     % get filter criteria
     [~,~,criteria] = getSavename(S);
     
-%     criteria{end+1} = 'not_PIM';
+    criteria{end+1} = 'not_PIM';
 %     criteria{end+1} = 'not_FDB';
-%     criteria{end+1} = 'not_o1x25';
-%     criteria{end+1} = 'not_Track';
-%     criteria{end+1} = 'not_table_x5';
-%     criteria{end+1} = 'not_test';
-%     criteria{end+1} = 'not_MTc';
+    criteria{end+1} = 'not_o1x25';
+    criteria{end+1} = 'not_Track';
+    criteria{end+1} = 'not_table_x5';
+    criteria{end+1} = 'not_test';
+    criteria{end+1} = 'not_mtjc';
+    criteria{end+1} = 'not_o45z10';
+    criteria{end+1} = 'not_MTc';
     
     % filter filenames
     [filteredResults] = filterResultfolderByParameters(pathResult,criteria);
@@ -186,15 +198,15 @@ else
 end
 ref = {};
 
-ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sd_MTPp_k17_d05_ig21_pp.mat']);
-% ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sc_MTPp_k17_d05_ig21_pp.mat']);
+% ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sd_MTPp_k17_d05_ig21_pp.mat']);
+ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sc_MTPp_k17_d05_ig21_pp.mat']);
 % ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sc_cspx10_oy_MTPp_k17_d05_ig21_pp.mat']);
 % ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sd_MTPm_k1_d05_ig21_pp.mat']);
 % ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sc_MTPm_k1_d01_ig21_pp.mat']);
 
 
 filteredResultsWithRef = filteredResults';
-filteredResultsWithRef = [ref, filteredResults]';
+% filteredResultsWithRef = [ref, filteredResults]';
 % filteredResultsWithRef = [filteredResults, ref]';
 
 
@@ -205,7 +217,7 @@ ResultsFile = filteredResultsWithRef;
 % compare_Lundgren_2008(ResultsFile{1});
 
 %%
-LegNames = {' '};
+LegNames = {'scaled default', 'scaled custom'};
 
 % LegNames = {'mtp-model, passive','muscle-driven, PF Gefen (2002)','muscle-driven, PF Natali et al. (2010)',...
 %     'muscle-driven, 5x PF Natali et al. (2010)', 'passive, 5x PF Natali et al. (2010)',...
@@ -220,7 +232,7 @@ figNamePrefix = 'none';
 %%% select figures to make
 makeplot.kinematics                     = 1; % selected joint angles
 makeplot.kinetics                       = 1; % selected joint torques
-makeplot.ankle_musc                     = 1; % ankle muscles
+makeplot.ankle_musc                     = 0; % ankle muscles
 makeplot.GRF                            = 0; % ground interaction
 makeplot.compareLiterature              = 0; % mtj and mtp Caravaggi 2018
 makeplot.compareTakahashi17             = 0; % "distal to segment" power analysis
@@ -233,7 +245,7 @@ makeplot.power                          = 0; % datailed power decomposition
 makeplot.work                           = 0; % same as power, but work over GC
 makeplot.work_bar                       = 0; % positive, negative and net work bar plot
 makeplot.work_bar_small                 = 0; % positive, negative and net work bar plot
-makeplot.power_main                     = 1; % main power components of foot
+makeplot.power_main                     = 0; % main power components of foot
 makeplot.spatiotemp                     = 0; % stridelength etc.
 makeplot.ankle_correlation              = 0; % correlation of ankle 
 makeplot.E_muscle_bar                   = 0; % muscle metabolic energy totals

@@ -40,8 +40,8 @@ for f = 1:nF
             ct= ct+1;
             if (~exist(OutName,'file') || S.OverWrite == 1)
                 try
-                    disp(filename);
                     f_LoadSim_Gait92_FootModel(DataFolders{f},filename);
+                    disp(filename);
                 catch
                     disp([filename ' failed']);
                 end

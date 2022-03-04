@@ -59,17 +59,17 @@ S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be save
 
 
 %% Tracking term
-S.TrackSim = 1;
+S.TrackSim = 0;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
-S.Track.Q_ref = 'mtj_custom';
+S.Track.Q_ref = 'mtjc_custom';
 S.W.Q_track = 1e4;
 
 
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp';
+S.Foot.Model = 'mtjc';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
@@ -87,7 +87,7 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-% S.MTparams = 'MTc2';
+S.MTparams = 'MTc2';
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
@@ -97,9 +97,9 @@ S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction 
 
 %% metatarsophalangeal (mtp) joint
 S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
-S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 17;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 0.5;          % additional damping of the joint (Nms/rad)
+S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 S.Foot.mtp_tau_pass = 0;    % use passive bushing torque
 
 %% midtarsal joint 
@@ -115,7 +115,7 @@ S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
 S.Foot.PF_sf = 1;   
 S.Foot.PF_slack_length = 0.146; % (m) slack length
 

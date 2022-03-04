@@ -29,6 +29,8 @@ if ~isfield(S,'OsimFileName')
         OsimFileName = [OsimFileName '_' S.MTparams];
     end
     S.OsimFileName = OsimFileName;
+else
+    ExternalFunc = S.OsimFileName;
 end
 
 %% construct external function file name

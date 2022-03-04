@@ -75,6 +75,14 @@ Data.IK_mtj_custom.Qall_std = Qref.subject1.Qs.std;
 Data.IK_mtj_custom.Qdotall_mean = Qref.subject1.Qdots.mean;
 Data.IK_mtj_custom.Qdotall_std = Qref.subject1.Qdots.std;
 
+load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_Fal_s1_mtjc_sc_FDB_MTc2.mat');
+Data.IK_mtjc_custom.colheaders = Qref.subject1.colheaders;
+Data.IK_mtjc_custom.Qall_mean = Qref.subject1.Qs.mean;
+Data.IK_mtjc_custom.Qall_std = Qref.subject1.Qs.std;
+Data.IK_mtjc_custom.Qdotall_mean = Qref.subject1.Qdots.mean;
+Data.IK_mtjc_custom.Qdotall_std = Qref.subject1.Qdots.std;
+
+
 Data.ID_original.colheaders = ExperimentalData.Q.subject1.Qs.colheaders;
 Data.ID_original.Tall_mean = ExperimentalData.Torques.subject1.mean;
 Data.ID_original.Tall_std = ExperimentalData.Torques.subject1.std;

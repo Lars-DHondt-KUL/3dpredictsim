@@ -12,7 +12,7 @@ clc
 %% Inputs
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
-FootModel = 'mtj'; % mtp or mtj
+FootModel = 'mtjc'; % mtp or mtj
 FootScaling = 'custom'; % default, custom, personalised
 FDB = 1;
 tib_ant_Rajagopal2015 = 0;
@@ -51,11 +51,12 @@ elseif MTcustom == 2
 end
 % Manually overwrite OpenSim file name if wanted
 % OsimFileName = 'CP3_T0_scaled_MRI_v7_scaledMT_right';
-
+% OsimFileName = 'Hamner_modified';
 
 % Modelpath
 ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
 disp(OsimFileName)
+
 
 % Path to save the polynomials
 PolyFolder = OsimFileName;

@@ -68,7 +68,7 @@ for inr=1:nr
     
     has_no_tmt = 1;
     if isfield(R.S,'Foot')
-        has_no_mtj = ~strcmp(R.S.Foot.Model,'mtj');
+        has_no_mtj = ~contains(R.S.Foot.Model,'mtj');
     else
         has_no_mtj = sum( contains(R.colheaders.joints,'mtj_angle_r') >0);
     end

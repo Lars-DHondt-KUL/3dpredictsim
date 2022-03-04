@@ -222,10 +222,23 @@ if ~isfield(S,'Periodic')
     S.Periodic = false;
 end
 
+% model used
+if ~isfield(S.Foot,'Model')
+    S.Foot.Model = 'mtp';
+    S.Foot.mtp_muscles = 0;
+    S.Foot.contactStiffnessFactor = 1;
+    S.Foot.contactSphereOffsetY = 0;
+    S.Foot.contactSphereOffset45Z = 0;
+    S.Foot.contactSphereOffset1X = 0;
+    S.useMtpPinExtF = 0;
+    S.TrackSim = 0;
+    S.Foot.PIM = 0;
+    S.Foot.mtj_muscles = 0;
+end
 
 % default IK file to determine bounds
 if ~isfield(S,'IKfile_Bounds')
-    if strcmp(S.Foot.Model,'mtj')
+    if contains(S.Foot.Model,'mtj')
         S.IKfile_Bounds = 'OpenSimModel\IK_Bounds_Default_mtj.mat';
     elseif strcmp(S.Foot.Model,'mtp')
         S.IKfile_Bounds = 'OpenSimModel\IK_Bounds_Default.mat';
@@ -234,7 +247,7 @@ end
 
 % default IK file for initial guess (when used data-informed guess)
 if ~isfield(S,'IKfile_guess')
-    if strcmp(S.Foot.Model,'mtj')
+    if contains(S.Foot.Model,'mtj')
         S.IKfile_guess = 'OpenSimModel\IK_Guess_Default_mtj.mat';
     elseif strcmp(S.Foot.Model,'mtp')
         S.IKfile_guess = 'OpenSimModel\IK_Guess_Default.mat';

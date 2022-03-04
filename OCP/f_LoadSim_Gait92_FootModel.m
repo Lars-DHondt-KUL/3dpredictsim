@@ -32,7 +32,7 @@ S = Sopt;
 body_mass = S.mass;
 body_weight = S.mass*9.81;
     
-if strcmp(S.Foot.Model,'mtj')
+if contains(S.Foot.Model,'mtj')
     mtj = 1;
 else
     mtj = 0;
