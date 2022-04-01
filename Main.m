@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This script serves as the main file for the branch extended_foot_model. 
 % It allows to specify the settings, solve, and post-process a single gait 
 % simulation.
@@ -62,14 +62,14 @@ S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be save
 S.TrackSim = 0;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
-S.Track.Q_ref = 'mtjc_custom';
+S.Track.Q_ref = 'mtjc3_custom';
 S.W.Q_track = 1e4;
 
 
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc';
+S.Foot.Model = 'mtjc5';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
@@ -87,11 +87,11 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = 'MTc2';
+S.MTparams = 'MTc2';    % MTc2 Sv50
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactSphereOffsetY = 1;    % contact spheres are offset in y-direction to match static trial IK
+S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
 
@@ -101,13 +101,14 @@ S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joi
 S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
 S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 S.Foot.mtp_tau_pass = 0;    % use passive bushing torque
+S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
 
 %% midtarsal joint 
 % (only used if Model = mtj)
 S.Foot.mtj_muscles = 1;  % joint interacts with- extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
 S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
-S.Foot.mtj_stiffness = 'MG_exp_v2_table';
+S.Foot.mtj_stiffness = 'MG_exp5_table'; % 'MG_exp5_table' 'MG_exp_table'
 S.Foot.mtj_sf = 1; 
 
 S.Foot.kMT_li = 300;        % angular stiffness in case of linear
@@ -125,7 +126,7 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 1;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
 
 %% Initial guess
 %-------------------------------------------------------------------------%

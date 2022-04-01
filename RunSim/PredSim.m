@@ -39,8 +39,10 @@ if S.Foot.contactStiffnessFactor == 10
 elseif S.Foot.contactStiffnessFactor == 5
     ExternalFunc = [ExternalFunc '_cspx5'];
 end
-if S.Foot.contactSphereOffsetY
+if S.Foot.contactSphereOffsetY == 1
     ExternalFunc = [ExternalFunc '_oy'];
+elseif S.Foot.contactSphereOffsetY == 2
+    ExternalFunc = [ExternalFunc '_oy2'];
 end
 if S.Foot.contactSphereOffset45Z
     ExternalFunc = [ExternalFunc '_o45z' num2str(S.Foot.contactSphereOffset45Z*1e3)];

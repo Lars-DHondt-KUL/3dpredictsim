@@ -8,8 +8,15 @@ pathmain = pwd;
 
 
 %%
-Modelpath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_pinMTJ_sc.osim'];
-PolyFolder = [pathRepo '\Polynomials\Fal_s1_mtj_sc'];
+% ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_pinMTJ_sc.osim'];
+% pathPoly = [pathRepo '\Polynomials\Fal_s1_mtj_sc'];
+
+ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc5_sc.osim'];
+pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc5_sc'];
+
+if ~isfolder(pathPoly)
+    mkdir(pathPoly);
+end
 
 ligament_names = {'LongPlantar1_r','LongPlantar2_r','LongPlantar3_r','LongPlantar4_r',... % long plantar ligament
     'CalcaneoCuboidPlantar1Mus_r','CalcaneoCuboidPlantar2Mus_r',... % short plantar ligament
@@ -27,7 +34,7 @@ mrk = {'-','--',':','-.'};
 
 %% Initialise model
 import org.opensim.modeling.*;
-model = Model(Modelpath);
+model = Model(ModelPath);
 s = model.initSystem;
 
 
@@ -269,7 +276,7 @@ for j=1:p
     F_lig_G_exp(:,j) = sigma_j*sf2*pcsa_0(j);
 end
 
-F_lig_G_exp(:,5) = F_lig_G_exp(:,5)*0.5; % adjust 1 ligament part
+% F_lig_G_exp(:,5) = F_lig_G_exp(:,5)*0.5; % adjust 1 ligament part
 
 M_lig_G_exp = d_lig.*F_lig_G_exp;
 M_mtj_G_exp = sum(M_lig_G_exp,2);
@@ -316,7 +323,7 @@ for j=1:p
     F_lig_G_exp3(:,j) = sigma_j*sf3*pcsa_0(j);
 end
 
-F_lig_G_exp3(:,5) = F_lig_G_exp3(:,5)*0.5; % adjust 1 ligament part
+% F_lig_G_exp3(:,5) = F_lig_G_exp3(:,5)*0.5; % adjust 1 ligament part
 
 M_lig_G_exp3 = d_lig.*F_lig_G_exp3;
 M_mtj_G_exp3 = sum(M_lig_G_exp3,2);
@@ -360,41 +367,41 @@ ylabel('mtj moment (Nm)')
 
 
 %%
-modelfun = @(coeff,x) coeff(1) + coeff(2)*exp((coeff(3)+x).*coeff(4)) + coeff(5).*x;
-
-coeff_0 = [0,-0.3,0.2,10,-10];
-M_tmp = modelfun(coeff_0,q_mtj);
+% modelfun = @(coeff,x) coeff(1) + coeff(2)*exp((coeff(3)+x).*coeff(4)) + coeff(5).*x;
+% 
+% coeff_0 = [0,-0.3,0.2,10,-10];
+% M_tmp = modelfun(coeff_0,q_mtj);
 
 % figure(fg5)
 % plot(q_mtj*180/pi,M_tmp,'--','DisplayName','IG a + b*exp{(c+q)*d} + e*q')
 
 %%
-idx_fit = find(q_mtj*180/pi<=q_max);
-x_fit = q_mtj(idx_fit);
-y_fit = M_mtj_G(idx_fit);
-
-
-mdl = fitnlm(x_fit,y_fit,modelfun,coeff_0);
-coeff_sol = table2array(mdl.Coefficients(:,1));
-f_getMtjLigamentMoment = @(q) modelfun(coeff_sol,q);
+% idx_fit = find(q_mtj*180/pi<=q_max);
+% x_fit = q_mtj(idx_fit);
+% y_fit = M_mtj_G(idx_fit);
+% 
+% 
+% mdl = fitnlm(x_fit,y_fit,modelfun,coeff_0);
+% coeff_sol = table2array(mdl.Coefficients(:,1));
+% f_getMtjLigamentMoment = @(q) modelfun(coeff_sol,q);
 
 
 %%
 
-M_mtj_func = f_getMtjLigamentMoment(q_mtj);
-
-figure(fg5)
-plot(q_mtj*180/pi,M_mtj_func,'--','DisplayName','a + b*exp{(c+q)*d} + e*q')
+% M_mtj_func = f_getMtjLigamentMoment(q_mtj);
+% 
+% figure(fg5)
+% plot(q_mtj*180/pi,M_mtj_func,'--','DisplayName','a + b*exp{(c+q)*d} + e*q')
 
 %%
 
-poly_GM = polyfit(q_mtj,M_mtj_G,5);
-figure(fg5)
-plot(q_mtj*180/pi,polyval(poly_GM,q_mtj),'--','DisplayName','5th order polynomial')
-
-poly_GM = polyfit(q_mtj,M_mtj_G,15);
-figure(fg5)
-plot(q_mtj*180/pi,polyval(poly_GM,q_mtj),'--','DisplayName','15th order polynomial')
+% poly_GM = polyfit(q_mtj,M_mtj_G,5);
+% figure(fg5)
+% plot(q_mtj*180/pi,polyval(poly_GM,q_mtj),'--','DisplayName','5th order polynomial')
+% 
+% poly_GM = polyfit(q_mtj,M_mtj_G,15);
+% figure(fg5)
+% plot(q_mtj*180/pi,polyval(poly_GM,q_mtj),'--','DisplayName','15th order polynomial')
 
 %%
 % coeff = poly_GM(end:-1:1);
@@ -411,26 +418,26 @@ plot(q_mtj*180/pi,polyval(poly_GM,q_mtj),'--','DisplayName','15th order polynomi
 % plot(q_mtj*180/pi,M_li,'-.','DisplayName','5e-th order polynomial')
 
 %% 
-% Adapt the moment to not fall back to 0 after a peak, but maintain its
-% peak value.
-M_mtj_G2 = M_mtj_G;
-
-M_mtj_qn = M_mtj_G(q_mtj<0);
-[M_max,idx_max] = max(M_mtj_qn);
-q_n = q_mtj(q_mtj<0);
-q_max = q_n(idx_max);
-M_mtj_G2(q_mtj<q_max) = M_max;
-
-M_mtj_qp = M_mtj_G(q_mtj>0);
-[M_min,idx_min] = min(M_mtj_qp);
-q_p = q_mtj(q_mtj>0);
-q_min = q_p(idx_min);
-M_mtj_G2(q_mtj>q_min) = M_min;
-
-% figure(fg5)
-% plot(q_mtj*180/pi,M_mtj_G2,'--','DisplayName','plateau-ed')
-% ylim([M_min,M_max]*1.2)
-ylim([-100,20])
+% % Adapt the moment to not fall back to 0 after a peak, but maintain its
+% % peak value.
+% M_mtj_G2 = M_mtj_G;
+% 
+% M_mtj_qn = M_mtj_G(q_mtj<0);
+% [M_max,idx_max] = max(M_mtj_qn);
+% q_n = q_mtj(q_mtj<0);
+% q_max = q_n(idx_max);
+% M_mtj_G2(q_mtj<q_max) = M_max;
+% 
+% M_mtj_qp = M_mtj_G(q_mtj>0);
+% [M_min,idx_min] = min(M_mtj_qp);
+% q_p = q_mtj(q_mtj>0);
+% q_min = q_p(idx_min);
+% M_mtj_G2(q_mtj>q_min) = M_min;
+% 
+% % figure(fg5)
+% % plot(q_mtj*180/pi,M_mtj_G2,'--','DisplayName','plateau-ed')
+% % ylim([M_min,M_max]*1.2)
+% ylim([-100,20])
 
 %%
 % import casadi.*
@@ -440,7 +447,7 @@ ylim([-100,20])
 % M_mtj_cas = f_getMtjLigamentMoment(q_mtj);
 % plot(q_mtj*180/pi,full(M_mtj_cas),'--','DisplayName','casadi function')
 % 
-% f_getMtjLigamentMoment.save((fullfile(PolyFolder,'f_getMtjLigamentMoment')));
+% f_getMtjLigamentMoment.save((fullfile(pathPoly,'f_getMtjLigamentMoment')));
 
 %%
 import casadi.*
@@ -450,27 +457,27 @@ figure(fg5)
 M_mtj_cas = f_getMtjLigamentMoment_exp(q_mtj);
 plot(q_mtj*180/pi,full(M_mtj_cas),'-','DisplayName','exp, scaled at \lambda = 1.10')
 
-% f_getMtjLigamentMoment_exp.save((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp')));
-% 
-% % assume long plantar ligament removed
-% M_mtj_G_exp_d = sum(M_lig_G_exp(:,5:end),2);
-% f_getMtjLigamentMoment_exp_d = interpolant('f_getMtjLigamentMoment_exp_d','bspline',{q_mtj},M_mtj_G_exp_d);
-% f_getMtjLigamentMoment_exp_d.save((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp_d')));
-% 
-% % assume short plantar ligament also removed
-% M_mtj_G_exp_e = sum(M_lig_G_exp(:,7:end),2);
-% f_getMtjLigamentMoment_exp_e = interpolant('f_getMtjLigamentMoment_exp_e','bspline',{q_mtj},M_mtj_G_exp_e);
-% f_getMtjLigamentMoment_exp_e.save((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp_e')));
-% 
-% % assume spring ligament also removed
-% M_mtj_G_exp_f = sum(M_lig_G_exp(:,10:end),2);
-% f_getMtjLigamentMoment_exp_f = interpolant('f_getMtjLigamentMoment_exp_f','bspline',{q_mtj},M_mtj_G_exp_f);
-% f_getMtjLigamentMoment_exp_f.save((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp_f')));
+f_getMtjLigamentMoment_exp.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp')));
+
+% assume long plantar ligament removed
+M_mtj_G_exp_d = sum(M_lig_G_exp(:,5:end),2);
+f_getMtjLigamentMoment_exp_d = interpolant('f_getMtjLigamentMoment_exp_d','bspline',{q_mtj},M_mtj_G_exp_d);
+f_getMtjLigamentMoment_exp_d.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_d')));
+
+% assume short plantar ligament also removed
+M_mtj_G_exp_e = sum(M_lig_G_exp(:,7:end),2);
+f_getMtjLigamentMoment_exp_e = interpolant('f_getMtjLigamentMoment_exp_e','bspline',{q_mtj},M_mtj_G_exp_e);
+f_getMtjLigamentMoment_exp_e.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_e')));
+
+% assume spring ligament also removed
+M_mtj_G_exp_f = sum(M_lig_G_exp(:,10:end),2);
+f_getMtjLigamentMoment_exp_f = interpolant('f_getMtjLigamentMoment_exp_f','bspline',{q_mtj},M_mtj_G_exp_f);
+f_getMtjLigamentMoment_exp_f.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_f')));
 
 
 %%
 
-% f_test = Function.load((fullfile(PolyFolder,'f_getMtjLigamentMoment')));
+% f_test = Function.load((fullfile(pathPoly,'f_getMtjLigamentMoment')));
 % 
 % figure(fg5)
 % M_mtj_cas_t = f_test(q_mtj);
@@ -484,26 +491,26 @@ figure(fg5)
 M_mtj_cas5 = f_getMtjLigamentMoment_exp5(q_mtj);
 plot(q_mtj*180/pi,full(M_mtj_cas5),'-','DisplayName','exp, scaled at \lambda = 1.05')
 
-% f_getMtjLigamentMoment_exp5.save((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp5')));
+f_getMtjLigamentMoment_exp5.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5')));
 
 %%
-M_mtj_G_exp4 = M_mtj_G_exp3;
-M_mtj_G_exp4(q_mtj<0) = M_mtj_G_exp4(q_mtj<0)*2;
+% M_mtj_G_exp4 = M_mtj_G_exp3;
+% M_mtj_G_exp4(q_mtj<0) = M_mtj_G_exp4(q_mtj<0)*2;
+% 
+% import casadi.*
+% f_getMtjLigamentMoment_exp_v2 = interpolant('f_getMtjLigamentMoment_exp_v2','bspline',{q_mtj},M_mtj_G_exp4);
+% 
+% figure(fg5)
+% M_mtj_cas4 = f_getMtjLigamentMoment_exp_v2(q_mtj);
+% plot(q_mtj*180/pi,full(M_mtj_cas4),'-','DisplayName','exp, scaled at \lambda = 1.10, M(q<0)x2')
 
-import casadi.*
-f_getMtjLigamentMoment_exp_v2 = interpolant('f_getMtjLigamentMoment_exp_v2','bspline',{q_mtj},M_mtj_G_exp4);
-
-figure(fg5)
-M_mtj_cas4 = f_getMtjLigamentMoment_exp_v2(q_mtj);
-plot(q_mtj*180/pi,full(M_mtj_cas4),'-','DisplayName','exp, scaled at \lambda = 1.10, M(q<0)x2')
-
-f_getMtjLigamentMoment_exp_v2.save((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp_v2')));
+% f_getMtjLigamentMoment_exp_v2.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_v2')));
 
 %%
 
-for i=1:length(ligament_names)
-    disp([ligament_names{i}(1:end-2) ' A_0 = ' num2str(pcsa_0(i)*sf2,2) ' mm^2'])
-end
+% for i=1:length(ligament_names)
+%     disp([ligament_names{i}(1:end-2) ' A_0 = ' num2str(pcsa_0(i)*sf2,2) ' mm^2'])
+% end
 
 %%
 

@@ -168,7 +168,19 @@ if isfield(S,'Foot')
             end
         end
 
-
+    elseif isfield(S.Foot,'mtp_M_PF') && ~isempty(S.Foot.mtp_M_PF) && S.Foot.mtp_M_PF
+        if isfield(S.Foot,'PF_stiffness') && ~isempty(S.Foot.PF_stiffness)
+            savenameparts{end+1} = ['PF_' S.Foot.PF_stiffness];
+            casfuncfolparts{end+1} = ['PF_' S.Foot.PF_stiffness];
+        end
+        if isfield(S.Foot,'PF_sf') && S.Foot.PF_sf~=1
+            savenameparts{end} = [savenameparts{end} '_x' num2str(S.Foot.PF_sf)];
+        end
+        if isfield(S.Foot,'PF_slack_length') && ~isempty(S.Foot.PF_slack_length)
+            savenameparts{end+1} = ['ls' num2str(S.Foot.PF_slack_length*1000)];
+            casfuncfolparts{end+1} = ['ls' num2str(S.Foot.PF_slack_length*1000)];
+        end
+        
     end
       
 end

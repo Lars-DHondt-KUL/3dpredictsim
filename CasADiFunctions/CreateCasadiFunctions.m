@@ -431,13 +431,13 @@ if mtj
 
     if strcmp(S.Foot.mtj_stiffness,'MG_exp_table')
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp')));
-        M_mtj = f_getMtjLigamentMoment(qin1)*S.Foot.mtj_sf - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
+        M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
     elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table')
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp5')));
-        M_mtj = f_getMtjLigamentMoment(qin1)*S.Foot.mtj_sf - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
+        M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
     elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_v2_table')
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp_v2')));
-        M_mtj = f_getMtjLigamentMoment(qin1)*S.Foot.mtj_sf - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
+        M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
     else
         M_mtj = getMidtarsalJointPassiveMoment(qin1,qdotin1,S);
     end
@@ -447,6 +447,22 @@ if mtj
 
     f_PF_stiffness = f_getPlantarFasciaStiffnessModelCasADiFunction(S.Foot.PF_stiffness,...
         'ls',S.Foot.PF_slack_length);
+
+elseif isfield(S.Foot,'mtp_M_PF') && ~isempty(S.Foot.mtp_M_PF) && S.Foot.mtp_M_PF
+
+    qin1     = SX.sym('qin1',1);
+
+    f_PF_stiffness = f_getPlantarFasciaStiffnessModelCasADiFunction(S.Foot.PF_stiffness,...
+        'ls',S.Foot.PF_slack_length);
+
+    [l_PF,~,MA_PF] =  f_lLi_vLi_dM(qin1,0);
+
+    F_PF = f_PF_stiffness(l_PF)*S.Foot.PF_sf;
+     
+    M_PF_mtp = MA_PF*F_PF;
+
+    f_M_PF_mtp = Function('f_M_PF_mtp',{qin1}, {M_PF_mtp},{'qin1'},{'M_PF_mtp'});
+
 end
 
 
@@ -597,6 +613,12 @@ else
         Q_SX(jointi.mtp.r), Qdot_SX(jointi.mtp.r)); %...
     %     + f_PassiveMoments(k_pass.mtp, theta.pass.mtp, Q_SX(jointi.mtp.r),...
     %     Qdot_SX(jointi.mtp.r));
+    Tau_passj.mtp.all = [Tau_passj.mtp.l, Tau_passj.mtp.r];
+end
+
+if isfield(S.Foot,'mtp_M_PF') && ~isempty(S.Foot.mtp_M_PF) && S.Foot.mtp_M_PF
+    Tau_passj.mtp.l = Tau_passj.mtp.l + f_M_PF_mtp(Q_SX(jointi.mtp.l));
+    Tau_passj.mtp.r = Tau_passj.mtp.r + f_M_PF_mtp(Q_SX(jointi.mtp.r));
     Tau_passj.mtp.all = [Tau_passj.mtp.l, Tau_passj.mtp.r];
 end
 

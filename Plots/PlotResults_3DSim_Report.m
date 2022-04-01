@@ -125,7 +125,7 @@ for inr=1:nr
 
     x = 1:(100-1)/(size(R.Qs,1)-1):100;
     istance = 1:1:ceil(R.Event.Stance)+10;
-    ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,8)>5);
+    ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,17)>5);
     istance0 = 1:1:ceil(R.Event.Stance);
     iswing = istance0(end)+1:100;
     xst_10 = linspace(1,110,length(istance));
@@ -303,7 +303,7 @@ for inr=1:nr
     Cs = CsV(inr,:);
     
     if inr==1
-        hleg = figure('Position',[fpos(3,1),500,fsq*0.5]);
+        hleg = figure('Position',[fpos(3,1),500,fwide]);
         subplot(1,5,1)
         hold on
         plot(inr,R.COT,'o','Color',Cs,'MarkerFaceColor',Cs,'DisplayName',LegName);
@@ -414,7 +414,7 @@ for inr=1:nr
                 end
                 % X-axis
                 L = get(gca,'XLim');
-                set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+%                 set(gca,'XTick',linspace(L(1),L(2),NumTicks))
                 if i > 3
                     xlabel('Gait cycle (%)','Fontsize',label_fontsize);
                 end
@@ -2140,19 +2140,30 @@ for inr=1:nr
                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
                 xlim([0,100])
                 
+%                 subplot(2,4,3)
+%                 hold on
+%                 if R.S.Foot.PIM
+%                     plot(x,F_PIM/(R.body_mass*9.81)*100,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+%                 end
+%                 title('Plantar intr. musc. force')
+%                 xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+%                 ylabel('Force/BW (%)','Fontsize',label_fontsize);
+%                 axis tight
+%                 yl = get(gca, 'ylim');
+%                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+%                 xlim([0,100])
+                
                 subplot(2,4,3)
                 hold on
-                if R.S.Foot.PIM
-                    plot(x,F_PIM/(R.body_mass*9.81)*100,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
-                end
-                title('Plantar intr. musc. force')
+                plot(x,M_mtj_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                title('Plantar fascia moment mtj')
                 xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-                ylabel('Force/BW (%)','Fontsize',label_fontsize);
+                ylabel('Moment (Nm)','Fontsize',label_fontsize);
                 axis tight
                 yl = get(gca, 'ylim');
                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
                 xlim([0,100])
-                
+
 %                 subplot(2,3,4)
 %                 F_At = R.FT(:,iSol)+R.FT(:,iGas)+R.FT(:,iGas2);
 %                 hold on
@@ -3147,8 +3158,8 @@ for inr=1:nr
 
 %         disp(tmp_str);
 % 
-%         tmpxcs = xcorr(q_ankle_ref(istance0),q_ankle_sim(istance0),0,'coeff');
-%         disp(['Stance phase Q: R = ' num2str(tmpxcs,2)])
+        tmpxcs = xcorr(q_ankle_ref(istance0),q_ankle_sim(istance0),0,'coeff');
+        disp(['Stance phase Q: R = ' num2str(tmpxcs,2)])
 %         tmpxcs = xcorr(Qref.Tall_mean(istance0,iankle_ref),R.Tid(istance0,iankle),0,'coeff');
 %         disp(['Stance phase T: R = ' num2str(tmpxcs,2)])
 %         
@@ -3165,7 +3176,7 @@ for inr=1:nr
         
         
         if inr==1
-            h23 = figure('Position',[fpos(4,:),fwide*0.5]);
+            h23 = figure('Position',[fpos(4,:),fwide*0.7]);
             
             meanPlusSTD = (Qref.Qall_mean(:,iankle_ref) + 2*Qref.Qall_std(:,iankle_ref));
             meanMinusSTD = (Qref.Qall_mean(:,iankle_ref) - 2*Qref.Qall_std(:,iankle_ref));
@@ -3175,7 +3186,7 @@ for inr=1:nr
             meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
             meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
             
-            subplot(121)
+            subplot(3,2,[1,3])
             
             hold on
             fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
@@ -3193,11 +3204,11 @@ for inr=1:nr
         
 
         figure(h23)
-        subplot(121)
+        subplot(3,2,[1,3])
         hold on
         plot(x,q_ankle_sim,'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
-        if inr==nr
-%             plot(x(iswing(aa:end)),q_ankle_sim(iswing(1:end-aa+1)),'--','linewidth',2,'Color',CsV(inr,:),'DisplayName',['Swing shifted ' num2str(aa) '%GC']);
+        if tmpxcs > 0.6
+            plot(x(iswing(aa:end)),q_ankle_sim(iswing(1:end-aa+1)),'--','linewidth',2,'Color',CsV(inr,:),'DisplayName',['Swing shifted ' num2str(aa) '%GC']);
         end
         if inr==nr
             axis tight
@@ -3205,8 +3216,8 @@ for inr=1:nr
             yl=[yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)];
             ylim(yl)
             xlim([0,100])
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-            ylabel('Angle (°)','Fontsize',label_fontsize);
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('Ankle angle (°)','Fontsize',label_fontsize);
 %             title('Ankle with events')
             
 %             plot([1,1]*0,yl,'-ok','DisplayName','Heel strike');
@@ -3222,6 +3233,30 @@ for inr=1:nr
            set(lh23,'position',lhPos);
            title(lh23,'Legend')
         end
+
+        if inr==1
+            subplot(3,2,5)
+            hold on
+            meanPlusSTD = Data.GRF.Fmean(:,2) + 2*Data.GRF.Fstd(:,2);
+            meanMinusSTD = Data.GRF.Fmean(:,2) - 2*Data.GRF.Fstd(:,2);
+            stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
+            intervalQ = 1:stepQ:size(R.Qs,1);
+            sampleQ = 1:size(R.Qs,1);
+            meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
+            meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
+            fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Measured');
+            alpha(.25);
+        end
+
+        subplot(3,2,5)
+        hold on
+        l = plot(R.GRFs(:,2),'-','Color',CsV(inr,:));
+        axis tight
+        yl = get(gca, 'ylim');
+        ylim([yl(1)-0.1*abs(sum(yl)),yl(2)+0.1*abs(sum(yl))])
+        xlim([0,100])
+        ylabel('GRF (%BW)')
+        xlabel('Gait cycle (%)','Fontsize',label_fontsize);
 
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h23,'PaperPositionMode','auto')
@@ -3949,9 +3984,9 @@ for inr=1:nr
            if i==1
                ylabel('T ankle (Nm)')
            end
-           if i==nr_musi_ankle-1
-               lh30=legend('location','northeast','Interpreter',lgInt);
-           end
+%            if i==nr_musi_ankle-1
+%                lh30=legend('location','northeast','Interpreter',lgInt);
+%            end
            
            subplot(4,nr_musi_ankle,nr_musi_ankle+i)
            hold on
@@ -4002,10 +4037,10 @@ for inr=1:nr
             
         end
 
-       lhPos = lh30.Position;
-       lhPos(1) = lhPos(1)+0.1;
-       lhPos(2) = lhPos(2)+0.1;
-       set(lh30,'position',lhPos);
+%        lhPos = lh30.Position;
+%        lhPos(1) = lhPos(1)+0.1;
+%        lhPos(2) = lhPos(2)+0.1;
+%        set(lh30,'position',lhPos);
 
         if R.S.Foot.PIM
             subplot(4,nr_musi_ankle,3*nr_musi_ankle)
@@ -4018,6 +4053,11 @@ for inr=1:nr
             plot(x,M_mtp_PIM,'Color',CsV(inr,:),'DisplayName',LegName);
         end
         
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h30,'PaperPositionMode','auto')
+            print(h30,[figNamePrefix '_musc_moment'],'-dpng','-r0')
+            print(h30,[figNamePrefix '_musc_moment'],'-depsc')
+        end
     end
     
     %%
@@ -4275,6 +4315,62 @@ for inr=1:nr
     end
 
     %%
+
+
+    if makeplot.windlass_mtp
+        if inr==1
+            h34 = figure('Position',[fpos(4,:),fwide]);
+        end
+        
+        figure(h34)
+        subplot(2,2,1)
+        hold on
+        plot(x,R.Qs(:,imtp),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+        title('MTP angle')
+%         xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+        ylabel('Angle (°)','Fontsize',label_fontsize);
+        axis tight
+        yl = get(gca, 'ylim');
+        ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+        xlim([0,100])
+        plot(x(ipush_off(1)),R.Qs(ipush_off(1),imtp),'d','color',Cs)
+        plot(x(ipush_off(end)),R.Qs(ipush_off(end),imtp),'o','color',Cs)
+
+        if ~isempty(imtj)
+            subplot(2,2,3)
+            hold on
+            plot(x,F_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Plantar fascia force')
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('Force (N)','Fontsize',label_fontsize);
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+            xlim([0,100])
+            plot(x(ipush_off(1)),F_PF(ipush_off(1)),'d','color',Cs)
+            plot(x(ipush_off(end)),F_PF(ipush_off(end)),'o','color',Cs)
+
+            subplot(2,2,[2,4])
+            hold on
+            plot(R.Qs(ipush_off,imtp),F_PF(ipush_off),'.','color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Plantar fascia - mtp during push-off')
+            xlabel('Mtp angle (°)','Fontsize',label_fontsize);
+            ylabel('PF force (N)','Fontsize',label_fontsize);
+            plot(R.Qs(ipush_off(1),imtp),F_PF(ipush_off(1)),'d','color',Cs)
+            plot(R.Qs(ipush_off(end),imtp),F_PF(ipush_off(end)),'o','color',Cs)
+
+        end
+
+            
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h34,'PaperPositionMode','auto')
+            print(h34,[figNamePrefix '_WL_mtp'],'-dpng','-r0')
+            print(h34,[figNamePrefix '_WL_mtp'],'-depsc')
+        end
+    end
+
+    %%
+
 
 end
 

@@ -54,7 +54,7 @@ elseif strcmp(name,'MSI')           % laptop
 
 elseif strcmp(name,'GBW-L-W2122')   % laptop
     myCluster = parcluster('local');
-    imax = 2; % max nr of jobs to start
+    imax = 40; % max nr of jobs to start
 end
 
 %%
