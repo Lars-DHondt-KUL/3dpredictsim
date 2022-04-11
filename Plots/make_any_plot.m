@@ -38,6 +38,10 @@ S.subject = 'Fal_s1';
 % S.suffixCasName = 'v3';     % suffix for name of folder with casadifunctions
 % S.suffixName = 'v4';        % suffix for name of file with results
 
+% Cost function weights
+% S.W.Ak      = 50000;    % weight joint accelerations
+% S.W.passMom = 1000;     % weight passive torques
+% S.W.A       = 2000;     % weight muscle activations
 
 %% Tracking term
 % S.TrackSim = 1;
@@ -47,13 +51,19 @@ S.subject = 'Fal_s1';
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-% S.Foot.Model = 'mtjc2';
+S.Foot.Model = 'mtjc2';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
-% S.Foot.Scaling = 'custom'; % default, custom, personalised
+S.Foot.Scaling = 'custom'; % default, custom, personalised
 
-% Achilles tendon
-% S.AchillesTendonScaleFactor = 1;
+% Achilles tendon stiffness
+S.AchillesTendonScaleFactor = 0.7;
+
+% Reduce tendon slack length of Soleus
+S.SoleusTendonShorter = 0;
+
+% Shift passive force-length curve of ankle muscle fibers
+% S.passiveFiberForceShift = 0;
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -65,11 +75,11 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-% S.MTparams = 'MTc2';
+S.MTparams = 'MTc2';
 
 % Contact spheres
-% S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-% S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
+S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
+S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
 % S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 % S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction
 
@@ -83,7 +93,7 @@ S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 % (only used if Model = mtj)
 S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
-% S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
+S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
 % S.Foot.mtj_stiffness = 'MG_exp_table';
 % S.Foot.mtj_sf = 1; 
 
@@ -93,8 +103,9 @@ S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 
 % plantar fascia
 % S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
-% S.Foot.PF_sf = 5;
-% S.Foot.PF_slack_length = 0.146; % (m) slack length
+% S.Foot.PF_sf = 1;
+% S.Foot.PF_sf_isvar = 2; 
+S.Foot.PF_slack_length = 0.146; % (m) slack length
 
 % Plantar Intrinsic Muscles represented by and ideal force actuator
 % S.Foot.PIM = 0;             % include PIM actuator
@@ -109,7 +120,7 @@ S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-% S.Foot.FDB = 1;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
 
 
 
@@ -137,7 +148,7 @@ S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 %     };
 
 % results = {
-% %     '\debug\Fal_s1_mtj_sc_cspx10_oy_MTPm_k1_d01_MTJm_nl_MG_exp_table_d01_PF_Gefen2002_ls146_ig21'
+%     '\debug\Fal_s1_mtj_sc_cspx10_oy_MTPm_k1_d01_MTJm_nl_MG_exp_table_d01_PF_Gefen2002_ls146_ig21'
 % %     '\debug\Fal_s1_mtj_sc_cspx10_oy_MTPm_k1_d01_MTJm_nl_MG_exp_table_d01_PF_Natali2010_ls146_ig21'
 %     '\debug\Fal_s1_mtj_sc_cspx10_oy_MTPm_k1_d01_MTJm_nl_MG_exp_table_d01_PF_Natali2010_x5_ls146_ig21'
 % %     '\debug\Fal_s1_mtj_sc_cspx10_oy_MTPp_k1_d01_MTJp_nl_MG_exp_table_d01_PF_Natali2010_x5_ls146_ig21'
@@ -159,6 +170,48 @@ S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 %     '/debug\Fal_s1_mtp_sc_MTPp_k17_d05_ig21'
 %     };
 
+% results = {
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_TrackAnkleQSubtQ_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_mtptau'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_TrackAnkleQSubtQ_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_mtptau'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_wAk4e+04_wa2e+03_wpM1e+03'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_TrackAnkleQSubtQ_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_wAk4e+04_wa2e+03_wpM1e+03'
+%     };
+
+% results = {
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_ls146_ig21_wAk5e+04_wa2e+03_wpM1e+03'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21_wAk5e+04_wa2e+03_wpM1e+03'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_wAk4e+04_wa2e+03_wpM1e+03'
+%     };
+
+% results = {
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_xv2_ls146_ig21_wAk5e+04_wa2e+03_wpM1e+03'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_TrackAnkleQSubtQ_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_xv2_ls146_ig21_wAk5e+04_wa2e+03_wpM1e+03'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_xv2_ls146_ig21'
+%     };
+
+% results = {
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+%     };
+
+results = {
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_xv2_ls146_ig21_wAk5e+04_wa2e+03_wpM1e+03'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_ls146_FDB2_lTs125_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+    '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+    '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+%     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_TrackAnkleQSubtQ_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+    '\debug\New folder\Fal_s1_mtjc2_sc_cspx10_oy2_TrackAnkleQSubtQ_ATx70_MTc2_MTPm_k1_d01_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+    };
+
+
+%%
 if exist('results','var') && ~isempty(results)
     filteredResults = {length(results)};
     for i=1:length(results)
@@ -184,12 +237,13 @@ else
     criteria{end+1} = 'not_table_x5';
     criteria{end+1} = 'not_test';
 %     criteria{end+1} = 'not_mtjc';
-%     criteria{end+1} = 'not_o45z10';
 %     criteria{end+1} = 'not_MTc';
     criteria{end+1} = 'not_old';
     criteria{end+1} = 'not___v1';
     criteria{end+1} = 'not_ig24';
-    criteria{end+1} = 'oy2';
+%     criteria{end+1} = 'oy2';
+%     criteria{end+1} = 'cg2';
+    criteria{end+1} = 'not_mtptau';
 %     criteria{end+1} = 'AT';
 %     criteria{end+1} = 'not_cspx10';
     
@@ -215,7 +269,7 @@ ref{end+1} = fullfile([pathRepo '/Results/debug\Fal_s1_mtp_sd_MTPp_k17_d05_ig21_
 filteredResultsWithRef = filteredResults';
 filteredResultsWithRef = [ref, filteredResults]';
 % filteredResultsWithRef = [filteredResults, ref]';
-
+% filteredResultsWithRef = ref;
 
 ResultsFile = filteredResultsWithRef;
 
@@ -223,7 +277,15 @@ ResultsFile = filteredResultsWithRef;
 %%
 % compare_Lundgren_2008(ResultsFile{1});
 
+%% compare ALL muscles for 2 simulation results
+ResultsFile1 = filteredResultsWithRef{2};
+ResultsFile2 = filteredResultsWithRef{4};
+
+PlotResultsComparison_3DSim(ResultsFile1,ResultsFile2,{'predictive','tracking'});
+
 %%
+LegNames = {''};
+
 % LegNames = {'scaled default', 'scaled custom'};
 
 % LegNames = {'mtp-model, passive', 'mtp-model, muscle', 'mtj-model, muscle, compliant PF',...
@@ -232,22 +294,37 @@ ResultsFile = filteredResultsWithRef;
 % LegNames = {'mtp-model, passive','mtj-model, muscle, compliant PF',...
 %     'mtj-model, muscle, stiff PF'};
 
-LegNames = {'mtp-model, passive', 'mtj-model, muscle, stiff PF'};
+% LegNames = {'mtp-model, passive', 'mtj-model, muscle, stiff PF'};
 
 % LegNames = {'Soleus 100% vMmax', 'Soleus 50% vMmax', 'Soleus 80% vMmax'};
 
 % LegNames = {'mtp-model, passive','mtj, muscle,  PF Gefen2002','mtj, muscle, PF Natali2010',...
 %     'mtj, muscle, 5x PF Natali2010', 'mtj, passive, 5x PF Natali2010', 'mtj, muscle, 10x PF Natali2010'};
 
+% LegNames = {'3 segment foot model','4 segment foot model (compliant plantar fascia)',...
+%     '4 segment foot model (stiff plantar fascia)'};
+
+% LegNames = {'mtj axis orientation 1','mtj axis orientation 2','mtj axis orientation 3',...
+%     'mtj axis orientation 4','mtj axis orientation 5'};
+
+% LegNames = {'mtp model','default weights','default weights, tracking',...
+%     'lower qdd weight','lower qdd weight, tracking'};
+
+LegNames = {'mtp model', 'new model', 'new model + tau_p_a_s_s mtp','new model + track ankle & subt angle'};
+
+% LegNames = {'damping torque in cost','damping torque not in cost'};
+
 mtj = 1;
 figNamePrefix = 'none';
 % figNamePrefix = 'C:\Users\u0150099\Documents\WTK\thesis\figuren\extended_foot_model\musc';
-% figNamePrefix = 'C:\Users\u0150099\Documents\PhD\meetings\Model_Personalization_Meeting\stance';
+% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Model_Personalization_Meeting\compliant_and_stiff';
+% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\WTK\thesis\figuren\extended_foot_model\mtj_axis';
 
 %%% select figures to make
-makeplot.kinematics                     = 1; % selected joint angles
+makeplot.kinematics_Qs                  = 0; % selected joint angles
+makeplot.kinematics_Qdots               = 0; % selected joint velocities
 makeplot.kinetics                       = 0; % selected joint torques
-makeplot.ankle_musc                     = 1; % ankle muscles
+makeplot.ankle_musc                     = 0; % ankle muscles
 makeplot.GRF                            = 0; % ground interaction
 makeplot.compareLiterature              = 0; % mtj and mtp Caravaggi 2018
 makeplot.compareTakahashi17             = 0; % "distal to segment" power analysis
@@ -257,14 +334,14 @@ makeplot.compareTakahashi17_W_bar       = 0; % "distal to segment" work analysis
 makeplot.allQsTs                        = 0; % all joint angles and torques
 makeplot.windlass                       = 0; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
+makeplot.power_main                     = 0; % main power components of foot
 makeplot.power                          = 0; % datailed power decomposition
 makeplot.work                           = 0; % same as power, but work over GC
 makeplot.work_bar                       = 0; % positive, negative and net work bar plot
 makeplot.work_bar_small                 = 0; % positive, negative and net work bar plot
-makeplot.power_main                     = 0; % main power components of foot
 makeplot.spatiotemp                     = 0; % stridelength etc.
 makeplot.ankle_correlation              = 0; % correlation of ankle 
-makeplot.E_muscle_bar                   = 1; % muscle metabolic energy totals
+makeplot.E_muscle_bar                   = 0; % muscle metabolic energy totals
 makeplot.W_muscle_bar                   = 0; % muscle fibre work totals   
 makeplot.E_muscle_bar_small             = 0; % metabolic energy and work by selected muscle groups
 makeplot.toes                           = 0; % toe flexor and extensor muscle info
@@ -274,7 +351,7 @@ makeplot.muscle_act                     = 0; % muscle activity
 makeplot.muscle_act_exc                 = 0; % muscle activity and excitation   
 makeplot.muscle_joint_moment            = 0; % moments of muscles around ankle-foot joints
 makeplot.muscle_joint_power             = 0; % powers of muscles around ankle-foot joints
-makeplot.Objective_cost                 = 1; % cost function decomposition
+makeplot.Objective_cost                 = 0; % cost function decomposition
 makeplot.tau_pass                       = 0; % passive joint torques
 
 PlotResults_3DSim_Report(ResultsFile,LegNames,'Fal_s1_mtjc2_custom',mtj,makeplot,figNamePrefix);

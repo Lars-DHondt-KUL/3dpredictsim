@@ -102,6 +102,10 @@ NMuscle = length(muscleNames(1:end-3))*2;
 % fiber lengths; Row 3: tendon slack lengths; Row 4: optimal pennation
 % angles; Row 5: maximal contraction velocities
 load([pathmusclemodel,'/MTparameters.mat'],'MTparameters');
+if S.SoleusTendonShorter
+    IndexSoleus = find(contains(muscleNames,'soleus'));
+    MTparameters(3,IndexSoleus) = MTparameters(3,IndexSoleus) - S.SoleusTendonShorter;
+end
 MTparameters_m = [MTparameters(:,musi),MTparameters(:,musi)];
 
 % By default, the tendon stiffness is 35 and the shift is 0.
@@ -112,6 +116,21 @@ IndexCalf = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus'));
 IndexCalf = [IndexCalf,IndexCalf+musi(end)];
 aTendon(IndexCalf) = 35*S.AchillesTendonScaleFactor;
 shift = getShift(aTendon);
+
+IndexAnkle = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus')...
+     | contains(muscleNames,'tib_') | contains(muscleNames,'per_')...
+     | contains(muscleNames,'_dig_') | contains(muscleNames,'_hal_'));
+IndexAnkle = [IndexAnkle,IndexAnkle+musi(end)];
+passiveFiberForceShift = zeros(NMuscle,1);
+passiveFiberForceShift(IndexAnkle) = S.passiveFiberForceShift;
+
+% disp(muscleNames(IndexAnkle(1:12)));
+
+if S.Foot.FDB
+    IndexFDB = find(contains(muscleNames,'FDB'));
+    IndexFDB = [IndexFDB, IndexFDB+musi(end)];
+    passiveFiberForceShift(IndexFDB) = S.Foot.FDB_shift;
+end
 
 %% Musculoskeletal geometry
 % We load some variables for the polynomial approximations
@@ -366,7 +385,7 @@ for m = 1:NMuscle
     [Hilldiff(m),FT(m),Fce(m),Fpass(m),Fiso(m),vMmax(m),massM(m)] = ...
         ForceEquilibrium_FtildeState_all_tendon(a(m),FTtilde(m),...
         dFTtilde(m),lMT(m),vMT(m),MTparameters_m(:,m),Fvparam,Fpparam,...
-        Faparam,tension_SX(m),aTendon(m),shift(m),MuscMoAsmp);
+        Faparam,tension_SX(m),aTendon(m),shift(m),MuscMoAsmp,passiveFiberForceShift(m));
 end
 f_forceEquilibrium_FtildeState_all_tendon = ...
     Function('f_forceEquilibrium_FtildeState_all_tendon',{a,FTtilde,...

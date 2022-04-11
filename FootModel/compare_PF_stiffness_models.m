@@ -23,11 +23,12 @@ q_mtp = linspace(-45,45,N)*pi/180;
 % PF_stiffness = {'Cheng2008','Gefen2002','Ker1987','Natali2010','Song2011','linear','tanh'};
 % PF_stiffness = {'linear','Natali2010','Cheng2008','Song2011','Gefen2002'};
 % PF_stiffness = {'linear','Natali2010','Cheng2008','Gefen2002'};
-PF_stiffness = {'Natali2010','Natali2010','Natali2010','Natali2010'};
+% PF_stiffness = {'Natali2010','Natali2010','Natali2010','Natali2010'};
+PF_stiffness = {'Natali2010','Gefen2002'};
 
 % mtj_stiffness = {'Gefen2002','Ker1987','fitted1'};
-mtj_stiffness = {'Gefen2002','Ker1987','Song2011','signed_lin'};
-% mtj_stiffness = {'Song2011','signed_lin'};
+% mtj_stiffness = {'Gefen2002','Ker1987','Song2011','signed_lin'};
+mtj_stiffness = {'Song2011','signed_lin'};
 S.MT_li_nonl = 1;
 S.kMT_li = 300;          % angular stiffness in case of linear
 S.kMT_li2 = 10;          % angular stiffness in case of linear
@@ -176,15 +177,15 @@ plot(q_mt*180/pi,-q_mt*k_mtj,'DisplayName',['k = ' num2str(k_mtj) ' Nm/rad'])
 
 %%
 
-figNamePrefix = 'D:\OneDrive\WTK\thesis\figuren\matlab_final\MLA_vs_WL';
+% figNamePrefix = 'D:\OneDrive\WTK\thesis\figuren\matlab_final\MLA_vs_WL';
 
 scs = get(0,'ScreenSize');
 fsq = [scs(3)/2, scs(4)*0.6];
 h1=figure('Position',[100,500,fsq*0.5]);
 % h1=figure;
 CsV = hsv(numel(PF_stiffness));
-CsV = hsv(4);
-for i=3:4%1:numel(PF_stiffness)
+% CsV = hsv(4);
+for i=1:numel(PF_stiffness)
     hold on
     if i==4
     plot((l-ls)*1000,F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
@@ -199,8 +200,8 @@ for i=3:4%1:numel(PF_stiffness)
     ylim([0,2000])
 end
 
-set(h1,'PaperPositionMode','auto')
-print(h1,[figNamePrefix '_PF'],'-dpng','-r0')
+% set(h1,'PaperPositionMode','auto')
+% print(h1,[figNamePrefix '_PF'],'-dpng','-r0')
     
 % h2=figure;
 % for i=1:numel(mtj_stiffness)

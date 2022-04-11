@@ -1,4 +1,4 @@
-function [] = PlotResultsComparison_3DSim(ResultsFile1,ResultsFile2)
+function [] = PlotResultsComparison_3DSim(ResultsFile1,ResultsFile2,legNames)
 
 Csv = hsv(3);
 
@@ -41,10 +41,12 @@ if(j==1)
     [path,file,~] = fileparts(ResultsFile1);
     addpath(path);
     load(file);
+%     legNames{1} = R.S.savename;
 elseif(j==2)
    [path,file,~] = fileparts(ResultsFile2);
     addpath(path);
     load(file);
+%     legNames{2} = R.S.savename;
 end
 
 Cs = Csv(j,:);
@@ -199,7 +201,7 @@ iM = [47:92];
         xlabel('% stride'); ylabel('activity');
         
         if j==2 && ii==1
-           legend('b cst','alpha cst') 
+           legend(legNames) 
         end
         
         subplot(5,4,ii+12)

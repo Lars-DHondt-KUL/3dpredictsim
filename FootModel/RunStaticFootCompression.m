@@ -30,7 +30,7 @@ Fs_tib = [0];
 % Qs_mtp = [-30:30:30]*pi/180;
 % Qs_mtp = [-30:30:30]*pi/180;
 % Qs_mtp = [0:5:30]*pi/180;
-Qs_mtp = [-30:10:30]*pi/180;
+% Qs_mtp = [-30:10:30]*pi/180;
 
 
 % vertical forces on knee
@@ -63,38 +63,38 @@ Results = {};
 % Results{end+1} = R;
 
 
-% S.Foot.PF_stiffness = 'Gefen2002';
-% S.Foot.PF_sf = 1; 
-% S.Foot.PF_slack_length = 0.146;
-% S.Foot.mtj_stiffness = 'MG_exp_table';
-% Fs_tib = [0:50:300,400:100:900,1000:250:3000];
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
-% 
-% S.Foot.PF_stiffness = 'none';
-% S.Foot.mtj_stiffness = 'MG_exp_table';
-% Fs_tib = [0:50:300,400:100:900,1000:250:2500];
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
-% 
-% S.Foot.PF_stiffness = 'none';
-% S.Foot.mtj_stiffness = 'MG_exp_d_table';
-% Fs_tib = [0:50:300,400:100:900,1000:250:1500];
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
-% 
-% S.Foot.PF_stiffness = 'none';
-% S.Foot.mtj_stiffness = 'MG_exp_e_table';
-% Fs_tib = [0:50:500];
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
-% 
-% S.Foot.Scaling = 'custom';
-% S.Foot.PF_stiffness = 'none';
-% S.Foot.mtj_stiffness = 'MG_exp_f_table';
-% Fs_tib = [0:50:400];
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
+S.Foot.PF_stiffness = 'Gefen2002';
+S.Foot.PF_sf = 1; 
+S.Foot.PF_slack_length = 0.146;
+S.Foot.mtj_stiffness = 'MG_exp_table';
+Fs_tib = [0:50:300,400:100:900,1000:250:3000];
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.PF_stiffness = 'none';
+S.Foot.mtj_stiffness = 'MG_exp_table';
+Fs_tib = [0:50:300,400:100:900,1000:250:2500];
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.PF_stiffness = 'none';
+S.Foot.mtj_stiffness = 'MG_exp_d_table';
+Fs_tib = [0:50:300,400:100:900,1000:250:1500];
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.PF_stiffness = 'none';
+S.Foot.mtj_stiffness = 'MG_exp_e_table';
+Fs_tib = [0:50:500];
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.Scaling = 'custom';
+S.Foot.PF_stiffness = 'none';
+S.Foot.mtj_stiffness = 'MG_exp_f_table';
+Fs_tib = [0:50:400];
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
 
 
 % S.Foot.PF_stiffness = 'Gefen2002';
@@ -132,23 +132,23 @@ Results = {};
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 
-Qs_mtp = [0]*pi/180;
-S.Foot.kMT_li = 0;
-S.Foot.mtj_stiffness = 'MG_exp_table';
-R = f_staticFootHanging(S,Qs_mtp,subtR);
-Results{end+1} = R;
-
-Qs_mtp = [0]*pi/180;
-S.Foot.kMT_li = 0;
-S.Foot.mtj_stiffness = 'MG_exp_table_v2';
-R = f_staticFootHanging(S,Qs_mtp,subtR);
-Results{end+1} = R;
+% Qs_mtp = [0]*pi/180;
+% S.Foot.kMT_li = 0;
+% S.Foot.mtj_stiffness = 'MG_exp_table';
+% R = f_staticFootHanging(S,Qs_mtp,subtR);
+% Results{end+1} = R;
+% 
+% Qs_mtp = [0]*pi/180;
+% S.Foot.kMT_li = 0;
+% S.Foot.mtj_stiffness = 'MG_exp_table_v2';
+% R = f_staticFootHanging(S,Qs_mtp,subtR);
+% Results{end+1} = R;
 
 %%
 % call plot function
 nrf = length(Results);
 CsV = hsv(nrf);
-fig_nr = 0;
+fig_nr = 4;
 for i=1:nrf
     R = Results{i};
     if i==1
@@ -159,7 +159,12 @@ for i=1:nrf
 end
 
 
+%%
 
+figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Model_Personalization_Meeting\mtj';
+set(h,'PaperPositionMode','auto')
+print(h,[figNamePrefix '_static_foot_loading'],'-dpng','-r0')
+print(h,[figNamePrefix '_static_foot_loading'],'-depsc')
 
 
 

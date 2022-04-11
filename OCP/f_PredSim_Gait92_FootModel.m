@@ -42,21 +42,9 @@ pathCollocationScheme = [pathRepo,'/CollocationScheme'];
 addpath(genpath(pathCollocationScheme));
 d = 3; % degree of interpolating polynomial
 method = 'radau'; % collocation method
-[tau_root,C,D,B] = CollocationScheme(d,method);
+[~,C,D,B] = CollocationScheme(d,method);
 
 %% Muscle information
-% Muscles from one leg and from the back
-% muscleNames = {'glut_med1_r','glut_med2_r','glut_med3_r',...
-%     'glut_min1_r','glut_min2_r','glut_min3_r','semimem_r',...
-%     'semiten_r','bifemlh_r','bifemsh_r','sar_r','add_long_r',...
-%     'add_brev_r','add_mag1_r','add_mag2_r','add_mag3_r','tfl_r',...
-%     'pect_r','grac_r','glut_max1_r','glut_max2_r','glut_max3_r',......
-%     'iliacus_r','psoas_r','quad_fem_r','gem_r','peri_r',...
-%     'rect_fem_r','vas_med_r','vas_int_r','vas_lat_r','med_gas_r',...
-%     'lat_gas_r','soleus_r','tib_post_r','flex_dig_r','flex_hal_r',...
-%     'tib_ant_r','per_brev_r','per_long_r','per_tert_r','ext_dig_r',...
-%     'ext_hal_r','ercspn_r','intobl_r','extobl_r','ercspn_l',...
-%     'intobl_l','extobl_l'};
 % Muscle indices for later use
 pathmusclemodel = fullfile(pathRepo,'MuscleModel',S.OsimFileName);
 pathpolynomial = fullfile(pathRepo,'Polynomials',S.OsimFileName);
@@ -214,6 +202,15 @@ if S.TrackSim
         Qref_lr = Qref_subt_lr;
     end
 
+end
+
+%% Possibility to vary plantar fascia force scale factor over time (predefined)
+PF_sf_isvar = 0;
+if length(S.Foot.PF_sf_var)==2*N
+    PF_sf_isvar = 1;
+    PF_sf_var_r = horzcat(S.Foot.PF_sf_var(1:N));
+    PF_sf_var_l = horzcat(S.Foot.PF_sf_var(N+1:end));
+    PF_sf_var_lr = [PF_sf_var_l; PF_sf_var_r];
 end
 
 %% Get bounds and initial guess
@@ -463,8 +460,12 @@ if S.Foot.PIM
     e_PIMk      = MX.sym('e_PIMk',2);
 end
 if S.TrackSim
-    Qsk_track   =MX.sym('Qsk_track',2*(S.Track.Q_ankle+S.Track.Q_subt));
+    Qsk_track   = MX.sym('Qsk_track',2*(S.Track.Q_ankle+S.Track.Q_subt));
 end
+if PF_sf_isvar
+    PF_sf_k     = MX.sym('PF_sf',2);
+end
+
 % Define CasADi variables for "slack" controls
 dFTtildej   = MX.sym('dFTtildej',NMuscle,d);
 Aj          = MX.sym('Aj',nq.all,d);
@@ -483,7 +484,7 @@ h = tfk/N;
 
 % Field names for moment arms:
 MAj_fieldnames = {'hip_flex','hip_add','hip_rot','knee','ankle','subt'};
-if S.Foot.mtj_muscles
+if S.Foot.mtj_muscles && mtj
     MAj_fieldnames{end+1} = 'mtj';
 end
 if S.Foot.mtp_muscles
@@ -591,8 +592,13 @@ for j=1:d
                 F_PF_PIMj.r = F_PIMj.r;
             end
         else
-            F_PFj_l = f_PF_stiffness(l_PFj_l)*S.Foot.PF_sf;
-            F_PFj_r = f_PF_stiffness(l_PFj_r)*S.Foot.PF_sf;
+            if PF_sf_isvar
+                F_PFj_l = f_PF_stiffness(l_PFj_l)*PF_sf_k(1);
+                F_PFj_r = f_PF_stiffness(l_PFj_r)*PF_sf_k(2);
+            else
+                F_PFj_l = f_PF_stiffness(l_PFj_l)*S.Foot.PF_sf;
+                F_PFj_r = f_PF_stiffness(l_PFj_r)*S.Foot.PF_sf;
+            end
             if S.Foot.PIM == 2
                 % no PF, only PIM + prevent PIM force at low lengths
                 F_PIMj.l = a_PIMkj(1,j+1)*scaling.PIMF*(0.5+0.5*tanh(100*(l_PFj_l/S.Foot.PF_slack_length)-96));
@@ -631,6 +637,9 @@ for j=1:d
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Get passive joint torques
     Tau_passj_all = f_AllPassiveTorques(Qskj_nsc(:,j+1),Qdotskj_nsc(:,j+1));
+    if S.W.noDamping
+        Tau_passj_all_noDamping = f_AllPassiveTorques(Qskj_nsc(:,j+1),zeros(size(Qdotskj_nsc(:,j+1))));
+    end
     Tau_passj.hip.flex.l = Tau_passj_all(1);
     Tau_passj.hip.flex.r = Tau_passj_all(2);
     Tau_passj.hip.add.l = Tau_passj_all(3);
@@ -652,7 +661,11 @@ for j=1:d
         Tau_passj.trunk.ben = Tau_passj_all(18);
         Tau_passj.trunk.rot = Tau_passj_all(19);
         Tau_passj.arm = Tau_passj_all(20:27);
-        Tau_passj_J = Tau_passj_all([1:12 17:end]);
+        if S.W.noDamping
+            Tau_passj_J = Tau_passj_all_noDamping([1:12 17:end]);
+        else
+            Tau_passj_J = Tau_passj_all([1:12 17:end]);
+        end
     else
         Tau_passj.mtp.l = Tau_passj_all(13);
         Tau_passj.mtp.r = Tau_passj_all(14);
@@ -660,7 +673,11 @@ for j=1:d
         Tau_passj.trunk.ben = Tau_passj_all(16);
         Tau_passj.trunk.rot = Tau_passj_all(17);
         Tau_passj.arm = Tau_passj_all(18:25);
-        Tau_passj_J = Tau_passj_all([1:12 15:end]);
+        if S.W.noDamping
+            Tau_passj_J = Tau_passj_all_noDamping([1:12 15:end]);
+        else
+            Tau_passj_J = Tau_passj_all([1:12 15:end]);
+        end
     end
 
 
@@ -930,7 +947,7 @@ ineq_constr6 = vertcat(ineq_constr6{:});
 
 % Createcasadi function for opti
 if S.Foot.mtp_actuator
-    if S.Foot.PIM
+    if S.Foot.PIM       % mtp and PIM actuator
         % Casadi function to get constraints and objective
         f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
             Qdotsj,a_ak,a_aj,a_mtpk,a_mtpj,a_PIMk,a_PIMj,vAk,e_ak,e_mtpk,e_PIMk,dFTtildej,Aj},...
@@ -943,7 +960,7 @@ if S.Foot.mtp_actuator
             a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
             Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
             a_mtp(:,1:end-1), a_mtp_col, a_PIM(:,1:end-1), a_PIM_col, vA, e_a, e_mtp, e_PIM, dFTtilde_col, A_col);
-    else
+    else                % only mtp actuator
         % Casadi function to get constraints and objective
         f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
             Qdotsj,a_ak,a_aj,a_mtpk,a_mtpj,vAk,e_ak,e_mtpk,dFTtildej,Aj},...
@@ -958,7 +975,7 @@ if S.Foot.mtp_actuator
             a_mtp(:,1:end-1), a_mtp_col, vA, e_a, e_mtp, dFTtilde_col, A_col);
     end
 else
-    if S.Foot.PIM
+    if S.Foot.PIM       % only PIM actuator
         % Casadi function to get constraints and objective
         f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
             Qdotsj,a_ak,a_aj,a_PIMk,a_PIMj,vAk,e_ak,e_PIMk,dFTtildej,Aj},...
@@ -972,33 +989,66 @@ else
             Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
             a_PIM(:,1:end-1), a_PIM_col, vA, e_a, e_PIM, dFTtilde_col, A_col);
     else
-        if S.TrackSim
-            % Casadi function to get constraints and objective
-            f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
-                Qdotsj,a_ak,a_aj,vAk,e_ak,dFTtildej,Aj,Qsk_track},...
-                {eq_constr,ineq_constr1,ineq_constr2,ineq_constr3,ineq_constr4,...
-                ineq_constr5,ineq_constr6,J});
-            % assign NLP problem to multiple cores
-            f_coll_map = f_coll.map(N,S.parallelMode,S.NThreads);
-            [coll_eq_constr, coll_ineq_constr1, coll_ineq_constr2, coll_ineq_constr3,...
-                coll_ineq_constr4, coll_ineq_constr5, coll_ineq_constr6, Jall] = f_coll_map(tf,...
-                a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
-                Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
-                vA, e_a, dFTtilde_col, A_col, Qref_lr);
+        if S.TrackSim    
+            if PF_sf_isvar % with tracking term, no actuators, variable PF
+                % Casadi function to get constraints and objective
+                f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
+                    Qdotsj,a_ak,a_aj,vAk,e_ak,dFTtildej,Aj,Qsk_track,PF_sf_k},...
+                    {eq_constr,ineq_constr1,ineq_constr2,ineq_constr3,ineq_constr4,...
+                    ineq_constr5,ineq_constr6,J});
+                % assign NLP problem to multiple cores
+                f_coll_map = f_coll.map(N,S.parallelMode,S.NThreads);
+                [coll_eq_constr, coll_ineq_constr1, coll_ineq_constr2, coll_ineq_constr3,...
+                    coll_ineq_constr4, coll_ineq_constr5, coll_ineq_constr6, Jall] = f_coll_map(tf,...
+                    a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
+                    Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
+                    vA, e_a, dFTtilde_col, A_col, Qref_lr, PF_sf_var_lr);
 
-        else
-            % Casadi function to get constraints and objective
-            f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
-                Qdotsj,a_ak,a_aj,vAk,e_ak,dFTtildej,Aj},...
-                {eq_constr,ineq_constr1,ineq_constr2,ineq_constr3,ineq_constr4,...
-                ineq_constr5,ineq_constr6,J});
-            % assign NLP problem to multiple cores
-            f_coll_map = f_coll.map(N,S.parallelMode,S.NThreads);
-            [coll_eq_constr, coll_ineq_constr1, coll_ineq_constr2, coll_ineq_constr3,...
-                coll_ineq_constr4, coll_ineq_constr5, coll_ineq_constr6, Jall] = f_coll_map(tf,...
-                a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
-                Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
-                vA, e_a, dFTtilde_col, A_col);
+            else        % with tracking term, no actuators, fixed PF
+                % Casadi function to get constraints and objective
+                f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
+                    Qdotsj,a_ak,a_aj,vAk,e_ak,dFTtildej,Aj,Qsk_track},...
+                    {eq_constr,ineq_constr1,ineq_constr2,ineq_constr3,ineq_constr4,...
+                    ineq_constr5,ineq_constr6,J});
+                % assign NLP problem to multiple cores
+                f_coll_map = f_coll.map(N,S.parallelMode,S.NThreads);
+                [coll_eq_constr, coll_ineq_constr1, coll_ineq_constr2, coll_ineq_constr3,...
+                    coll_ineq_constr4, coll_ineq_constr5, coll_ineq_constr6, Jall] = f_coll_map(tf,...
+                    a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
+                    Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
+                    vA, e_a, dFTtilde_col, A_col, Qref_lr);
+
+            end
+
+        else            
+            if PF_sf_isvar % w/o tracking term, no actuators, variable PF
+                % Casadi function to get constraints and objective
+                f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
+                    Qdotsj,a_ak,a_aj,vAk,e_ak,dFTtildej,Aj,PF_sf_k},...
+                    {eq_constr,ineq_constr1,ineq_constr2,ineq_constr3,ineq_constr4,...
+                    ineq_constr5,ineq_constr6,J});
+                % assign NLP problem to multiple cores
+                f_coll_map = f_coll.map(N,S.parallelMode,S.NThreads);
+                [coll_eq_constr, coll_ineq_constr1, coll_ineq_constr2, coll_ineq_constr3,...
+                    coll_ineq_constr4, coll_ineq_constr5, coll_ineq_constr6, Jall] = f_coll_map(tf,...
+                    a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
+                    Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
+                    vA, e_a, dFTtilde_col, A_col, PF_sf_var_lr);
+
+            else    % w/o tracking term, no actuators, fixed PF
+                % Casadi function to get constraints and objective
+                f_coll = Function('f_coll',{tfk,ak,aj,FTtildek,FTtildej,Qsk,Qsj,Qdotsk,...
+                    Qdotsj,a_ak,a_aj,vAk,e_ak,dFTtildej,Aj},...
+                    {eq_constr,ineq_constr1,ineq_constr2,ineq_constr3,ineq_constr4,...
+                    ineq_constr5,ineq_constr6,J});
+                % assign NLP problem to multiple cores
+                f_coll_map = f_coll.map(N,S.parallelMode,S.NThreads);
+                [coll_eq_constr, coll_ineq_constr1, coll_ineq_constr2, coll_ineq_constr3,...
+                    coll_ineq_constr4, coll_ineq_constr5, coll_ineq_constr6, Jall] = f_coll_map(tf,...
+                    a(:,1:end-1), a_col, FTtilde(:,1:end-1), FTtilde_col, Qs(:,1:end-1), ...
+                    Qs_col, Qdots(:,1:end-1), Qdots_col, a_a(:,1:end-1), a_a_col, ...
+                    vA, e_a, dFTtilde_col, A_col);
+            end
         end
     end
 end

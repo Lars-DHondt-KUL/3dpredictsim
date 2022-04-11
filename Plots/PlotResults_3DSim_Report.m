@@ -336,7 +336,7 @@ for inr=1:nr
     
     
     %% kinematics
-    if makeplot.kinematics
+    if makeplot.kinematics_Qs
     
         if inr==1
             h1 = figure('Position',[fpos(1,:),fwide]);
@@ -439,87 +439,89 @@ for inr=1:nr
             print(h1,[figNamePrefix '_qs'],'-depsc')
         end
 
-%         % qdots
-%         
-%         if inr==1
-%             h1a = figure('Position',[fpos(1,:),fwide]);
-%         else
-%             figure(h1a);
-%         end
-%         j = 0;
-%         label_fontsize  = 12;
-%         line_linewidth  = 0.5;
-%         NumTicks = 6;
-%         for i = 1:length(idx_title)
-%             subplot(2,4,idx_sp(i))
-%             x = 1:(100-1)/(size(R.Qdots,1)-1):100;
-%             % Experimental data
-%             if  inr == 1 && md
-%                 idx_jref = strcmp(Qref.colheaders,joints_ref{idx_js(i)});
-%                 if sum(idx_jref) == 1
-%                     meanPlusSTD = (Qref.Qdotall_mean(:,idx_jref) + 2*Qref.Qdotall_std(:,idx_jref));
-%                     meanMinusSTD = (Qref.Qdotall_mean(:,idx_jref) - 2*Qref.Qdotall_std(:,idx_jref));
-% 
-%                     stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
-%                     intervalQ = 1:stepQ:size(R.Qs,1);
-%                     sampleQ = 1:size(R.Qs,1);
-%                     meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
-%                     meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
-% 
-%                     hold on
-%                     fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
-%                     alpha(.25);
-%                 end
-%             end
-% 
-%             % Simulation results
-%             x = 1:(100-1)/(size(R.Qs,1)-1):100;
-%             hold on;
-%             if (has_no_tmt && strcmp(joints_tit{idx_title(i)},'Tarsometatarsal R')) || ...
-%                     (has_no_mtj && strcmp(joints_tit{idx_title(i)},'Midtarsal R'))
-%                 % skip this plot
-%             else
-%                 j=j+1;
-%                 plot(x,R.Qdots(:,idx_Qs(j)),'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
-% 
-%             end
-% 
-%             % Plot settings
-%             if inr == nr
-%                 set(gca,'Fontsize',label_fontsize);
-%                 ttl_tmp = joints_tit{idx_title(i)};
-%                 title(ttl_tmp(1:end-2),'Fontsize',label_fontsize);
-%                 % Y-axis
-%                 if i == 1 || i == 4
-%                     ylabel('Angular velocity (°)','Fontsize',label_fontsize);
-%                 end
-%                 % X-axis
-%                 L = get(gca,'XLim');
-%                 set(gca,'XTick',linspace(L(1),L(2),NumTicks))
-%                 if i > 3
-%                     xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-%                 end
-%                 axis tight
-%                 yl = get(gca, 'ylim');
-%                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-%                 xlim([0,100])
-%             end
-%             if i == 3
-% %                 lh1=legend('-DynamicLegend','location','northwest');
-% %                 lh1.Interpreter = 'tex';
-% %                 lhPos = lh1.Position;
-% %                 lhPos(1) = lhPos(1)+0.17;
-% % %                 lhPos(2) = lhPos(2)+0.1;
-% % %                 lh1.Box='off';
-% %                 set(lh1,'position',lhPos);
-%             end
-%         end
-%         
-%         if inr==nr && ~strcmp(figNamePrefix,'none')
-%             set(h1a,'PaperPositionMode','auto')
-%             print(h1a,[figNamePrefix '_qdots'],'-dpng','-r0')
-%             print(h1a,[figNamePrefix '_qdots'],'-depsc')
-%         end
+    end
+    if makeplot.kinematics_Qdots
+        % qdots
+        
+        if inr==1
+            h1a = figure('Position',[fpos(1,:),fwide]);
+        else
+            figure(h1a);
+        end
+        j = 0;
+        label_fontsize  = 12;
+        line_linewidth  = 0.5;
+        NumTicks = 6;
+        for i = 1:length(idx_title)
+            subplot(2,4,idx_sp(i))
+            x = 1:(100-1)/(size(R.Qdots,1)-1):100;
+            % Experimental data
+            if  inr == 1 && md
+                idx_jref = strcmp(Qref.colheaders,joints_ref{idx_js(i)});
+                if sum(idx_jref) == 1
+                    meanPlusSTD = (Qref.Qdotall_mean(:,idx_jref) + 2*Qref.Qdotall_std(:,idx_jref));
+                    meanMinusSTD = (Qref.Qdotall_mean(:,idx_jref) - 2*Qref.Qdotall_std(:,idx_jref));
+
+                    stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
+                    intervalQ = 1:stepQ:size(R.Qs,1);
+                    sampleQ = 1:size(R.Qs,1);
+                    meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
+                    meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
+
+                    hold on
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
+                    alpha(.25);
+                end
+            end
+
+            % Simulation results
+            x = 1:(100-1)/(size(R.Qs,1)-1):100;
+            hold on;
+            if (has_no_tmt && strcmp(joints_tit{idx_title(i)},'Tarsometatarsal R')) || ...
+                    (has_no_mtj && strcmp(joints_tit{idx_title(i)},'Midtarsal R'))
+                % skip this plot
+            else
+                j=j+1;
+                plot(x,R.Qdots(:,idx_Qs(j)),'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
+
+            end
+
+            % Plot settings
+            if inr == nr
+                set(gca,'Fontsize',label_fontsize);
+                ttl_tmp = joints_tit{idx_title(i)};
+                title(ttl_tmp(1:end-2),'Fontsize',label_fontsize);
+                % Y-axis
+                if i == 1 || i == 4
+                    ylabel('Angular velocity (°/s)','Fontsize',label_fontsize);
+                end
+                % X-axis
+                L = get(gca,'XLim');
+                set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+                if i > 3
+                    xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                end
+                axis tight
+                yl = get(gca, 'ylim');
+                ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+                xlim([0,100])
+            end
+            if i == 3
+%                 lh1=legend('-DynamicLegend','location','northwest');
+%                 lh1.Interpreter = 'tex';
+%                 lhPos = lh1.Position;
+%                 lhPos(1) = lhPos(1)+0.17;
+% %                 lhPos(2) = lhPos(2)+0.1;
+% %                 lh1.Box='off';
+%                 set(lh1,'position',lhPos);
+            end
+        end
+        
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h1a,'PaperPositionMode','auto')
+            print(h1a,[figNamePrefix '_qdots'],'-dpng','-r0')
+            print(h1a,[figNamePrefix '_qdots'],'-depsc')
+        end
     end
     
     
@@ -642,7 +644,7 @@ for inr=1:nr
             figure(h3);
         end
 
-        n_msc = 7;
+        n_msc = 8;
 %         nn_msc = 6;
 
         if inr==1 && md 
@@ -820,6 +822,20 @@ for inr=1:nr
                 axis tight
                 yl = get(gca, 'ylim');
                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+                xlim([0,100])
+
+                subplot(n_msc,nn_msc,7*nn_msc+imu)
+                plot(R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+                hold on
+                grid on
+                L = get(gca,'XLim');
+                set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+                if imu==1
+                    ylabel('$l^{MT}$ (m)','Interpreter','latex');
+                end
+                axis tight
+                yl = get(gca, 'ylim');
+                ylim([yl(1)-0.01*norm(yl),yl(2)+0.01*norm(yl)])
                 xlim([0,100])
 
             end
@@ -2102,7 +2118,11 @@ for inr=1:nr
             else
                 h_fa = zeros(size(l_PF)); % to do: add this to prost-processing
             end
-                        
+            if isfield(R.windlass,'sf_PF')
+                PF_sf_var = R.windlass.sf_PF;
+            else
+                PF_sf_var = ones(2*R.S.N,2)*R.S.Foot.PF_sf;
+            end
             
             subplot(2,4,5)
             hold on
@@ -2177,7 +2197,16 @@ for inr=1:nr
 %                 ylabel('PF force (kN)','Fontsize',label_fontsize);
 %                 poly_1 = ['F_P_F = ' num2str(c(2),3) ' N + ' num2str(c(1),3) ' F_A_t'];
                 
-                
+                subplot(2,4,7)
+                hold on
+                plot(x,PF_sf_var(:,1),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                title('Plantar fascia scale factor')
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('scale factor (-)','Fontsize',label_fontsize);
+                axis tight
+                yl = get(gca, 'ylim');
+                ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+                xlim([0,100])
 
 %                 F_GRF = R.GRFs(iarch_stance,2)*R.body_mass*9.81/100;
 %                 A_tmp = [F_GRF, F_At(iarch_stance)]\F_PF(iarch_stance);
@@ -3189,7 +3218,7 @@ for inr=1:nr
             subplot(3,2,[1,3])
             
             hold on
-            fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
+            fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Measured (mean \pm 2 SD)');
             alpha(.25);
             
 %             [pathHere,~,~] = fileparts(mfilename('fullpath'));
@@ -3207,7 +3236,7 @@ for inr=1:nr
         subplot(3,2,[1,3])
         hold on
         plot(x,q_ankle_sim,'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
-        if tmpxcs > 0.6
+        if tmpxcs > 0.8
             plot(x(iswing(aa:end)),q_ankle_sim(iswing(1:end-aa+1)),'--','linewidth',2,'Color',CsV(inr,:),'DisplayName',['Swing shifted ' num2str(aa) '%GC']);
         end
         if inr==nr
@@ -4170,51 +4199,51 @@ for inr=1:nr
         title('Objective')
 
         subplot(2,6,2)
-        plot(inr,R.Obj.E,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        plot(inr,R.Obj.E/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('E_{metabolic}')
 
         subplot(2,6,3)
-        plot(inr,R.Obj.A,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        plot(inr,R.Obj.A/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('activity')
 
         subplot(2,6,4)
-        plot(inr,R.Obj.Arm,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        plot(inr,R.Obj.Arm/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('arms e')
 
         subplot(2,6,5)
-        plot(inr,R.Obj.Mtp,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        plot(inr,R.Obj.Mtp/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('mtp e')
 
         if isfield(R.Obj,'PIM') && R.Obj.PIM >0
             subplot(2,6,6)
-            plot(inr,R.Obj.PIM,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+            plot(inr,R.Obj.PIM/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
             hold on
             title('PIM e')
         end
 
         if isfield(R.Obj,'P_PIM')  && R.Obj.P_PIM >0
             subplot(2,6,7)
-            plot(inr,R.Obj.P_PIM,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+            plot(inr,R.Obj.P_PIM/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
             hold on
             title('PIM Work')
         end
 
         subplot(2,6,8)
-        plot(inr,R.Obj.qdd,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        plot(inr,R.Obj.qdd/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('accelerations')
 
         subplot(2,6,9)
-        plot(inr,R.Obj.Pass,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        plot(inr,R.Obj.Pass/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('passive torques')
 
         subplot(2,6,10)
-        plot(inr,R.Obj.vA,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
+        plot(inr,R.Obj.vA/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
         hold on
         title('da/dt')
 
@@ -4222,7 +4251,7 @@ for inr=1:nr
 
         if isfield(R.Obj,'Track')  && R.Obj.Track >0
             subplot(2,6,11)
-            plot(inr,R.Obj.Track,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
+            plot(inr,R.Obj.Track/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
             hold on
             title('Tracking')
         end

@@ -54,28 +54,40 @@ S.NThreads  = 6;        % number of threads for parallel computing
 
 % output folder
 S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be saved
-% S.suffixCasName = 'v2';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'test';        % suffix for name of file with results
+% S.suffixCasName = 'mtptau';     % suffix for name of folder with casadifunctions
+% S.suffixName = 'test1';        % suffix for name of file with results
+
+% Cost function weights
+S.W.Ak      = 50000;    % weight joint accelerations
+S.W.passMom = 1000;     % weight passive torques
+S.W.noDamping = 1;
+S.W.A       = 2000;     % weight muscle activations
 
 
 %% Tracking term
-S.TrackSim = 0;
+S.TrackSim = 1;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
-S.Track.Q_ref = 'mtjc3_custom';
+S.Track.Q_ref = 'mtjc2_custom';
 S.W.Q_track = 1e4;
 
 
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc5';
+S.Foot.Model = 'mtjc2';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
 
-% Achilles tendon
-S.AchillesTendonScaleFactor = 1;
+% Achilles tendon stiffness
+S.AchillesTendonScaleFactor = 0.7;
+
+% Reduce tendon slack length of Soleus
+S.SoleusTendonShorter = 0;
+
+% Shift passive force-length curve of ankle muscle fibers
+S.passiveFiberForceShift = 0;
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -91,6 +103,7 @@ S.MTparams = 'MTc2';    % MTc2 Sv50
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
+S.Foot.contactGeometryVersion = 1;
 S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
@@ -105,7 +118,7 @@ S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
 
 %% midtarsal joint 
 % (only used if Model = mtj)
-S.Foot.mtj_muscles = 1;  % joint interacts with- extrinsic foot muscles
+S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
 S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
 S.Foot.mtj_stiffness = 'MG_exp5_table'; % 'MG_exp5_table' 'MG_exp_table'
@@ -116,8 +129,9 @@ S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
-S.Foot.PF_sf = 1;   
+S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_sf = 1;
+S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
 
 % Plantar Intrinsic Muscles represented by an ideal force actuator
@@ -126,7 +140,11 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
+% Tendon slack length
+S.Foot.FDB_lTs = 0.125;
+% Shift fiber passive force-length curve
+S.Foot.FDB_shift = -0.1;
 
 %% Initial guess
 %-------------------------------------------------------------------------%

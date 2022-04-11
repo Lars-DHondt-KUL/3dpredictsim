@@ -542,19 +542,29 @@ Xj_Qs_Qdots_opt(:,2:2:end)  = qdot_col_opt_unsc.rad;
 Xj_Qdotdots_opt             = qdotdot_col_opt_unsc.rad;
 Foutj_opt                   = zeros(d*N,F.nnz_out);
 Tau_passj_opt_all           = zeros(d*N,nq.all-nq.abs);
+Tau_passj_opt_all_noDamping = Tau_passj_opt_all;
+
 for i = 1:d*N
     % inverse dynamics
     [res] = F([Xj_Qs_Qdots_opt(i,:)';Xj_Qdotdots_opt(i,:)']); 
     Foutj_opt(i,:) = full(res); % extract ID moments from external function used in the optimization
     % passive torques
     Tau_passj_opt_all(i,:) = full(f_AllPassiveTorques(q_col_opt_unsc.rad(i,:),qdot_col_opt_unsc.rad(i,:)));
+    Tau_passj_opt_all_noDamping(i,:) = full(f_AllPassiveTorques(q_col_opt_unsc.rad(i,:),zeros(size(qdot_col_opt_unsc.rad(i,:)))));
 end
-if mtj
-    Tau_passj_J = Tau_passj_opt_all(:,[1:12 17:end]);
+if S.W.noDamping
+    if mtj
+        Tau_passj_J = Tau_passj_opt_all_noDamping(:,[1:12 17:end]);
+    else
+        Tau_passj_J = Tau_passj_opt_all_noDamping(:,[1:12 15:end]);
+    end
 else
-    Tau_passj_J = Tau_passj_opt_all(:,[1:12 15:end]);
+    if mtj
+        Tau_passj_J = Tau_passj_opt_all(:,[1:12 17:end]);
+    else
+        Tau_passj_J = Tau_passj_opt_all(:,[1:12 15:end]);
+    end
 end
-
 
 %% Stride length and width
 % For the stride length we also need the values at the end of the
@@ -1113,6 +1123,24 @@ if strcmp(HS1,'l')
     Tau_pass_opt_GC(:,Tau_pass_opt_inv) = Tau_pass_opt_GC(:,:);
 end
 
+if length(S.Foot.PF_sf_var)==2*N
+    PF_sf_var(:,1) = horzcat(S.Foot.PF_sf_var(1:N));
+    PF_sf_var(:,2) = horzcat(S.Foot.PF_sf_var(N+1:end));
+    PF_sf_var_GC = zeros(2*N,2);
+    PF_sf_var_GC(1:N-IC1i_c+1,:) = PF_sf_var(IC1i_c:end,:);
+    PF_sf_var_GC(N-IC1i_c+2:N-IC1i_c+1+N,:) = PF_sf_var(1:end,[2,1]);
+    PF_sf_var_GC(N-IC1i_c+2+N:2*N,:) = PF_sf_var(1:IC1i_c-1,:);
+
+    % If the first heel strike was on the left foot then we invert so that
+    % we always start with the right foot, for analysis purpose
+    if strcmp(HS1,'l')
+        PF_sf_var_GC(:,[2,1]) = PF_sf_var_GC(:,:);
+    end
+else
+    PF_sf_var_GC = ones(2*N,2)*S.Foot.PF_sf;
+end
+
+
 % Create .mot file for OpenSim GUI
 q_opt_GUI_GC = zeros(2*N,1+nq.all+2);
 q_opt_GUI_GC(1:N-IC1i_s+1,1) = tgrid(:,IC1i_s:end-1)';
@@ -1478,8 +1506,9 @@ if mtj
     end
     
     if ~strcmp(S.Foot.PF_stiffness,'none')
-        F_PF = f_PF_stiffness(l_PF)*S.Foot.PF_sf;
+        F_PF = f_PF_stiffness(l_PF).*PF_sf_var_GC(:,1)';
         windlass.F_PF = full(F_PF');
+        windlass.sf_PF = PF_sf_var_GC;
     end
     
 %     windlass.l_fa = l_fa;

@@ -412,7 +412,7 @@ if numFig <1 || numFig==4
     end
     xlabel('Horizontal elongation (mm)')
     ylabel('Vertical force (kN)')
-    title({'Foot arch stiffness','\rm as defined by Ker and all, 1987'})
+    title({'Foot arch stiffness','\rm as defined by Ker et al. (1987)'})
     lg12 = legend('Location','southeast','Interpreter','none');
     lhPos = lg12.Position;
     lhPos(2) = lhPos(2)-0.3;

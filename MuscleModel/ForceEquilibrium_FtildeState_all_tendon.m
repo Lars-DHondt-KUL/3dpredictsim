@@ -8,10 +8,16 @@ function [err, FT, Fce, Fpass, Fiso, vMmax, massM] = ...
     ForceEquilibrium_FtildeState_all_tendon(a,fse,dfse,lMT,vMT,params,...
     Fvparam,Fpparam,Faparam,tension,aTendon,shift,varargin)
 
-if isempty(varargin)
-    MuscMoAsmp = 0;
-else
+if length(varargin)>=1 && ~isempty(varargin{1})
     MuscMoAsmp = varargin{1};
+else
+    MuscMoAsmp = 0;
+end
+
+if length(varargin)>=2 && ~isempty(varargin{2})
+    pass_shift_1 = varargin{2};
+else
+    pass_shift_1 = 0;
 end
 
 FMo = ones(size(a,1),1)*params(1,:);
@@ -29,7 +35,7 @@ lTtilde = log(5*(fse + 0.25 - shift))./Atendon + 0.995;
 
 % Hill-type muscle model: geometric relationships
 if(MuscMoAsmp == 0) % b = cst
-    lM = sqrt((lMo.*sin(alphao)).^2+(lMT-lTs.*lTtilde).^2);
+   lM = sqrt((lMo.*sin(alphao)).^2+(lMT-lTs.*lTtilde).^2);
 else    % alpha = cst = alphao
    lM = (lMT-lTs.*lTtilde)./cos(alphao);
 end
@@ -81,7 +87,7 @@ Fce = FMo.*Fcetilde;
 % Passive muscle force-length characteristic
 e0 = 0.6;
 kpe = 4;
-t5 = exp(kpe * (lMtilde - 0.10e1) / e0);
+t5 = exp(kpe * (lMtilde - 0.10e1 - pass_shift_1) / e0);
 % Passive muscle force
 Fpetilde = ((t5 - 0.10e1) - Fpparam(1)) / Fpparam(2);
 Fpass = FMo.*Fpetilde;

@@ -82,6 +82,9 @@ if isfield(S,'W')
     if ~isfield(S.W,'passMom')
         S.W.passMom = 1000;     % weight passive torques
     end
+    if ~isfield(S.W,'noDamping')
+        S.W.noDamping = 0;      % do not use damping in penalty
+    end
     if ~isfield(S.W,'A')
         S.W.A       = 2000;     % weight muscle activations
     end
@@ -105,6 +108,7 @@ else
     S.W.Ak      = 50000;    % weight joint accelerations
     S.W.ArmE    = 10^6;     % weight arm excitations
     S.W.passMom = 1000;     % weight passive torques
+    S.W.noDamping = 0;      % do not use damping in penalty
     S.W.A       = 2000;     % weight muscle activations
     S.W.exp_E   = 2;        % power metabolic energy
     S.W.Mtp     = 10^6;     % weight mtp excitations
@@ -277,6 +281,10 @@ end
 %%
 if ~isfield(S,'AchillesTendonScaleFactor') || isempty(S.AchillesTendonScaleFactor)
     S.AchillesTendonScaleFactor = 1;
+end
+
+if ~isfield(S,'SoleusTendonShorter') || isempty(S.SoleusTendonShorter)
+    S.SoleusTendonShorter = 0;
 end
 
 if ~isfield(S.Foot,'kMTP') || isempty(S.Foot.kMTP)

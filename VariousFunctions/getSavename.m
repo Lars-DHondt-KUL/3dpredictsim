@@ -52,6 +52,18 @@ if isfield(S,'AchillesTendonScaleFactor') && S.AchillesTendonScaleFactor~=1
 elseif isfield(S,'AchillesTendonScaleFactor') && S.AchillesTendonScaleFactor==1
      not{end+1} = 'not_ATx';
 end
+if isfield(S,'SoleusTendonShorter') && S.SoleusTendonShorter
+    savenameparts{end+1} = ['STm' num2str(S.SoleusTendonShorter*1000)];
+    casfuncfolparts{end+1} = ['STm' num2str(S.SoleusTendonShorter*1000)];
+elseif isfield(S,'SoleusTendonShorter')
+    not{end+1} = 'not_STm';
+end
+if isfield(S,'passiveFiberForceShift') && S.passiveFiberForceShift
+    savenameparts{end+1} = ['Fpsl' num2str(-S.passiveFiberForceShift*100)];
+    casfuncfolparts{end+1} = ['Fpsl' num2str(-S.passiveFiberForceShift*100)];
+% elseif isfield(S,'passiveFiberForceShift')
+%     not{end+1} = 'not_Fpsl';
+end
 
 if isfield(S,'tib_ant_Rajagopal2015') && S.tib_ant_Rajagopal2015
     savenameparts{end+1} = 'TAR';
@@ -94,6 +106,14 @@ if isfield(S,'Foot')
     if isfield(S.Foot,'dMTP') && ~isempty(S.Foot.dMTP)
         savenameparts{end+1} = ['d0' num2str(S.Foot.dMTP*10)];
         casfuncfolparts{end+1} = ['d0' num2str(S.Foot.dMTP*10)];
+    end
+    if isfield(S.Foot,'mtp_tau_pass') && ~isempty(S.Foot.mtp_tau_pass)
+        if S.Foot.mtp_tau_pass
+            savenameparts{end+1} = ['tau'];
+            casfuncfolparts{end+1} = ['tau'];
+        else
+            not{end+1} = 'not_tau';
+        end
     end
     
     
@@ -144,14 +164,30 @@ if isfield(S,'Foot')
         if isfield(S.Foot,'PF_sf') && S.Foot.PF_sf~=1
             savenameparts{end} = [savenameparts{end} '_x' num2str(S.Foot.PF_sf)];
         end
+        if isfield(S.Foot,'PF_sf_isvar') && S.Foot.PF_sf_isvar > 0
+            savenameparts{end} = [savenameparts{end} '_xv' num2str(S.Foot.PF_sf_isvar)];
+        end
         if isfield(S.Foot,'PF_slack_length') && ~isempty(S.Foot.PF_slack_length)
             savenameparts{end+1} = ['ls' num2str(S.Foot.PF_slack_length*1000)];
             casfuncfolparts{end+1} = ['ls' num2str(S.Foot.PF_slack_length*1000)];
         end
     
-        if isfield(S.Foot,'FDB') && S.Foot.FDB
-            savenameparts{end+1} = 'FDB';
-            casfuncfolparts{end+1} = 'FDB';
+        if isfield(S.Foot,'FDB') 
+            if S.Foot.FDB == 1
+                savenameparts{end+1} = 'FDB';
+                casfuncfolparts{end+1} = 'FDB';
+            elseif S.Foot.FDB == 2
+                savenameparts{end+1} = 'FDB2';
+                casfuncfolparts{end+1} = 'FDB2';
+            end
+        end
+        if isfield(S.Foot,'FDB_lTs')
+            savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+            casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+        end
+        if isfield(S.Foot,'FDB_shift') && S.Foot.FDB_shift
+            savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+            casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
         end
 
         if isfield(S.Foot,'PIM') && S.Foot.PIM
@@ -185,12 +221,35 @@ if isfield(S,'Foot')
       
 end
 
-
+% initial guess
 if isfield(S,'IGsel') && ~isempty(S.IGsel)
     if S.IGsel == 1
         savenameparts{end+1} = ['ig1'];
     else
         savenameparts{end+1} = ['ig2' num2str(S.IGmodeID )];
+    end
+end
+
+% cost function weight factors
+if isfield(S,'W')
+    if isfield(S.W,'Ak')
+        savenameparts{end+1} = ['wAk' num2str(S.W.Ak,2)];
+    else
+        not{end+1} = 'not_wAk';
+    end
+    if isfield(S.W,'A')
+        savenameparts{end+1} = ['wa' num2str(S.W.A,2)];
+    else
+        not{end+1} = 'not_wa';
+    end
+    if isfield(S.W,'passMom')
+        if isfield(S.W,'noDamping') && S.W.noDamping
+            savenameparts{end+1} = ['wpMnD' num2str(S.W.passMom,2)];
+        else
+            savenameparts{end+1} = ['wpM' num2str(S.W.passMom,2)];
+        end
+    else
+        not{end+1} = 'not_wpM';
     end
 end
 

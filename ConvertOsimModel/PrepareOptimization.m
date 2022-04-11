@@ -12,9 +12,9 @@ clc
 %% Inputs
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
-FootModel = 'mtjc5'; % mtp or mtj
+FootModel = 'mtjc2'; % mtp or mtj
 FootScaling = 'custom'; % default, custom
-FDB = 0;
+FDB = 2;
 tib_ant_Rajagopal2015 = 0;
 MTcustom = 2; % 2 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis
@@ -38,8 +38,10 @@ elseif strcmp(FootScaling,'custom')
 elseif strcmp(FootScaling,'personalised')
     OsimFileName = [OsimFileName '_sp'];
 end
-if FDB
+if FDB == 1
     OsimFileName = [OsimFileName '_FDB'];
+elseif FDB == 2
+    OsimFileName = [OsimFileName '_FDB2'];
 end
 if tib_ant_Rajagopal2015
     OsimFileName = [OsimFileName '_TAR'];
@@ -72,6 +74,10 @@ ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
 if ~isfile(ModelPath)
     OsimFileName = [OsimFileName '_cspx10_oy'];
     ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
+    if ~isfile(ModelPath)
+        OsimFileName = [OsimFileName '2'];
+        ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
+    end
 end
 disp(OsimFileName)
 

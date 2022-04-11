@@ -16,8 +16,10 @@ if ~isfield(S,'OsimFileName')
         OsimFileName = [OsimFileName '_sp'];
     end
     ExternalFunc = OsimFileName;
-    if S.Foot.FDB
+    if S.Foot.FDB == 1
         OsimFileName = [OsimFileName '_FDB'];
+    elseif S.Foot.FDB == 2
+        OsimFileName = [OsimFileName '_FDB2'];
     end
     if S.tib_ant_Rajagopal2015
         OsimFileName = [OsimFileName '_TAR'];
@@ -39,6 +41,9 @@ if S.Foot.contactStiffnessFactor == 10
 elseif S.Foot.contactStiffnessFactor == 5
     ExternalFunc = [ExternalFunc '_cspx5'];
 end
+if S.Foot.contactGeometryVersion > 1
+    ExternalFunc = [ExternalFunc '_cg' num2str(S.Foot.contactGeometryVersion)];
+end
 if S.Foot.contactSphereOffsetY == 1
     ExternalFunc = [ExternalFunc '_oy'];
 elseif S.Foot.contactSphereOffsetY == 2
@@ -56,6 +61,12 @@ end
 
 S.ExternalFunc = ExternalFunc;
 
+%% get variable plantar fascia stiffness scale factor
+if S.Foot.PF_sf_isvar
+    S.Foot.PF_sf_var = get_PF_sf_var(S.N,S.Foot.PF_sf_isvar);
+else
+    S.Foot.PF_sf_var = 1;
+end
 
 %% build standardised names
 [savename, casfuncfol] = getSavename(S);
