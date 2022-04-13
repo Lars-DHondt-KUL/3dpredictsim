@@ -180,15 +180,18 @@ if isfield(S,'Foot')
                 savenameparts{end+1} = 'FDB2';
                 casfuncfolparts{end+1} = 'FDB2';
             end
+            if S.Foot.FDB
+                if isfield(S.Foot,'FDB_lTs')
+                    savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+                    casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+                end
+                if isfield(S.Foot,'FDB_shift') && S.Foot.FDB_shift
+                    savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+                    casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+                end
+            end
         end
-        if isfield(S.Foot,'FDB_lTs')
-            savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
-            casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
-        end
-        if isfield(S.Foot,'FDB_shift') && S.Foot.FDB_shift
-            savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
-            casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
-        end
+        
 
         if isfield(S.Foot,'PIM') && S.Foot.PIM
             savenameparts{end+1} = 'PIM';

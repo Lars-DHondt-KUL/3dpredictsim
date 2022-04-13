@@ -32,7 +32,8 @@ load([pathRepo '/Results/batchQ.mat'],'batchQ');
 fields = fieldnames(batchQ);
 % remove entries that already have a postprocessed result
 for i=1:numel(fields)
-pathResult_pp = fullfile([pathRepo '/Results'],batchQ.(fields{i}).S.ResultsFolder,[batchQ.(fields{i}).S.savename '_pp.mat']);
+pathResult_pp = fullfile([pathRepo '/Results'],batchQ.(fields{i}).S.ResultsFolder,...
+    [batchQ.(fields{i}).S.savename '_pp.mat']);
     if exist(pathResult_pp,'file')
         batchQ = rmfield(batchQ,(fields{i}));
     end
@@ -63,7 +64,8 @@ imax = min(imax,numel(fields));
 
 for i=1:imax
     % check if this job has been started
-    if ~( isfield(batchQ.(fields{i}),'job_started') && ~isempty(batchQ.(fields{i}).job_started) && batchQ.(fields{i}).job_started )
+    if ~( isfield(batchQ.(fields{i}),'job_started') && ~isempty(batchQ.(fields{i}).job_started)...
+            && batchQ.(fields{i}).job_started )
         % make folder to store results if it doesn't exist
         pathResults = fullfile([pathRepo '/Results'],batchQ.(fields{i}).S.ResultsFolder);
         if ~isfolder(pathResults)
@@ -82,8 +84,9 @@ for i=1:imax
         CasadiFiles = fullfile(pathRepo,'CasADiFunctions',batchQ.(fields{i}).S.CasadiFunc_Folders);
         batchQ.(fields{i}).S.NThreads  = 2;
 
-        job(i) = batch(myCluster,batchQ.(fields{i}).PredSim,0,{batchQ.(fields{i}).S},'CurrentFolder',StartPath,...
-                'AdditionalPaths',{CasadiFiles,PathPolynomials,pathExternalFunctions});
+        job(i) = batch(myCluster,batchQ.(fields{i}).PredSim,0,{batchQ.(fields{i}).S},...
+            'CurrentFolder',StartPath,'AdditionalPaths',...
+            {CasadiFiles,PathPolynomials,pathExternalFunctions});
 
         % mark this job as started
         batchQ.(fields{i}).job_started = 1;
@@ -93,13 +96,4 @@ end
 save([pathRepo '/Results/batchQ.mat'],'batchQ');
 
 
-%% rerun this section after the jobs are done to get logfiles
 
-% for i=1:length(job)
-%     if strcmp(job(1, i).State,'finished') && strcmp(job(1, i).Name(1:9),'f_PredSim')
-%         clc
-%         diary(fullfile(pathRepo,'Results',batchQ.(fields{i}).S.ResultsFolder,[batchQ.(fields{i}).S.savename '_log.txt']));
-%         job(1, i).Tasks.Diary
-%         diary off
-%     end
-% end

@@ -48,7 +48,7 @@ add_to_batch_queue = 1;     % save settings to run later
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
 S.N         = 50;       % number of mesh intervals
-S.NThreads  = 6;        % number of threads for parallel computing
+S.NThreads  = 8;        % number of threads for parallel computing
 % S.max_iter  = 10;       % maximum number of iterations (comment -> 10000)
 % S.tol_ipopt = 3;        % stopping criterion: < 10^(-...) 
 
@@ -58,14 +58,14 @@ S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be save
 % S.suffixName = 'test1';        % suffix for name of file with results
 
 % Cost function weights
-S.W.Ak      = 50000;    % weight joint accelerations
+S.W.Ak      = 20000;    % weight joint accelerations
 S.W.passMom = 1000;     % weight passive torques
 S.W.noDamping = 1;
 S.W.A       = 2000;     % weight muscle activations
 
 
 %% Tracking term
-S.TrackSim = 1;
+S.TrackSim = 0;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
 S.Track.Q_ref = 'mtjc2_custom';
@@ -87,7 +87,7 @@ S.AchillesTendonScaleFactor = 0.7;
 S.SoleusTendonShorter = 0;
 
 % Shift passive force-length curve of ankle muscle fibers
-S.passiveFiberForceShift = 0;
+S.passiveFiberForceShift = -0.1; %-0.1
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -103,7 +103,7 @@ S.MTparams = 'MTc2';    % MTc2 Sv50
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 1;
+S.Foot.contactGeometryVersion = 2;
 S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
