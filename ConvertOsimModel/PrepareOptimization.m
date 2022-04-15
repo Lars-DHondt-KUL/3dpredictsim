@@ -16,7 +16,7 @@ FootModel = 'mtjc2'; % mtp or mtj
 FootScaling = 'custom'; % default, custom
 FDB = 2;
 tib_ant_Rajagopal2015 = 0;
-MTcustom = 2; % 2 is proper geometry for mtj models
+MTcustom = 4; % 2 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis
 Bool_RunMA = 1; 
 
@@ -48,8 +48,8 @@ if tib_ant_Rajagopal2015
 end
 if MTcustom == 1
     OsimFileName = [OsimFileName '_MTc'];
-elseif MTcustom == 2
-    OsimFileName = [OsimFileName '_MTc2'];
+elseif MTcustom >= 2
+    OsimFileName = [OsimFileName '_MTc' num2str(MTcustom)];
 end
 % Manually overwrite OpenSim file name if wanted
 % OsimFileName = 'CP3_T0_scaled_MRI_v7_scaledMT_right';

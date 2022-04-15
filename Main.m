@@ -49,7 +49,7 @@ add_to_batch_queue = 1;     % save settings to run later
 S.v_tgt     = 1.33;     % average speed
 S.N         = 50;       % number of mesh intervals
 S.NThreads  = 8;        % number of threads for parallel computing
-% S.max_iter  = 10;       % maximum number of iterations (comment -> 10000)
+% S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.tol_ipopt = 3;        % stopping criterion: < 10^(-...) 
 
 % output folder
@@ -58,7 +58,7 @@ S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be save
 % S.suffixName = 'test1';        % suffix for name of file with results
 
 % Cost function weights
-S.W.Ak      = 20000;    % weight joint accelerations
+S.W.Ak      = 50000;    % weight joint accelerations
 S.W.passMom = 1000;     % weight passive torques
 S.W.noDamping = 1;
 S.W.A       = 2000;     % weight muscle activations
@@ -99,11 +99,11 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = 'MTc2';    % MTc2 Sv50
+S.MTparams = 'MTc4';    % MTc2 Sv50
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 2;
+S.Foot.contactGeometryVersion = 1;
 S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
@@ -113,7 +113,7 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
 S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
 S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
-S.Foot.mtp_tau_pass = 0;    % use passive bushing torque
+S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
 
 %% midtarsal joint 
