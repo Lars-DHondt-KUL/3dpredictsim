@@ -45,6 +45,8 @@ Data.IK_original.Qall_mean = ExperimentalData.Q.subject1.Qs.mean;
 Data.IK_original.Qall_std = ExperimentalData.Q.subject1.Qs.std;
 Data.IK_original.Qdotall_mean = ExperimentalData.Q.subject1.Qdots.mean;
 Data.IK_original.Qdotall_std = ExperimentalData.Q.subject1.Qdots.std;
+% Data.IK_original.Qddotall_mean = ExperimentalData.Q.subject1.Qdotdots.mean;
+% Data.IK_original.Qddotall_std = ExperimentalData.Q.subject1.Qdotdots.std;
 
 load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_subject1_withMTJ_locked_scaled_default.mat');
 Data.IK_mtp_default.colheaders = Qref.subject1.colheaders;
@@ -52,6 +54,8 @@ Data.IK_mtp_default.Qall_mean = Qref.subject1.Qs.mean;
 Data.IK_mtp_default.Qall_std = Qref.subject1.Qs.std;
 Data.IK_mtp_default.Qdotall_mean = Qref.subject1.Qdots.mean;
 Data.IK_mtp_default.Qdotall_std = Qref.subject1.Qdots.std;
+Data.IK_mtp_default.Qddotall_mean = Qref.subject1.Qdotdots.mean;
+Data.IK_mtp_default.Qddotall_std = Qref.subject1.Qdotdots.std;
 
 load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_subject1_withMTJ_locked_scaled_custom.mat');
 Data.IK_mtp_custom.colheaders = Qref.subject1.colheaders;
@@ -59,7 +63,8 @@ Data.IK_mtp_custom.Qall_mean = Qref.subject1.Qs.mean;
 Data.IK_mtp_custom.Qall_std = Qref.subject1.Qs.std;
 Data.IK_mtp_custom.Qdotall_mean = Qref.subject1.Qdots.mean;
 Data.IK_mtp_custom.Qdotall_std = Qref.subject1.Qdots.std;
-
+Data.IK_mtp_custom.Qddotall_mean = Qref.subject1.Qdotdots.mean;
+Data.IK_mtp_custom.Qddotall_std = Qref.subject1.Qdotdots.std;
 
 load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_subject1_withMTJ_scaled_default.mat');
 Data.IK_mtj_default.colheaders = Qref.subject1.colheaders;
@@ -67,6 +72,8 @@ Data.IK_mtj_default.Qall_mean = Qref.subject1.Qs.mean;
 Data.IK_mtj_default.Qall_std = Qref.subject1.Qs.std;
 Data.IK_mtj_default.Qdotall_mean = Qref.subject1.Qdots.mean;
 Data.IK_mtj_default.Qdotall_std = Qref.subject1.Qdots.std;
+Data.IK_mtj_default.Qddotall_mean = Qref.subject1.Qdotdots.mean;
+Data.IK_mtj_default.Qddotall_std = Qref.subject1.Qdotdots.std;
 
 load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_subject1_withMTJ_scaled_custom.mat');
 Data.IK_mtj_custom.colheaders = Qref.subject1.colheaders;
@@ -74,6 +81,8 @@ Data.IK_mtj_custom.Qall_mean = Qref.subject1.Qs.mean;
 Data.IK_mtj_custom.Qall_std = Qref.subject1.Qs.std;
 Data.IK_mtj_custom.Qdotall_mean = Qref.subject1.Qdots.mean;
 Data.IK_mtj_custom.Qdotall_std = Qref.subject1.Qdots.std;
+Data.IK_mtj_custom.Qddotall_mean = Qref.subject1.Qdotdots.mean;
+Data.IK_mtj_custom.Qddotall_std = Qref.subject1.Qdotdots.std;
 
 load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_Fal_s1_mtjc_sc_FDB_MTc2.mat');
 Data.IK_mtjc_custom.colheaders = Qref.subject1.colheaders;
@@ -81,6 +90,8 @@ Data.IK_mtjc_custom.Qall_mean = Qref.subject1.Qs.mean;
 Data.IK_mtjc_custom.Qall_std = Qref.subject1.Qs.std;
 Data.IK_mtjc_custom.Qdotall_mean = Qref.subject1.Qdots.mean;
 Data.IK_mtjc_custom.Qdotall_std = Qref.subject1.Qdots.std;
+Data.IK_mtjc_custom.Qddotall_mean = Qref.subject1.Qdotdots.mean;
+Data.IK_mtjc_custom.Qddotall_std = Qref.subject1.Qdotdots.std;
 
 for i=1:5
     load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_Fal_s1_mtjc' num2str(i) '_sc_MTc2_cspx10_oy.mat']);
@@ -90,6 +101,8 @@ for i=1:5
     Data.(fieldname_i).Qall_std = Qref.subject1.Qs.std;
     Data.(fieldname_i).Qdotall_mean = Qref.subject1.Qdots.mean;
     Data.(fieldname_i).Qdotall_std = Qref.subject1.Qdots.std;
+    Data.(fieldname_i).Qddotall_mean = Qref.subject1.Qdotdots.mean;
+    Data.(fieldname_i).Qddotall_std = Qref.subject1.Qdotdots.std;
 end
 
 Data.ID_original.colheaders = ExperimentalData.Q.subject1.Qs.colheaders;
@@ -102,5 +115,11 @@ Data.lowEMG_std = ExperimentalData.EMG.subject1.std;
 
 Data.GRF.Fmean = ExperimentalData.GRFs.subject1.mean;
 Data.GRF.Fstd = ExperimentalData.GRFs.subject1.std;
+
+load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\COPref_mtp.mat');
+Data.GRF.COPmean = COPref.subject1.mean;
+Data.GRF.COPstd = COPref.subject1.std;
+
+
 
 save([pathRepo '\Data\Fal_s1.mat'],'Data');

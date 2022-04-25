@@ -42,8 +42,8 @@ AddCasadiPaths();
 %-------------------------------------------------------------------------%
 % Full body gait simulation
 run_simulation = 0;         % run solver
-post_process_results = 0;   % postproces
-add_to_batch_queue = 1;     % save settings to run later
+post_process_results = 1;   % postproces
+add_to_batch_queue = 0;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
@@ -54,8 +54,8 @@ S.NThreads  = 8;        % number of threads for parallel computing
 
 % output folder
 S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be saved
-% S.suffixCasName = 'mtptau';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'test1';        % suffix for name of file with results
+% S.suffixCasName = '';     % suffix for name of folder with casadifunctions
+S.suffixName = 'pelvis_bounds2';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations

@@ -73,6 +73,25 @@ for inr=1:nr
         has_no_mtj = sum( contains(R.colheaders.joints,'mtj_angle_r') >0);
     end
     
+    if makeplot.plot_bounds
+        load([ResultsFile{inr}(1:end-7) '.mat'],'setup');
+        scaling_Qs = setup.scaling.Qs;
+        bounds_Qs_l = setup.bounds.Qs.lower;
+        bounds_Qs_u = setup.bounds.Qs.upper;
+        bounds_Qs_l = bounds_Qs_l.*scaling_Qs;
+        bounds_Qs_u = bounds_Qs_u.*scaling_Qs;
+        scaling_Qdots = setup.scaling.Qdots;
+        bounds_Qdots_l = setup.bounds.Qdots.lower;
+        bounds_Qdots_u = setup.bounds.Qdots.upper;
+        bounds_Qdots_l = bounds_Qdots_l.*scaling_Qdots;
+        bounds_Qdots_u = bounds_Qdots_u.*scaling_Qdots;
+        scaling_Qddots = setup.scaling.Qdotdots;
+        bounds_Qddots_l = setup.bounds.Qdotdots.lower;
+        bounds_Qddots_u = setup.bounds.Qdotdots.upper;
+        bounds_Qddots_l = bounds_Qddots_l.*scaling_Qddots;
+        bounds_Qddots_u = bounds_Qddots_u.*scaling_Qddots;
+    end
+
 %% get indices
     imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
     iknee = strcmp(R.colheaders.joints,'knee_angle_r');
@@ -124,7 +143,7 @@ for inr=1:nr
     %% calculate power and work
 
     x = 1:(100-1)/(size(R.Qs,1)-1):100;
-    istance = 1:1:ceil(R.Event.Stance)+10;
+    istance = 1:1:min(ceil(R.Event.Stance)+10,100);
     ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,17)>5);
     istance0 = 1:1:ceil(R.Event.Stance);
     iswing = istance0(end)+1:100;
@@ -892,9 +911,25 @@ for inr=1:nr
         else
             figure(h4);
         end
+
         
-        
-        istance_COPR = find(R.GRFs(:,2)>20);
+        if inr==1 && md
+            subplot(3,5,[5;10])
+            hold on
+            grid on
+            iCOPd = find(Data.GRF.Fmean(:,2)>=20);
+            COPdzR = Data.GRF.COPmean(iCOPd,3)*1e3;
+            iCOPdL = mod(iCOPd+49,100)+1;
+            COPdzL = Data.GRF.COPmean(iCOPdL,3)*1e3;
+            COPdz = mean(COPdzR) + mean(COPdzL);
+            COPdzR = COPdzR - COPdz/2;
+            COPdx = Data.GRF.COPmean(iCOPd,1)*1e3;
+            COPdx = COPdx - COPdx(1);
+            
+            plot(COPdzR,COPdx,'.k','DisplayName','Measured');
+        end
+
+        istance_COPR = find(R.GRFs(:,2)>30);
         COPz = R.COPR(istance_COPR,3)*1e3;
         COPx = (R.COPR(istance_COPR,1)-R.COPR(istance_COPR(1),1))*1e3;
         subplot(3,5,[5;10])
@@ -1897,6 +1932,10 @@ for inr=1:nr
             else
                 j=j+1;
                 plot(x,R.Qs(:,idx_Qs(j)),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                if makeplot.plot_bounds
+                    yline(bounds_Qs_l(idx_Qs(j))*180/pi,'--','color',Cs)
+                    yline(bounds_Qs_u(idx_Qs(j))*180/pi,'--','color',Cs)
+                end
             end
 
             % Plot settings
@@ -2008,6 +2047,116 @@ for inr=1:nr
     end
         
     %% all
+    if makeplot.allQdots
+        if inr==1
+            h9b = figure('Position',[fpos(3,:),fhigh1]);
+        end
+        
+        if has_no_tmt && has_no_mtj
+            idx_Qs = [1,2,3,10,11,12,14,16,18,20,21,22,23,27,28,29,31];
+        else
+            idx_Qs = [1,2,3,10,11,12,14,16,18,20,22,23,24,25,29,30,31,33];
+        end
+        idx_title = [1,2,3,10,11,12,14,16,18,20,24,25,26,27,31,32,33,35];
+        joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
+                'hip_flexion','hip_adduction','hip_rotation',...
+                'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle',...
+                'lumbar_extension','lumbar_bending','lumbar_rotation',...
+                'arm_flex','arm_add','arm_rot','elbow_flex'};
+        
+        joints_tit = {'Pelvis tilt','Pelvis list','Pelvis rotation','Pelvis tx',...
+                'Pelvis ty','Pelvis tz','Hip flexion L','Hip adduction L',...
+                'Hip rotation L','Hip flexion R','Hip adduction R','Hip rotation R',...
+                'Knee L','Knee R','Ankle L','Ankle R','Subtalar L','Subtalar R',...
+                'Midtarsal L','Midtarsal R','Tmt L','Tmt R',...
+                'Mtp L','Mtp R',...
+                'Lumbar extension','Lumbar bending','Lumbar rotation',...
+                'Arm flexion L','Arm adduction L','Arm rotation L',...
+                'Arm flexion R','Arm adduction R','Arm rotation R',...
+                'Elbow flexion L','Elbow flexion R'};
+    
+        figure(h9b)
+        
+        j = 0;
+        label_fontsize  = 12;
+        line_linewidth  = 0.5;
+        for i = 1:length(idx_title)
+            subplot(6,3,i)
+            x = 1:(100-1)/(size(R.Qs,1)-1):100;
+            % Experimental data
+            if  inr == 1 && md
+                idx_jref = strcmp(Qref.colheaders,joints_ref{i});
+                if sum(idx_jref) == 1
+                    meanPlusSTD = (Qref.Qdotall_mean(:,idx_jref) + 2*Qref.Qdotall_std(:,idx_jref));
+                    meanMinusSTD = (Qref.Qdotall_mean(:,idx_jref) - 2*Qref.Qdotall_std(:,idx_jref));
+
+                    stepQdot = (size(R.Qddots,1)-1)/(size(meanPlusSTD,1)-1);
+                    intervalQdot = 1:stepQdot:size(R.Qddots,1);
+                    sampleQdot = 1:size(R.Qddots,1);
+                    meanPlusSTD = interp1(intervalQdot,meanPlusSTD,sampleQdot);
+                    meanMinusSTD = interp1(intervalQdot,meanMinusSTD,sampleQdot);
+
+                    hold on
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
+                    alpha(.25);
+                end
+            end
+
+            % Simulation results
+            
+            hold on;
+            axis tight
+            xlim([0,100]);
+            if (has_no_tmt && strcmp(joints_tit{idx_title(i)},'Tarsometatarsal R')) || ...
+                    (has_no_mtj && strcmp(joints_tit{idx_title(i)},'Midtarsal R'))
+                % skip this plot
+            else
+                j=j+1;
+                plot(x,R.Qdots(:,idx_Qs(j)),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                if makeplot.plot_bounds
+                    yline(bounds_Qdots_l(idx_Qs(j))*180/pi,'--','color',Cs)
+                    yline(bounds_Qdots_u(idx_Qs(j))*180/pi,'--','color',Cs)
+                end
+            end
+
+            % Plot settings
+            if inr==1
+                set(gca,'Fontsize',label_fontsize);
+                title(joints_tit{idx_title(i)},'Fontsize',label_fontsize);
+                % Y-axis
+                if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 || i == 16
+                    ylabel('Velocity (°/s)','Fontsize',label_fontsize);
+                end
+                % X-axis
+                L = get(gca,'XLim');
+                NumTicks = 3;
+                set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+                if i > 15
+                    xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                end
+            end
+            if inr==1 && i==1
+                lhQ=legend('-DynamicLegend','location','northwest');
+                lhQ.Interpreter = lgInt;
+                lhQ.Orientation = 'horizontal';
+            end
+            if inr==nr && i==1
+                lhPos = lhQ.Position;
+                lhPos(1) = lhPos(1)-0.1;
+                lhPos(2) = lhPos(2)+0.08;
+                set(lhQ,'position',lhPos);
+            end
+        end
+
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h9b,'PaperPositionMode','auto')
+            print(h9b,[figNamePrefix '_qds_all'],'-dpng','-r0')
+            print(h9b,[figNamePrefix '_qds_all'],'-depsc')
+            
+        end
+    end
+
+    %% all
     if makeplot.allQddots
         if inr==1
             h9a = figure('Position',[fpos(3,:),fhigh1]);
@@ -2043,9 +2192,28 @@ for inr=1:nr
         line_linewidth  = 0.5;
         for i = 1:length(idx_title)
             subplot(6,3,i)
+            x = 1:(100-1)/(size(R.Qs,1)-1):100;
+            % Experimental data
+            if  inr == 1 && md
+                idx_jref = strcmp(Qref.colheaders,joints_ref{i});
+                if sum(idx_jref) == 1
+                    meanPlusSTD = (Qref.Qddotall_mean(:,idx_jref) + 2*Qref.Qddotall_std(:,idx_jref));
+                    meanMinusSTD = (Qref.Qddotall_mean(:,idx_jref) - 2*Qref.Qddotall_std(:,idx_jref));
+
+                    stepQddot = (size(R.Qddots,1)-1)/(size(meanPlusSTD,1)-1);
+                    intervalQddot = 1:stepQddot:size(R.Qddots,1);
+                    sampleQddot = 1:size(R.Qddots,1);
+                    meanPlusSTD = interp1(intervalQddot,meanPlusSTD,sampleQddot);
+                    meanMinusSTD = interp1(intervalQddot,meanMinusSTD,sampleQddot);
+
+                    hold on
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
+                    alpha(.25);
+                end
+            end
 
             % Simulation results
-            x = 1:(100-1)/(size(R.Qs,1)-1):100;
+            
             hold on;
             axis tight
             xlim([0,100]);
@@ -2054,7 +2222,11 @@ for inr=1:nr
                 % skip this plot
             else
                 j=j+1;
-                plot(x,R.Qddots(:,idx_Qs(j)),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                plot(x,R.Qddots(:,idx_Qs(j))*180/pi,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                if makeplot.plot_bounds
+                    yline(bounds_Qddots_l(idx_Qs(j))*180/pi,'--','color',Cs)
+                    yline(bounds_Qddots_u(idx_Qs(j))*180/pi,'--','color',Cs)
+                end
             end
 
             % Plot settings

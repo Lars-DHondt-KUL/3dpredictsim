@@ -245,6 +245,10 @@ end
 Qs_walk          = getIK(IKfile_bounds,joints);
 [bounds,scaling] = getBounds_all(Qs_walk,NMuscle,nq,jointi,S.v_tgt,mtj);
 
+% load([pathRepo '\Data\Fal_s1.mat'],'Data');
+% Qs_IK = Data.(['IK_' S.Foot.Model '_' S.Foot.Scaling]);
+% [bounds,scaling] = getBounds_all_v2(Qs_IK,NMuscle,nq,jointi,S.v_tgt,mtj);
+
 % adapt bounds based on user input
 bounds = AdaptBounds(bounds,S,mai);
 

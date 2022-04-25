@@ -56,7 +56,7 @@ FL = ML*FDB_FL_ML; % (m) fibre length
 lMo = FL; % (m) optimal fibre length
 
 lTs = lMT0 - lMo*cos(alphao); % (m) the tendon covers the remaining length
-
+lTs = 0.125;
 FDBparameters(1,1) = FMo;
 FDBparameters(2,1) = lMo;
 FDBparameters(3,1) = lTs;
@@ -146,7 +146,7 @@ plot(lambda,F_PF_N,'--','DisplayName','PF Natali2010')
 subplot(2,2,2)
 hold on
 for j=1:N1
-    plot(lambda,0.5*F_PF_N'+FT_FDB(:,j),'DisplayName',['FDB lTs = ' num2str(lTs_vec(j))])
+    plot(lambda,F_PF_N'+FT_FDB(:,j),'DisplayName',['FDB lTs = ' num2str(lTs_vec(j))])
 end
 xlabel('\lambda (-)')
 ylabel('Force (N)')
@@ -154,7 +154,7 @@ title('Flexor Digitorum Brevis + Plantar Fascia')
 legend('Location','northwest')
 ylim([0,2000])
 plot(lambda,F_PF_G,'--','DisplayName','PF Gefen2002')
-plot(lambda,F_PF_N/2,'--','DisplayName','PF Natali2010 /2')
+% plot(lambda,F_PF_N/2,'--','DisplayName','PF Natali2010 /2')
 plot(lambda,F_PF_N,'--','DisplayName','PF Natali2010')
 plot(lambda,F_PF_N*3,'--','DisplayName','PF Natali2010 x3')
 
