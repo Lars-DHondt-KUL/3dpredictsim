@@ -124,9 +124,9 @@ Qs_range = abs(bounds.Qs.upper - bounds.Qs.lower);
 bounds.Qs.lower = bounds.Qs.lower - 2*Qs_range;
 bounds.Qs.upper = bounds.Qs.upper + 2*Qs_range;
 % For several joints, we manually adjust the bounds
-% Pelvis_tilt
-bounds.Qs.upper(jointi.pelvis.tilt) = 20*pi/180;
-bounds.Qs.lower(jointi.pelvis.tilt) = -20*pi/180;
+% % Pelvis_tilt
+% bounds.Qs.upper(jointi.pelvis.tilt) = 20*pi/180;
+% bounds.Qs.lower(jointi.pelvis.tilt) = -20*pi/180;
 % Pelvis_tx
 bounds.Qs.upper(jointi.pelvis.tx) = 2;  
 bounds.Qs.lower(jointi.pelvis.tx) = 0;
@@ -136,8 +136,8 @@ bounds.Qs.lower(jointi.pelvis.ty) = 0.55;
 % Pelvis_tz
 bounds.Qs.upper(jointi.pelvis.tz) = 0.1;
 bounds.Qs.lower(jointi.pelvis.tz) = -0.1;
-% Lumbar extension
-bounds.Qs.upper(jointi.trunk.ext) = 10*pi/180;
+% % Lumbar extension
+% bounds.Qs.upper(jointi.trunk.ext) = 10*pi/180;
 % Mtp
 bounds.Qs.upper(jointi.mtp.l) = 1.05;
 bounds.Qs.lower(jointi.mtp.l) = -0.5;
@@ -157,10 +157,12 @@ bounds.Qs.lower(jointi.elb.r) = 0;
 bounds.Qs.upper(jointi.sh_add.l) = rec_uw_sh_add;
 bounds.Qs.upper(jointi.sh_add.r) = rec_uw_sh_add;
 % Shoulder rotation
-bounds.Qs.upper(jointi.sh_rot.l) = 40*pi/180; %rec_uw_sh_rot;
-bounds.Qs.lower(jointi.sh_rot.l) = -40*pi/180;
-bounds.Qs.upper(jointi.sh_rot.r) = 40*pi/180; %rec_uw_sh_rot;
-bounds.Qs.lower(jointi.sh_rot.r) = -40*pi/180;
+% bounds.Qs.upper(jointi.sh_rot.l) = 40*pi/180; %rec_uw_sh_rot;
+% bounds.Qs.lower(jointi.sh_rot.l) = -40*pi/180;
+% bounds.Qs.upper(jointi.sh_rot.r) = 40*pi/180; %rec_uw_sh_rot;
+% bounds.Qs.lower(jointi.sh_rot.r) = -40*pi/180;
+bounds.Qs.upper(jointi.sh_rot.l) = rec_uw_sh_rot;
+bounds.Qs.upper(jointi.sh_rot.r) = rec_uw_sh_rot;
 % We adjust some bounds when we increase the speed to allow for the
 % generation of running motions.
 if v_tgt > 1.33

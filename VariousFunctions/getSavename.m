@@ -189,6 +189,10 @@ if isfield(S,'Foot')
                     savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
                     casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
                 end
+                if isfield(S.Foot,'FDB_sf_FMo') && S.Foot.FDB_sf_FMo~=1
+                    savenameparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
+                    casfuncfolparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
+                end
             end
         end
         
@@ -233,28 +237,28 @@ if isfield(S,'IGsel') && ~isempty(S.IGsel)
     end
 end
 
-% cost function weight factors
-if isfield(S,'W')
-    if isfield(S.W,'Ak')
-        savenameparts{end+1} = ['wAk' num2str(S.W.Ak,2)];
-    else
-        not{end+1} = 'not_wAk';
-    end
-    if isfield(S.W,'A')
-        savenameparts{end+1} = ['wa' num2str(S.W.A,2)];
-    else
-        not{end+1} = 'not_wa';
-    end
-    if isfield(S.W,'passMom')
-        if isfield(S.W,'noDamping') && S.W.noDamping
-            savenameparts{end+1} = ['wpMnD' num2str(S.W.passMom,2)];
-        else
-            savenameparts{end+1} = ['wpM' num2str(S.W.passMom,2)];
-        end
-    else
-        not{end+1} = 'not_wpM';
-    end
-end
+% % cost function weight factors
+% if isfield(S,'W')
+%     if isfield(S.W,'Ak')
+%         savenameparts{end+1} = ['wAk' num2str(S.W.Ak,2)];
+%     else
+%         not{end+1} = 'not_wAk';
+%     end
+%     if isfield(S.W,'A')
+%         savenameparts{end+1} = ['wa' num2str(S.W.A,2)];
+%     else
+%         not{end+1} = 'not_wa';
+%     end
+%     if isfield(S.W,'passMom')
+%         if isfield(S.W,'noDamping') && S.W.noDamping
+%             savenameparts{end+1} = ['wpMnD' num2str(S.W.passMom,2)];
+%         else
+%             savenameparts{end+1} = ['wpM' num2str(S.W.passMom,2)];
+%         end
+%     else
+%         not{end+1} = 'not_wpM';
+%     end
+% end
 
 if isfield(S,'suffixCasName')
     casfuncfolparts{end+1} = S.suffixCasName;

@@ -77,14 +77,19 @@ S.savename = savename;
 % Casadi functions are made when
 if batchQueue
     % Store the settings
-    fieldname = S.savename;
-    fieldname = fieldname((fieldname(:)~='_'));
+%     fieldname = S.savename;
+%     fieldname = fieldname((fieldname(:)~='_'));
     
+    
+
     if (exist([pathRepo '/Results/batchQ.mat'],'file')==2) 
         load([pathRepo '/Results/batchQ.mat'],'batchQ');
     else
-        batchQ.(fieldname) = struct('S',[]);
+        batchQ.field0 = struct('S',[]);
     end
+    fields = numel(fieldnames(batchQ));
+    fieldname = ['field' num2str(fields)];
+
     batchQ.(fieldname).S = S;
     % Specify function to use
     batchQ.(fieldname).PredSim = 'f_PredSim_Gait92_FootModel';
@@ -112,7 +117,7 @@ else
     end
     % post-proces simulation results
     if pp
-        f_LoadSim_Gait92_FootModel(S.ResultsFolder,S.savename);
+        f_LoadSim_Gait92_FootModel(fullfile(S.ResultsRepo,S.ResultsFolder),S.savename);
     end
 
 end

@@ -42,8 +42,8 @@ AddCasadiPaths();
 %-------------------------------------------------------------------------%
 % Full body gait simulation
 run_simulation = 0;         % run solver
-post_process_results = 1;   % postproces
-add_to_batch_queue = 0;     % save settings to run later
+post_process_results = 0;   % postproces
+add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
@@ -53,9 +53,10 @@ S.NThreads  = 8;        % number of threads for parallel computing
 % S.tol_ipopt = 3;        % stopping criterion: < 10^(-...) 
 
 % output folder
-S.ResultsFolder = 'debug'; % subfolder of \Results where the result will be saved
+S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+S.ResultsFolder = 'with_better_knee'; % subfolder of \Results where the result will be saved
 % S.suffixCasName = '';     % suffix for name of folder with casadifunctions
-S.suffixName = 'pelvis_bounds2';        % suffix for name of file with results
+S.suffixName = 'old_bounds';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -99,7 +100,7 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = 'MTc4';    % MTc2 Sv50
+S.MTparams = 'MTc5';    % MTc2 Sv50
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
@@ -129,7 +130,7 @@ S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
 S.Foot.PF_sf = 1;
 S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
@@ -140,11 +141,13 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
 % Tendon slack length
 S.Foot.FDB_lTs = 0.125;
 % Shift fiber passive force-length curve
 S.Foot.FDB_shift = -0.1;
+% scale FMo
+S.Foot.FDB_sf_FMo = 1;
 
 %% Initial guess
 %-------------------------------------------------------------------------%

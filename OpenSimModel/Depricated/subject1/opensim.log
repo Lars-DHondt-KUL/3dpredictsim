@@ -1,6 +1,0 @@
-[2021-11-08 11:37:07.286] [info] Updating Model file from 30000 to latest format...
-[2021-11-08 11:37:07.358] [info] Loaded model subject1_Scaled from file C:/Users/u0150099/Documents/master_thesis/3dpredictsim/OpenSimModel/subject1/subject1_mtp_markers.osim
-[2021-11-08 11:37:07.363] [info] ControllerSet 'Controllers' was renamed and is being reset to 'controllerset'.
-[2021-11-08 11:37:07.364] [info] ComponentSet 'MiscComponents' was renamed and is being reset to 'componentset'.
-[2021-11-08 11:37:26.675] [info] Loaded model subject1_Scaled_mtj from file C:/Users/u0150099/Documents/master_thesis/3dpredictsim/OpenSimModel/subject1/subject1_mtj.osim
-[2021-11-08 11:38:57.827] [info] Loaded marker file C:\Users\u0150099\Documents\master_thesis\ReferenceData\reference_data\TRC\static.trc (59 markers, 780 frames)

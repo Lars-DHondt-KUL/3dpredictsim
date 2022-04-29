@@ -9,14 +9,16 @@ clear all; clc;
 
 %% Path information
 cd ..;
-Datapath = [pwd '\Results'];
+% Datapath = [pwd '\Results'];
+Datapath = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 addpath([pwd,'/OCP']);
 addpath([pwd,'/MuscleModel']);
 addpath([pwd,'/Debug']);
 addpath([pwd '/VariousFunctions']);
 addpath([pwd '/FootModel']);
 AddCasadiPaths();
-DataFolders = {'debug'};
+% DataFolders = {'debug'};
+DataFolders = {'with_better_knee'};
 
 
 S.OverWrite = 0;
@@ -40,11 +42,12 @@ for f = 1:nF
             ct= ct+1;
             if (~exist(OutName,'file') || S.OverWrite == 1)
                 try
-                    f_LoadSim_Gait92_FootModel(DataFolders{f},filename);
+                    f_LoadSim_Gait92_FootModel(dpath,filename);
                     disp(filename);
                 catch
                     disp([filename ' failed']);
                 end
+% %                 f_LoadSim_Gait92_FootModel(dpath,filename);
             end
         end
     end

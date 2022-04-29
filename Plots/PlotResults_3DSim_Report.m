@@ -115,6 +115,13 @@ for inr=1:nr
     if isempty(iGas2)
         iGas2 = find(strcmp(R.colheaders.muscles,'gasmed_r'));
     end
+
+    ifd = find(strcmp(R.colheaders.muscles,'flex_dig_r'));
+    ifh = find(strcmp(R.colheaders.muscles,'flex_hal_r'));
+    ied = find(strcmp(R.colheaders.muscles,'ext_dig_r'));
+    ieh = find(strcmp(R.colheaders.muscles,'ext_hal_r'));
+    iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
+
     ihamstrings(1) = find(strcmp(R.colheaders.muscles,'semimem_r'));
     ihamstrings(2) = find(strcmp(R.colheaders.muscles,'semiten_r'));
     ihamstrings(3) = find(strcmp(R.colheaders.muscles,'bifemlh_r'));
@@ -2374,7 +2381,7 @@ for inr=1:nr
     %% Windlass
     if makeplot.windlass
         if inr==1
-            h12 = figure('Position',[fpos(4,:),fwide]);
+            h12 = figure('Position',[fpos(4,:),fhigh]);
         end
         
         figure(h12)
@@ -2396,7 +2403,7 @@ for inr=1:nr
                 PF_sf_var = ones(2*R.S.N,2)*R.S.Foot.PF_sf;
             end
             
-            subplot(2,4,5)
+            subplot(4,4,5)
             hold on
             plot(x,h_fa*1000,'color',Cs,'linewidth',line_linewidth)
             title('Foot arch height')
@@ -2408,7 +2415,7 @@ for inr=1:nr
             xlim([0,100])
         
             if max(F_PF) > 1 % else there is no PF
-                subplot(2,4,1)
+                subplot(4,4,1)
                 hold on
                 ls = R.S.Foot.PF_slack_length;
                 PF_strain = (l_PF./ls-1)*100;
@@ -2421,7 +2428,7 @@ for inr=1:nr
                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
                 xlim([0,100])
                 
-                subplot(2,4,2)
+                subplot(4,4,2)
                 hold on
                 plot(x,F_PF/(R.body_mass*9.81)*100,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
                 title('Plantar fascia force')
@@ -2445,7 +2452,7 @@ for inr=1:nr
 %                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
 %                 xlim([0,100])
                 
-                subplot(2,4,3)
+                subplot(4,4,3)
                 hold on
                 plot(x,M_mtj_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
                 title('Plantar fascia moment mtj')
@@ -2469,7 +2476,7 @@ for inr=1:nr
 %                 ylabel('PF force (kN)','Fontsize',label_fontsize);
 %                 poly_1 = ['F_P_F = ' num2str(c(2),3) ' N + ' num2str(c(1),3) ' F_A_t'];
                 
-                subplot(2,4,7)
+                subplot(4,4,7)
                 hold on
                 plot(x,PF_sf_var(:,1),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
                 title('Plantar fascia scale factor')
@@ -2546,9 +2553,65 @@ for inr=1:nr
 
 
                     
-                    
+                f_plantar_quasi_stiffness = getPlantarQuasiStiffnessCasADiFunction(R.S);
+                l_PF = R.windlass.l_PF;
+                iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
+                a_FDB = R.a(:,iFDB);
+                pqs = full(f_plantar_quasi_stiffness(a_FDB,l_PF));
+                subplot(4,4,9)
+                hold on
+                plot(x,pqs,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('Quasi-stiffness (N/m)','Fontsize',label_fontsize);
+                title('Plantar stiffness') 
 
+                if isfield(R.S.Foot,'FDB') && R.S.Foot.FDB == 2
+                    subplot(4,4,10)
+                    hold on
+                    F_FDB = R.FT(:,iFDB);
+                    plot(x,F_FDB/(R.body_mass*9.81)*100,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                    xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                    ylabel('Force/BW (%)','Fontsize',label_fontsize);
+                    title('PIM') 
+
+                    subplot(4,4,14)
+                    hold on
+                    P_FDB = -v_PF.*R.FT(:,iFDB)/R.body_mass;
+                    plot(x,P_FDB,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                    xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                    ylabel('Power (W/kg)','Fontsize',label_fontsize);
+                    title('PIM')
+                    plot(x,(-R.FT(:,iFDB).*R.vT(:,iFDB))/R.body_mass,'--','Color',CsV(inr,:));
+
+
+                else
+                    F_FDB = zeros(size(F_PF));
+                end
+
+                subplot(4,4,13)
+                hold on
+                plot(x,P_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('Power (W/kg)','Fontsize',label_fontsize);
+                title('PF')
+
+                subplot(4,4,15)
+                hold on
+                plot(x,(P_FDB+P_PF),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('Power (W/kg)','Fontsize',label_fontsize);
+                title('PF + PIM') 
+    
                 
+
+                subplot(4,4,11)
+                hold on
+                plot(x,(F_FDB+F_PF)/(R.body_mass*9.81)*100,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('Force/BW (%)','Fontsize',label_fontsize);
+                title('PF + PIM') 
+
+
 %                 subplot(2,4,4)
 %                 hold on
 %                 plot(R.GRFs_separate(istance,2+3),F_PF(istance)/(R.body_mass*9.81/100),'.','color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
@@ -2565,9 +2628,15 @@ for inr=1:nr
                 
             end
 
+            subplot(4,4,16)
+            hold on
+            P_At = P_T_Sol+P_T_Gas+P_T_Gas2;
+            plot(x,(P_At),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('Power (W/kg)','Fontsize',label_fontsize);
+            title('Achilles tendon') 
 
-
-            subplot(2,5,10)
+            subplot(4,4,8)
             hold on
             
             plot(R.Qs(ipush_off,imtp)-R.Qs(ipush_off(1),imtp),(h_fa(ipush_off)-h_fa(ipush_off(1)))*1e3,'-','Color',Cs)
@@ -2588,7 +2657,7 @@ for inr=1:nr
    
         figure(h12)
         if inr==nr && exist('ccc','var')
-            subplot(2,4,4)
+            subplot(4,4,4)
             cat_ccc = categorical({'Achilles force','Mtj angle','Mtp angle','GRF Heel','GRF Forefoot','GRF Toes'});
             cat_ccc = reordercats(cat_ccc,[1,3,2,4,5,6]);
             
@@ -2606,7 +2675,7 @@ for inr=1:nr
             
         end
 
-        subplot(2,4,6)
+        subplot(4,4,6)
         hold on
         plot(x,F_At/(R.body_mass*9.81)*100,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
         title('Achilles tendon')
@@ -3793,12 +3862,7 @@ for inr=1:nr
     
     if makeplot.toes
 
-        ifd = find(strcmp(R.colheaders.muscles,'flex_dig_r'));
-        ifh = find(strcmp(R.colheaders.muscles,'flex_hal_r'));
-        ied = find(strcmp(R.colheaders.muscles,'ext_dig_r'));
-        ieh = find(strcmp(R.colheaders.muscles,'ext_hal_r'));
-        iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
-
+        
         mVect = {'Flex-dig','Flex-hal','Ext-dig','Ext-hal','FDB'};
 
         imus = [ifd ifh ied ieh];
@@ -4660,6 +4724,20 @@ for inr=1:nr
             plot(R.Qs(ipush_off(1),imtp),F_PF(ipush_off(1)),'d','color',Cs)
             plot(R.Qs(ipush_off(end),imtp),F_PF(ipush_off(end)),'o','color',Cs)
 
+
+%             f_plantar_quasi_stiffness = getPlantarQuasiStiffnessCasADiFunction(R.S);
+%             l_PF = R.windlass.l_PF;
+%             iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
+%             a_PIM = R.a(:,iFDB);
+%             pqs = full(f_plantar_quasi_stiffness(a_PIM,l_PF));
+%             subplot(2,2,2)
+%             hold on
+%             plot(x,pqs,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+%             ylabel('Quasi-stiffness (N/m)','Fontsize',label_fontsize);
+%             title('Plantar stiffness')
+
+            
         end
 
             
@@ -4671,7 +4749,41 @@ for inr=1:nr
     end
 
     %%
+    if makeplot.compareZelik15
+        
+        if inr==1
+            pathmain = pwd;
+            [pathRepo,~,~]  = fileparts(pathmain);
+            folder = '\Figures';
+            file = 'Zelik15.png';
+            pathRefImg = fullfile(pathRepo,folder,file);
+            img_Zelik = imread(pathRefImg);
+            h35 = figure('Position',[fpos(2,:),fsq]);
+            subplot(1,2,1)
+            hold on
+            axis tight
+            hi1 = image([-30,105],flip([0,1]),img_Zelik);
+            uistack(hi1,'bottom')
+            set(gca,'YTickLabel','')
+        end
+        if isempty(iFDB)
+            iFDB = 0;
+        end
+        imus_Z = [iGas,iGas2,iSol,iPerL,iPerB,ifd,iFDB,0,0,ieh,iTibAnt];
+        figure(h35)
+        for iz=1:length(imus_Z)
+            subplot(11,2,iz*2)
+            hold on
+            if imus_Z(iz)~=0
+                plot(R.a(:,imus_Z(iz)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            end
+            if iz~=length(imus_Z)
+                set(gca,'XTickLabel','')
+            end
+        end
+        xlabel('Gait cycle (%)')
 
+    end
 
 end
 

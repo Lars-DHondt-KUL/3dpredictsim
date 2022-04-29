@@ -25,14 +25,15 @@ addpath([pathRepo '/FootModel']);
 StartPath = pathRepo;
 cd(pathRepo)
 pathExternalFunctions = fullfile(pathRepo,'ExternalFunctions');
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 %% Load queue
-load([pathRepo '/Results/batchQ.mat'],'batchQ');
+load(fullfile(pathRepo,'Results','batchQ.mat'),'batchQ');
 
 fields = fieldnames(batchQ);
 % remove entries that already have a postprocessed result
 for i=1:numel(fields)
-pathResult_pp = fullfile([pathRepo '/Results'],batchQ.(fields{i}).S.ResultsFolder,...
+pathResult_pp = fullfile(ResultsRepo,batchQ.(fields{i}).S.ResultsFolder,...
     [batchQ.(fields{i}).S.savename '_pp.mat']);
     if exist(pathResult_pp,'file')
         batchQ = rmfield(batchQ,(fields{i}));

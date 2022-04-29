@@ -23,7 +23,7 @@ end
 pathmain = mfilename('fullpath');
 [filepath,~,~] =  fileparts(pathmain);
 [pathRepo,~,~] = fileparts(filepath);
-OutFolder = fullfile(pathRepo,'Results',ResultsFolder);
+OutFolder = fullfile(ResultsFolder);
 Outname = fullfile(OutFolder,[loadname '.mat']);
 load(Outname,'w_opt','stats','Sopt','setup');
 S = Sopt;
@@ -552,7 +552,7 @@ for i = 1:d*N
     Tau_passj_opt_all(i,:) = full(f_AllPassiveTorques(q_col_opt_unsc.rad(i,:),qdot_col_opt_unsc.rad(i,:)));
     Tau_passj_opt_all_noDamping(i,:) = full(f_AllPassiveTorques(q_col_opt_unsc.rad(i,:),zeros(size(qdot_col_opt_unsc.rad(i,:)))));
 end
-if S.W.noDamping
+if isfield(S.W,'noDamping') && S.W.noDamping
     if mtj
         Tau_passj_J = Tau_passj_opt_all_noDamping(:,[1:12 17:end]);
     else
@@ -730,7 +730,7 @@ for k=1:N
             (f_J8(qdotdot_col_opt(count,armsi)))*h_opt;
         count = count + 1;
     end
-    if S.TrackSim
+    if isfield(S,'TrackSim') && S.TrackSim
         if S.Track.Q_ankle
             track_err = q_opt_unsc.rad(k,[jointi.ankle.l, jointi.ankle.r]) - Qref_lr(1:2,k)';
             J_opt = J_opt + W.Q_track * f_J2(track_err)*h_opt;
@@ -1123,7 +1123,7 @@ if strcmp(HS1,'l')
     Tau_pass_opt_GC(:,Tau_pass_opt_inv) = Tau_pass_opt_GC(:,:);
 end
 
-if length(S.Foot.PF_sf_var)==2*N
+if isfield(S.Foot,'PF_sf_var') && length(S.Foot.PF_sf_var)==2*N
     PF_sf_var(:,1) = horzcat(S.Foot.PF_sf_var(1:N));
     PF_sf_var(:,2) = horzcat(S.Foot.PF_sf_var(N+1:end));
     PF_sf_var_GC = zeros(2*N,2);
@@ -1178,7 +1178,7 @@ if writeIKmotion
         JointAngleMuscleAct.labels{i+size(q_opt_GUI_GC_2,2)} = ...
             [muscleNamesAll{i},'/activation'];
     end
-    OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
+%     OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
     filenameJointAngles = fullfile(OutFolder,[S.savename '.mot']);
     write_motionFile(JointAngleMuscleAct, filenameJointAngles);
 end
@@ -1616,7 +1616,7 @@ end
 % script information
 R.info.script = 'f_LoadSim_Gait92_FootModel.m';
 % Save data
-OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
+% OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
 FilenameAnalysis = fullfile(OutFolder,[S.savename '_pp.mat']);
 save(FilenameAnalysis,'R');
 

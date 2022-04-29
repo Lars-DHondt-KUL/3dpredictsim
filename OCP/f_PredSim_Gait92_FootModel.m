@@ -1165,7 +1165,7 @@ options.ipopt.linear_solver         = S.linear_solver;
 options.ipopt.tol                   = 1*10^(-S.tol_ipopt);
 opti.solver('ipopt', options);
 % Create and save diary
-OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
+OutFolder = fullfile(S.ResultsRepo,S.ResultsFolder);
 if ~isfolder(OutFolder)
     mkdir(OutFolder);
 end

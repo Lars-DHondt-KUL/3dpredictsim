@@ -130,6 +130,8 @@ if S.Foot.FDB
     IndexFDB = find(contains(muscleNames,'FDB'));
     IndexFDB = [IndexFDB, IndexFDB+musi(end)];
     passiveFiberForceShift(IndexFDB) = S.Foot.FDB_shift;
+    MTparameters_m(1,IndexFDB) = MTparameters_m(1,IndexFDB)*S.Foot.FDB_sf_FMo;
+    MTparameters_m(3,IndexFDB) = S.Foot.FDB_lTs;
 end
 
 %% Musculoskeletal geometry
