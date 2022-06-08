@@ -1,4 +1,4 @@
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This script serves as the main file for the branch extended_foot_model. 
 % It allows to specify the settings, solve, and post-process a single gait 
 % simulation.
@@ -49,14 +49,14 @@ add_to_batch_queue = 1;     % save settings to run later
 S.v_tgt     = 1.33;     % average speed
 S.N         = 50;       % number of mesh intervals
 S.NThreads  = 8;        % number of threads for parallel computing
-% S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
+% S.max_iter  = 10;       % maximum number of iterations (comment -> 10000)
 % S.tol_ipopt = 3;        % stopping criterion: < 10^(-...) 
 
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'with_better_knee'; % subfolder of \Results where the result will be saved
 % S.suffixCasName = '';     % suffix for name of folder with casadifunctions
-S.suffixName = 'old_bounds';        % suffix for name of file with results
+% S.suffixName = 'test';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -76,7 +76,7 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc2';
+S.Foot.Model = 'mtp';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
@@ -88,7 +88,7 @@ S.AchillesTendonScaleFactor = 0.7;
 S.SoleusTendonShorter = 0;
 
 % Shift passive force-length curve of ankle muscle fibers
-S.passiveFiberForceShift = -0.1; %-0.1
+S.passiveFiberForceShift = 0; %-0.1
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -111,9 +111,9 @@ S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction 
 
 %% metatarsophalangeal (mtp) joint
 S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
-S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
+S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
 
@@ -130,7 +130,7 @@ S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
 S.Foot.PF_sf = 1;
 S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length

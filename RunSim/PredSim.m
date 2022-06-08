@@ -84,11 +84,13 @@ if batchQueue
 
     if (exist([pathRepo '/Results/batchQ.mat'],'file')==2) 
         load([pathRepo '/Results/batchQ.mat'],'batchQ');
+        fields = numel(fieldnames(batchQ))+1;
+        fieldname = ['field' num2str(fields)];
     else
-        batchQ.field0 = struct('S',[]);
+        fieldname = 'field1';
+        batchQ.(fieldname) = struct('S',[]);
     end
-    fields = numel(fieldnames(batchQ));
-    fieldname = ['field' num2str(fields)];
+    
 
     batchQ.(fieldname).S = S;
     % Specify function to use

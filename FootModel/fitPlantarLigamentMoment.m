@@ -8,11 +8,11 @@ pathmain = pwd;
 
 
 %%
-% ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_pinMTJ_sc.osim'];
-% pathPoly = [pathRepo '\Polynomials\Fal_s1_mtj_sc'];
+ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_pinMTJ_sc.osim'];
+pathPoly = [pathRepo '\Polynomials\Fal_s1_mtj_sc'];
 
-ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc5_sc.osim'];
-pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc5_sc'];
+% ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc5_sc.osim'];
+% pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc5_sc'];
 
 if ~isfolder(pathPoly)
     mkdir(pathPoly);
@@ -450,29 +450,29 @@ ylabel('mtj moment (Nm)')
 % f_getMtjLigamentMoment.save((fullfile(pathPoly,'f_getMtjLigamentMoment')));
 
 %%
-import casadi.*
-f_getMtjLigamentMoment_exp = interpolant('f_getMtjLigamentMoment_exp','bspline',{q_mtj},M_mtj_G_exp);
-
-figure(fg5)
-M_mtj_cas = f_getMtjLigamentMoment_exp(q_mtj);
-plot(q_mtj*180/pi,full(M_mtj_cas),'-','DisplayName','exp, scaled at \lambda = 1.10')
-
-f_getMtjLigamentMoment_exp.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp')));
-
-% assume long plantar ligament removed
-M_mtj_G_exp_d = sum(M_lig_G_exp(:,5:end),2);
-f_getMtjLigamentMoment_exp_d = interpolant('f_getMtjLigamentMoment_exp_d','bspline',{q_mtj},M_mtj_G_exp_d);
-f_getMtjLigamentMoment_exp_d.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_d')));
-
-% assume short plantar ligament also removed
-M_mtj_G_exp_e = sum(M_lig_G_exp(:,7:end),2);
-f_getMtjLigamentMoment_exp_e = interpolant('f_getMtjLigamentMoment_exp_e','bspline',{q_mtj},M_mtj_G_exp_e);
-f_getMtjLigamentMoment_exp_e.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_e')));
-
-% assume spring ligament also removed
-M_mtj_G_exp_f = sum(M_lig_G_exp(:,10:end),2);
-f_getMtjLigamentMoment_exp_f = interpolant('f_getMtjLigamentMoment_exp_f','bspline',{q_mtj},M_mtj_G_exp_f);
-f_getMtjLigamentMoment_exp_f.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_f')));
+% import casadi.*
+% f_getMtjLigamentMoment_exp = interpolant('f_getMtjLigamentMoment_exp','bspline',{q_mtj},M_mtj_G_exp);
+% 
+% figure(fg5)
+% M_mtj_cas = f_getMtjLigamentMoment_exp(q_mtj);
+% plot(q_mtj*180/pi,full(M_mtj_cas),'-','DisplayName','exp, scaled at \lambda = 1.10')
+% 
+% f_getMtjLigamentMoment_exp.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp')));
+% 
+% % assume long plantar ligament removed
+% M_mtj_G_exp_d = sum(M_lig_G_exp(:,5:end),2);
+% f_getMtjLigamentMoment_exp_d = interpolant('f_getMtjLigamentMoment_exp_d','bspline',{q_mtj},M_mtj_G_exp_d);
+% f_getMtjLigamentMoment_exp_d.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_d')));
+% 
+% % assume short plantar ligament also removed
+% M_mtj_G_exp_e = sum(M_lig_G_exp(:,7:end),2);
+% f_getMtjLigamentMoment_exp_e = interpolant('f_getMtjLigamentMoment_exp_e','bspline',{q_mtj},M_mtj_G_exp_e);
+% f_getMtjLigamentMoment_exp_e.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_e')));
+% 
+% % assume spring ligament also removed
+% M_mtj_G_exp_f = sum(M_lig_G_exp(:,10:end),2);
+% f_getMtjLigamentMoment_exp_f = interpolant('f_getMtjLigamentMoment_exp_f','bspline',{q_mtj},M_mtj_G_exp_f);
+% f_getMtjLigamentMoment_exp_f.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp_f')));
 
 
 %%
@@ -484,14 +484,14 @@ f_getMtjLigamentMoment_exp_f.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp
 % plot(q_mtj*180/pi,full(M_mtj_cas_t),'--','DisplayName','casadi function 1')
 
 %%
-import casadi.*
-f_getMtjLigamentMoment_exp5 = interpolant('f_getMtjLigamentMoment_exp5','bspline',{q_mtj},M_mtj_G_exp3);
-
-figure(fg5)
-M_mtj_cas5 = f_getMtjLigamentMoment_exp5(q_mtj);
-plot(q_mtj*180/pi,full(M_mtj_cas5),'-','DisplayName','exp, scaled at \lambda = 1.05')
-
-f_getMtjLigamentMoment_exp5.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5')));
+% import casadi.*
+% f_getMtjLigamentMoment_exp5 = interpolant('f_getMtjLigamentMoment_exp5','bspline',{q_mtj},M_mtj_G_exp3);
+% 
+% figure(fg5)
+% M_mtj_cas5 = f_getMtjLigamentMoment_exp5(q_mtj);
+% plot(q_mtj*180/pi,full(M_mtj_cas5),'-','DisplayName','exp, scaled at \lambda = 1.05')
+% 
+% f_getMtjLigamentMoment_exp5.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5')));
 
 %%
 % M_mtj_G_exp4 = M_mtj_G_exp3;

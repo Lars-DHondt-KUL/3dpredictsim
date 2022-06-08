@@ -12,11 +12,11 @@ clc
 %% Inputs
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
-FootModel = 'mtjc2'; % mtp or mtj
+FootModel = 'mtp'; % mtp or mtj
 FootScaling = 'custom'; % default, custom
 FDB = 0;
 tib_ant_Rajagopal2015 = 0;
-MTcustom = 5; % 2 is proper geometry for mtj models
+MTcustom = 5; % 5 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis
 Bool_RunMA = 1; 
 

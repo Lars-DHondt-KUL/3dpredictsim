@@ -256,7 +256,7 @@ bounds = AdaptBounds(bounds,S,mai);
 pathIG = [pathRepo,'/IG'];
 addpath(genpath(pathIG));
 if S.IGsel == 1 % Quasi-random initial guess
-    guess = getGuess_QR_opti_int_tmt(N,nq,NMuscle,scaling,S.v_tgt,jointi,d,S.IG_PelvisY);
+    guess = getGuess_QR_opti_int(N,nq,NMuscle,scaling,S.v_tgt,jointi,d,S.IG_PelvisY);
 elseif S.IGsel == 2 % Data-informed initial guess
     if S.IGmodeID  < 2 % Data from average walking motion
         IKfile_guess    = fullfile(pathRepo, S.IKfile_guess);

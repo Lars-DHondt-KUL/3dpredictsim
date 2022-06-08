@@ -8,7 +8,7 @@
 % Author: Antoine Falisse
 % Date: 12/19/2018
 % 
-function guess = getGuess_QR_opti_int_tmt(N,nq,NMuscle,scaling,v_tgt,jointi,d,PelvisY)
+function guess = getGuess_QR_opti_int(N,nq,NMuscle,scaling,v_tgt,jointi,d,PelvisY)
 
 
 if ~exist('PelvisY','var')
@@ -70,8 +70,6 @@ orderQsInv = [jointi.pelvis.tilt:2*jointi.pelvis.tz,...
     2*jointi.ankle.l-1:2*jointi.ankle.l,...
     2*jointi.subt.r-1:2*jointi.subt.r,...
     2*jointi.subt.l-1:2*jointi.subt.l,...
-    2*jointi.tmt.r-1:2*jointi.tmt.r,...
-    2*jointi.tmt.l-1:2*jointi.tmt.l,...
     2*jointi.mtp.r-1:2*jointi.mtp.r,...
     2*jointi.mtp.l-1:2*jointi.mtp.l,...
     2*jointi.trunk.ext-1:2*jointi.trunk.rot,...
@@ -105,8 +103,8 @@ orderArmInv = [jointi.sh_flex.r:jointi.sh_rot.r,...
 guess.a_a = [guess.a_a; guess.a_a(1,orderArmInv)];
 
 %% Mtp activations
-guess.a_mtp = 0.1*ones(N+1,nq.mtp);
-guess.e_mtp = 0.1*ones(N,nq.mtp);
+% guess.a_mtp = 0.1*ones(N+1,nq.mtp);
+% guess.e_mtp = 0.1*ones(N,nq.mtp);
 
 %% Mtp lumbar activations
 % Only used when no muscles actuate the lumbar joints (e.g. Rajagopal
@@ -122,7 +120,7 @@ guess.FTtilde   = (guess.FTtilde)./repmat(scaling.FTtilde,N+1,1);
 guess.vA        = (guess.vA)./repmat(scaling.vA,N,size(guess.vA,2));
 guess.dFTtilde  = (guess.dFTtilde)./repmat(scaling.dFTtilde,N,...
     size(guess.dFTtilde,2));
-guess.a_mtp_col = zeros(d*N,nq.mtp);
+% guess.a_mtp_col = zeros(d*N,nq.mtp);
 guess.a_lumbar_col = zeros(d*N,nq.trunk);
 
 

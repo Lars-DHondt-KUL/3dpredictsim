@@ -2586,6 +2586,7 @@ for inr=1:nr
 
                 else
                     F_FDB = zeros(size(F_PF));
+                    P_FDB = F_FDB;
                 end
 
                 subplot(4,4,13)
@@ -3520,31 +3521,6 @@ for inr=1:nr
             tmp_str = [tmp_str ' & ' num2str(tmpx,2)];
         end
 
-%         tmpx = xcorr(q_ankle_ref(56:69),q_ankle_sim(46:59),0,'coeff');
-%         tmpx = xcorr(q_ankle_ref(46+6:59+6),q_ankle_sim(46:59),0,'coeff');
-%         tmp_str = [tmp_str ' & ' num2str(tmpx,2)];
-%         tmpx = xcorr(q_ankle_ref(60+6:99),q_ankle_sim(60:99-6),0,'coeff');
-%         tmp_str = [tmp_str ' & ' num2str(tmpx,2)];
-
-%         disp(tmp_str);
-% 
-        tmpxcs = xcorr(q_ankle_ref(istance0),q_ankle_sim(istance0),0,'coeff');
-        disp(['Stance phase Q: R = ' num2str(tmpxcs,2)])
-%         tmpxcs = xcorr(Qref.Tall_mean(istance0,iankle_ref),R.Tid(istance0,iankle),0,'coeff');
-%         disp(['Stance phase T: R = ' num2str(tmpxcs,2)])
-%         
-%         
-%         tmpx_x = xcorr(Dat.(type).gc.GRF.Fmean(istance0,1),R.GRFs(istance0,1),0,'coeff');
-%         tmpx_y = xcorr(Dat.(type).gc.GRF.Fmean(istance0,2),R.GRFs(istance0,2),0,'coeff');
-%         tmpx_z = xcorr(Dat.(type).gc.GRF.Fmean(istance0,3),R.GRFs(istance0,3),0,'coeff');
-%         
-%         disp(['Stance phase x/y/z: R = ' num2str(tmpx_x,2) '/' num2str(tmpx_y,2) '/' num2str(tmpx_z,2)])
-        
-        aa = 8;
-        tmpxcs = xcorr(q_ankle_ref(iswing(aa:end)),q_ankle_sim(iswing(1:end-aa+1)),0,'coeff');
-        disp(['Swing phase Q: R = ' num2str(tmpxcs,2)])
-        
-        
         if inr==1
             h23 = figure('Position',[fpos(4,:),fwide*0.7]);
             
@@ -3557,38 +3533,62 @@ for inr=1:nr
             meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
             
             subplot(3,2,[1,3])
-            
             hold on
             fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Measured (mean \pm 2 SD)');
             alpha(.25);
-            
-%             [pathHere,~,~] = fileparts(mfilename('fullpath'));
-%             [pathRepo,~,~] = fileparts(pathHere);
-%             pathRefImg = fullfile(pathRepo,'\Figures\ankle_Pothrat.png');
-%             img_ankle = imread(pathRefImg);
-%             hold on
-%             hi1 = image([0,100],flip([-20,25]),img_ankle);
-%             uistack(hi1,'bottom')
 
+            %
+            subplot(3,2,[2,4])
+            hold on
+            fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Measured (mean \pm 2 SD)');
+            alpha(.25);
+            q_ankle_hs = Qref.Qall_mean(1,iankle_ref);
+
+
+            %
+            i_to_ref = find(Data.GRF.Fmean(:,2)>5,1,'last');
+            istance_ref = 1:i_to_ref-1;
+            iswing_ref = i_to_ref:length(Data.GRF.Fmean(:,2));
         end
+
+        q_ankle_sim_ofs = q_ankle_sim - q_ankle_sim(1) + q_ankle_hs;
+        smpl_stance = linspace(istance0(1),istance0(end),length(istance_ref));
+        smpl_swing = linspace(iswing(1),iswing(end),length(iswing_ref));
         
+        q_stance_matched_ofs = interp1(istance0,q_ankle_sim_ofs(istance0),smpl_stance);
+        q_swing_matched_ofs = interp1(iswing,q_ankle_sim_ofs(iswing),smpl_swing);
+        q_matched_ofs = [q_stance_matched_ofs, q_swing_matched_ofs];
+
+        q_stance_matched = interp1(istance0,q_ankle_sim(istance0),smpl_stance);
+        q_swing_matched = interp1(iswing,q_ankle_sim(iswing),smpl_swing);
+        q_matched = [q_stance_matched, q_swing_matched];
+        
+        xcs_stance = xcorr(q_ankle_ref(istance_ref),q_stance_matched,0,'coeff');
+        xcs_stance_ofs = xcorr(q_ankle_ref(istance_ref),q_stance_matched_ofs,0,'coeff');
+        disp(['Stance phase Q: R = ' num2str(xcs_stance,2) ' (' num2str(xcs_stance_ofs,2) ')'])
+        
+        xcs_swing = xcorr(q_ankle_ref(iswing_ref),q_swing_matched,0,'coeff');
+        xcs_swing_ofs = xcorr(q_ankle_ref(iswing_ref),q_swing_matched_ofs,0,'coeff');
+        disp(['Swing phase Q: R = ' num2str(xcs_swing,2) ' (' num2str(xcs_swing_ofs,2) ')'])
+
 
         figure(h23)
         subplot(3,2,[1,3])
         hold on
         plot(x,q_ankle_sim,'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
-        if tmpxcs > 0.8
-            plot(x(iswing(aa:end)),q_ankle_sim(iswing(1:end-aa+1)),'--','linewidth',2,'Color',CsV(inr,:),'DisplayName',['Swing shifted ' num2str(aa) '%GC']);
-        end
+%         plot(x,q_matched,'--','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
+
         if inr==nr
+            figure(h23)
+            subplot(3,2,[1,3])
             axis tight
             yl = get(gca, 'ylim');
             yl=[yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)];
             ylim(yl)
             xlim([0,100])
 %             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-            ylabel('Ankle angle (°)','Fontsize',label_fontsize);
-%             title('Ankle with events')
+            ylabel('angle (°)','Fontsize',label_fontsize);
+            title('Ankle angle')
             
 %             plot([1,1]*0,yl,'-ok','DisplayName','Heel strike');
 %             plot([1,1]*10,yl,'-vk','DisplayName','Foot flat');
@@ -3599,9 +3599,24 @@ for inr=1:nr
            lh23=legend('location','northwest','Interpreter',lgInt);
            lhPos = lh23.Position;
            lhPos(1) = lhPos(1)+0.4;
-           lhPos(2) = lhPos(2)+0.05;
+%            lhPos(2) = lhPos(2)+0.05;
+           lhPos(2) = lhPos(2)-0.6;
            set(lh23,'position',lhPos);
            title(lh23,'Legend')
+
+           
+        end
+
+        subplot(3,2,[2,4])
+        hold on
+%         plot(x,q_ankle_sim_ofs,'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
+        plot(x,q_matched_ofs,'-','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
+        if inr==nr
+           subplot(3,2,[2,4])
+           ylim(yl)
+           xlim([0,100])
+           xline(istance_ref(end)+0.5,'-k')
+           title('Matched initial angle and toe-off timing')
         end
 
         if inr==1
@@ -4698,10 +4713,15 @@ for inr=1:nr
         yl = get(gca, 'ylim');
         ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
         xlim([0,100])
-        plot(x(ipush_off(1)),R.Qs(ipush_off(1),imtp),'d','color',Cs)
-        plot(x(ipush_off(end)),R.Qs(ipush_off(end),imtp),'o','color',Cs)
 
+        [~,imax_mtp] = max(R.Qs(:,imtp));
+        plot(x(imax_mtp),R.Qs(imax_mtp,imtp),'d','color',Cs)
+        
         if ~isempty(imtj)
+            [~,imax_PF] = max(F_PF);
+            plot(x(imax_PF),R.Qs(imax_PF,imtp),'o','color',Cs)
+
+
             subplot(2,2,3)
             hold on
             plot(x,F_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
@@ -4712,8 +4732,8 @@ for inr=1:nr
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            plot(x(ipush_off(1)),F_PF(ipush_off(1)),'d','color',Cs)
-            plot(x(ipush_off(end)),F_PF(ipush_off(end)),'o','color',Cs)
+            plot(x(imax_mtp),F_PF(imax_mtp),'d','color',Cs)
+            plot(x(imax_PF),F_PF(imax_PF),'o','color',Cs)
 
             subplot(2,2,[2,4])
             hold on
@@ -4721,8 +4741,8 @@ for inr=1:nr
             title('Plantar fascia - mtp during push-off')
             xlabel('Mtp angle (°)','Fontsize',label_fontsize);
             ylabel('PF force (N)','Fontsize',label_fontsize);
-            plot(R.Qs(ipush_off(1),imtp),F_PF(ipush_off(1)),'d','color',Cs)
-            plot(R.Qs(ipush_off(end),imtp),F_PF(ipush_off(end)),'o','color',Cs)
+            plot(R.Qs(imax_mtp,imtp),F_PF(imax_mtp),'d','color',Cs)
+            plot(R.Qs(imax_PF,imtp),F_PF(imax_PF),'o','color',Cs)
 
 
 %             f_plantar_quasi_stiffness = getPlantarQuasiStiffnessCasADiFunction(R.S);
@@ -4783,6 +4803,11 @@ for inr=1:nr
         end
         xlabel('Gait cycle (%)')
 
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h35,'PaperPositionMode','auto')
+            print(h35,[figNamePrefix '_Zelik'],'-dpng','-r0')
+            print(h35,[figNamePrefix '_Zelik'],'-depsc')
+        end
     end
 
 end

@@ -79,7 +79,7 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-% S.MTparams = 'MTc5'; % 
+S.MTparams = 'MTc5'; % 
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
@@ -106,7 +106,7 @@ S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
 % S.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-% S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
 % S.Foot.PF_sf = 1;
 % S.Foot.PF_sf_isvar = 2; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
@@ -124,7 +124,7 @@ S.Foot.PF_slack_length = 0.146; % (m) slack length
 
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 1;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
 % Tendon slack length
 S.Foot.FDB_lTs = 0.125;
 % Shift fiber passive force-length curve
@@ -267,16 +267,34 @@ LegNames = {''};
 %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc4_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_wAk5e+04_wa2e+03_wpMnD1e+03_pelvis_bounds2'
 %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
 %     };
-% LegNames = {'mtp model', 'old bounds', 'new bounds','updated MSK geometry foot'};
+% LegNames = {'mtp model', 'old bounds', 'new bounds'};%,'updated MSK geometry foot'};
 
 % results = {
 % %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Song2011_ls146_FDB2_lTs125_Fpsl10_ig21_old_bounds'
+%     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_ls146_ig21_old_bounds'
+%     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21_old_bounds'
+%     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_old_bounds'
+% %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_old_bounds'
+% %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
+% };
+% LegNames = {'mtp model (passive)','compliant PF', 'stiff PF', '3x stiff PF'};
+
+% results = {
+% %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Song2011_ls146_FDB2_lTs125_Fpsl10_ig21_old_bounds'
+% %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_ls146_ig21_old_bounds'
 %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21_old_bounds'
 %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x3_ls146_ig21_old_bounds'
 %     '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_old_bounds'
 % %     '\debug\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc2_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_ig21_wAk5e+04_wa2e+03_wpMnD1e+03'
 % };
-% LegNames = {'mtp model', 'new model'};
+% LegNames = {'mtp model (passive)', 'stiff PF', '3x stiff PF','stiff PF + PIM'};
+
+results = {
+    '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_old_bounds'
+    '\with_better_knee\Fal_s1_mtjc2_sc_cspx10_oy2_ATx70_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+    };
+LegNames = {'with increased passive stiffness', 'default passive stiffness'};
+
 
 %%
 if exist('results','var') && ~isempty(results)
@@ -315,7 +333,7 @@ else
 %     criteria{end+1} = 'AT';
 %     criteria{end+1} = 'not_cspx10';
 %     criteria{end+1} = 'pelvis_bounds';
-    criteria{end+1} = 'old_bounds';
+%     criteria{end+1} = 'old_bounds';
     
     % filter filenames
     [filteredResults] = filterResultfolderByParameters(pathResult,criteria);
@@ -356,38 +374,13 @@ ResultsFile = filteredResultsWithRef;
 %%
 % LegNames = {''};
 
-% LegNames = {'scaled default', 'scaled custom'};
-
-% LegNames = {'mtp-model, passive', 'mtp-model, muscle', 'mtj-model, muscle, compliant PF',...
-%     'mtj-model, muscle, stiff PF'};
-
-% LegNames = {'mtp-model, passive','mtj-model, muscle, compliant PF',...
-%     'mtj-model, muscle, stiff PF'};
-
-% LegNames = {'mtp-model, passive', 'mtj-model, muscle, stiff PF'};
-
-% LegNames = {'mtp-model, passive','mtj, muscle,  PF Gefen2002','mtj, muscle, PF Natali2010',...
-%     'mtj, muscle, 5x PF Natali2010', 'mtj, passive, 5x PF Natali2010', 'mtj, muscle, 10x PF Natali2010'};
-
-% LegNames = {'3 segment foot model','4 segment foot model (compliant plantar fascia)',...
-%     '4 segment foot model (stiff plantar fascia)'};
-
-% LegNames = {'mtj axis orientation 1','mtj axis orientation 2','mtj axis orientation 3',...
-%     'mtj axis orientation 4','mtj axis orientation 5'};
-
-% LegNames = {'mtp model','default weights','default weights, tracking',...
-%     'lower qdd weight','lower qdd weight, tracking'};
-
-% LegNames = {'mtp model', 'new model', 'new model + tau_p_a_s_s mtp','new model + track ankle & subt angle'};
-
-% LegNames = {'damping torque in cost','damping torque not in cost'};
-
 mtj = 1;
 figNamePrefix = 'none';
 % figNamePrefix = 'C:\Users\u0150099\Documents\WTK\thesis\figuren\extended_foot_model\musc';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Model_Personalization_Meeting\compliant_and_stiff';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\WTK\thesis\figuren\extended_foot_model\mtj_axis';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Journal club\foot_model';
+% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Foot_Modeling_Meeting\2022_05_02\PIM';
 
 %%% select figures to make
 makeplot.kinematics_Qs                  = 0; % selected joint angles
@@ -400,8 +393,8 @@ makeplot.compareTakahashi17             = 0; % "distal to segment" power analysi
 makeplot.compareTakahashi17_separate    = 0; % "distal to segment" power analysis
 makeplot.compareTakahashi17_mtj_only    = 0; % plot mtj power over experimental result
 makeplot.compareTakahashi17_W_bar       = 0; % "distal to segment" work analysis
-makeplot.compareZelik15                 = 1; % foot muscle activity coordination
-makeplot.allQsTs                        = 0; % all joint angles and torques
+makeplot.compareZelik15                 = 0; % foot muscle activity coordination
+makeplot.allQsTs                        = 1; % all joint angles and torques
 makeplot.allQdots                       = 0; % all joint velocities
 makeplot.allQddots                      = 0; % all joint accelerations
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
