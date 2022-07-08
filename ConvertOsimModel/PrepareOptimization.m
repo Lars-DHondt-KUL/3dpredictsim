@@ -13,8 +13,9 @@ clc
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
 FootModel = 'mtp'; % mtp or mtj
+FixedKnee = 0; % 1 for fixed knee axis, 0 for moving
 FootScaling = 'custom'; % default, custom
-FDB = 0;
+FDB = 2;
 tib_ant_Rajagopal2015 = 0;
 MTcustom = 5; % 5 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis
@@ -31,6 +32,9 @@ addpath(fullfile(pathRepo,'\Polynomials'));
 %%
 % OpenSim file name from settings
 OsimFileName = [Subject '_' FootModel];
+if FixedKnee
+    OsimFileName = [OsimFileName '_FK'];
+end
 if strcmp(FootScaling,'default')
     OsimFileName = [OsimFileName '_sd'];
 elseif strcmp(FootScaling,'custom')
@@ -68,6 +72,8 @@ pathMusc = fullfile(pathRepo,'MuscleModel',PolyFolder);
 if ~isfolder(pathMusc)
     mkdir(pathMusc);
 end
+
+OsimFileName = [OsimFileName '_cspx10_oy3'];
 
 % Modelpath
 ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);

@@ -106,7 +106,10 @@ if S.SoleusTendonShorter
     IndexSoleus = find(contains(muscleNames,'soleus'));
     MTparameters(3,IndexSoleus) = MTparameters(3,IndexSoleus) - S.SoleusTendonShorter;
 end
-MTparameters_m = [MTparameters(:,musi),MTparameters(:,musi)];
+IndexGastroc = find(contains(muscleNames,'_gas'));
+MTparameters(3,IndexGastroc) = MTparameters(3,IndexGastroc)*S.GastroclTsScale;
+
+
 
 % By default, the tendon stiffness is 35 and the shift is 0.
 aTendon = 35*ones(NMuscle,1);
@@ -117,6 +120,8 @@ IndexCalf = [IndexCalf,IndexCalf+musi(end)];
 aTendon(IndexCalf) = 35*S.AchillesTendonScaleFactor;
 shift = getShift(aTendon);
 
+MTparameters(1,IndexCalf) = MTparameters(1,IndexCalf)*S.TricepsFMoScale;
+
 IndexAnkle = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus')...
      | contains(muscleNames,'tib_') | contains(muscleNames,'per_')...
      | contains(muscleNames,'_dig_') | contains(muscleNames,'_hal_'));
@@ -125,6 +130,7 @@ passiveFiberForceShift = zeros(NMuscle,1);
 passiveFiberForceShift(IndexAnkle) = S.passiveFiberForceShift;
 
 % disp(muscleNames(IndexAnkle(1:12)));
+MTparameters_m = [MTparameters(:,musi),MTparameters(:,musi)];
 
 if S.Foot.FDB
     IndexFDB = find(contains(muscleNames,'FDB'));

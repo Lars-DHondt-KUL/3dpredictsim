@@ -244,7 +244,7 @@ end
 if ~isfield(S,'IKfile_Bounds')
     if contains(S.Foot.Model,'mtj')
         S.IKfile_Bounds = 'OpenSimModel\IK_Bounds_Default_mtj.mat';
-    elseif strcmp(S.Foot.Model,'mtp')
+    elseif contains(S.Foot.Model,'mtp')
         S.IKfile_Bounds = 'OpenSimModel\IK_Bounds_Default.mat';
     end
 end
@@ -253,7 +253,7 @@ end
 if ~isfield(S,'IKfile_guess')
     if contains(S.Foot.Model,'mtj')
         S.IKfile_guess = 'OpenSimModel\IK_Guess_Default_mtj.mat';
-    elseif strcmp(S.Foot.Model,'mtp')
+    elseif contains(S.Foot.Model,'mtp')
         S.IKfile_guess = 'OpenSimModel\IK_Guess_Default.mat';
     end
 end
@@ -287,11 +287,15 @@ if ~isfield(S,'SoleusTendonShorter') || isempty(S.SoleusTendonShorter)
     S.SoleusTendonShorter = 0;
 end
 
+if ~isfield(S,'GastroclTsScale') || isempty(S.GastroclTsScale)
+    S.GastroclTsScale = 1;
+end
+
 if ~isfield(S.Foot,'kMTP') || isempty(S.Foot.kMTP)
-    S.Foot.kMTP = 1.5/(pi/180)/5;
+    S.Foot.kMTP = 25;
 end
 if ~isfield(S.Foot,'dMTP') || isempty(S.Foot.dMTP)
-    S.Foot.dMTP = 0.5;
+    S.Foot.dMTP = 2;
 end
 
 if ~isfield(S.Foot,'dMT') || isempty(S.Foot.dMT)

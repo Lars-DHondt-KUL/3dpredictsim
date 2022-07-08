@@ -83,7 +83,8 @@ orderQsOpp = [2*jointi.pelvis.list-1:2*jointi.pelvis.list,...
     2*jointi.trunk.ben-1:2*jointi.trunk.ben,...
     2*jointi.trunk.rot-1:2*jointi.trunk.rot];
 % For "symmetric" joints, we invert right and left
-inv_X = guess.QsQdots(1,orderQsInv);
+inv_X = zeros(1,nq.all);
+inv_X(1,sort(orderQsInv)) = guess.QsQdots(1,orderQsInv);
 % For other joints, we take the opposite right and left
 inv_X(orderQsOpp) = -guess.QsQdots(1,orderQsOpp);           
 dx = guess.QsQdots(end,2*jointi.pelvis.tx-1) - ...

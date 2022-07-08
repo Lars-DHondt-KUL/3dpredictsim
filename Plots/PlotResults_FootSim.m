@@ -407,7 +407,7 @@ if numFig <1 || numFig==4
 %     end
     hold on
     if BoolFirst
-        hi1 = image([1,9.65]*0.9,flip([0,4]*0.9^2),img_Ker);
+        hi1 = image([1,9.65]*0.9-1,flip([0,4]*0.9^2),img_Ker);
         uistack(hi1,'bottom')
     end
     xlabel('Horizontal elongation (mm)')

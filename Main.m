@@ -1,4 +1,4 @@
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This script serves as the main file for the branch extended_foot_model. 
 % It allows to specify the settings, solve, and post-process a single gait 
 % simulation.
@@ -49,8 +49,7 @@ add_to_batch_queue = 1;     % save settings to run later
 S.v_tgt     = 1.33;     % average speed
 S.N         = 50;       % number of mesh intervals
 S.NThreads  = 8;        % number of threads for parallel computing
-% S.max_iter  = 10;       % maximum number of iterations (comment -> 10000)
-% S.tol_ipopt = 3;        % stopping criterion: < 10^(-...) 
+% S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
@@ -76,19 +75,28 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp';
+S.Foot.Model = 'mtjc2';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
 
+% fixed knee axis
+S.fixed_knee = 0;
+
 % Achilles tendon stiffness
 S.AchillesTendonScaleFactor = 0.7;
+
+% Triceps surae optimal force scale
+S.TricepsFMoScale = 1.2;
 
 % Reduce tendon slack length of Soleus
 S.SoleusTendonShorter = 0;
 
+% scale tendon slack length of gastrocnemius
+S.GastroclTsScale = 1;
+
 % Shift passive force-length curve of ankle muscle fibers
-S.passiveFiberForceShift = 0; %-0.1
+S.passiveFiberForceShift = -0.1; %-0.1
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -104,16 +112,16 @@ S.MTparams = 'MTc5';    % MTc2 Sv50
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 1;
-S.Foot.contactSphereOffsetY = 2;    % contact spheres are offset in y-direction to match static trial IK
+S.Foot.contactGeometryVersion = 0;
+S.Foot.contactSphereOffsetY = 3;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
 
 %% metatarsophalangeal (mtp) joint
 S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
-S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
+S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
 
@@ -141,7 +149,7 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
 % Tendon slack length
 S.Foot.FDB_lTs = 0.125;
 % Shift fiber passive force-length curve

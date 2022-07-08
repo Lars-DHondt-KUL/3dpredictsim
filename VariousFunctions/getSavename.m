@@ -15,6 +15,9 @@ else
         if isfield(S.Foot,'Model')
             savenameparts{end+1} = S.Foot.Model;
         end
+        if isfield(S,'fixed_knee') && S.fixed_knee
+            savenameparts{end+1} = 'FK';
+        end
         if isfield(S.Foot,'Scaling')
             if strcmp(S.Foot.Scaling,'default')
                 savenameparts{end+1} = 'sd';
@@ -33,8 +36,21 @@ else
                 not{end+1} = 'not_cspx';
             end
         end
+        if isfield(S.Foot,'contactGeometryVersion')
+            if S.Foot.contactGeometryVersion~=0
+                savenameparts{end+1} = ['cg' num2str(S.Foot.contactGeometryVersion)];
+            else
+                not{end+1} = 'not_cg';
+            end
+        end
+        if isfield(S.Foot,'contactSphereOffsetY')
+            if S.Foot.contactSphereOffsetY == 1
+                savenameparts{end+1} = 'oy_';
+            elseif S.Foot.contactSphereOffsetY >= 2
+                savenameparts{end+1} = ['oy' num2str(S.Foot.contactSphereOffsetY)];
+            end
+        end
     end
-
 end
 
 if isfield(S,'TrackSim') && S.TrackSim 
@@ -52,11 +68,21 @@ if isfield(S,'AchillesTendonScaleFactor') && S.AchillesTendonScaleFactor~=1
 elseif isfield(S,'AchillesTendonScaleFactor') && S.AchillesTendonScaleFactor==1
      not{end+1} = 'not_ATx';
 end
+if isfield(S,'TricepsFMoScale') && S.TricepsFMoScale~=1
+    savenameparts{end+1} = ['TFMox' num2str(S.TricepsFMoScale*100)];
+    casfuncfolparts{end+1} = ['TFMox' num2str(S.TricepsFMoScale*100)];
+elseif isfield(S,'TricepsFMoScale') && S.TricepsFMoScale==1
+     not{end+1} = 'not_TFMox';
+end
 if isfield(S,'SoleusTendonShorter') && S.SoleusTendonShorter
     savenameparts{end+1} = ['STm' num2str(S.SoleusTendonShorter*1000)];
     casfuncfolparts{end+1} = ['STm' num2str(S.SoleusTendonShorter*1000)];
 elseif isfield(S,'SoleusTendonShorter')
     not{end+1} = 'not_STm';
+end
+if isfield(S,'GastroclTsScale') && S.GastroclTsScale~=1
+    savenameparts{end+1} = ['GlTsx' num2str(S.GastroclTsScale*100)];
+    casfuncfolparts{end+1} = ['GlTsx' num2str(S.GastroclTsScale*100)];
 end
 if isfield(S,'passiveFiberForceShift') && S.passiveFiberForceShift
     savenameparts{end+1} = ['Fpsl' num2str(-S.passiveFiberForceShift*100)];
@@ -79,7 +105,7 @@ elseif isfield(S,'useMtpPinPoly') && ~S.useMtpPinPoly
     not{end+1} = 'not_oldPoly';
 end
 
-if isfield(S,'MTparams')
+if isfield(S,'MTparams') && ~isempty(S.MTparams)
     savenameparts{end+1} = S.MTparams;
     casfuncfolparts{end+1} = S.MTparams;
 end
@@ -172,29 +198,29 @@ if isfield(S,'Foot')
             casfuncfolparts{end+1} = ['ls' num2str(S.Foot.PF_slack_length*1000)];
         end
     
-        if isfield(S.Foot,'FDB') 
-            if S.Foot.FDB == 1
-                savenameparts{end+1} = 'FDB';
-                casfuncfolparts{end+1} = 'FDB';
-            elseif S.Foot.FDB == 2
-                savenameparts{end+1} = 'FDB2';
-                casfuncfolparts{end+1} = 'FDB2';
-            end
-            if S.Foot.FDB
-                if isfield(S.Foot,'FDB_lTs')
-                    savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
-                    casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
-                end
-                if isfield(S.Foot,'FDB_shift') && S.Foot.FDB_shift
-                    savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
-                    casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
-                end
-                if isfield(S.Foot,'FDB_sf_FMo') && S.Foot.FDB_sf_FMo~=1
-                    savenameparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
-                    casfuncfolparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
-                end
-            end
-        end
+%         if isfield(S.Foot,'FDB') 
+%             if S.Foot.FDB == 1
+%                 savenameparts{end+1} = 'FDB';
+%                 casfuncfolparts{end+1} = 'FDB';
+%             elseif S.Foot.FDB == 2
+%                 savenameparts{end+1} = 'FDB2';
+%                 casfuncfolparts{end+1} = 'FDB2';
+%             end
+%             if S.Foot.FDB
+%                 if isfield(S.Foot,'FDB_lTs')
+%                     savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+%                     casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+%                 end
+%                 if isfield(S.Foot,'FDB_shift') && S.Foot.FDB_shift
+%                     savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+%                     casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+%                 end
+%                 if isfield(S.Foot,'FDB_sf_FMo') && S.Foot.FDB_sf_FMo~=1
+%                     savenameparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
+%                     casfuncfolparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
+%                 end
+%             end
+%         end
         
 
         if isfield(S.Foot,'PIM') && S.Foot.PIM
@@ -226,6 +252,30 @@ if isfield(S,'Foot')
         
     end
       
+    if isfield(S.Foot,'FDB') 
+        if S.Foot.FDB == 1
+            savenameparts{end+1} = 'FDB';
+            casfuncfolparts{end+1} = 'FDB';
+        elseif S.Foot.FDB == 2
+            savenameparts{end+1} = 'FDB2';
+            casfuncfolparts{end+1} = 'FDB2';
+        end
+        if S.Foot.FDB
+            if isfield(S.Foot,'FDB_lTs')
+                savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+                casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
+            end
+            if isfield(S.Foot,'FDB_shift') && S.Foot.FDB_shift
+                savenameparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+                casfuncfolparts{end+1} = ['Fpsl' num2str(-S.Foot.FDB_shift*100)];
+            end
+            if isfield(S.Foot,'FDB_sf_FMo') && S.Foot.FDB_sf_FMo~=1
+                savenameparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
+                casfuncfolparts{end+1} = ['FMox' num2str(S.Foot.FDB_sf_FMo*100)];
+            end
+        end
+    end
+
 end
 
 % initial guess
