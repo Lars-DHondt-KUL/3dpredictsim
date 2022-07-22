@@ -114,13 +114,14 @@ MTparameters(3,IndexGastroc) = MTparameters(3,IndexGastroc)*S.GastroclTsScale;
 % By default, the tendon stiffness is 35 and the shift is 0.
 aTendon = 35*ones(NMuscle,1);
 % adjust stiffness of the calf muscles
-% IndexCalf = [32 33 34 78 79 80]; 
 IndexCalf = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus'));
+MTparameters(1,IndexCalf) = MTparameters(1,IndexCalf)*S.TricepsFMoScale;
+
 IndexCalf = [IndexCalf,IndexCalf+musi(end)];
 aTendon(IndexCalf) = 35*S.AchillesTendonScaleFactor;
 shift = getShift(aTendon);
 
-MTparameters(1,IndexCalf) = MTparameters(1,IndexCalf)*S.TricepsFMoScale;
+
 
 IndexAnkle = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus')...
      | contains(muscleNames,'tib_') | contains(muscleNames,'per_')...

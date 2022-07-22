@@ -39,6 +39,7 @@ if length(varargin)>=2 && varargin{2}~=0
         tab4 = h.Parent.Children(1).Children(1).Children(4);
         tab5 = h.Parent.Children(1).Children(1).Children(5);
         tab6 = h.Parent.Children(1).Children(1).Children(6);
+        tab7 = h.Parent.Children(1).Children(1).Children(7);
     end
 else
     h = figure('Position',[82,151,1497,827]);
@@ -52,6 +53,7 @@ else
         tab4 = uitab(hTabGroup, 'Title', 'Arch stiffness');
         tab5 = uitab(hTabGroup, 'Title', 'mtp');
         tab6 = uitab(hTabGroup, 'Title', 'mtp stiffening');
+        tab7 = uitab(hTabGroup, 'Title', 'mtj');
     end
 end
 
@@ -648,6 +650,59 @@ end
 % end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%
+if numFig <1
+    axes('parent', tab7);
+elseif numFig==4
+    figure(h)
+end
+if numFig <1 || numFig==7
+
+    idx0 = find(R.Qs_mtp(:) == 0);
+    js = find(R.failed(idx0,:)==0);
+    dH0 = min(R.talus_or(idx0,js))*1e3;
+
+    for i=1:n_mtp
+    %     axes('parent', tab3);
+
+        js = find(R.failed(i,:)==0);
+        Fs_tib = R.Fs_tib(js);
+
+        subplot(2,2,1)
+        hold on
+        plot(R.Qs(i,js,R.jointfi.mtj.r)*180/pi,R.T_mtj.ext(i,js)/R.S.mass,...
+            mrk{i},'Color',CsV,'DisplayName',[num2str(R.Qs_mtp(i)*180/pi) '°; ' R.legname])
+        xlabel('angle (°)')
+        ylabel('torque (Nm/kg)')
+        title('midtarsal joint')
+
+        subplot(2,2,2)
+        hold on
+        dH = R.talus_or(i,js)*1e3;
+        dH = dH - dH0;
+        ddH = dH(2:end) - dH(1:end-1);
+        idxH = find(ddH>=0);
+        plot(dH(idxH),Fs_tib(idxH)/BW,mrk{i},'Color',CsV,'DisplayName',...
+            [num2str(R.Qs_mtp(i)*180/pi) '°; ' R.legname])
+        xlabel('vertical displacement ankle (mm)')
+        ylabel('vertical force (N/BW)')
+        title('vertical stiffness')
+
+    end
+
+    legend('Location','best','Interpreter','none');
+
+    subplot(2,2,1)
+    hold on
+    plot([0,2.5],[0,-1],'--k')
+
+
+end
+
+
+
 %%
 if fig2
     % 

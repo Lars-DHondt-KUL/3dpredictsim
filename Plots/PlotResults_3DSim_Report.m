@@ -324,6 +324,14 @@ for inr=1:nr
             Tref = Data.ID_original;
         end
 
+        data_field = ['P_' RefData(8:end)];
+        if isfield(Data,data_field)
+            Pref = Data.(data_field);
+        else
+            Pref = Data.ID_original;
+        end
+
+
     end
     
     Cs = CsV(inr,:);
@@ -909,6 +917,241 @@ for inr=1:nr
     end
     
     
+    %%
+    if makeplot.ankle_musc2
+        
+        if inr==1
+            h3a = figure('Position',[fpos(2,:),fhigh]);
+
+        else
+            figure(h3a);
+        end
+
+        n_msc = 8;
+%         nn_msc = 6;
+
+        if inr==1 && md 
+
+            iPerL_data = find(strcmp(Data.EMGheaders,'Peroneus-longus'));
+            iPerB_data = find(strcmp(Data.EMGheaders,'Peroneus-brevis'));
+            
+            ankle2_act(:,1) = Data.lowEMG_mean(:,iPerL_data);
+            ankle2_act(:,2) = Data.lowEMG_mean(:,iPerB_data);
+
+            imusd = [iPerL_data,iPerB_data];
+
+            
+            
+%             nn_msc = length(imusd);%+2;
+            nn_msc = 4;
+
+            
+            for imu=1:length(imusd)
+                subplot(n_msc,nn_msc,imu); hold on;
+                yyaxis right
+                hold on
+                meanPlusSTD = Data.lowEMG_mean(:,imusd(imu)) + 2*Data.lowEMG_std(:,imusd(imu));
+                meanMinusSTD = Data.lowEMG_mean(:,imusd(imu)) - 2*Data.lowEMG_std(:,imusd(imu));
+                stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
+                intervalQ = 1:stepQ:size(R.Qs,1);
+                sampleQ = 1:size(R.Qs,1);
+                meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
+                meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
+                p1=fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],[1,1,1]*0.8,'DisplayName','EMG data');
+                alpha(.25)
+                set(gca,'XTick',[0:20:100])
+                plot(ankle2_act(:,imu),'-k','DisplayName','mean EMG data')
+                a1 = gca;
+                a1.YColor = [0,0,0];
+                if imu==1
+                    lg_aa = [p1];
+                end
+                if imu==nn_msc-2
+                    ylabel('EMG (mV)')
+                end
+                axis tight
+                yl = get(gca, 'ylim');
+                ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+                xlim([0,100])
+                yyaxis left
+                a1 = gca;
+                a1.YColor = [0,0,0];
+            end
+            
+        end
+        NumTicks = 6;
+        imus = [iPerL,iPerB,iPerT,iTibPo];
+
+        for imu=1:nn_msc
+            
+            subplot(n_msc,nn_msc,imu); hold on;
+            hold on
+            p2=plot(R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            hold on
+            title(R.colheaders.muscles{imus(imu)},'Interpreter','none')
+            grid on
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+            xlim([0,100])
+                if imu==1
+                    ylabel('Activity (-)','Interpreter','latex');
+                    if md
+                        lg_aa(end+1) = p2;
+                    else
+                        lg_aa = [p2];
+                    end
+                    if inr==nr
+                        lh3a=legend(lg_aa,'location','northwest');
+                        lh3a.Interpreter = lgInt;
+                        lh3a.Orientation = 'horizontal';
+                    end
+                end
+            subplot(n_msc,nn_msc,nn_msc+imu)
+            plot(R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            hold on
+            grid on
+            
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$F^T$ (N)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([0,yl(2)+0.15*norm(yl)])
+            xlim([0,100])
+
+            subplot(n_msc,nn_msc,2*nn_msc+imu)
+            plot(R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            hold on
+            grid on
+            
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$\dot{E}$ (W)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+            xlim([0,100])
+
+
+            subplot(n_msc,nn_msc,3*nn_msc+imu)
+            plot(R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            hold on
+            grid on
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$\dot{W}$ (W)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.15*norm(yl),yl(2)+0.15*norm(yl)])
+            xlim([0,100])
+
+            if isfield(R,'vT')
+
+                subplot(n_msc,nn_msc,4*nn_msc+imu)
+                plot(-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+                hold on
+                grid on
+
+                L = get(gca,'XLim');
+                set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+                if imu==1
+                    ylabel('$P^T$ (W)','Interpreter','latex');
+                end
+                axis tight
+                yl = get(gca, 'ylim');
+                ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+                xlim([0,100])
+            end
+
+            subplot(n_msc,nn_msc,5*nn_msc+imu)
+            plot(R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            hold on
+            grid on
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$\tilde{l}^M$ (-)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.05*norm(yl),yl(2)+0.02*norm(yl)])
+            xlim([0,100])
+
+%                 subplot(n_msc,nn_msc,6*nn_msc+imu)
+%                 plot(R.vMtilde(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+%                 hold on
+%                 grid on
+%                 L = get(gca,'XLim');
+%                 set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+%                 if imu==1
+%                     ylabel('$\dot{\tilde{l}^M}$ (-)','Interpreter','latex');
+%                 end
+%                 axis tight
+%                 yl = get(gca, 'ylim');
+%                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+%                 xlim([0,100])
+
+            subplot(n_msc,nn_msc,6*nn_msc+imu)
+            plot(R.Muscle.vM(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            hold on
+            grid on
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$v^M$ (m/s)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+            xlim([0,100])
+
+            subplot(n_msc,nn_msc,7*nn_msc+imu)
+            plot(R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            hold on
+            grid on
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$l^{MT}$ (m)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.01*norm(yl),yl(2)+0.01*norm(yl)])
+            xlim([0,100])
+
+            
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+        end
+        
+        if inr==nr
+            lhPos = lh3a.Position;
+%             lhPos(1) = lhPos(1)-0.12;
+            if makeplot.sol_all
+                lhPos(2) = lhPos(2)+0.08;
+            else
+                lhPos(2) = lhPos(2)+0.1;
+            end
+            set(lh3a,'position',lhPos);
+        end
+            
+        
+        
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h3a,'PaperPositionMode','auto')
+            print(h3a,[figNamePrefix '_peroneus'],'-dpng','-r0')
+            print(h3a,[figNamePrefix '_peroneus'],'-depsc')
+        end
+    end
+    
     
     %% GRF
     if makeplot.GRF
@@ -920,21 +1163,21 @@ for inr=1:nr
         end
 
         
-        if inr==1 && md
-            subplot(3,5,[5;10])
-            hold on
-            grid on
-            iCOPd = find(Data.GRF.Fmean(:,2)>=20);
-            COPdzR = Data.GRF.COPmean(iCOPd,3)*1e3;
-            iCOPdL = mod(iCOPd+49,100)+1;
-            COPdzL = Data.GRF.COPmean(iCOPdL,3)*1e3;
-            COPdz = mean(COPdzR) + mean(COPdzL);
-            COPdzR = COPdzR - COPdz/2;
-            COPdx = Data.GRF.COPmean(iCOPd,1)*1e3;
-            COPdx = COPdx - COPdx(1);
-            
-            plot(COPdzR,COPdx,'.k','DisplayName','Measured');
-        end
+%         if inr==1 && md
+%             subplot(3,5,[5;10])
+%             hold on
+%             grid on
+%             iCOPd = find(Data.GRF.Fmean(:,2)>=20);
+%             COPdzR = Data.GRF.COPmean(iCOPd,3)*1e3;
+%             iCOPdL = mod(iCOPd+49,100)+1;
+%             COPdzL = Data.GRF.COPmean(iCOPdL,3)*1e3;
+%             COPdz = mean(COPdzR) + mean(COPdzL);
+%             COPdzR = COPdzR - COPdz/2;
+%             COPdx = Data.GRF.COPmean(iCOPd,1)*1e3;
+%             COPdx = COPdx - COPdx(1);
+%             
+%             plot(COPdzR,COPdx,'.k','DisplayName','Measured');
+%         end
 
         istance_COPR = find(R.GRFs(:,2)>30);
         COPz = R.COPR(istance_COPR,3)*1e3;
@@ -2273,6 +2516,112 @@ for inr=1:nr
         end
     end
     
+        %% all
+    if makeplot.allPs
+        if inr==1
+            h9d = figure('Position',[fpos(3,:),fhigh1]);
+        end
+        
+        if has_no_tmt && has_no_mtj
+            idx_Qs = [1,2,3,10,11,12,14,16,18,20,21,22,23,27,28,29,31];
+        else
+            idx_Qs = [1,2,3,10,11,12,14,16,18,20,22,23,24,25,29,30,31,33];
+        end
+        idx_title = [1,2,3,10,11,12,14,16,18,20,24,25,26,27,31,32,33,35];
+        joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
+                'hip_flexion','hip_adduction','hip_rotation',...
+                'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle',...
+                'lumbar_extension','lumbar_bending','lumbar_rotation',...
+                'arm_flex','arm_add','arm_rot','elbow_flex'};
+        
+        joints_tit = {'Pelvis tilt','Pelvis list','Pelvis rotation','Pelvis tx',...
+                'Pelvis ty','Pelvis tz','Hip flexion L','Hip adduction L',...
+                'Hip rotation L','Hip flexion R','Hip adduction R','Hip rotation R',...
+                'Knee L','Knee R','Ankle L','Ankle R','Subtalar L','Subtalar R',...
+                'Midtarsal L','Midtarsal R','Tmt L','Tmt R',...
+                'Mtp L','Mtp R',...
+                'Lumbar extension','Lumbar bending','Lumbar rotation',...
+                'Arm flexion L','Arm adduction L','Arm rotation L',...
+                'Arm flexion R','Arm adduction R','Arm rotation R',...
+                'Elbow flexion L','Elbow flexion R'};
+    
+        figure(h9d)
+        
+        j = 0;
+        label_fontsize  = 12;
+        line_linewidth  = 0.5;
+        for i = 1:length(idx_title)
+            subplot(6,3,i)
+            x = 1:(100-1)/(size(R.Qs,1)-1):100;
+            % Experimental data
+            if  inr == 1 && md
+                idx_jref = strcmp(Pref.colheaders,joints_ref{i});
+                if sum(idx_jref) == 1
+                    meanPlusSTD = (Pref.Pall_mean(:,idx_jref) + 2*Pref.Pall_std(:,idx_jref));
+                    meanMinusSTD = (Pref.Pall_mean(:,idx_jref) - 2*Pref.Pall_std(:,idx_jref));
+
+                    stepQddot = (size(R.Qddots,1)-1)/(size(meanPlusSTD,1)-1);
+                    intervalQddot = 1:stepQddot:size(R.Qddots,1);
+                    sampleQddot = 1:size(R.Qddots,1);
+                    meanPlusSTD = interp1(intervalQddot,meanPlusSTD,sampleQddot);
+                    meanMinusSTD = interp1(intervalQddot,meanMinusSTD,sampleQddot);
+
+                    hold on
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
+                    alpha(.25);
+                end
+            end
+
+            % Simulation results
+            
+            hold on;
+            axis tight
+            xlim([0,100]);
+            if (has_no_tmt && strcmp(joints_tit{idx_title(i)},'Tarsometatarsal R')) || ...
+                    (has_no_mtj && strcmp(joints_tit{idx_title(i)},'Midtarsal R'))
+                % skip this plot
+            else
+                j=j+1;
+                plot(x,R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            end
+
+            % Plot settings
+            if inr==1
+                set(gca,'Fontsize',label_fontsize);
+                title(joints_tit{idx_title(i)},'Fontsize',label_fontsize);
+                % Y-axis
+                if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 || i == 16
+                    ylabel('Power (W)','Fontsize',label_fontsize);
+                end
+                % X-axis
+                L = get(gca,'XLim');
+                NumTicks = 3;
+                set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+                if i > 15
+                    xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                end
+            end
+            if inr==1 && i==1
+                lhQ=legend('-DynamicLegend','location','northwest');
+                lhQ.Interpreter = lgInt;
+                lhQ.Orientation = 'horizontal';
+            end
+            if inr==nr && i==1
+                lhPos = lhQ.Position;
+                lhPos(1) = lhPos(1)-0.1;
+                lhPos(2) = lhPos(2)+0.08;
+                set(lhQ,'position',lhPos);
+            end
+        end
+
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(ha9,'PaperPositionMode','auto')
+            print(h9a,[figNamePrefix '_P_all'],'-dpng','-r0')
+            print(h9a,[figNamePrefix '_P_all'],'-depsc')
+            
+        end
+    end
+
     %%
 %     x = 1:(100-1)/(size(R.Qs,1)-1):100;
 %     if makeplot.k_mtj_lin
@@ -3878,7 +4227,7 @@ for inr=1:nr
     if makeplot.toes
 
         
-        mVect = {'Flex-dig','Flex-hal','Ext-dig','Ext-hal','FDB'};
+        mVect_t = {'Flex-dig','Flex-hal','Ext-dig','Ext-hal','FDB'};
 
         imus = [ifd ifh ied ieh];
 
@@ -3895,9 +4244,9 @@ for inr=1:nr
 
         for imu=1:length(imus)
 
-            subplot(7,5,imu); hold on;
+            subplot(8,5,imu); hold on;
             plot(R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
-            title(mVect{imu});
+            title(mVect_t{imu});
             ylabel('Activity (-)','Interpreter','latex');
             grid on
             L = get(gca,'XLim');
@@ -3913,7 +4262,7 @@ for inr=1:nr
 % %                     lh3.Orientation = 'horizontal';
 %             end
 
-            subplot(7,5,5+imu)
+            subplot(8,5,5+imu)
             plot(R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
@@ -3928,7 +4277,7 @@ for inr=1:nr
             ylim([0,yl(2)+0.15*norm(yl)])
             xlim([0,100])
 
-            subplot(7,5,10+imu)
+            subplot(8,5,10+imu)
             plot(R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
@@ -3943,7 +4292,7 @@ for inr=1:nr
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
 
-            subplot(7,5,15+imu)
+            subplot(8,5,15+imu)
             plot(R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
@@ -3957,7 +4306,7 @@ for inr=1:nr
             ylim([yl(1)-0.15*norm(yl),yl(2)+0.15*norm(yl)])
             xlim([0,100])
 
-            subplot(7,5,20+imu)
+            subplot(8,5,20+imu)
             plot(-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
@@ -3971,7 +4320,7 @@ for inr=1:nr
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
 
-            subplot(7,5,25+imu)
+            subplot(8,5,25+imu)
             plot(R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
@@ -3985,7 +4334,7 @@ for inr=1:nr
             ylim([yl(1)-0.05*norm(yl),yl(2)+0.02*norm(yl)])
             xlim([0,100])
 
-            subplot(7,5,30+imu)
+            subplot(8,5,30+imu)
             plot(R.vMtilde(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
@@ -3997,6 +4346,21 @@ for inr=1:nr
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
+            xlim([0,100])
+
+
+            subplot(8,5,35+imu)
+            plot(R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            hold on
+            grid on
+            L = get(gca,'XLim');
+            set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if imu==1
+                ylabel('$l^{MT}$ (m)','Interpreter','latex');
+            end
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.05*abs(diff(yl)),yl(2)+0.05*abs(diff(yl))])
             xlim([0,100])
 
 

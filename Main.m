@@ -75,16 +75,16 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc2';
+S.Foot.Model = 'mtp';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
 
 % fixed knee axis
-S.fixed_knee = 0;
+S.fixed_knee = 1;
 
 % Achilles tendon stiffness
-S.AchillesTendonScaleFactor = 0.7;
+S.AchillesTendonScaleFactor = 0.5;
 
 % Triceps surae optimal force scale
 S.TricepsFMoScale = 1.2;
@@ -115,15 +115,22 @@ S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stif
 S.Foot.contactGeometryVersion = 0;
 S.Foot.contactSphereOffsetY = 3;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
+S.Foot.contactSphereOffset1X = 20e-3;   % heel contact sphere offset in x-direction (0.025)
 
 %% metatarsophalangeal (mtp) joint
-S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
-S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
+% preset for passive mtp
+S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
+
+% preset for muscle-driven mtp
+% S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
+% S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
+% S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
+
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
+S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 
 %% midtarsal joint 
 % (only used if Model = mtj)
@@ -149,7 +156,7 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
 % Tendon slack length
 S.Foot.FDB_lTs = 0.125;
 % Shift fiber passive force-length curve

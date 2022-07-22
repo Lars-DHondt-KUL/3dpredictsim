@@ -62,13 +62,15 @@ S2.Foot.PF_sf = 1;
 S2.Foot.PF_slack_length = 0.146;
 S2.Foot.mtj_stiffness = 'MG_exp5_table';
 S2.Foot.mtj_sf = 1; 
+[S0] = getFileNames(S2);
+S2.fixed_knee = 1;
 [S2] = getFileNames(S2);
 [~, casfuncfol] = getSavename(S2);
 
 pathCasADiFunctions = [pathRepo,'/CasADiFunctions'];
 PathDefaultFunc = fullfile(pathCasADiFunctions,casfuncfol);
 PolyFolder = fullfile(pathRepo,'Polynomials',S2.OsimFileName);
-ext_name = ['Foot_' S2.ExternalFunc];
+ext_name = ['Foot_' S0.ExternalFunc];
 pathMusc = fullfile(pathRepo,'MuscleModel',S2.OsimFileName);
 % if strcmp(S.Foot.Scaling,'custom')
 %     PathDefaultFunc = fullfile(pathCasADiFunctions,...
@@ -530,6 +532,7 @@ tau_mtj = zeros(n_mtp,n_tib);
 T_mtp = zeros(n_mtp,n_tib);
 T_ankle_ext = zeros(n_mtp,n_tib);
 T_subt_ext = zeros(n_mtp,n_tib);
+T_mtj_ext = zeros(n_mtp,n_tib);
 for i=1:NM_f
     F_tendon.(muscleNamesFoot{i}) = zeros(n_mtp,n_tib);
 end
@@ -638,6 +641,7 @@ for i=1:n_mtp
 
             T_ankle_ext(i,j) = T_res(jointfi.ankle.r);
             T_subt_ext(i,j) = T_res(jointfi.subt.r);
+            T_mtj_ext(i,j) = T_res(jointfi.mtj.r);
 
             % ground reaction forces
             GRF_calcn(i,j,:) = T_res(jointfi.calcn_GRF(1,:)) + T_res(jointfi.calcn_GRF(2,:));
@@ -703,6 +707,7 @@ R.T_ankle.ext = T_ankle_ext;
 R.T_subt.muscle = T_subt;
 R.T_subt.pass = tau_subt;
 R.T_subt.ext = T_subt_ext;
+R.T_mtj.ext = T_mtj_ext;
 R.T_mtj.muscle = T_mtj;
 R.T_mtj.pass = tau_mtj;
 R.T_mtj.lig = M_mtj_li;

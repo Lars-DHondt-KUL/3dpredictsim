@@ -42,7 +42,7 @@ Fs_tib = [0];
 % Qs_mtp = [-30:30:30]*pi/180;
 % Qs_mtp = [0:5:30]*pi/180;
 % Qs_mtp = [-30:10:30]*pi/180;
-
+Qs_mtp = [0,15]*pi/180;
 
 % vertical forces on knee
 % Fs_tib = [0:100:1000];
@@ -73,6 +73,8 @@ Results = {};
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 
+%%
+% S.Foot.Model = 'mtj';
 % 
 % S.Foot.PF_stiffness = 'Gefen2002';
 % S.Foot.PF_sf = 1; 
@@ -126,15 +128,46 @@ Results = {};
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 
+% S.Foot.PF_stiffness = 'Natali2010';
+% S.Foot.PF_sf = 1; 
+% S.Foot.PF_slack_length = 0.146;
+% S.Foot.mtj_stiffness = 'MG_exp5_table';
+% % Fs_tib = [0:100:1000];
+% Qs_mtp = [-30:15:30]*pi/180;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+
+% S.Foot.PF_stiffness = 'Gefen2002';
+% S.Foot.PF_sf = 1; 
+% S.Foot.PF_slack_length = 0.146;
+% S.Foot.mtj_stiffness = 'MG_exp5_table';
+% % Fs_tib = [0:100:1000];
+% Qs_mtp = [-30:15:30]*pi/180;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+
 S.Foot.PF_stiffness = 'Natali2010';
 S.Foot.PF_sf = 1; 
 S.Foot.PF_slack_length = 0.146;
-S.Foot.mtj_stiffness = 'MG_exp_table';
-Fs_tib = [0:100:1000];
-Qs_mtp = [-30:10:30]*pi/180;
+S.Foot.mtj_stiffness = 'MG_exp5_table';
+Fs_tib = [0:50:300,400:100:1000,1200:200:2000];
+Qs_mtp = [0,15]*pi/180;
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 Results{end+1} = R;
+% 
+% S.Foot.PF_stiffness = 'none';
+% S.Foot.PF_sf = 1; 
+% S.Foot.PF_slack_length = 0.146;
+% S.Foot.mtj_stiffness = 'MG_exp5_table';
+% Fs_tib = [0:50:300,400:100:1000,1200:200:2000];
+% Qs_mtp = [0,15]*pi/180;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
 
+
+
+
+%%
 % S.Foot.PF_stiffness = 'Gefen2002';
 % S.Foot.PF_sf = 1; 
 % S.Foot.PF_slack_length = 0.146;
@@ -153,13 +186,13 @@ Results{end+1} = R;
 
 % Qs_mtp = [0]*pi/180;
 % S.Foot.kMT_li = 0;
-% S.Foot.mtj_stiffness = 'MG_exp_table';
+% S.Foot.mtj_stiffness = 'MG_exp5_table';
 % R = f_staticFootHanging(S,Qs_mtp,subtR);
 % Results{end+1} = R;
 % 
 % Qs_mtp = [0]*pi/180;
 % S.Foot.kMT_li = 0;
-% S.Foot.mtj_stiffness = 'MG_exp_table_v2';
+% S.Foot.mtj_stiffness = 'MG_exp5_table';
 % R = f_staticFootHanging(S,Qs_mtp,subtR);
 % Results{end+1} = R;
 
@@ -167,7 +200,7 @@ Results{end+1} = R;
 % call plot function
 nrf = length(Results);
 CsV = hsv(nrf);
-fig_nr = -1;
+fig_nr = 7;
 for i=1:nrf
     R = Results{i};
     if i==1
