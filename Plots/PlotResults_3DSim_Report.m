@@ -308,8 +308,6 @@ for inr=1:nr
         
 %         data_field = ['IK_' R.S.Foot.Model '_' R.S.Foot.Scaling];
         data_field = ['IK_' RefData(8:end)];
-        
-
         if isfield(Data,data_field)
             Qref = Data.(data_field);
         else
@@ -470,7 +468,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h1,'PaperPositionMode','auto')
             print(h1,[figNamePrefix '_qs'],'-dpng','-r0')
-            print(h1,[figNamePrefix '_qs'],'-depsc')
+% %             print(h1,[figNamePrefix '_qs'],'-depsc')
         end
 
     end
@@ -554,7 +552,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h1a,'PaperPositionMode','auto')
             print(h1a,[figNamePrefix '_qdots'],'-dpng','-r0')
-            print(h1a,[figNamePrefix '_qdots'],'-depsc')
+% %             print(h1a,[figNamePrefix '_qdots'],'-depsc')
         end
     end
     
@@ -658,7 +656,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h2,'PaperPositionMode','auto')
             print(h2,[figNamePrefix '_Ts'],'-dpng','-r0')
-            print(h2,[figNamePrefix '_Ts'],'-depsc')
+% %             print(h2,[figNamePrefix '_Ts'],'-depsc')
         end
     end
     
@@ -908,10 +906,10 @@ for inr=1:nr
             set(h3,'PaperPositionMode','auto')
             if makeplot.sol_all
                 print(h3,[figNamePrefix '_calf_all'],'-dpng','-r0')
-                print(h3,[figNamePrefix '_calf_all'],'-depsc')
+% %                 print(h3,[figNamePrefix '_calf_all'],'-depsc')
             else
                 print(h3,[figNamePrefix '_calf'],'-dpng','-r0')
-                print(h3,[figNamePrefix '_calf'],'-depsc')
+% %                 print(h3,[figNamePrefix '_calf'],'-depsc')
             end
         end
     end
@@ -1148,7 +1146,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h3a,'PaperPositionMode','auto')
             print(h3a,[figNamePrefix '_peroneus'],'-dpng','-r0')
-            print(h3a,[figNamePrefix '_peroneus'],'-depsc')
+%             print(h3a,[figNamePrefix '_peroneus'],'-depsc')
         end
     end
     
@@ -1303,7 +1301,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h4,'PaperPositionMode','auto')
             print(h4,[figNamePrefix '_GRF'],'-dpng','-r0')
-            print(h4,[figNamePrefix '_GRF'],'-depsc')
+%             print(h4,[figNamePrefix '_GRF'],'-depsc')
         end
     end
 
@@ -1458,7 +1456,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h5,'PaperPositionMode','auto')
             print(h5,[figNamePrefix '_qs_lit_1'],'-dpng','-r0')
-            print(h5,[figNamePrefix '_qs_lit_1'],'-depsc')
+%             print(h5,[figNamePrefix '_qs_lit_1'],'-depsc')
         end
         
         %         
@@ -1513,7 +1511,7 @@ for inr=1:nr
             if inr==nr && ~strcmp(figNamePrefix,'none')
                 set(h5a,'PaperPositionMode','auto')
                 print(h5a,[figNamePrefix '_qs_lit_2'],'-dpng','-r0')
-                print(h5a,[figNamePrefix '_qs_lit_2'],'-depsc')
+%                 print(h5a,[figNamePrefix '_qs_lit_2'],'-depsc')
             end
         
         end
@@ -1741,7 +1739,7 @@ for inr=1:nr
         if ~strcmp(figNamePrefix,'none')
             set(h6,'PaperPositionMode','auto')
             print(h6,[figNamePrefix '_Takahashi17_' num2str(inr)],'-dpng','-r0')
-            print(h6,[figNamePrefix '_Takahashi17_' num2str(inr)],'-depsc')
+%             print(h6,[figNamePrefix '_Takahashi17_' num2str(inr)],'-depsc')
         end
         
     end
@@ -1795,7 +1793,7 @@ for inr=1:nr
         if ~strcmp(figNamePrefix,'none')
             set(h6c,'PaperPositionMode','auto')
             print(h6c,[figNamePrefix '_Takahashi17_foot_' num2str(inr)],'-dpng','-r0')
-            print(h6c,[figNamePrefix '_Takahashi17_foot_' num2str(inr)],'-depsc')
+%             print(h6c,[figNamePrefix '_Takahashi17_foot_' num2str(inr)],'-depsc')
         end
         
         %
@@ -1839,7 +1837,7 @@ for inr=1:nr
         if ~strcmp(figNamePrefix,'none')
             set(h6d,'PaperPositionMode','auto')
             print(h6d,[figNamePrefix '_Takahashi17_mtj_' num2str(inr)],'-dpng','-r0')
-            print(h6d,[figNamePrefix '_Takahashi17_mtj_' num2str(inr)],'-depsc')
+%             print(h6d,[figNamePrefix '_Takahashi17_mtj_' num2str(inr)],'-depsc')
         end
         %
         
@@ -1884,7 +1882,7 @@ for inr=1:nr
         if ~strcmp(figNamePrefix,'none')
             set(h6e,'PaperPositionMode','auto')
             print(h6e,[figNamePrefix '_Takahashi17_ankle_' num2str(inr)],'-dpng','-r0')
-            print(h6e,[figNamePrefix '_Takahashi17_ankle_' num2str(inr)],'-depsc')
+%             print(h6e,[figNamePrefix '_Takahashi17_ankle_' num2str(inr)],'-depsc')
         end
         
     end
@@ -1924,7 +1922,7 @@ for inr=1:nr
         if ~strcmp(figNamePrefix,'none')
             set(h6a,'PaperPositionMode','auto')
             print(h6a,[figNamePrefix '_Takahashi17_mtj'],'-dpng','-r0')
-            print(h6a,[figNamePrefix '_Takahashi17_mtj'],'-depsc')
+%             print(h6a,[figNamePrefix '_Takahashi17_mtj'],'-depsc')
         end
 
     end
@@ -2034,7 +2032,7 @@ for inr=1:nr
         if ~strcmp(figNamePrefix,'none')
             set(h6b,'PaperPositionMode','auto')
             print(h6b,[figNamePrefix '_Takahashi17_W_bar_' num2str(inr)],'-dpng','-r0')
-            print(h6b,[figNamePrefix '_Takahashi17_W_bar_' num2str(inr)],'-depsc')
+%             print(h6b,[figNamePrefix '_Takahashi17_W_bar_' num2str(inr)],'-depsc')
         end
         
     end
@@ -2108,7 +2106,7 @@ for inr=1:nr
 %         if inr==nr && ~strcmp(figNamePrefix,'none')
 %             set(h8,'PaperPositionMode','auto')
 %             print(h8,[figNamePrefix '_COP'],'-dpng','-r0')
-%             print(h8,[figNamePrefix '_COP'],'-depsc')
+% %             print(h8,[figNamePrefix '_COP'],'-depsc')
 %         end
 %         
 %     end
@@ -2219,6 +2217,11 @@ for inr=1:nr
 
         
         figure(h10)
+        joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
+                'hip_flexion','hip_adduction','hip_rotation',...
+                'knee_angle','ankle_angle','subtalar_angle','mtj_angle0','mtp_angle0',...
+                'lumbar_extension','lumbar_bending','lumbar_rotation',...
+                'arm_flex','arm_add','arm_rot','elbow_flex'};
         j = 0;
         label_fontsize  = 12;
         line_linewidth  = 0.5;
@@ -2288,10 +2291,10 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h9,'PaperPositionMode','auto')
             print(h9,[figNamePrefix '_qs_all'],'-dpng','-r0')
-            print(h9,[figNamePrefix '_qs_all'],'-depsc')
+%             print(h9,[figNamePrefix '_qs_all'],'-depsc')
             set(h10,'PaperPositionMode','auto')
             print(h10,[figNamePrefix '_Ts_all'],'-dpng','-r0')
-            print(h10,[figNamePrefix '_Ts_all'],'-depsc')
+%             print(h10,[figNamePrefix '_Ts_all'],'-depsc')
         end
         
     end
@@ -2401,7 +2404,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h9b,'PaperPositionMode','auto')
             print(h9b,[figNamePrefix '_qds_all'],'-dpng','-r0')
-            print(h9b,[figNamePrefix '_qds_all'],'-depsc')
+%             print(h9b,[figNamePrefix '_qds_all'],'-depsc')
             
         end
     end
@@ -2511,7 +2514,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(ha9,'PaperPositionMode','auto')
             print(h9a,[figNamePrefix '_qdds_all'],'-dpng','-r0')
-            print(h9a,[figNamePrefix '_qdds_all'],'-depsc')
+%             print(h9a,[figNamePrefix '_qdds_all'],'-depsc')
             
         end
     end
@@ -2530,7 +2533,7 @@ for inr=1:nr
         idx_title = [1,2,3,10,11,12,14,16,18,20,24,25,26,27,31,32,33,35];
         joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
                 'hip_flexion','hip_adduction','hip_rotation',...
-                'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle',...
+                'knee_angle','ankle_angle','subtalar_angle','mtj_angle0','mtp_angle0',...
                 'lumbar_extension','lumbar_bending','lumbar_rotation',...
                 'arm_flex','arm_add','arm_rot','elbow_flex'};
         
@@ -2563,8 +2566,8 @@ for inr=1:nr
                     stepQddot = (size(R.Qddots,1)-1)/(size(meanPlusSTD,1)-1);
                     intervalQddot = 1:stepQddot:size(R.Qddots,1);
                     sampleQddot = 1:size(R.Qddots,1);
-                    meanPlusSTD = interp1(intervalQddot,meanPlusSTD,sampleQddot);
-                    meanMinusSTD = interp1(intervalQddot,meanMinusSTD,sampleQddot);
+                    meanPlusSTD = interp1(intervalQddot,meanPlusSTD,sampleQddot)/R.body_mass;
+                    meanMinusSTD = interp1(intervalQddot,meanMinusSTD,sampleQddot)/R.body_mass;
 
                     hold on
                     fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
@@ -2582,7 +2585,7 @@ for inr=1:nr
                 % skip this plot
             else
                 j=j+1;
-                plot(x,R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                plot(x,R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
             end
 
             % Plot settings
@@ -2591,7 +2594,7 @@ for inr=1:nr
                 title(joints_tit{idx_title(i)},'Fontsize',label_fontsize);
                 % Y-axis
                 if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 || i == 16
-                    ylabel('Power (W)','Fontsize',label_fontsize);
+                    ylabel('Power (W/kg)','Fontsize',label_fontsize);
                 end
                 % X-axis
                 L = get(gca,'XLim');
@@ -2615,9 +2618,9 @@ for inr=1:nr
         end
 
         if inr==nr && ~strcmp(figNamePrefix,'none')
-            set(ha9,'PaperPositionMode','auto')
-            print(h9a,[figNamePrefix '_P_all'],'-dpng','-r0')
-            print(h9a,[figNamePrefix '_P_all'],'-depsc')
+            set(h9d,'PaperPositionMode','auto')
+            print(h9d,[figNamePrefix '_P_all'],'-dpng','-r0')
+%             print(h9d,[figNamePrefix '_P_all'],'-depsc')
             
         end
     end
@@ -2904,9 +2907,16 @@ for inr=1:nr
                     
                 f_plantar_quasi_stiffness = getPlantarQuasiStiffnessCasADiFunction(R.S);
                 l_PF = R.windlass.l_PF;
+                v_PF = R.windlass.v_PF;
                 iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
                 a_FDB = R.a(:,iFDB);
-                pqs = full(f_plantar_quasi_stiffness(a_FDB,l_PF));
+                FTt_FDB = R.FTtilde(:,iFDB);
+                dFTt_FDB = R.dFTtilde(:,iFDB);
+                if f_plantar_quasi_stiffness.n_in == 2
+                    pqs = full(f_plantar_quasi_stiffness(a_FDB,l_PF));
+                else
+                    pqs = full(f_plantar_quasi_stiffness(FTt_FDB,a_FDB,dFTt_FDB,l_PF,v_PF));
+                end
                 subplot(4,4,9)
                 hold on
                 plot(x,pqs,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
@@ -3048,7 +3058,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h12,'PaperPositionMode','auto')
             print(h12,[figNamePrefix '_WL'],'-dpng','-r0')
-            print(h12,[figNamePrefix '_WL'],'-depsc')
+%             print(h12,[figNamePrefix '_WL'],'-depsc')
         end
         
      end
@@ -3115,7 +3125,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h14,'PaperPositionMode','auto')
             print(h14,[figNamePrefix '_P1'],'-dpng','-r0')
-            print(h14,[figNamePrefix '_P1'],'-depsc')
+%             print(h14,[figNamePrefix '_P1'],'-depsc')
         end
         
         %%
@@ -3160,7 +3170,7 @@ for inr=1:nr
 %         if inr==nr && ~strcmp(figNamePrefix,'none')
 %             set(h15,'PaperPositionMode','auto')
 %             print(h15,[figNamePrefix '_P_ankle'],'-dpng','-r0')
-%             print(h15,[figNamePrefix '_P_ankle'],'-depsc')
+% %             print(h15,[figNamePrefix '_P_ankle'],'-depsc')
 %         end
         
 %%
@@ -3213,7 +3223,7 @@ for inr=1:nr
 %         if inr==nr && ~strcmp(figNamePrefix,'none')
 %             set(h16,'PaperPositionMode','auto')
 %             print(h16,[figNamePrefix '_P_foot'],'-dpng','-r0')
-%             print(h16,[figNamePrefix '_P_foot'],'-depsc')
+% %             print(h16,[figNamePrefix '_P_foot'],'-depsc')
 %         end
         
 
@@ -3268,7 +3278,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h17,'PaperPositionMode','auto')
             print(h17,[figNamePrefix '_W1'],'-dpng','-r0')
-            print(h17,[figNamePrefix '_W1'],'-depsc')
+%             print(h17,[figNamePrefix '_W1'],'-depsc')
         end
         
         %%
@@ -3315,7 +3325,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h18,'PaperPositionMode','auto')
             print(h18,[figNamePrefix '_W_ankle'],'-dpng','-r0')
-            print(h18,[figNamePrefix '_W_ankle'],'-depsc')
+%             print(h18,[figNamePrefix '_W_ankle'],'-depsc')
         end
         
 %%
@@ -3407,7 +3417,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h19,'PaperPositionMode','auto')
             print(h19,[figNamePrefix '_W_foot'],'-dpng','-r0')
-            print(h19,[figNamePrefix '_W_foot'],'-depsc')
+%             print(h19,[figNamePrefix '_W_foot'],'-depsc')
         end
         
     end
@@ -3572,7 +3582,7 @@ for inr=1:nr
                if inr==nr && ~strcmp(figNamePrefix,'none')
                     set(h20,'PaperPositionMode','auto')
                     print(h20,[figNamePrefix '_W_bar'],'-dpng','-r0')
-                    print(h20,[figNamePrefix '_W_bar'],'-depsc')
+%                     print(h20,[figNamePrefix '_W_bar'],'-depsc')
                end
                 
 %                figure
@@ -3701,7 +3711,7 @@ for inr=1:nr
                if inr==nr && ~strcmp(figNamePrefix,'none')
                     set(h20s,'PaperPositionMode','auto')
                     print(h20s,[figNamePrefix '_W_bar_s'],'-dpng','-r0')
-                    print(h20s,[figNamePrefix '_W_bar_s'],'-depsc')
+%                     print(h20s,[figNamePrefix '_W_bar_s'],'-depsc')
                end
                 
             end
@@ -3788,7 +3798,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h21,'PaperPositionMode','auto')
             print(h21,[figNamePrefix '_P_main'],'-dpng','-r0')
-            print(h21,[figNamePrefix '_P_main'],'-depsc')
+%             print(h21,[figNamePrefix '_P_main'],'-depsc')
         end
     end
 
@@ -3852,7 +3862,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h22,'PaperPositionMode','auto')
             print(h22,[figNamePrefix '_sptmp'],'-dpng','-r0')
-            print(h22,[figNamePrefix '_sptmp'],'-depsc')
+%             print(h22,[figNamePrefix '_sptmp'],'-depsc')
         end
     end
     %%
@@ -3907,18 +3917,29 @@ for inr=1:nr
         q_stance_matched_ofs = interp1(istance0,q_ankle_sim_ofs(istance0),smpl_stance);
         q_swing_matched_ofs = interp1(iswing,q_ankle_sim_ofs(iswing),smpl_swing);
         q_matched_ofs = [q_stance_matched_ofs, q_swing_matched_ofs];
-
+        
         q_stance_matched = interp1(istance0,q_ankle_sim(istance0),smpl_stance);
         q_swing_matched = interp1(iswing,q_ankle_sim(iswing),smpl_swing);
         q_matched = [q_stance_matched, q_swing_matched];
+
+        q_stance_sf = max(q_ankle_ref(istance_ref))/max(q_stance_matched_ofs);
+        q_matched_ofs_sc = q_matched_ofs*q_stance_sf;
+
         
+        if inr==1
+            disp('Ankle angle cross-correlation')
+            disp('Phase   toe-off matched (w/o offset)')
+
+
+        end
+        disp(LegName)
         xcs_stance = xcorr(q_ankle_ref(istance_ref),q_stance_matched,0,'coeff');
         xcs_stance_ofs = xcorr(q_ankle_ref(istance_ref),q_stance_matched_ofs,0,'coeff');
-        disp(['Stance phase Q: R = ' num2str(xcs_stance,2) ' (' num2str(xcs_stance_ofs,2) ')'])
+        disp(['   Stance: R = ' num2str(xcs_stance,2) ' (' num2str(xcs_stance_ofs,2) ')'])
         
         xcs_swing = xcorr(q_ankle_ref(iswing_ref),q_swing_matched,0,'coeff');
         xcs_swing_ofs = xcorr(q_ankle_ref(iswing_ref),q_swing_matched_ofs,0,'coeff');
-        disp(['Swing phase Q: R = ' num2str(xcs_swing,2) ' (' num2str(xcs_swing_ofs,2) ')'])
+        disp(['   Swing:  R = ' num2str(xcs_swing,2) ' (' num2str(xcs_swing_ofs,2) ')'])
 
 
         figure(h23)
@@ -3960,6 +3981,7 @@ for inr=1:nr
         hold on
 %         plot(x,q_ankle_sim_ofs,'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
         plot(x,q_matched_ofs,'-','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
+%         plot(x,q_matched_ofs_sc,'-.','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
         if inr==nr
            subplot(3,2,[2,4])
            ylim(yl)
@@ -3995,7 +4017,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h23,'PaperPositionMode','auto')
             print(h23,[figNamePrefix '_ankle_corr_1'],'-dpng','-r0')
-            print(h23,[figNamePrefix '_ankle_corr_1'],'-depsc')
+%             print(h23,[figNamePrefix '_ankle_corr_1'],'-depsc')
         end
     end
 
@@ -4082,7 +4104,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h24,'PaperPositionMode','auto')
             print(h24,[figNamePrefix '_musc_all'],'-dpng','-r0')
-            print(h24,[figNamePrefix '_musc_all'],'-depsc')
+%             print(h24,[figNamePrefix '_musc_all'],'-depsc')
         end
         
     end
@@ -4170,7 +4192,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h24a,'PaperPositionMode','auto')
             print(h24a,[figNamePrefix '_musc_all'],'-dpng','-r0')
-            print(h24a,[figNamePrefix '_musc_all'],'-depsc')
+%             print(h24a,[figNamePrefix '_musc_all'],'-depsc')
         end
         
     end
@@ -4381,7 +4403,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h25,'PaperPositionMode','auto')
             print(h25,[figNamePrefix '_toes'],'-dpng','-r0')
-            print(h25,[figNamePrefix '_toes'],'-depsc')
+%             print(h25,[figNamePrefix '_toes'],'-depsc')
         end
 
     end
@@ -4496,7 +4518,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h26,'PaperPositionMode','auto')
             print(h26,[figNamePrefix '_musc_s'],'-dpng','-r0')
-            print(h26,[figNamePrefix '_musc_s'],'-depsc')
+%             print(h26,[figNamePrefix '_musc_s'],'-depsc')
         end
     end
 
@@ -4593,7 +4615,7 @@ for inr=1:nr
             if inr==nr && ~strcmp(figNamePrefix,'none')
                 set(h28,'PaperPositionMode','auto')
                 print(h28,[figNamePrefix '_musc_E'],'-dpng','-r0')
-                print(h28,[figNamePrefix '_musc_E'],'-depsc')
+%                 print(h28,[figNamePrefix '_musc_E'],'-depsc')
             end
             
     end
@@ -4654,7 +4676,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h29,'PaperPositionMode','auto')
             print(h29,[figNamePrefix '_musc_act'],'-dpng','-r0')
-            print(h29,[figNamePrefix '_musc_act'],'-depsc')
+%             print(h29,[figNamePrefix '_musc_act'],'-depsc')
         end
         
     end
@@ -4696,7 +4718,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h29a,'PaperPositionMode','auto')
             print(h29a,[figNamePrefix '_musc_act_exc'],'-dpng','-r0')
-            print(h29a,[figNamePrefix '_musc_act_exc'],'-depsc')
+%             print(h29a,[figNamePrefix '_musc_act_exc'],'-depsc')
         end
         
     end
@@ -4800,7 +4822,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h30,'PaperPositionMode','auto')
             print(h30,[figNamePrefix '_musc_moment'],'-dpng','-r0')
-            print(h30,[figNamePrefix '_musc_moment'],'-depsc')
+%             print(h30,[figNamePrefix '_musc_moment'],'-depsc')
         end
     end
     
@@ -4851,11 +4873,12 @@ for inr=1:nr
            if i==1
                ylabel('P mtj (W)')
            end
-           if R.S.Foot.mtj_muscles
+           if ~has_no_mtj && R.S.Foot.mtj_muscles
                T_mus = R.FT(:,musi_ankle(i)) .* R.dM(:,musi_ankle(i),idx_dM);
                idx_dM = idx_dM + 1;
                if norm(T_mus)>0
-                   plot(x,T_mus.*R.Qdots(:,imtj)*pi/180,'Color',CsV(inr,:),'DisplayName',LegName);
+                   P_mus_mtj = T_mus.*R.Qdots(:,imtj)*pi/180;
+                   plot(x,P_mus_mtj,'Color',CsV(inr,:),'DisplayName',LegName);
                end
            end
 
@@ -4869,11 +4892,11 @@ for inr=1:nr
                if norm(T_mus)>0
                    plot(x,T_mus.*R.Qdots(:,imtp)*pi/180,'Color',CsV(inr,:),'DisplayName',LegName);
                end
-           else
-               T_mus = R.FT(:,musi_ankle(i)) .* R.dM(:,musi_ankle(i),idx_dM);
-               if norm(T_mus)>0
-                   plot(x,T_mus.*R.Qdots(:,imtp)*pi/180,':','Color',CsV(inr,:),'DisplayName',LegName);
-               end
+%            else
+%                T_mus = R.FT(:,musi_ankle(i)) .* R.dM(:,musi_ankle(i),idx_dM);
+%                if norm(T_mus)>0
+%                    plot(x,T_mus.*R.Qdots(:,imtp)*pi/180,':','Color',CsV(inr,:),'DisplayName',LegName);
+%                end
            end
            
             xlabel('% GC')
@@ -5054,7 +5077,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h33,'PaperPositionMode','auto')
             print(h33,[figNamePrefix '_Tpass_all'],'-dpng','-r0')
-            print(h33,[figNamePrefix '_Tpass_all'],'-depsc')
+%             print(h33,[figNamePrefix '_Tpass_all'],'-depsc')
         end
     end
 
@@ -5128,7 +5151,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h34,'PaperPositionMode','auto')
             print(h34,[figNamePrefix '_WL_mtp'],'-dpng','-r0')
-            print(h34,[figNamePrefix '_WL_mtp'],'-depsc')
+%             print(h34,[figNamePrefix '_WL_mtp'],'-depsc')
         end
     end
 
@@ -5170,7 +5193,7 @@ for inr=1:nr
         if inr==nr && ~strcmp(figNamePrefix,'none')
             set(h35,'PaperPositionMode','auto')
             print(h35,[figNamePrefix '_Zelik'],'-dpng','-r0')
-            print(h35,[figNamePrefix '_Zelik'],'-depsc')
+%             print(h35,[figNamePrefix '_Zelik'],'-depsc')
         end
     end
 
@@ -5199,7 +5222,7 @@ set(gca,'YAxisLocation','right')
 if ~strcmp(figNamePrefix,'none')
     set(hleg,'PaperPositionMode','auto')
     print(hleg,[figNamePrefix '_legend'],'-dpng','-r0')
-    print(hleg,[figNamePrefix '_legend'],'-depsc')
+%     print(hleg,[figNamePrefix '_legend'],'-depsc')
 end
         
 

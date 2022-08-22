@@ -59,26 +59,68 @@ if isfield(S.Foot,'FDB') && S.Foot.FDB == 2
         end
     end
     
-    %% casadi function for intrinsic muscle force
+    % casadi function for intrinsic muscle force
     f_PIM_force = interpolant('f_FDB_force','bspline',{a, l},FT_FDB(:));
+
+    %% Solve for tendon force v2
+
+    % Get muscle-tendon forces and derive Hill-equilibrium
+    a_SX = SX.sym('a',1);
+    FTtilde_SX = SX.sym('FTtilde',1);
+    dFTtilde_SX = SX.sym('dFTtilde',1);
+    lMT_SX = SX.sym('lMT',1);
+    vMT_SX = SX.sym('vMT',1);
+    
+    [Hilldiff_SX,~,~,~,~,~,~] = ...
+        ForceEquilibrium_FtildeState_all_tendon(a_SX,FTtilde_SX,dFTtilde_SX,lMT_SX,...
+        vMT_SX,FDBparameters(:,1),Fvparam,Fpparam,Faparam,tension,...
+        aTendon,shift,0,pass_shift);
+
+    f_Hilldiff = Function('f_Hilldiff',{FTtilde_SX,a_SX,dFTtilde_SX,lMT_SX,vMT_SX},{Hilldiff_SX});
+
+    % solve equilibrium
+    f_FTtilde = rootfinder('f_FTtilde','newton',f_Hilldiff);
+
+    % evaluate FT
+    a_MX = MX.sym('a',1);
+    FTtilde_sol_MX = MX.sym('FTtilde',1);
+    dFTtilde_MX = MX.sym('dFTtilde',1);
+    lMT_MX = MX.sym('lMT',1);
+    vMT_MX = MX.sym('vMT',1);
+
+    FTtilde_MX = f_FTtilde(FTtilde_sol_MX,a_MX,dFTtilde_MX,lMT_MX,vMT_MX);
+
+    [~,FT_MX,~,~,~,~,~] = ...
+        ForceEquilibrium_FtildeState_all_tendon(a_MX,FTtilde_MX,dFTtilde_MX,lMT_MX,...
+        vMT_MX,FDBparameters(:,1),Fvparam,Fpparam,Faparam,tension,...
+        aTendon,shift,0,pass_shift);
+
+    f_PIM_force_v2 = Function('f_PIM_force_v2',{FTtilde_sol_MX,a_MX,dFTtilde_MX,lMT_MX,vMT_MX},{FT_MX});
 
     %% casadi function for total force
     a_MX = MX.sym('a',1);
     l_MX = MX.sym('l',1);
-    
+    v_MX = MX.sym('v',1);
+    FTt_MX = MX.sym('FTt',1);
+    dFTt_MX = MX.sym('dFTt',1);
+
     F_PF = f_PF_stiffness(l_MX)*S.Foot.PF_sf;
-    F_PIM = f_PIM_force([a_MX,l_MX]);
-    
+%     F_PIM = f_PIM_force([a_MX,l_MX]);
+    F_PIM = f_PIM_force_v2(FTt_MX,a_MX,dFTt_MX,l_MX,v_MX);
     F_plantar = F_PF + F_PIM;
     
     plantar_quasi_stiffness = jacobian(F_plantar,l_MX);
     
-    f_plantar_quasi_stiffness = Function('f_plantar_quasi_stiffness',{a_MX,l_MX},{plantar_quasi_stiffness});
+%     f_plantar_quasi_stiffness = Function('f_plantar_quasi_stiffness',{a_MX,l_MX},{plantar_quasi_stiffness});
+    f_plantar_quasi_stiffness = Function('f_plantar_quasi_stiffness',{FTt_MX,a_MX,dFTt_MX,l_MX,v_MX},{plantar_quasi_stiffness});
 
 else
     %% casadi function for total force
     a_MX = MX.sym('a',1);
     l_MX = MX.sym('l',1);
+    v_MX = MX.sym('v',1);
+    FTt_MX = MX.sym('FTt',1);
+    dFTt_MX = MX.sym('dFTt',1);
     
     F_PF = f_PF_stiffness(l_MX)*S.Foot.PF_sf;
     
@@ -86,7 +128,8 @@ else
     
     plantar_quasi_stiffness = jacobian(F_plantar,l_MX);
     
-    f_plantar_quasi_stiffness = Function('f_plantar_quasi_stiffness',{a_MX,l_MX},{plantar_quasi_stiffness});
+%     f_plantar_quasi_stiffness = Function('f_plantar_quasi_stiffness',{a_MX,l_MX},{plantar_quasi_stiffness});
+    f_plantar_quasi_stiffness = Function('f_plantar_quasi_stiffness',{FTt_MX,a_MX,dFTt_MX,l_MX,v_MX},{plantar_quasi_stiffness});
 end
 
 

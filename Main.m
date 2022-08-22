@@ -41,21 +41,23 @@ AddCasadiPaths();
 %% General settings
 %-------------------------------------------------------------------------%
 % Full body gait simulation
-run_simulation = 0;         % run solver
+run_simulation = 1;         % run solver
 post_process_results = 0;   % postproces
-add_to_batch_queue = 1;     % save settings to run later
+add_to_batch_queue = 0;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
 S.N         = 50;       % number of mesh intervals
-S.NThreads  = 8;        % number of threads for parallel computing
-% S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
+S.NThreads  = 6;        % number of threads for parallel computing
+S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
+% S.linear_solver = 'ma86';
+S.use_jit = 1;
 
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'with_better_knee'; % subfolder of \Results where the result will be saved
 % S.suffixCasName = '';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'test';        % suffix for name of file with results
+S.suffixName = 'jit_test';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -75,7 +77,7 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp';
+S.Foot.Model = 'mtjc4';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
@@ -115,18 +117,18 @@ S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stif
 S.Foot.contactGeometryVersion = 0;
 S.Foot.contactSphereOffsetY = 3;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 20e-3;   % heel contact sphere offset in x-direction (0.025)
+S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
 
 %% metatarsophalangeal (mtp) joint
 % preset for passive mtp
-S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
+% S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+% S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
+% S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
 
 % preset for muscle-driven mtp
-% S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
-% S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
-% S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
+S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
