@@ -107,7 +107,7 @@ if S.SoleusTendonShorter
     MTparameters(3,IndexSoleus) = MTparameters(3,IndexSoleus) - S.SoleusTendonShorter;
 end
 IndexGastroc = find(contains(muscleNames,'_gas'));
-MTparameters(3,IndexGastroc) = MTparameters(3,IndexGastroc)*S.GastroclTsScale;
+MTparameters(3,IndexGastroc) = MTparameters(3,IndexGastroc) - S.GastrocTendonShorter;
 
 
 

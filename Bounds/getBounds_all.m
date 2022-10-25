@@ -172,6 +172,9 @@ if v_tgt > 1.33
     bounds.Qs.lower(jointi.sh_flex.l) = -50*pi/180;
     bounds.Qs.lower(jointi.sh_flex.r) = -50*pi/180;
 end
+if v_tgt > 2
+    bounds.Qs.upper(jointi.pelvis.tx) = 6; 
+end
 
 %% Qdots
 % The extreme values are selected as upper/lower bounds, which are then
@@ -292,10 +295,14 @@ if midtarsal
 end
 % We adjust some bounds when we increase the speed to allow for the
 % generation of running motions.
-if v_tgt > 1.33
+if v_tgt > 2
+    % Pelvis tx
+    bounds.Qdots.upper(jointi.pelvis.tx) = 6;
+elseif v_tgt > 1.33
     % Pelvis tx
     bounds.Qdots.upper(jointi.pelvis.tx) = 4;
 end
+
 %% Qdotdots
 % The extreme values are selected as upper/lower bounds, which are then
 % further extended.

@@ -24,6 +24,10 @@ if isempty(idx_speed)
 end
 guess.tf = all_tf(idx_speed);
 
+if isempty(idx_speed)
+    guess.tf = -0.1750*v_tgt + 0.8277;
+end
+
 %% Qs
 % The model is moving forward but with a standing position (Qs=0)
 guess.Qs = zeros(N,nq.all);

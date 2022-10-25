@@ -44,7 +44,7 @@ if S.Foot.contactStiffnessFactor == 10
 elseif S.Foot.contactStiffnessFactor == 5
     ExternalFunc = [ExternalFunc '_cspx5'];
 end
-if S.Foot.contactGeometryVersion > 1
+if S.Foot.contactGeometryVersion >= 0
     ExternalFunc = [ExternalFunc '_cg' num2str(S.Foot.contactGeometryVersion)];
 end
 if S.Foot.contactSphereOffsetY == 1
@@ -69,6 +69,12 @@ if S.Foot.PF_sf_isvar
     S.Foot.PF_sf_var = get_PF_sf_var(S.N,S.Foot.PF_sf_isvar);
 else
     S.Foot.PF_sf_var = 1;
+end
+
+%% adjust plantar fascia and PIM lengths to default scaling
+if strcmp(S.Foot.Scaling,'default')
+    S.Foot.PF_slack_length = round(S.Foot.PF_slack_length*0.9624,3);
+    S.Foot.FDB_lTs = round(S.Foot.FDB_lTs*0.9624,3);
 end
 
 %% build standardised names

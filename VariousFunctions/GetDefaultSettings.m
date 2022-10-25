@@ -287,8 +287,8 @@ if ~isfield(S,'SoleusTendonShorter') || isempty(S.SoleusTendonShorter)
     S.SoleusTendonShorter = 0;
 end
 
-if ~isfield(S,'GastroclTsScale') || isempty(S.GastroclTsScale)
-    S.GastroclTsScale = 1;
+if ~isfield(S,'GastrocTendonShorter') || isempty(S.GastrocTendonShorter)
+    S.GastrocTendonShorter = 0;
 end
 
 if ~isfield(S.Foot,'kMTP') || isempty(S.Foot.kMTP)

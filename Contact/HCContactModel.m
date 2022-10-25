@@ -41,6 +41,7 @@ function force = HCContactModel(stiffness,radius,dissipation,normal,...
 Rot_l = (reshape(rotBtoG_inG,3,3))';
 % Express sphere position in ground
 spherePos = (Rot_l*spherePos_inB+trBtoG_inG)';
+disp(spherePos)
 % Contact point position
 temp = spherePos-[0,radius,0];
 indentation = -temp(2);

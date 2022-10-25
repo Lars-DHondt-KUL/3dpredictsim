@@ -33,8 +33,8 @@ load(fullfile(pathRepo,'Results','batchQ.mat'),'batchQ');
 fields = fieldnames(batchQ);
 % remove entries that already have a postprocessed result
 for i=1:numel(fields)
-pathResult_pp = fullfile(ResultsRepo,batchQ.(fields{i}).S.ResultsFolder,...
-    [batchQ.(fields{i}).S.savename '_pp.mat']);
+    pathResult_pp = fullfile(ResultsRepo,batchQ.(fields{i}).S.ResultsFolder,...
+        [batchQ.(fields{i}).S.savename '_pp.mat']);
     if exist(pathResult_pp,'file')
         batchQ = rmfield(batchQ,(fields{i}));
     end

@@ -7,13 +7,12 @@ if strcmp(RefData,'none')
     md = 0;
 else
     md = 1;
-    refName = 'Barefoot';
 end
 
 set(0,'defaultTextInterpreter','tex');
 nr = length(ResultsFile);
 
-if numel(LegNames) == nr
+if numel(LegNames) >= nr
     LN = 1;
     lgInt = 'tex';
 else
@@ -56,10 +55,16 @@ label_fontsize  = 12;
 line_linewidth  = 0.5;
 NumTicks = 6;
 CsV = hsv(nr);
+if nr==3
+    CsV = [[0 0.4470 0.7410];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840]];
+end
 mrk = {'-','--',':','-.'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
         
 for inr=1:nr
     load(ResultsFile{inr},'R');
+
+%     disp([num2str(R.S.Foot.FDB_sf_FMo) '  '  num2str(R.S.IGsel) '  ' num2str(R.COT)])
+
     if LN
         LegName = LegNames{inr};
     else
@@ -116,6 +121,8 @@ for inr=1:nr
         iGas2 = find(strcmp(R.colheaders.muscles,'gasmed_r'));
     end
 
+    itriceps = [iSol,iGas,iGas2];
+
     ifd = find(strcmp(R.colheaders.muscles,'flex_dig_r'));
     ifh = find(strcmp(R.colheaders.muscles,'flex_hal_r'));
     ied = find(strcmp(R.colheaders.muscles,'ext_dig_r'));
@@ -157,6 +164,9 @@ for inr=1:nr
     xst_10 = linspace(1,110,length(istance));
     xst = linspace(1,100,length(istance0));
 
+    iheel_contact = find(R.GRFs_separate(:,2)>3);
+    iff_contact = find(R.GRFs_separate(:,8)>1 | R.GRFs_separate(:,11)>1);
+    itoe_contact = find(R.GRFs_separate(:,14)>1);
 
     P_hip = ( R.Qdots(:,ihip1)*pi/180.*R.Tid(:,ihip1) +...
         R.Qdots(:,ihip2)*pi/180.*R.Tid(:,ihip2) +...
@@ -187,9 +197,12 @@ for inr=1:nr
         F_PF = R.windlass.F_PF;
         if isfield(R.windlass,'F_PIM')
             F_PIM = R.windlass.F_PIM(:,2);
+        elseif ~isempty(iFDB)
+            F_PIM = R.FT(:,iFDB(1));
         else
             F_PIM = zeros(size(F_PF));
         end
+ 
         qdot_mtj = R.Qdots(:,imtj)*pi/180;
         M_mtj_li = R.windlass.M_li;
         M_mtj_PF = R.windlass.MA_PF.mtj.*F_PF;
@@ -262,6 +275,9 @@ for inr=1:nr
     P_M_hamstrings = sum(R.MetabB.Wdot(:,ihamstrings),2)/R.body_mass;
     P_M_quadriceps_femoris = sum(R.MetabB.Wdot(:,iquadriceps_femoris),2)/R.body_mass;
     
+    P_M_triceps_knee = sum(R.FT(:,itriceps).*squeeze(R.dM(:,itriceps,4)).*R.Qdots(:,iknee)*pi/180,2)/R.body_mass;
+    P_M_triceps_ankle = sum(R.FT(:,itriceps).*squeeze(R.dM(:,itriceps,5)).*R.Qdots(:,iankle)*pi/180,2)/R.body_mass;
+
     W_M_Sol = zeros(size(P_M_Sol));
     W_M_Gas = zeros(size(P_M_Sol));
     W_M_Gas2 = zeros(size(P_M_Sol));
@@ -301,34 +317,55 @@ for inr=1:nr
 %%
 
     if inr==1 && md
-
-        [pathHere,~,~] = fileparts(mfilename('fullpath'));
-        [pathRepo,~,~] = fileparts(pathHere);
-        load([pathRepo '\Data\Fal_s1.mat'],'Data');
         
-%         data_field = ['IK_' R.S.Foot.Model '_' R.S.Foot.Scaling];
-        data_field = ['IK_' RefData(8:end)];
-        if isfield(Data,data_field)
-            Qref = Data.(data_field);
-        else
-            Qref = Data.IK_original;
-        end
+        if contains(RefData,'Hamner')
+            refName = RefData;
+            t_mp = strfind(refName,'_');
+            refName(t_mp) = ' ';
 
-%         data_field = ['ID_' R.S.Foot.Model '_' R.S.Foot.Scaling];
-        data_field = ['ID_' RefData(8:end)];
-        if isfield(Data,data_field)
-            Tref = Data.(data_field);
-        else
-            Tref = Data.ID_original;
-        end
+            load('C:\Users\u0150099\Documents\master_thesis\ReferenceData\ExperimentalData.mat','ExperimentalData')
+            Qref.Qall_mean = ExperimentalData.Q.(RefData).Qs.mean;
+            Qref.Qall_std = ExperimentalData.Q.(RefData).Qs.std;
+            Qref.colheaders = ExperimentalData.Q.(RefData).Qs.colheaders;
 
-        data_field = ['P_' RefData(8:end)];
-        if isfield(Data,data_field)
-            Pref = Data.(data_field);
-        else
-            Pref = Data.ID_original;
-        end
+            Tref.Tall_mean = ExperimentalData.Torques.(RefData).mean;
+            Tref.Tall_std = ExperimentalData.Torques.(RefData).std;
+            Tref.colheaders = ExperimentalData.Torques.(RefData).colheaders;
 
+            Data.GRF.Fmean = ExperimentalData.GRFs.(RefData).mean;
+            Data.GRF.Fstd = ExperimentalData.GRFs.(RefData).std;
+
+        else
+            refName = 'Falisse';
+            [pathHere,~,~] = fileparts(mfilename('fullpath'));
+            [pathRepo,~,~] = fileparts(pathHere);
+            load([pathRepo '\Data\Fal_s1.mat'],'Data');
+            
+    %         data_field = ['IK_' R.S.Foot.Model '_' R.S.Foot.Scaling];
+            data_field = ['IK_' RefData(8:end)];
+            if isfield(Data,data_field)
+                Qref = Data.(data_field);
+            else
+                disp(['No experimental data found for "' RefData '"'])
+                Qref = Data.IK_original;
+            end
+    
+    %         data_field = ['ID_' R.S.Foot.Model '_' R.S.Foot.Scaling];
+            data_field = ['ID_' RefData(8:end)];
+            if isfield(Data,data_field)
+                Tref = Data.(data_field);
+            else
+                Tref = Data.ID_original;
+            end
+    
+            data_field = ['P_' RefData(8:end)];
+            if isfield(Data,data_field)
+                Pref = Data.(data_field);
+            else
+                Pref = Data.ID_original;
+            end
+
+        end
 
     end
     
@@ -677,6 +714,7 @@ for inr=1:nr
         end
 
         n_msc = 8;
+        nn_msc = 4;
 %         nn_msc = 6;
 
         if inr==1 && md 
@@ -1179,7 +1217,8 @@ for inr=1:nr
 
         istance_COPR = find(R.GRFs(:,2)>30);
         COPz = R.COPR(istance_COPR,3)*1e3;
-        COPx = (R.COPR(istance_COPR,1)-R.COPR(istance_COPR(1),1))*1e3;
+%         COPx = (R.COPR(istance_COPR,1)-R.COPR(istance_COPR(1),1))*1e3;
+        COPx = R.COPR(istance_COPR,1)*1e3;
         subplot(3,5,[5;10])
         hold on
         grid on
@@ -1305,7 +1344,72 @@ for inr=1:nr
         end
     end
 
-    
+    if makeplot.GRF_simple
+        GRF_title = {'Fore-aft','Vertical','Lateral'};
+        if inr==1
+            h4a = figure('Position',[fpos(4,:),flong]);
+            tiledlayout('flow')
+        else
+            figure(h4a);
+        end
+
+        if inr==1 && md
+            for i=1:3
+%                 subplot(1,3,i)
+                nexttile(i)
+                hold on
+
+                meanPlusSTD = Data.GRF.Fmean(:,i) + 2*Data.GRF.Fstd(:,i);
+                meanMinusSTD = Data.GRF.Fmean(:,i) - 2*Data.GRF.Fstd(:,i);
+                stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
+                intervalQ = 1:stepQ:size(R.Qs,1);
+                sampleQ = 1:size(R.Qs,1);
+                meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
+                meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
+                fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Measured');
+                alpha(.25);
+
+
+            end
+
+        end
+        for i=1:3
+%             subplot(1,3,i)
+            nexttile(i)
+            hold on
+            grid on
+            l = plot(R.GRFs(:,i),'-','Color',CsV(inr,:));
+            title(GRF_title{i});
+            axis tight
+            yl = get(gca, 'ylim');
+            ylim([yl(1)-0.1*abs(sum(yl)),yl(2)+0.1*abs(sum(yl))])
+            xlim([0,100])
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+%             L = get(gca,'XLim');
+%             set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+            if i==1
+                ylabel({'Ground reaction force','(% body weight)'})
+            end
+        end
+        l.DisplayName = LegName;
+
+        if inr == 1
+%             lh=legend('location','northeast','Interpreter',lgInt);
+%             lhPos = lh.Position;
+%             lhPos(1) = lhPos(1)+0.1;
+%             lhPos(2) = lhPos(2)-0.02;
+%             set(lh,'position',lhPos);
+            lh=legend('Interpreter',lgInt);
+            lh.Layout.Tile = 4;
+
+        end
+
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h4a,'PaperPositionMode','auto')
+            print(h4a,[figNamePrefix '_GRFs'],'-dpng','-r0')
+%             print(h4,[figNamePrefix '_GRFs'],'-depsc')
+        end
+    end
     
     %% literature
     
@@ -2206,6 +2310,7 @@ for inr=1:nr
                 lhQ=legend('-DynamicLegend','location','northwest');
                 lhQ.Interpreter = lgInt;
                 lhQ.Orientation = 'horizontal';
+                lhQ.NumColumns = ceil((nr+1)/2);
             end
             if inr==nr && i==1
                 lhPos = lhQ.Position;
@@ -2279,6 +2384,7 @@ for inr=1:nr
                 lhT=legend('-DynamicLegend','location','northwest');
                 lhT.Interpreter = lgInt;
                 lhT.Orientation = 'horizontal';
+                lhT.NumColumns = ceil((nr+1)/2);
             end
             if inr==nr && i==1
                 lhPos = lhT.Position;
@@ -2392,6 +2498,7 @@ for inr=1:nr
                 lhQ=legend('-DynamicLegend','location','northwest');
                 lhQ.Interpreter = lgInt;
                 lhQ.Orientation = 'horizontal';
+                lhQ.NumColumns = ceil((nr+1)/2);
             end
             if inr==nr && i==1
                 lhPos = lhQ.Position;
@@ -2502,6 +2609,7 @@ for inr=1:nr
                 lhQ=legend('-DynamicLegend','location','northwest');
                 lhQ.Interpreter = lgInt;
                 lhQ.Orientation = 'horizontal';
+                lhQ.NumColumns = ceil((nr+1)/2);
             end
             if inr==nr && i==1
                 lhPos = lhQ.Position;
@@ -2608,6 +2716,7 @@ for inr=1:nr
                 lhQ=legend('-DynamicLegend','location','northwest');
                 lhQ.Interpreter = lgInt;
                 lhQ.Orientation = 'horizontal';
+                lhQ.NumColumns = ceil((nr+1)/2);
             end
             if inr==nr && i==1
                 lhPos = lhQ.Position;
@@ -3080,15 +3189,16 @@ for inr=1:nr
         pos_P_all = {P_tot, P_joints, P_HC, 'none',...
                    P_HC_heel, P_HC_ball, P_HC_toes, P_leg_joints,...
                    P_ankle, P_subt, P_mtj, P_mtp,...
-                   P_hip, P_knee, P_mtj_li, P_mtp-P_mtp_PF,...
+                   P_hip, P_knee, P_knee-P_M_triceps_knee, P_ankle-P_M_triceps_ankle,...
                    P_M_hamstrings,P_M_quadriceps_femoris,P_At,P_M_tri_sur};
                
         titles_P_all = {{'Ankle-foot','\fontsize{10}\rm joints + pads'},...
             {'Joints','\fontsize{10}\rm ankle + subt + mtj + mtp'},...
             {'Pads','\fontsize{10}\rm hindfoot + forefoot + toes'},...
-            'none', 'Hindfoot','Forefoot','Toes','Total leg joints',...
+            'none', {'Hindfoot','\fontsize{10}\rm (pads)'},{'Forefoot','\fontsize{10}\rm (pads)'},...
+            {'Toes','\fontsize{10}\rm (pads)'},{'Joint total','\fontsize{10}\rm leg-foot'},...
             'Ankle','Subt','Mtj','Mtp',...
-            'Hip','Knee','Mtj non-PF','Mtp non-PF',...
+            'Hip','Knee',{'Knee w/o gastroc'},{'Ankle w/o gastroc, soleus'},...
             {'Hamstrings','\rm fibres, active'},{'Quadriceps femoris','\rm fibres, active'},{'Achilles tendon',''},{'Triceps surae','\rm fibres, active'}};
         
         for i_P=1:numel(pos_P_all)
@@ -3102,7 +3212,7 @@ for inr=1:nr
                 yl = get(gca, 'ylim');
                 ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
                 xlim([0,110])
-                set(gca,'XTick',[0,20,40,60,80,100])
+                set(gca,'XTick',[0:25:100])
                 
                 if mod(i_P-1,nw)==0
                     ylabel('P_{mech} (W/kg)','Fontsize',label_fontsize);
@@ -3427,13 +3537,14 @@ for inr=1:nr
         if makeplot.work_bar
             if inr == 1
                 Ws_cat = categorical({'Hip','Knee','Ankle','Subt','Mtj',...
-                    'Mtp','Joints total','Heel','Forefoot','toes','Sol act',...
-                    'Gas act','Achilles tendon','Plantar fascia','Mtj ligaments',...
+                    'Mtp','Joints total','Heel pad','Forefoot pad','Toes pad',...
+                    'Achilles tendon','Plantar fascia','Mtj ligaments',...
                     'Plantar Intr. Mus.'});
                 Ws_pos = zeros(length(Ws_cat),nr);
                 Ws_neg = Ws_pos;
                 Ws_pos_gc = Ws_pos;
                 Ws_neg_gc = Ws_pos;
+                Ws_net_gc = Ws_pos;
             end
 %             % stance only
 %             [W_hip_pos,W_hip_neg] = getWork(P_hip(istance),R.t(istance));
@@ -3456,39 +3567,44 @@ for inr=1:nr
 %             Ws_neg(:,inr) = [Wi_neg;W_sum_neg;W_At_neg;W_PF_neg];
 
             % full gait cycle
-            [W_hip_pos,W_hip_neg] = getWork(P_hip,R.t);
-            [W_knee_pos,W_knee_neg] = getWork(P_knee,R.t);
-            [W_ankle_pos,W_ankle_neg] = getWork(P_ankle,R.t);
-            [W_subt_pos,W_subt_neg] = getWork(P_subt,R.t);
-            [W_mtj_pos,W_mtj_neg] = getWork(P_mtj,R.t);
-            [W_mtp_pos,W_mtp_neg] = getWork(P_mtp,R.t);
+            [W_hip_pos,W_hip_neg,W_hip_net] = getWork(P_hip,R.t);
+            [W_knee_pos,W_knee_neg,W_knee_net] = getWork(P_knee,R.t);
+            [W_ankle_pos,W_ankle_neg,W_ankle_net] = getWork(P_ankle,R.t);
+            [W_subt_pos,W_subt_neg,W_subt_net] = getWork(P_subt,R.t);
+            [W_mtj_pos,W_mtj_neg,W_mtj_net] = getWork(P_mtj,R.t);
+            [W_mtp_pos,W_mtp_neg,W_mtp_net] = getWork(P_mtp,R.t);
             P_sum = P_hip+P_knee+P_ankle+P_subt+P_mtj+P_mtp;
-            [W_sum_pos,W_sum_neg] = getWork(P_sum,R.t);
-            [W_heel_pos,W_heel_neg] = getWork(P_HC_heel,R.t);
-            [W_fft_pos,W_fft_neg] = getWork(P_HC_ball,R.t);
-            [W_toes_pos,W_toes_neg] = getWork(P_HC_toes,R.t);
-            [W_PF_pos,W_PF_neg] = getWork(P_PF,R.t);
-            [W_At_pos,W_At_neg] = getWork(P_T_Sol+P_T_Gas+P_T_Gas2,R.t);
-            [W_sol_pos,W_sol_neg] = getWork(P_M_Sol,R.t);
-            [W_gas_pos,W_gas_neg] = getWork(P_M_Gas+P_M_Gas2,R.t);
-            [W_mtj_li_pos,W_mtj_li_neg] = getWork(P_mtj_li,R.t);
-            [W_PIM_pos,W_PIM_neg] = getWork(P_PIM,R.t);
+            [W_sum_pos,W_sum_neg,W_sum_net] = getWork(P_sum,R.t);
+            [W_heel_pos,W_heel_neg,W_heel_net] = getWork(P_HC_heel,R.t);
+            [W_fft_pos,W_fft_neg,W_fft_net] = getWork(P_HC_ball,R.t);
+            [W_toes_pos,W_toes_neg,W_toes_net] = getWork(P_HC_toes,R.t);
+            [W_PF_pos,W_PF_neg,W_PF_net] = getWork(P_PF,R.t);
+            [W_At_pos,W_At_neg,W_At_net] = getWork(P_T_Sol+P_T_Gas+P_T_Gas2,R.t);
+%             [W_sol_pos,W_sol_neg] = getWork(P_M_Sol,R.t);
+%             [W_gas_pos,W_gas_neg] = getWork(P_M_Gas+P_M_Gas2,R.t);
+            [W_mtj_li_pos,W_mtj_li_neg,W_mtj_li_net] = getWork(P_mtj_li,R.t);
+            [W_PIM_pos,W_PIM_neg,W_PIM_net] = getWork(P_PIM,R.t);
+%             [W_pads_pos,W_pads_neg] = getWork(P_HC,R.t);
 %             [E_sol_pos,E_sol_neg] = getWork(P_E_Sol,R.t);
 %             [E_gas_pos,E_gas_neg] = getWork(P_E_Gas+P_E_Gas2,R.t);
             
             Wi_pos = [W_hip_pos;W_knee_pos;W_ankle_pos;W_subt_pos;W_mtj_pos;W_mtp_pos];
-            Ws_pos_gc(:,inr) = [Wi_pos;W_sum_pos;W_heel_pos;W_fft_pos;W_toes_pos;W_sol_pos;W_gas_pos;...
+            Ws_pos_gc(:,inr) = [Wi_pos;W_sum_pos;W_heel_pos;W_fft_pos;W_toes_pos;...
                 W_At_pos;W_PF_pos;W_mtj_li_pos;W_PIM_pos]/dist_trav;
             
             Wi_neg = [W_hip_neg;W_knee_neg;W_ankle_neg;W_subt_neg;W_mtj_neg;W_mtp_neg];
-            Ws_neg_gc(:,inr) = [Wi_neg;W_sum_neg;W_heel_neg;W_fft_neg;W_toes_neg;W_sol_neg;W_gas_neg;...
+            Ws_neg_gc(:,inr) = [Wi_neg;W_sum_neg;W_heel_neg;W_fft_neg;W_toes_neg;...
                 W_At_neg;W_PF_neg;W_mtj_li_neg;W_PIM_neg]/dist_trav;
             
+            Wi_net = [W_hip_net;W_knee_net;W_ankle_net;W_subt_net;W_mtj_net;W_mtp_net];
+            Ws_net_gc(:,inr) = [Wi_net;W_sum_net;W_heel_net;W_fft_net;W_toes_net;...
+                W_At_net;W_PF_net;W_mtj_li_net;W_PIM_net]/dist_trav;
+
             legW{inr} = LegName;
             
             % make figures
             if inr == nr
-               Ws_cat = reordercats(Ws_cat,[6,8,2,15,9,11,7, 5,3,16, 4,14, 1,13,12,10]);
+               Ws_cat = reordercats(Ws_cat,[5,7,2,13,8,10,6, 4,3,14, 1,11,12,9]);
                
 %                % stance
 %                figure
@@ -3562,7 +3678,7 @@ for inr=1:nr
                tmp.XTickLabelRotation = 90;
                
                subplot(313)
-               br3=bar(Ws_cat,(Ws_pos_gc+Ws_neg_gc));
+               br3=bar(Ws_cat,(Ws_net_gc));
                grid on
                xl = get(gca, 'xlim');
                axis tight
@@ -5090,60 +5206,38 @@ for inr=1:nr
         end
         
         figure(h34)
-        subplot(2,2,1)
-        hold on
-        plot(x,R.Qs(:,imtp),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
-        title('MTP angle')
-%         xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-        ylabel('Angle (°)','Fontsize',label_fontsize);
-        axis tight
-        yl = get(gca, 'ylim');
-        ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-        xlim([0,100])
-
-        [~,imax_mtp] = max(R.Qs(:,imtp));
-        plot(x(imax_mtp),R.Qs(imax_mtp,imtp),'d','color',Cs)
         
         if ~isempty(imtj)
-            [~,imax_PF] = max(F_PF);
-            plot(x(imax_PF),R.Qs(imax_PF,imtp),'o','color',Cs)
 
 
-            subplot(2,2,3)
+            p1=plot(R.Qs(:,imtj),-R.Tid(:,imtj),'.','color',Cs);
             hold on
-            plot(x,F_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
-            title('Plantar fascia force')
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-            ylabel('Force (N)','Fontsize',label_fontsize);
-            axis tight
-            yl = get(gca, 'ylim');
-            ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-            xlim([0,100])
-            plot(x(imax_mtp),F_PF(imax_mtp),'d','color',Cs)
-            plot(x(imax_PF),F_PF(imax_PF),'o','color',Cs)
+            xlabel('mtj angle (°)')
+            ylabel('mtj torque (Nm)')
+%             yyaxis right
+%             p2=plot(R.Qs(:,imtj),R.Qs(:,imtp),'.');
+%             ylabel('mtp angle (°)')
+            
+%             yyaxis left
+            plot(R.Qs(iheel_contact(1),imtj),-R.Tid(iheel_contact(1),imtj),'o','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(iheel_contact(end),imtj),-R.Tid(iheel_contact(end),imtj),'*','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(iff_contact(1),imtj),-R.Tid(iff_contact(1),imtj),'+','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(iff_contact(end),imtj),-R.Tid(iff_contact(end),imtj),'x','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(itoe_contact(1),imtj),-R.Tid(itoe_contact(1),imtj),'<','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(itoe_contact(end),imtj),-R.Tid(itoe_contact(end),imtj),'d','Color',p1.Color,'MarkerSize',15)
+            
+            
+%             yyaxis right
+%             plot(R.Qs(iheel_contact(1),imtj),R.Qs(iheel_contact(1),imtp),'o','Color',p2.Color)
+%             plot(R.Qs(iheel_contact(end),imtj),R.Qs(iheel_contact(end),imtp),'*','Color',p2.Color)
+%             plot(R.Qs(iff_contact(1),imtj),R.Qs(iff_contact(1),imtp),'+','Color',p2.Color)
+%             plot(R.Qs(iff_contact(end),imtj),R.Qs(iff_contact(end),imtp),'x','Color',p2.Color)
 
-            subplot(2,2,[2,4])
-            hold on
-            plot(R.Qs(ipush_off,imtp),F_PF(ipush_off),'.','color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
-            title('Plantar fascia - mtp during push-off')
-            xlabel('Mtp angle (°)','Fontsize',label_fontsize);
-            ylabel('PF force (N)','Fontsize',label_fontsize);
-            plot(R.Qs(imax_mtp,imtp),F_PF(imax_mtp),'d','color',Cs)
-            plot(R.Qs(imax_PF,imtp),F_PF(imax_PF),'o','color',Cs)
 
-
-%             f_plantar_quasi_stiffness = getPlantarQuasiStiffnessCasADiFunction(R.S);
-%             l_PF = R.windlass.l_PF;
-%             iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
-%             a_PIM = R.a(:,iFDB);
-%             pqs = full(f_plantar_quasi_stiffness(a_PIM,l_PF));
-%             subplot(2,2,2)
-%             hold on
-%             plot(x,pqs,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
-%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
-%             ylabel('Quasi-stiffness (N/m)','Fontsize',label_fontsize);
-%             title('Plantar stiffness')
-
+            if inr==nr
+%                 lg34 = legend()
+                annotation('textbox',[0.15,0.6,0.2,0.27],'String',{'o  first heel contact','*   last heel contact','+  first forefoot contact','x  last forefoot contact','<  first toe contact','d  last toe contact'})
+            end
             
         end
 
@@ -5197,6 +5291,116 @@ for inr=1:nr
         end
     end
 
+    %
+    if makeplot.COP
+        if inr==1
+            h36 = figure('Position',[fpos(2,:),fsq]);
+            subplot(2,1,1)
+            hold on
+            xlabel('Anterior (mm)')
+            ylabel('Superior (mm)')
+
+            subplot(2,1,2)
+            hold on
+            xlabel('Anterior (mm)')
+            ylabel('Lateral (mm)')
+
+
+        end
+    
+        if ~isfield(R,'COP_in_calcn') || ~isfield(R,'COP_wrt_talus_in_calcn')
+            [COP_in_calcn, COP_wrt_talus_in_calcn] = getCOPInFootFrame(R);
+            R.COP_in_calcn = COP_in_calcn*1e3;
+            R.COP_wrt_talus_in_calcn = COP_wrt_talus_in_calcn*1e3;
+
+            save(ResultsFile{inr},'R','-append');
+        end
+
+        istance_COPR = find(R.GRFs(:,2)>30);
+        mtp_centre = [0.1182,-0.0630,0.0090]*1e3;
+
+        figure(h36)
+        subplot(211)
+        hold on
+        plot(R.COP_wrt_talus_in_calcn(istance_COPR,1),R.COP_wrt_talus_in_calcn(istance_COPR,2),'.','Color',CsV(inr,:),'DisplayName',LegName);
+        plot(R.COP_wrt_talus_in_calcn(istance_COPR(1),1),R.COP_wrt_talus_in_calcn(istance_COPR(1),2),'+','Color',CsV(inr,:),'DisplayName',[LegName ' (heel strike)']);
+        plot(R.COP_wrt_talus_in_calcn(istance_COPR(end),1),R.COP_wrt_talus_in_calcn(istance_COPR(end),2),'o','Color',CsV(inr,:),'DisplayName',[LegName ' (toe-off)']);
+        if inr==nr
+
+            axis equal
+            xlm = get(gca,'XLim');
+            xlm(1) = xlm(1)-5;
+            xlm(2) = xlm(2)+5;
+            xlim(xlm)
+            title('Centre of pressure wrt ankle centre, in hindfoot ref frame')
+            plot(mtp_centre(1),mtp_centre(2),'dk')
+        end
+
+        subplot(2,1,2)
+        hold on
+        plot(R.COP_wrt_talus_in_calcn(istance_COPR,1),R.COP_wrt_talus_in_calcn(istance_COPR,3),'.','Color',CsV(inr,:),'DisplayName',LegName);
+        plot(R.COP_wrt_talus_in_calcn(istance_COPR(1),1),R.COP_wrt_talus_in_calcn(istance_COPR(1),3),'+','Color',CsV(inr,:),'DisplayName',[LegName ' (heel strike)']);
+        plot(R.COP_wrt_talus_in_calcn(istance_COPR(end),1),R.COP_wrt_talus_in_calcn(istance_COPR(end),3),'o','Color',CsV(inr,:),'DisplayName',[LegName ' (toe-off)']);
+        if inr==nr
+            axis equal
+            xlim(xlm)
+            plot(mtp_centre(1),mtp_centre(3),'dk','DisplayName','MTP centre')
+            legend('Location','best')
+        end
+
+    end
+
+
+    %
+
+    if makeplot.ankle_gearing
+        if inr==1
+            h37 = figure('Position',[fpos(2,:),fwide]);
+
+            subplot(1,3,1)
+            xlabel('% stance')
+            ylabel('GRF lever arm (mm)')
+
+
+            subplot(1,3,2)
+            xlabel('% stance')
+            ylabel('plantar flexor lever arm (mm)')
+
+            subplot(1,3,3)
+            xlabel('% stance')
+            ylabel('ratio (-)')
+
+        end
+    
+        if ~isfield(R,'COP_in_calcn') || ~isfield(R,'COP_wrt_talus_in_calcn')
+            [COP_in_calcn, COP_wrt_talus_in_calcn] = getCOPInFootFrame(R);
+            R.COP_in_calcn = COP_in_calcn*1e3;
+            R.COP_wrt_talus_in_calcn = COP_wrt_talus_in_calcn*1e3;
+
+            save(ResultsFile{inr},'R','-append');
+        end
+
+
+        GRF_lever = sqrt(sum(R.COP_wrt_talus_in_calcn.^2,2));
+
+        PF_lever = -R.dM(:,iSol,5)*1e3;
+
+        figure(h37)
+        subplot(131)
+        hold on
+        plot(xst,GRF_lever(istance0),'-','Color',CsV(inr,:),'DisplayName',LegName);
+
+        subplot(132)
+        hold on
+        plot(xst,PF_lever(istance0),'-','Color',CsV(inr,:),'DisplayName',LegName);
+
+        subplot(133)
+        hold on
+        plot(xst,GRF_lever(istance0)./PF_lever(istance0),'-','Color',CsV(inr,:),'DisplayName',LegName);
+
+    end
+
+    %
 end
 
 figure(hleg)
@@ -5228,7 +5432,7 @@ end
 
 
 
-function [pos_work,neg_work] = getWork(power,time)
+function [pos_work,neg_work,varargout] = getWork(power,time)
     pos_power = power;
     pos_power(power<0) = 0;
     pos_work = trapz(time,pos_power);
@@ -5236,6 +5440,11 @@ function [pos_work,neg_work] = getWork(power,time)
     neg_power = power;
     neg_power(power>0) = 0;
     neg_work = trapz(time,neg_power);
+
+    if nargout==3
+        net_work = trapz(time,power);
+        varargout{1} = net_work;
+    end
 end
 end
 

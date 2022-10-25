@@ -1,8 +1,23 @@
 clear
-% close all
+close all
 clc
 
-load('C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_pp.mat','R')
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+ResultsFolder = 'with_better_knee';
+
+results = {
+    '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+    '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
+    '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+    };
+
+LegNames = {'Baseline model','Windlass mechanism','Plantar intrinsic muscles'};
+
+
+for ires = 1:length(results)
+resultsfile = fullfile(ResultsRepo,[results{ires} '_pp.mat']);
+
+load(resultsfile,'R')
 
 
 
@@ -23,16 +38,18 @@ import casadi.*
 % OpenSim/Simbody C++ API. This external function is compiled as a dll from
 % which we create a Function instance using CasADi in MATLAB. More details
 % about the external function can be found in the documentation.
-cd ..
-pathRepo        = pwd;
+
+pathRepo = pwd;
+[pathRepo0,~,~] = fileparts(mfilename('fullpath'));
+[pathRepo,~,~] = fileparts(pathRepo0);
 addpath(genpath(pathRepo));
 % Loading external functions.
 setup.derivatives =  'AD'; % Algorithmic differentiation
-pathExternalFunctions = [pathRepo,'/ExternalFunctions'];
-cd(pathExternalFunctions)
-F  = external('F',['F_' S.ExternalFunc '.dll']);
-load(['F_' S.ExternalFunc '_IO.mat'],'IO');
-cd(pathRepo);
+pathExternalFunctions = 'C:\Users\u0150099\Documents\master_thesis\3dpredictsim\ExternalFunctions';
+% cd(pathExternalFunctions)
+F  = external('F',fullfile(pathExternalFunctions,['F_' S.ExternalFunc '.dll']));
+load(fullfile(pathExternalFunctions,['F_' S.ExternalFunc '_IO.mat']),'IO');
+% cd(pathRepo);
 
 coord_names = cell(2,nq.all);
 coord_names_tmp = fieldnames(IO.coordi);
@@ -413,6 +430,11 @@ Tj(jointi.trunk.rot,1) = (T_trunk_rot + Tau_passj.trunk.rot);
 
 %%
 f_jointStiffness = Function('f_jointStiffness',{FTtilde_sol,akj,dFTtildej_nsc,Qskj_nsc,Qdotskj_nsc},{Tj,jacobian(-Tj,Qskj_nsc)});
+f_jointDamping = Function('f_jointDamping',{FTtilde_sol,akj,dFTtildej_nsc,Qskj_nsc,Qdotskj_nsc},{Tj,jacobian(-Tj,Qdotskj_nsc)});
+
+if mtj
+    f_debug = Function('f_debug',{FTtilde_sol,akj,dFTtildej_nsc,Qskj_nsc,Qdotskj_nsc},{Tau_passj.mtj.r, T_passj.mtj.r, T_mtj_r, T_mtjPF_r,FTj});
+end
 
 %%
 
@@ -420,20 +442,39 @@ N = size(R.Qs,1);
 
 Ts = zeros(N,nq.all);
 jac_Ts = zeros(N,nq.all,nq.all);
-
+jac_Ts2 = zeros(N,nq.all,nq.all);
+clearvars FT
 for i=1:N
     [Tsi,jac_Tsi] = f_jointStiffness(R.FTtilde(i,:),R.a(i,:),R.dFTtilde(i,:),R.Qs(i,:)*pi/180,R.Qdots(i,:)*pi/180);
+    [~,jac_Ts2i] = f_jointDamping(R.FTtilde(i,:),R.a(i,:),R.dFTtilde(i,:),R.Qs(i,:)*pi/180,R.Qdots(i,:)*pi/180);
 
     Ts(i,:) = full(Tsi);
     jac_Ts(i,:,:) = full(jac_Tsi);
+    jac_Ts2(i,:,:) = full(jac_Ts2i);
 
+    if mtj
+        [Tau_passi,T_passi,T_musi,T_PFi,FTi] = f_debug(R.FTtilde(i,:),R.a(i,:),R.dFTtilde(i,:),R.Qs(i,:)*pi/180,R.Qdots(i,:)*pi/180);
+        Tau_pass(i) = full(Tau_passi);
+        T_pass(i) = full(T_passi);
+        T_mus(i) = full(T_musi);
+        T_PF(i) = full(T_PFi);
+        FT(i,:) = full(FTi);
+    end
 end
+
+% T_mtj = [Tau_pass',T_pass',T_PF',T_mus'];
+% T_mtj(:,5) = Tau_pass'+T_pass'+T_PF'+T_mus';
 
 %%
 DT = R.Tid-Ts;
-errs = max(abs(DT)-1e-5*abs(R.Tid),[],1);
+errs_rel = max(abs(DT)-1e-5*abs(R.Tid),[],1);
+errs_rel2 = max(abs(DT)./abs(R.Tid),[],1);
+errs_abs = max(abs(DT),[],1);
 
-% R.colheaders.joints{(errs)>0}
+% diff_FT = R.FT-FT;
+% tmp = DT(:,strcmp(R.colheaders.joints,'mtj_angle_r'));
+% tmp_M_PF = R.windlass.MA_PF.mtj.*R.windlass.F_PF;
+% R.colheaders.joints{(errs_rel)>0}
 
 %%
 imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
@@ -442,28 +483,107 @@ imtp = find(strcmp(R.colheaders.joints,'mtp_angle_r'));
 ihip = find(strcmp(R.colheaders.joints,'hip_flexion_r'));
 iknee = find(strcmp(R.colheaders.joints,'knee_angle_r'));
 
-figure
-plot(squeeze(jac_Ts(:,iankle,iankle)))
+if ires==1
+    f1=figure;
+    tiledlayout('flow')
+end
+
+figure(f1)
+
+nexttile(1)
+hold on
+p1=plot(squeeze(jac_Ts(:,iankle,iankle)));
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('ankle')
 
-figure
-plot(squeeze(jac_Ts(:,imtj,imtj)))
+nexttile(2)
+hold on
+if ~isempty(imtj)
+    plot(squeeze(jac_Ts(:,imtj,imtj)),'Color',p1.Color)
+    ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+    xlabel('% GC')
+    title('midtarsal')
+end
+
+nexttile(3)
+hold on
+plot(squeeze(jac_Ts(:,imtp,imtp)))
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
-title('midtarsal')
+title('mtp')
 
-figure
+nexttile(4)
+hold on
 plot(squeeze(jac_Ts(:,ihip,ihip)))
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('hip')
 
-figure
-plot(squeeze(jac_Ts(:,iknee,iknee)))
+nexttile(5)
+hold on
+plot(squeeze(jac_Ts(:,iknee,iknee)),'DisplayName',LegNames{ires})
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('knee')
 
 % yline(1/2.5*62*180/pi)
+
+%
+
+if ires==1
+    f2=figure;
+    tiledlayout('flow')
+end
+
+figure(f2)
+
+nexttile(1)
+hold on
+p1=plot(squeeze(jac_Ts2(:,iankle,iankle)));
+ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+xlabel('% GC')
+title('ankle')
+
+nexttile(2)
+hold on
+if ~isempty(imtj)
+    plot(squeeze(jac_Ts2(:,imtj,imtj)),'Color',p1.Color)
+    ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+    xlabel('% GC')
+    title('midtarsal')
+end
+
+nexttile(3)
+hold on
+plot(squeeze(jac_Ts2(:,imtp,imtp)))
+ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+xlabel('% GC')
+title('mtp')
+
+nexttile(4)
+hold on
+plot(squeeze(jac_Ts2(:,ihip,ihip)))
+ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+xlabel('% GC')
+title('hip')
+
+nexttile(5)
+hold on
+plot(squeeze(jac_Ts2(:,iknee,iknee)),'DisplayName',LegNames{ires})
+ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+xlabel('% GC')
+title('knee')
+
+end
+figure(f1)
+nexttile(5)
+legend
+
+figure(f2)
+nexttile(5)
+legend
+
+
+
+

@@ -267,7 +267,7 @@ elseif S.IGsel == 2 % Data-informed initial guess
     elseif S.IGmodeID == 3 || S.IGmodeID == 4 % Data from selected motion
         % Extract joint positions from existing motion (previous results)
         if S.IGmodeID == 3
-            GuessFolder = fullfile(pathRepo,'Results',S.ResultsF_ig);
+            GuessFolder = S.ResultsF_ig;
         elseif S.IGmodeID ==4
             GuessFolder = fullfile(pathRepo,'IG','data');
         end
@@ -1163,12 +1163,6 @@ options.ipopt.mu_strategy           = 'adaptive';
 options.ipopt.max_iter              = S.max_iter;
 options.ipopt.linear_solver         = S.linear_solver;
 options.ipopt.tol                   = 1*10^(-S.tol_ipopt);
-if S.use_jit
-    options.jit = true;
-    options.compiler = 'shell';
-    options.jit_options.flags = {'-O3'};
-    options.jit_options.verbose = true;
-end
 opti.solver('ipopt', options);
 % Create and save diary
 OutFolder = fullfile(S.ResultsRepo,S.ResultsFolder);

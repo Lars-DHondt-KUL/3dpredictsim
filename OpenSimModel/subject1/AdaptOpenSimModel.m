@@ -17,13 +17,14 @@ clc
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 
 % .osim file to adapt
-path_osim_in = fullfile(pathHere,'Fal_s1_mtp_sc_MTc5_cspx10_cg3.osim');
+path_osim_in = fullfile(pathHere,'Fal_s1_mtppin_FK_sd_cg0.osim');
 
 % adapted .osim file
-path_osim_out = fullfile(pathHere,'Fal_s1_mtp_sc_MTc5_cspx10_cg3_test.osim');
+path_osim_out = fullfile(pathHere,'Fal_s1_mtppin_FK_sd_cg0.osim');
 
 
 %% Define contact spheres
+% https://github.com/antoinefalisse/3dpredictsim/blob/mtp_paper/ExternalFunctions/PredSim_SSCM_pp.cpp
 
 % contact spheres right side
 csp = 1;

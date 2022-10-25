@@ -30,7 +30,7 @@ function [] = add_contact_spheres(osim_path,contact_spheres)
 
 
 %% dynamic properties
-stiffness           = 10000000;
+stiffness           = 1000000;
 dissipation         = 2.0;
 staticFriction      = 0.8;
 dynamicFriction     = 0.8;
@@ -44,7 +44,7 @@ model = Model(osim_path);
 
 %% ground
 ground_body = model.getGround();
-groundContactSpace = ContactHalfSpace(Vec3(0,0,0),Vec3(0,0,-1.57),ground_body);
+groundContactSpace = ContactHalfSpace(Vec3(0,0,0),Vec3(0,0,-pi/2),ground_body);
 groundContactSpace.setName('floor');
 model.addContactGeometry(groundContactSpace);
 

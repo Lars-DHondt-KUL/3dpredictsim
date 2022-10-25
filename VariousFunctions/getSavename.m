@@ -37,7 +37,7 @@ else
             end
         end
         if isfield(S.Foot,'contactGeometryVersion')
-            if S.Foot.contactGeometryVersion~=0
+            if S.Foot.contactGeometryVersion>=0
                 savenameparts{end+1} = ['cg' num2str(S.Foot.contactGeometryVersion)];
             else
                 not{end+1} = 'not_cg';
@@ -48,6 +48,13 @@ else
                 savenameparts{end+1} = 'oy_';
             elseif S.Foot.contactSphereOffsetY >= 2
                 savenameparts{end+1} = ['oy' num2str(S.Foot.contactSphereOffsetY)];
+            end
+        end
+        if isfield(S.Foot,'contactSphereOffset1X')
+            if S.Foot.contactSphereOffset1X ~= 0
+                savenameparts{end+1} = ['o1x' num2str(S.Foot.contactSphereOffset1X*1e3)];
+            else
+                not{end+1} = 'not_o1x';
             end
         end
     end
@@ -75,14 +82,16 @@ elseif isfield(S,'TricepsFMoScale') && S.TricepsFMoScale==1
      not{end+1} = 'not_TFMox';
 end
 if isfield(S,'SoleusTendonShorter') && S.SoleusTendonShorter
-    savenameparts{end+1} = ['STm' num2str(S.SoleusTendonShorter*1000)];
-    casfuncfolparts{end+1} = ['STm' num2str(S.SoleusTendonShorter*1000)];
+    savenameparts{end+1} = ['ST' num2str(S.SoleusTendonShorter*1000)];
+    casfuncfolparts{end+1} = ['ST' num2str(S.SoleusTendonShorter*1000)];
 elseif isfield(S,'SoleusTendonShorter')
-    not{end+1} = 'not_STm';
+    not{end+1} = 'not_ST';
 end
-if isfield(S,'GastroclTsScale') && S.GastroclTsScale~=1
-    savenameparts{end+1} = ['GlTsx' num2str(S.GastroclTsScale*100)];
-    casfuncfolparts{end+1} = ['GlTsx' num2str(S.GastroclTsScale*100)];
+if isfield(S,'GastrocTendonShorter') && S.GastrocTendonShorter
+    savenameparts{end+1} = ['GT' num2str(S.GastrocTendonShorter*1000)];
+    casfuncfolparts{end+1} = ['GT' num2str(S.GastrocTendonShorter*1000)];
+elseif isfield(S,'GastrocTendonShorter')
+    not{end+1} = 'not_GT';
 end
 if isfield(S,'passiveFiberForceShift') && S.passiveFiberForceShift
     savenameparts{end+1} = ['Fpsl' num2str(-S.passiveFiberForceShift*100)];
@@ -259,6 +268,8 @@ if isfield(S,'Foot')
         elseif S.Foot.FDB == 2
             savenameparts{end+1} = 'FDB2';
             casfuncfolparts{end+1} = 'FDB2';
+        elseif S.Foot.FDB == 0
+            not{end+1} = 'not_FDB';
         end
         if S.Foot.FDB
             if isfield(S.Foot,'FDB_lTs')
@@ -278,6 +289,19 @@ if isfield(S,'Foot')
 
 end
 
+% velocity
+if isfield(S,'v_tgt')
+    if S.v_tgt ~= 1.33
+        if S.v_tgt<1
+            savenameparts{end+1} = ['vel0' num2str(S.v_tgt*10)];
+        else
+            savenameparts{end+1} = ['vel' num2str(S.v_tgt*10)];
+        end
+    else
+        not{end+1} = 'not_vel';
+    end
+end
+
 % initial guess
 if isfield(S,'IGsel') && ~isempty(S.IGsel)
     if S.IGsel == 1
@@ -286,6 +310,8 @@ if isfield(S,'IGsel') && ~isempty(S.IGsel)
         savenameparts{end+1} = ['ig2' num2str(S.IGmodeID )];
     end
 end
+
+
 
 % % cost function weight factors
 % if isfield(S,'W')

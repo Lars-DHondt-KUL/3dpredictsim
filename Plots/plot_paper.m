@@ -20,10 +20,12 @@ results = {
     };
 LegNames = {'Baseline model','Windlass mechanism','Plantar intrinsic muscles'};
 
-colours = {[0 0.4470 0.7410],[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840]};
+colours = {[0.4660 0.6740 0.1880],[0 0.4470 0.7410],[0.6350 0.0780 0.1840]};
+% colours = {[0 0.4470 0.7410],[0.8500 0.3250 0.0980],[0.6350 0.0780 0.1840]};
+
 lines = {'-','--','-.'};
 
-norm_stance = 1;
+norm_stance = 0;
 lw = 2;
 
 %% Load experimental reference data
@@ -105,7 +107,7 @@ GRF_ref(1).mean = Data.GRF.Fmean(:,2);
 %%
 scs = get(0,'ScreenSize');
 f1 = figure('Position',[100,100,scs(3)/2, scs(3)*0.4]);
-
+set(f1,'Color','w');
 
 
 nh = 4;
@@ -138,7 +140,7 @@ for i=1:length(results)
                 fill([iswing_ref([1,end]), fliplr(iswing_ref([1,end]))],[yl(1),yl(1),yl(2),yl(2)],[1,1,1]*0.9,'LineStyle','none')
             end
             hold on
-            fill([x fliplr(x)],q_ref(j).mean2std,0.5*[1,1,1],'LineStyle','none','DisplayName','IK (mean \pm 2 SD)');
+            fill([x fliplr(x)],q_ref(j).mean2std,0.8*[1,1,1],'LineStyle','none','DisplayName','IK (mean \pm 2 SD)');
             xlim([0,100])
             ylim(yl)
             ylabel('Angle (°)')
@@ -179,7 +181,7 @@ for i=1:length(results)
                 fill([iswing_ref([1,end]), fliplr(iswing_ref([1,end]))],[yl(1),yl(1),yl(2),yl(2)],[1,1,1]*0.9,'LineStyle','none')
             end
             hold on
-            fill([x fliplr(x)],m_ref(j).mean2std,0.5*[1,1,1],'LineStyle','none','DisplayName','EMG (mean \pm 2 SD)');
+            fill([x fliplr(x)],m_ref(j).mean2std,0.8*[1,1,1],'LineStyle','none','DisplayName','EMG (mean \pm 2 SD)');
             xlim([0,100])
             ylim(yl)
             ylabel('Activity (-)')
@@ -219,7 +221,7 @@ for i=1:length(results)
                 fill([iswing_ref([1,end]), fliplr(iswing_ref([1,end]))],[yl(1),yl(1),yl(2),yl(2)],[1,1,1]*0.9,'LineStyle','none')
             end
             hold on
-            fill([x fliplr(x)],T_ref(j).mean2std,0.5*[1,1,1],'LineStyle','none','DisplayName','ID (mean \pm 2 SD)');
+            fill([x fliplr(x)],T_ref(j).mean2std,0.8*[1,1,1],'LineStyle','none','DisplayName','ID (mean \pm 2 SD)');
             xlim([0,100])
             ylim(yl)
             ylabel('Moment (Nm/kg)')
@@ -253,7 +255,7 @@ for i=1:length(results)
                 fill([iswing_ref([1,end]), fliplr(iswing_ref([1,end]))],[yl(1),yl(1),yl(2),yl(2)],[1,1,1]*0.9,'LineStyle','none')
             end
             hold on
-            fill([x fliplr(x)],P_ref(j).mean2std,0.5*[1,1,1],'LineStyle','none','DisplayName','P (mean \pm 2 SD)');
+            fill([x fliplr(x)],P_ref(j).mean2std,0.8*[1,1,1],'LineStyle','none','DisplayName','P (mean \pm 2 SD)');
             xlim([0,100])
             ylim(yl)
             ylabel('Power (W/kg)')
@@ -288,7 +290,7 @@ for i=1:length(results)
                 fill([iswing_ref([1,end]), fliplr(iswing_ref([1,end]))],[yl(1),yl(1),yl(2),yl(2)],[1,1,1]*0.9,'LineStyle','none','DisplayName','Swing')
             end
             hold on
-            p1=fill([x fliplr(x)],GRF_ref(j).mean2std,0.5*[1,1,1],'LineStyle','none','DisplayName','Reference data (mean \pm 2 SD)');
+            p1=fill([x fliplr(x)],GRF_ref(j).mean2std,0.8*[1,1,1],'LineStyle','none','DisplayName','Reference data (mean \pm 2 SD)');
             lg(1) = p1;
             xlim([0,100])
             ylim(yl)
@@ -360,9 +362,52 @@ end
 
 %%
 
-f2 = figure('Position',[100,100,scs(3)/2, scs(3)*0.4]);
-
-
-
-
+% f2 = figure('Position',[100,100,scs(3)/2, scs(3)*0.4]);
+% 
+% nh = 4;
+% nw = 4;
+% 
+% for i=1:length(results)
+% 
+%     load(fullfile(ResultsRepo, [results{i} '_pp.mat']),'R');
+%     istance = 1:1:ceil(R.Event.Stance);
+% 
+%     imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
+%     iankle = strcmp(R.colheaders.joints,'ankle_angle_r');
+%     isubt = strcmp(R.colheaders.joints,'subtalar_angle_r');
+%     imtp = find(strcmp(R.colheaders.joints,'mtp_angle_r'));
+% 
+%     iSol = find(strcmp(R.colheaders.muscles,'soleus_r'));
+%     iGas = find(strcmp(R.colheaders.muscles,'lat_gas_r'));
+%     iGas2 = find(strcmp(R.colheaders.muscles,'med_gas_r'));
+%     iFDB = find(strcmp(R.colheaders.muscles,'FDB_r'));
+% 
+%     P_ankle = R.Qdots(:,iankle)*pi/180.*R.Tid(:,iankle)/R.body_mass;
+%     P_subt = R.Qdots(:,isubt)*pi/180.*R.Tid(:,isubt)/R.body_mass;
+%     P_mtp = R.Qdots(:,imtp)*pi/180.*R.Tid(:,imtp)/R.body_mass;
+% 
+%     P_T_Sol = -R.FT(:,iSol).*R.vT(:,iSol)/R.body_mass;
+%     P_T_Gas = -R.FT(:,iGas).*R.vT(:,iGas)/R.body_mass;
+%     P_T_Gas2 = -R.FT(:,iGas2).*R.vT(:,iGas2)/R.body_mass;
+%     P_AT = P_T_Sol+P_T_Gas+P_T_Gas2;
+% 
+%     P_M_Sol = -(R.Muscle.Fce(:,iSol)+R.Muscle.Fpass(:,iSol)).*R.Muscle.vM(:,iSol)/R.body_mass;
+%     P_M_Gas = -(R.Muscle.Fce(:,iGas)+R.Muscle.Fpass(:,iGas)).*R.Muscle.vM(:,iGas)/R.body_mass;
+%     P_M_Gas2 = -(R.Muscle.Fce(:,iGas2)+R.Muscle.Fpass(:,iGas2)).*R.Muscle.vM(:,iGas2)/R.body_mass;
+%     P_TS = P_M_Sol+P_M_Gas+P_M_Gas2;
+% 
+%     if ~isempty(imtj)
+%         P_mtj = R.Qdots(:,imtj)*pi/180.*R.Tid(:,imtj)/R.body_mass;
+%         P_PF = -R.windlass.v_PF.*R.windlass.F_PF/R.body_mass;
+%     end
+% 
+%     if ~isempty(iFDB)
+% 
+%     end
+% 
+% 
+% 
+%     subplot(nh,nw,1)
+% 
+% end
 

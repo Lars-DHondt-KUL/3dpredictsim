@@ -18,7 +18,7 @@ addpath([pwd '/VariousFunctions']);
 addpath([pwd '/FootModel']);
 AddCasadiPaths();
 % DataFolders = {'debug'};
-DataFolders = {'with_better_knee'};
+DataFolders = {'with_better_knee','different_speeds'};
 
 
 S.OverWrite = 0;

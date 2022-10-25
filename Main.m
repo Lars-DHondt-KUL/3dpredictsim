@@ -41,23 +41,22 @@ AddCasadiPaths();
 %% General settings
 %-------------------------------------------------------------------------%
 % Full body gait simulation
-run_simulation = 1;         % run solver
+run_simulation = 0;         % run solver
 post_process_results = 0;   % postproces
-add_to_batch_queue = 0;     % save settings to run later
+add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
 S.N         = 50;       % number of mesh intervals
 S.NThreads  = 6;        % number of threads for parallel computing
-S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
+% S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.linear_solver = 'ma86';
-S.use_jit = 1;
 
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-S.ResultsFolder = 'with_better_knee'; % subfolder of \Results where the result will be saved
+S.ResultsFolder = 'with_better_knee'; % 'with_better_knee'
 % S.suffixCasName = '';     % suffix for name of folder with casadifunctions
-S.suffixName = 'jit_test';        % suffix for name of file with results
+% S.suffixName = 'igmtp';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -70,17 +69,17 @@ S.W.A       = 2000;     % weight muscle activations
 S.TrackSim = 0;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
-S.Track.Q_ref = 'mtjc2_custom';
+S.Track.Q_ref = 'mtjc4_custom';
 S.W.Q_track = 1e4;
 
 
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc4';
+S.Foot.Model = 'mtp';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
-S.Foot.Scaling = 'custom'; % default, custom, personalised
+S.Foot.Scaling = 'default'; % default, custom, personalised
 
 % fixed knee axis
 S.fixed_knee = 1;
@@ -89,13 +88,13 @@ S.fixed_knee = 1;
 S.AchillesTendonScaleFactor = 0.5;
 
 % Triceps surae optimal force scale
-S.TricepsFMoScale = 1.2;
+S.TricepsFMoScale = 1.2; %round(1.2*0.8,2);
 
 % Reduce tendon slack length of Soleus
-S.SoleusTendonShorter = 0;
+S.SoleusTendonShorter = 0; %7e-3
 
-% scale tendon slack length of gastrocnemius
-S.GastroclTsScale = 1;
+% Reduce tendon slack length of gastrocnemius
+S.GastrocTendonShorter = 0; %5e-3
 
 % Shift passive force-length curve of ankle muscle fibers
 S.passiveFiberForceShift = -0.1; %-0.1
@@ -110,25 +109,27 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = 'MTc5';    % MTc2 Sv50
+S.MTparams = '';    % MTc5
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 0;
+S.Foot.contactGeometryVersion = -1;
 S.Foot.contactSphereOffsetY = 3;    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
 
 %% metatarsophalangeal (mtp) joint
-% preset for passive mtp
-% S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
-% S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
-% S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
-
-% preset for muscle-driven mtp
-S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
+if strcmp(S.Foot.Model(1:3),'mtp')
+    % preset for passive mtp
+    S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+    S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
+    S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
+else
+    % preset for muscle-driven mtp
+    S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
+    S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
+    S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
+end
 
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
@@ -147,7 +148,7 @@ S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
 S.Foot.PF_sf = 1;
 S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
@@ -178,8 +179,8 @@ S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Da
 if S.IGmodeID == 4
     S.savename_ig   = 'NoExo';
 elseif S.IGmodeID == 3
-    S.ResultsF_ig   = '';
-    S.savename_ig   = 'Fal_s1_bCst_ig21';
+    S.ResultsF_ig   = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\different_speeds';
+    S.savename_ig   = 'Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel24_ig1';
 end
 
 
