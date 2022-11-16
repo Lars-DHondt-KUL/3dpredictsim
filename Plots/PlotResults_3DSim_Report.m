@@ -55,7 +55,7 @@ label_fontsize  = 12;
 line_linewidth  = 0.5;
 NumTicks = 6;
 CsV = hsv(nr);
-if nr==3
+if nr<=3
     CsV = [[0 0.4470 0.7410];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840]];
 end
 mrk = {'-','--',':','-.'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
@@ -403,7 +403,8 @@ for inr=1:nr
     COT_all(inr) = R.COT;
     
     
-    
+    x = 1:(100-1)/(size(R.Qs,1)-1):100;
+
     %% kinematics
     if makeplot.kinematics_Qs
     
@@ -754,7 +755,7 @@ for inr=1:nr
                 p1=fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],[1,1,1]*0.8,'DisplayName','EMG data');
                 alpha(.25)
                 set(gca,'XTick',[0:20:100])
-                plot(ankle_a(:,imu),'-k','DisplayName','mean EMG data')
+                plot(x,ankle_a(:,imu),'-k','DisplayName','mean EMG data')
                 a1 = gca;
                 a1.YColor = [0,0,0];
                 if imu==1
@@ -780,7 +781,7 @@ for inr=1:nr
             
             subplot(n_msc,nn_msc,imu); hold on;
             hold on
-            p2=plot(R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            p2=plot(x,R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             title(R.colheaders.muscles{imus(imu)},'Interpreter','none')
             grid on
@@ -804,7 +805,7 @@ for inr=1:nr
                     end
                 end
             subplot(n_msc,nn_msc,nn_msc+imu)
-            plot(R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
             
@@ -819,7 +820,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(n_msc,nn_msc,2*nn_msc+imu)
-            plot(R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             
@@ -835,7 +836,7 @@ for inr=1:nr
 
             if makeplot.sol_all
                 subplot(n_msc,nn_msc,3*nn_msc+imu)
-                plot(R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+                plot(x,R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
                 hold on
                 grid on
                 L = get(gca,'XLim');
@@ -851,7 +852,7 @@ for inr=1:nr
                 if isfield(R,'vT')
 
                     subplot(n_msc,nn_msc,4*nn_msc+imu)
-                    plot(-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+                    plot(x,-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
                     hold on
                     grid on
 
@@ -867,7 +868,7 @@ for inr=1:nr
                 end
 
                 subplot(n_msc,nn_msc,5*nn_msc+imu)
-                plot(R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+                plot(x,R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
                 hold on
                 grid on
                 L = get(gca,'XLim');
@@ -895,7 +896,7 @@ for inr=1:nr
 %                 xlim([0,100])
 
                 subplot(n_msc,nn_msc,6*nn_msc+imu)
-                plot(R.Muscle.vM(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+                plot(x,R.Muscle.vM(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
                 hold on
                 grid on
                 L = get(gca,'XLim');
@@ -909,7 +910,7 @@ for inr=1:nr
                 xlim([0,100])
 
                 subplot(n_msc,nn_msc,7*nn_msc+imu)
-                plot(R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+                plot(x,R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
                 hold on
                 grid on
                 L = get(gca,'XLim');
@@ -1022,7 +1023,7 @@ for inr=1:nr
             
             subplot(n_msc,nn_msc,imu); hold on;
             hold on
-            p2=plot(R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            p2=plot(x,R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             title(R.colheaders.muscles{imus(imu)},'Interpreter','none')
             grid on
@@ -1046,7 +1047,7 @@ for inr=1:nr
                     end
                 end
             subplot(n_msc,nn_msc,nn_msc+imu)
-            plot(R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
             
@@ -1061,7 +1062,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(n_msc,nn_msc,2*nn_msc+imu)
-            plot(R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             
@@ -1077,7 +1078,7 @@ for inr=1:nr
 
 
             subplot(n_msc,nn_msc,3*nn_msc+imu)
-            plot(R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             L = get(gca,'XLim');
@@ -1093,7 +1094,7 @@ for inr=1:nr
             if isfield(R,'vT')
 
                 subplot(n_msc,nn_msc,4*nn_msc+imu)
-                plot(-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+                plot(x,-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
                 hold on
                 grid on
 
@@ -1109,7 +1110,7 @@ for inr=1:nr
             end
 
             subplot(n_msc,nn_msc,5*nn_msc+imu)
-            plot(R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             L = get(gca,'XLim');
@@ -1137,7 +1138,7 @@ for inr=1:nr
 %                 xlim([0,100])
 
             subplot(n_msc,nn_msc,6*nn_msc+imu)
-            plot(R.Muscle.vM(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.Muscle.vM(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
             L = get(gca,'XLim');
@@ -1151,7 +1152,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(n_msc,nn_msc,7*nn_msc+imu)
-            plot(R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
             L = get(gca,'XLim');
@@ -1261,7 +1262,7 @@ for inr=1:nr
             subplot(3,4,i)
             hold on
             grid on
-            l = plot(R.GRFs(:,i),'-','Color',CsV(inr,:));
+            l = plot(x,R.GRFs(:,i),'-','Color',CsV(inr,:));
             title(GRF_title{i});
             axis tight
             yl = get(gca, 'ylim');
@@ -1287,7 +1288,7 @@ for inr=1:nr
             subplot(3,4,5)
             hold on
             grid on
-            plot(sum(R.GRFs_separate(:,[2,5]),2),'Color',Cs);
+            plot(x,sum(R.GRFs_separate(:,[2,5]),2),'Color',Cs);
             ylabel({'Ground reaction force','(% body weight)'})
             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
             title('Vertical GRF Heel')
@@ -1299,7 +1300,7 @@ for inr=1:nr
             subplot(3,4,6)
             hold on
             grid on
-            plot(sum(R.GRFs_separate(:,[8,11,14]),2),'Color',Cs);
+            plot(x,sum(R.GRFs_separate(:,[8,11,14]),2),'Color',Cs);
             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
             title('Vertical GRF Forefoot')
             axis tight
@@ -1310,7 +1311,7 @@ for inr=1:nr
             subplot(3,4,7)
             hold on
             grid on
-            plot(R.GRFs_separate(:,17),'Color',Cs);
+            plot(x,R.GRFs_separate(:,17),'Color',Cs);
             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
             title('Vertical GRF Toes')
             axis tight
@@ -1322,7 +1323,7 @@ for inr=1:nr
                 subplot(3,6,2*6+iGRF)
                 hold on
                 grid on
-                plot(R.GRFs_separate(:,2+3*(iGRF-1)),'Color',Cs);
+                plot(x,R.GRFs_separate(:,2+3*(iGRF-1)),'Color',Cs);
                 if iGRF == 1
                     ylabel({'Ground reaction force','(% body weight)'})
                 end
@@ -1378,7 +1379,7 @@ for inr=1:nr
             nexttile(i)
             hold on
             grid on
-            l = plot(R.GRFs(:,i),'-','Color',CsV(inr,:));
+            l = plot(x,R.GRFs(:,i),'-','Color',CsV(inr,:));
             title(GRF_title{i});
             axis tight
             yl = get(gca, 'ylim');
@@ -4383,7 +4384,7 @@ for inr=1:nr
         for imu=1:length(imus)
 
             subplot(8,5,imu); hold on;
-            plot(R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.a(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             title(mVect_t{imu});
             ylabel('Activity (-)','Interpreter','latex');
             grid on
@@ -4401,7 +4402,7 @@ for inr=1:nr
 %             end
 
             subplot(8,5,5+imu)
-            plot(R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.FT(:,imus(imu)),'-','Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
 
@@ -4416,7 +4417,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(8,5,10+imu)
-            plot(R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.MetabB.Etot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
 
@@ -4431,7 +4432,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(8,5,15+imu)
-            plot(R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.MetabB.Wdot(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             L = get(gca,'XLim');
@@ -4445,7 +4446,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(8,5,20+imu)
-            plot(-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,-R.FT(:,imus(imu)).*R.vT(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             L = get(gca,'XLim');
@@ -4459,7 +4460,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(8,5,25+imu)
-            plot(R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
+            plot(x,R.lMtilde(:,imus(imu)),'-','Color',CsV(inr,:)); hold on;
             hold on
             grid on
             L = get(gca,'XLim');
@@ -4473,7 +4474,7 @@ for inr=1:nr
             xlim([0,100])
 
             subplot(8,5,30+imu)
-            plot(R.vMtilde(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.vMtilde(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
             L = get(gca,'XLim');
@@ -4488,7 +4489,7 @@ for inr=1:nr
 
 
             subplot(8,5,35+imu)
-            plot(R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.lMT(:,imus(imu)),'Color',CsV(inr,:),'DisplayName',LegName);
             hold on
             grid on
             L = get(gca,'XLim');
@@ -5203,6 +5204,7 @@ for inr=1:nr
     if makeplot.windlass_mtp
         if inr==1
             h34 = figure('Position',[fpos(4,:),fwide]);
+            lg34 = [];
         end
         
         figure(h34)
@@ -5210,7 +5212,8 @@ for inr=1:nr
         if ~isempty(imtj)
 
 
-            p1=plot(R.Qs(:,imtj),-R.Tid(:,imtj),'.','color',Cs);
+            p1=plot(R.Qs(:,imtj),-R.Tid(:,imtj),'.','color',Cs,'DisplayName',LegName);
+            lg34(end+1) = p1;
             hold on
             xlabel('mtj angle (°)')
             ylabel('mtj torque (Nm)')
@@ -5235,7 +5238,7 @@ for inr=1:nr
 
 
             if inr==nr
-%                 lg34 = legend()
+                lh34 = legend(lg34,'Location','north');
                 annotation('textbox',[0.15,0.6,0.2,0.27],'String',{'o  first heel contact','*   last heel contact','+  first forefoot contact','x  last forefoot contact','<  first toe contact','d  last toe contact'})
             end
             
@@ -5401,6 +5404,81 @@ for inr=1:nr
     end
 
     %
+
+   %%
+
+    if makeplot.mtj_moments
+        if inr==1
+            h37 = figure('Position',[fpos(4,:),fsq]);
+            tiledlayout('flow')
+        end   
+
+        figure(h37)
+        if ~has_no_mtj
+            nexttile(1)
+            hold on
+            plot(x,R.Tid(:,imtj),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Total moment mtj')
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('Moment (Nm)','Fontsize',label_fontsize);
+
+            nexttile(2)
+            hold on
+            plot(x,M_mtj_li,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Ligaments')
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('Moment (Nm)','Fontsize',label_fontsize);
+
+            nexttile(3)
+            hold on
+            plot(x,M_mtj_PF,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Plantar fascia')
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('Moment (Nm)','Fontsize',label_fontsize);
+
+        end
+
+        if ~has_no_mtj && R.S.Foot.mtj_muscles
+            musi_mtj = find(R.dM(1,:,7)~=0);
+    
+            nr_musi_mtj = length(musi_mtj);
+            
+            musi_mtj = musi_mtj(nr_musi_mtj/2+1:end);
+            nr_musi_mtj_1 = length(musi_mtj);
+%             nr_musi_mtj = 13;
+    
+
+            for i=1:nr_musi_mtj_1
+               nexttile(i+3)
+               hold on
+               if ~has_no_mtj && R.S.Foot.mtj_muscles
+                   T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
+                   if norm(T_mus)>0
+                       plot(x,T_mus,'Color',CsV(inr,:),'DisplayName',LegName);
+                   end
+               elseif ~has_no_mtj
+                   T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
+                   if norm(T_mus)>0
+    %                    plot(x,T_mus,':','Color',CsV(inr,:),'DisplayName',LegName);
+                   end
+               end
+    
+               title(R.colheaders.muscles{musi_mtj(i)},'interpreter','none')
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('Moment (Nm)','Fontsize',label_fontsize);
+                
+            end
+
+        end
+
+        
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h37,'PaperPositionMode','auto')
+            print(h37,[figNamePrefix '_musc_moment'],'-dpng','-r0')
+        end
+    end
+    %%
+
 end
 
 figure(hleg)

@@ -3,7 +3,7 @@ function [M_mtj] = getMidtarsalJointPassiveMoment(q_mtj,qdot_mtj,varargin)
 
 %% Default parameters
 mtj_stiffness = '';
-dMT = 0;
+dMT = 0.1;
 nl = 0; % use nonlinear ligament stiffness
 kMT_li = 300; % linear stiffness
 kMT_li2 = kMT_li;
@@ -83,7 +83,7 @@ else
 end
 
 % viscous damping
-M_d = -dMT*qdot_mtj;
+M_d = -(dMT-0.1)*qdot_mtj;
 
 % Total passive moment
 M_mtj = M_li + M_d;

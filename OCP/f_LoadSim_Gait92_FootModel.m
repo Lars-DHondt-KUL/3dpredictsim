@@ -1331,6 +1331,13 @@ for nn = 1:2*N
         Acts_GC(nn,:)',full(lMtilde_opt),full(vM_opt),...
         full(Fce_optt),full(Fpass_optt),MuscleMass.MassM',pctsts,...
         full(Fiso_optt)',body_mass,1e9);
+
+    [~,~,~,~,~,eBarghb] = ...
+        f_getMetabolicEnergySmooth2004all(Acts_GC(nn,:)',...
+        Acts_GC(nn,:)',full(lMtilde_opt),full(vM_opt),...
+        full(Fce_optt),full(Fpass_optt),MuscleMass.MassM',pctsts,...
+        full(Fiso_optt)',body_mass,S.tanh_b);
+
     
 %     % Umberger 2003
 %     vMtildeUmbk_opt = full(vM_opt)./(MTparameters_m(2,:)');
@@ -1377,7 +1384,7 @@ for nn = 1:2*N
     
     % store results
     e_mo_opt(nn) = full(eBargh)';
-    e_mo_optb(nn) = full(eBargh)';
+    e_mo_optb(nn) = full(eBarghb)';
     metab_Etot(nn,:) = full(energy_total)';
     metab_Adot(nn,:) = full(Adot)';
     metab_Mdot(nn,:) = full(Mdot)';
@@ -1411,10 +1418,12 @@ end
 dist_trav_opt_GC = Qs_opt_rad(end,jointi.pelvis.tx) - ...
     Qs_opt_rad(1,jointi.pelvis.tx); % distance traveled
 time_GC = q_opt_GUI_GC(:,1);
-e_mo_opt_trb = trapz(time_GC,e_mo_optb);
+e_mo_opt_trb = trapz(time_GC,e_mo_opt);
+e_mo_opt_trb_b = trapz(time_GC,e_mo_optb);
 % Cost of transport: J/kg/m
 % Energy model from Bhargava et al. (2004)
 COT_GC = e_mo_opt_trb/body_mass/dist_trav_opt_GC;
+COT_GCb = e_mo_opt_trb_b/body_mass/dist_trav_opt_GC;
 
 % % COT for all models
 % COTv.Bargh2004 = trapz(time_GC,metab_Bargh2004)/body_mass/dist_trav_opt_GC;
@@ -1536,6 +1545,7 @@ R.Tid       = Ts_opt.*body_mass;
 R.a         = Acts_GC;
 R.e         = e_GC;
 R.COT       = COT_GC;
+R.COT_smoothed = COT_GCb;
 R.StrideLength = StrideLength_opt;
 R.StepWidth = stride_width_mean;
 R.vMtilde   = vMtilde_opt_all;

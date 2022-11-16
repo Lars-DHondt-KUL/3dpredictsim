@@ -1,4 +1,4 @@
-function [out] = OpenSim_body_frames(model_path,mot_path,intrvl)
+function [out] = OpenSim_body_frames(model_path,mot_path,intrvl,varargin)
 %--------------------------------------------------------------------------
 % Example of extracting body positions and orientations from OpenSim model
 % based on results on coordinates
@@ -13,13 +13,6 @@ import org.opensim.modeling.*;
 % use methodsview(object) to display methods for that object
 
 
-%_path = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21.mot';
-
-% load .mot file
-mot_data = importdata(mot_path);
-
-% number of data points
-n_time = size(mot_data.data,1);
 
 % load model
 model = Model(model_path);
@@ -38,7 +31,7 @@ coord_names = cell(1,n_coord);
 is_rotation = zeros(1,n_coord);
 for i=1:n_coord
     % opensim api indexing starts at 0, so use i-1
-    coord_names{i} = coord_set.get(i-1).getName();
+    coord_names{i} = char(coord_set.get(i-1).getName());
     is_rotation(i) = strcmp(coord_set.get(i-1).getMotionType(),"Rotational");
 end
 
@@ -48,28 +41,44 @@ n_body = body_set.getSize();
 body_names = cell(1,n_body);
 for i=1:n_body
     % api indexing starts at 0, so use i-1
-    body_names{i} = body_set.get(i-1).getName();
+    body_names{i} = char(body_set.get(i-1).getName());
 end
 
 
-% get Qs and Qdots
-if isempty(intrvl)
-    intrvl = mot_data.data(:,1);
+if length(varargin) >= 3
+    Qs = varargin{1};
+    Qdots = varargin{2};
+    colheaders = varargin{3};
+    n_time = size(Qs,1);
+
+else
+    % load .mot file
+    mot_data = importdata(mot_path);
+    colheaders = mot_data.colheaders(2:end);
+    n_time = size(mot_data.data,1);
+    % get Qs and Qdots
+    if isempty(intrvl)
+        intrvl = mot_data.data(:,1);
+    end
+    
+    for i=1:n_coord
+        qi = interp1(mot_data.data(:,1),mot_data.data(:,i+1),intrvl);
+        PP = spline(intrvl,qi);
+        [Qsi,Qdotsi,~] = SplineEval_ppuval(PP,intrvl,1);
+        Qs(:,i) = Qsi;
+        Qdots(:,i) = Qdotsi;
+    end
+
 end
 
-for i=1:n_coord
-    qi = interp1(mot_data.data(:,1),mot_data.data(:,i+1),intrvl);
-    PP = spline(intrvl,qi);
-    [Qsi,Qdotsi,~] = SplineEval_ppuval(PP,intrvl,1);
-    Qs(:,i) = Qsi;
-    Qdots(:,i) = Qdotsi;
-end
+
 
 %%
 H_all = nan(n_time,n_body,4,4);
 pos = nan(length(intrvl),n_body,3);
 vel = pos;
 omega = pos;
+eul = pos;
 rot = nan(length(intrvl),n_body,9);
 
 % loop over time
@@ -77,10 +86,10 @@ for i=1:length(intrvl)
     % loop over coordinates to set value
     for j=1:n_coord
         % index of coordinate in data from mot file
-        idx = find(strcmp(mot_data.colheaders,string(coord_names(j))));
+        idx = find(strcmp(strip(colheaders),coord_names(j)));
         % coordinate value
-        q_ij = Qs(i,idx-1);
-        qd_ij = Qdots(i,idx-1);
+        q_ij = Qs(i,idx);
+        qd_ij = Qdots(i,idx);
         % need rotations in radians
         if is_rotation(j)
             q_ij = q_ij*pi/180;
@@ -92,7 +101,7 @@ for i=1:length(intrvl)
 
     end
 
-    % calculate model kinematics (positions) for state
+    % calculate model kinematics for state
     model.realizeVelocity(state);
 
     % loop over bodies to get transformation matrix
@@ -116,8 +125,9 @@ for i=1:length(intrvl)
         pos(i,j,:) = pos_ij(:);
         vel(i,j,:) = v_ij(:);
         omega(i,j,:) = omega_ij(:);
-        rot(i,j,:) = reshape(rot_ij,9,1);
-        
+        rot(i,j,:) = reshape(inv(rot_ij),9,1);
+        eul(i,j,:) = rotm2eul(rot_ij);
+
 %         % construct homogeneous transformation matrix
 %         H_ij = eye(4);
 %         H_ij(1:3,1:3) = rot_ij;
@@ -135,6 +145,7 @@ for j=1:n_body
     tmp.v_lin = squeeze(vel(:,j,:));
     tmp.omega = squeeze(omega(:,j,:));
     tmp.R = squeeze(rot(:,j,:));
+    tmp.eul = squeeze(eul(:,j,:));
 
     out.(char(body_names{j})) = tmp;
 end

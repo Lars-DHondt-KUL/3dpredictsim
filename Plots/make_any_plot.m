@@ -55,10 +55,10 @@ S.subject = 'Fal_s1';
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp';
+S.Foot.Model = 'mtj';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
-S.Foot.Scaling = 'default'; % default, custom, personalised
+S.Foot.Scaling = 'custom'; % default, custom, personalised
 
 % fixed knee axis
 S.fixed_knee = 1;
@@ -88,7 +88,7 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = ''; % 
+% S.MTparams = ''; % 
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
@@ -105,9 +105,9 @@ S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
 
 %% midtarsal joint 
 % (only used if Model = mtj)
-% S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
+S.Foot.mtj_muscles = 0;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
-% S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
+S.Foot.MT_li_nonl = 0;       % 1: nonlinear torque-angle characteristic
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
 % S.Foot.mtj_sf = 1; 
 
@@ -164,10 +164,11 @@ experimental_reference = 'Fal_s1_mtjc4_FK_custom';
 % %     '\with_better_knee\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig21'
 %     '\with_better_knee\Fal_s1_mtp_FK_sc_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
 %     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
-% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
-% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
 %     };
-% LegNames = {'original','x10'};
+% LegNames = {'2-segment foot model: original stiffness','2-segment foot model: stiffness x10',...
+%     '3-segment foot model: original stiffness','3-segment foot model: stiffness x10'};
 
 % % effect of Achilles tendon old model
 % results = {
@@ -286,19 +287,20 @@ experimental_reference = 'Fal_s1_mtjc4_FK_custom';
 %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
 %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
 %     '\with_better_knee\Fal_s1_mtjc4_FK_sd_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls141_FDB2_lTs120_Fpsl10_ig21'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_k200_d01_PF_Natali2010_ls146_ig21'
 %     };
-% LegNames = {'Best 3-segment model','w/o stiffer contacts','w/o compliant Achilles tendon','w/o intrinsic muscle','w/o muscles actuating mtj and mtpj','w/o custom scaling'};
+% LegNames = {'Best 3-segment model','w/o stiffer contacts','w/o compliant Achilles tendon','w/o intrinsic muscle','w/o muscles actuating mtj and mtpj','w/o custom scaling','k mtj = 200'};
 
 % % major effects mtp model
-results = {
-    '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
-    '\with_better_knee\Fal_s1_mtp_FK_sc_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
-    '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
-    '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig21'
-    '\with_better_knee\Fal_s1_mtp_FK_sd_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTPp_k25_d020_tau_ig21'
-%     '\with_better_knee\Fal_s1_mtppin_FK_sd_cspx10_oy3_ATx50_MTPp_k25_d020_tau_ig21'
-    };
-LegNames = {'Best 2-segment model','w/o stiffer contacts','w/o compliant Achilles tendon','w/ muscles actuating mtpj','w/o custom scaling'};
+% results = {
+%     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+%     '\with_better_knee\Fal_s1_mtp_FK_sc_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+%     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+%     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig21'
+%     '\with_better_knee\Fal_s1_mtp_FK_sd_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTPp_k25_d020_tau_ig21'
+% %     '\with_better_knee\Fal_s1_mtppin_FK_sd_cspx10_oy3_ATx50_MTPp_k25_d020_tau_ig21'
+%     };
+% LegNames = {'Best 2-segment model','w/o stiffer contacts','w/o compliant Achilles tendon','w/ muscles actuating mtpj','w/o custom scaling'};
 
 
 % % nominal simulations v = 2.7 m/s
@@ -378,6 +380,30 @@ LegNames = {'Best 2-segment model','w/o stiffer contacts','w/o compliant Achille
 %     };
 % LegNames = {'PF Gefen 2002','PF Gefen 2002 + PIM'};
 
+% % compare speeds
+% results = {
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+%     '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel27_ig23_igmtp'
+%     };
+% LegNames = {'Plantar intrinsic muscles (v=1.33m/s)', 'Plantar intrinsic muscles (v=2.7m/s)'};
+
+% % effect of mesh
+% results = {
+% %     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+% %     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21_N75'
+% %     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21_N100'
+% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
+% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21_N75'
+% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21_N100'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_N75'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_N100'
+%     };
+% LegNames = {
+% %     'Rigid midfoot (N = 50)','Rigid midfoot (N = 75)','Rigid midfoot (N = 100)',...
+% %     'Plantar fascia (N = 50)','Plantar fascia (N = 75)','Plantar fascia (N = 100)',...
+%     'Plantar intrinsic muscles (N = 50)','Plantar intrinsic muscles (N = 75)','Plantar intrinsic muscles (N = 100)'
+%     };
 
 %%
 if exist('results','var') && ~isempty(results)
@@ -442,7 +468,6 @@ ref = {};
 % ref{end+1} = fullfile([ResultsRepo '/debug\Fal_s1_mtp_sc_MTPm_k1_d01_ig21_pp.mat']);
 ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_pp.mat']);
 % ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21_pp.mat']);
-% ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21_pp.mat']);
 
 
 filteredResultsWithRef = filteredResults';
@@ -474,17 +499,16 @@ figNamePrefix = 'none';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Foot_Modeling_Meeting\2022_05_02\PIM';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\figures\draft\nominal_1';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\Conferences\ESMAC 2022\presentation\extra';
-% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\plots_for_Madhu_2/run';
-
+% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\plots_for_Madhu\2022_11_03/walk';
 
 %%% select figures to make
 makeplot.kinematics_Qs                  = 1; % selected joint angles
 makeplot.kinematics_Qdots               = 0; % selected joint velocities
 makeplot.kinetics                       = 0; % selected joint torques
-makeplot.ankle_musc                     = 0; % ankle muscles
+makeplot.ankle_musc                     = 1; % ankle muscles
 makeplot.ankle_musc2                    = 0; % ankle muscles
 makeplot.GRF                            = 0; % ground interaction
-makeplot.GRF_simple                     = 0; % only total xyz GRFs
+makeplot.GRF_simple                     = 1; % only total xyz GRFs
 makeplot.COP                            = 0; % centre of pressure
 makeplot.compareLiterature              = 0; % mtj and mtp Caravaggi 2018
 makeplot.compareTakahashi17             = 0; % "distal to segment" power analysis
@@ -499,10 +523,11 @@ makeplot.allPs                          = 0; % all joint powers
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
 makeplot.windlass                       = 0; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
+makeplot.mtj_moments                    = 0; % mtj moment decomposition    
 makeplot.power_main                     = 0; % main power components of foot
 makeplot.power                          = 0; % datailed power decomposition
 makeplot.work                           = 0; % same as power, but work over GC
-makeplot.work_bar                       = 0; % positive, negative and net work bar plot
+makeplot.work_bar                       = 1; % positive, negative and net work bar plot
 makeplot.work_bar_small                 = 0; % positive, negative and net work bar plot
 makeplot.spatiotemp                     = 0; % stridelength etc.
 makeplot.ankle_correlation              = 0; % correlation of ankle 

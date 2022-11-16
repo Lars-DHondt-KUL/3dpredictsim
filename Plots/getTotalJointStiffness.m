@@ -1,17 +1,19 @@
 clear
-close all
+% close all
 clc
 
 ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-ResultsFolder = 'with_better_knee';
 
 results = {
-    '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
-    '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
-    '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+%     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
+%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+    '\different_speeds\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel27_ig1'
+    '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_vel27_ig23_igmtp'
+    '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel27_ig23_igmtp'
     };
 
-LegNames = {'Baseline model','Windlass mechanism','Plantar intrinsic muscles'};
+LegNames = {'Rigid midfoot','Plantar fascia','Plantar intrinsic muscles'};
 
 
 for ires = 1:length(results)
@@ -434,7 +436,9 @@ f_jointDamping = Function('f_jointDamping',{FTtilde_sol,akj,dFTtildej_nsc,Qskj_n
 
 if mtj
     f_debug = Function('f_debug',{FTtilde_sol,akj,dFTtildej_nsc,Qskj_nsc,Qdotskj_nsc},{Tau_passj.mtj.r, T_passj.mtj.r, T_mtj_r, T_mtjPF_r,FTj});
+    f_mtj_muscles_stiffness = Function('f_mtj_muscles_stiffness',{FTtilde_sol,akj,dFTtildej_nsc,Qskj_nsc,Qdotskj_nsc},{jacobian(-T_mtj_r,Qskj_nsc)});
 end
+
 
 %%
 
@@ -448,6 +452,7 @@ for i=1:N
     [Tsi,jac_Tsi] = f_jointStiffness(R.FTtilde(i,:),R.a(i,:),R.dFTtilde(i,:),R.Qs(i,:)*pi/180,R.Qdots(i,:)*pi/180);
     [~,jac_Ts2i] = f_jointDamping(R.FTtilde(i,:),R.a(i,:),R.dFTtilde(i,:),R.Qs(i,:)*pi/180,R.Qdots(i,:)*pi/180);
 
+
     Ts(i,:) = full(Tsi);
     jac_Ts(i,:,:) = full(jac_Tsi);
     jac_Ts2(i,:,:) = full(jac_Ts2i);
@@ -459,22 +464,30 @@ for i=1:N
         T_mus(i) = full(T_musi);
         T_PF(i) = full(T_PFi);
         FT(i,:) = full(FTi);
+        jac_T_mus(i,:) = full(f_mtj_muscles_stiffness(R.FTtilde(i,:),R.a(i,:),R.dFTtilde(i,:),R.Qs(i,:)*pi/180,R.Qdots(i,:)*pi/180));
     end
 end
 
-% T_mtj = [Tau_pass',T_pass',T_PF',T_mus'];
-% T_mtj(:,5) = Tau_pass'+T_pass'+T_PF'+T_mus';
+
 
 %%
-DT = R.Tid-Ts;
-errs_rel = max(abs(DT)-1e-5*abs(R.Tid),[],1);
-errs_rel2 = max(abs(DT)./abs(R.Tid),[],1);
-errs_abs = max(abs(DT),[],1);
-
-% diff_FT = R.FT-FT;
-% tmp = DT(:,strcmp(R.colheaders.joints,'mtj_angle_r'));
-% tmp_M_PF = R.windlass.MA_PF.mtj.*R.windlass.F_PF;
-% R.colheaders.joints{(errs_rel)>0}
+% DT = R.Tid-Ts;
+% errs_rel = max(abs(DT)-1e-5*abs(R.Tid),[],1);
+% errs_rel2 = max(abs(DT)./abs(R.Tid),[],1);
+% errs_abs = max(abs(DT),[],1);
+% 
+% if mtj
+%     T_mtj = [Tau_pass',T_pass',T_PF',T_mus'];
+%     T_mtj(:,5) = Tau_pass'+T_pass'+T_PF'+T_mus';
+% 
+%     diff_FT = R.FT-FT;
+%     diff_FT2 = diff_FT;
+%     diff_FT2(abs(diff_FT2)<1e-5) = 0;
+%     tmp = DT(:,strcmp(R.colheaders.joints,'mtj_angle_r'));
+%     tmp_M_PF = R.windlass.MA_PF.mtj.*R.windlass.F_PF;
+% end
+% 
+% R.colheaders.joints{(errs_abs)>1e-4}
 
 %%
 imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
@@ -504,6 +517,7 @@ if ~isempty(imtj)
     ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
     xlabel('% GC')
     title('midtarsal')
+    plot(squeeze(jac_T_mus(:,imtj)),'--','Color',p1.Color)
 end
 
 nexttile(3)
@@ -578,11 +592,13 @@ title('knee')
 end
 figure(f1)
 nexttile(5)
-legend
+lg=legend;
+lg.Layout.Tile = 6;
 
 figure(f2)
 nexttile(5)
-legend
+lg=legend;
+lg.Layout.Tile = 6;
 
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <OpenSimDocument Version="40000">
-	<Model name="Fal_s1_mtp_sc_MTc5_cspx10_oy1">
+	<Model name="Fal_s1_mtp_sc_MTc5_cspx10_oy3">
 		<!--The model's ground reference frame.-->
 		<Ground name="ground">
 			<!--The geometry used to display the axes of this Frame.-->
@@ -279,15 +279,15 @@
 						<objects>
 							<WrapCylinder name="MetatarsalHead_r">
 								<!--Body-fixed Euler angle sequence for the orientation of the WrapObject-->
-								<xyz_body_rotation>-0.0 -0.0 0</xyz_body_rotation>
+								<xyz_body_rotation>-0 -0 0</xyz_body_rotation>
 								<!--Translation of the WrapObject.-->
-								<translation>0.065 -0.015 -0.02</translation>
+								<translation>0.065000000000000002 -0.014999999999999999 -0.02</translation>
 								<!--The name of quadrant over which the wrap object is active. For example, '+x' or '-y' to set the sidedness of the wrapping.-->
 								<quadrant>-y</quadrant>
 								<!--The radius of the cylinder.-->
 								<radius>0.0094999999999999998</radius>
 								<!--The length of the cylinder.-->
-								<length>0.05</length>
+								<length>0.050000000000000003</length>
 							</WrapCylinder>
 						</objects>
 						<groups />
@@ -531,15 +531,15 @@
 						<objects>
 							<WrapCylinder name="MetatarsalHead_l">
 								<!--Body-fixed Euler angle sequence for the orientation of the WrapObject-->
-								<xyz_body_rotation>0.0 0.0 0</xyz_body_rotation>
+								<xyz_body_rotation>0 0 0</xyz_body_rotation>
 								<!--Translation of the WrapObject.-->
-								<translation>0.065 -0.015 0.02</translation>
+								<translation>0.065000000000000002 -0.014999999999999999 0.02</translation>
 								<!--The name of quadrant over which the wrap object is active. For example, '+x' or '-y' to set the sidedness of the wrapping.-->
 								<quadrant>-y</quadrant>
 								<!--The radius of the cylinder.-->
 								<radius>0.0094999999999999998</radius>
 								<!--The length of the cylinder.-->
-								<length>0.05</length>
+								<length>0.050000000000000003</length>
 							</WrapCylinder>
 						</objects>
 						<groups />
@@ -2210,7 +2210,7 @@
 							<!--Names of the coordinates that serve as the independent variables         of the transform function.-->
 							<coordinates>mtp_angle_r</coordinates>
 							<!--Rotation or translation axis for the transform.-->
-							<axis>-0.282997 0.0424223 0.958182</axis>
+							<axis>-0.282997 0.042422300000000003 0.95818199999999998</axis>
 							<!--Transform function of the generalized coordinates used to        represent the amount of displacement along a specified axis.-->
 							<LinearFunction name="function">
 								<coefficients> 1 0</coefficients>
@@ -2981,7 +2981,7 @@
 							<!--Names of the coordinates that serve as the independent variables         of the transform function.-->
 							<coordinates>mtp_angle_l</coordinates>
 							<!--Rotation or translation axis for the transform.-->
-							<axis>0.282997 -0.0424223 0.958182</axis>
+							<axis>0.282997 -0.042422300000000003 0.95818199999999998</axis>
 							<!--Transform function of the generalized coordinates used to        represent the amount of displacement along a specified axis.-->
 							<LinearFunction name="function">
 								<coefficients> 1 0</coefficients>
@@ -10690,7 +10690,7 @@
 									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
 									<socket_parent_frame>/bodyset/toes_r</socket_parent_frame>
 									<!--The fixed location of the path point expressed in its parent frame.-->
-									<location>0.015 -0.0027273077122499994 -0.014256576749999998</location>
+									<location>0.014999999999999999 -0.0027273077122499994 -0.014256576749999998</location>
 								</PathPoint>
 							</objects>
 							<groups />
@@ -10743,7 +10743,7 @@
 									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
 									<socket_parent_frame>/bodyset/toes_l</socket_parent_frame>
 									<!--The fixed location of the path point expressed in its parent frame.-->
-									<location>0.015 -0.0027273077122499994 0.014256576749999998</location>
+									<location>0.014999999999999999 -0.0027273077122499994 0.014256576749999998</location>
 								</PathPoint>
 							</objects>
 							<groups />
@@ -11612,7 +11612,7 @@
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/calcn_r</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
-					<location>0.059999999999999998 0.011922917510878089 0.020001000000000001</location>
+					<location>0.059999999999999998 0.01192291751087809 0.020001000000000001</location>
 					<!--Orientation of geometry in the PhysicalFrame (body-fixed XYZ Euler angles).-->
 					<orientation>0 0 0</orientation>
 					<!--Default appearance for this Geometry-->
@@ -11744,7 +11744,7 @@
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/calcn_l</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
-					<location>0.059999999999999998 0.011922917510878089 -0.020001000000000001</location>
+					<location>0.059999999999999998 0.01192291751087809 -0.020001000000000001</location>
 					<!--Orientation of geometry in the PhysicalFrame (body-fixed XYZ Euler angles).-->
 					<orientation>0 0 0</orientation>
 					<!--Default appearance for this Geometry-->

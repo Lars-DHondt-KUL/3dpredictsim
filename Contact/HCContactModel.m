@@ -32,7 +32,7 @@
 % Author: Antoine Falisse
 % Date: 1/7/2019
 %
-function force = HCContactModel(stiffness,radius,dissipation,normal,...
+function [force,varargout] = HCContactModel(stiffness,radius,dissipation,normal,...
     transitionVelocity,staticFriction,dynamicFriction,viscousFriction,...
     spherePos_inB,posFrame_inG,linVelFrame_inG,angVelFrame_InG,...
     rotBtoG_inG,trBtoG_inG) 
@@ -41,7 +41,6 @@ function force = HCContactModel(stiffness,radius,dissipation,normal,...
 Rot_l = (reshape(rotBtoG_inG,3,3))';
 % Express sphere position in ground
 spherePos = (Rot_l*spherePos_inB+trBtoG_inG)';
-disp(spherePos)
 % Contact point position
 temp = spherePos-[0,radius,0];
 indentation = -temp(2);
@@ -53,20 +52,20 @@ vnormal = v(1)*normal(1) + v(2)*normal(2) + v(3)*normal(3);
 vtangent = v - vnormal*normal;
 indentationVel = -vnormal;
 % Constant values
-eps = 1e-5;
+eps1 = 1e-8;
 eps2 = 1e-16;
 bv = 50;
 bd = 300; 
 % Stiffness force
 k = 0.5*(stiffness)^(2/3);
-fH = (4/3)*k*sqrt(radius*k)*((sqrt(indentation*indentation+eps))^(3/2));
+fH = (4/3)*k*sqrt(radius*k)*((sqrt(indentation*indentation+eps1))^(3/2));
 % Dissipation force
 fHd = fH*(1+1.5*dissipation*indentationVel); 
 fn = (0.5*tanh(bv*(indentationVel+1/(1.5*dissipation)))+0.5 + eps2)*...
     (0.5*tanh(bd*indentation)+0.5 + eps2)*fHd;
 force = fn.*normal;
 % Friction force
-aux = (vtangent(1)).^2 + (vtangent(2)).^2 + (vtangent(3)).^2 + eps; 
+aux = (vtangent(1)).^2 + (vtangent(2)).^2 + (vtangent(3)).^2 + eps1; 
 vslip = aux.^(0.5);
 vrel = vslip/transitionVelocity;
 ffriction = fn*(min(vrel,1)*(dynamicFriction + 2 * (staticFriction - ...
@@ -74,5 +73,12 @@ ffriction = fn*(min(vrel,1)*(dynamicFriction + 2 * (staticFriction - ...
 % Contact force
 force = force + ffriction*(-vtangent) / vslip;
 
+% extra outputs
+if nargout >=2
+    varargout{1} = spherePos;
+end
+if nargout >=3
+    varargout{2} = v;
 end
 
+end

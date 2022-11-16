@@ -52,11 +52,13 @@ S.NThreads  = 6;        % number of threads for parallel computing
 % S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.linear_solver = 'ma86';
 
+% S.tanh_b = 10;
+
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'with_better_knee'; % 'with_better_knee'
 % S.suffixCasName = '';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'igmtp';        % suffix for name of file with results
+% S.suffixName = 'N100';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -76,16 +78,16 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp';
+S.Foot.Model = 'mtjc4';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
-S.Foot.Scaling = 'default'; % default, custom, personalised
+S.Foot.Scaling = 'custom'; % default, custom, personalised
 
 % fixed knee axis
 S.fixed_knee = 1;
 
 % Achilles tendon stiffness
-S.AchillesTendonScaleFactor = 0.5;
+S.AchillesTendonScaleFactor = 0.5; % 0.5
 
 % Triceps surae optimal force scale
 S.TricepsFMoScale = 1.2; %round(1.2*0.8,2);
@@ -109,7 +111,7 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = '';    % MTc5
+S.MTparams = 'MTc5';    % MTc5
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
@@ -130,6 +132,9 @@ else
     S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
     S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 end
+S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
 
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
@@ -137,18 +142,18 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 
 %% midtarsal joint 
 % (only used if Model = mtj)
-S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
+S.Foot.mtj_muscles = 0;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
-S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
-S.Foot.mtj_stiffness = 'MG_exp5_table'; % 'MG_exp5_table' 'MG_exp_table'
+S.Foot.MT_li_nonl = 0;       % 1: nonlinear torque-angle characteristic
+S.Foot.mtj_stiffness = '';%'MG_exp5_table'; % 'MG_exp5_table' 'MG_exp_table'
 S.Foot.mtj_sf = 1; 
 
-S.Foot.kMT_li = 300;        % angular stiffness in case of linear
+S.Foot.kMT_li = 500;        % angular stiffness in case of linear
 S.Foot.kMT_li2 = 10;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
+S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
 S.Foot.PF_sf = 1;
 S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
