@@ -8,8 +8,13 @@ pos = SX.sym('pos',1);
 vel = SX.sym('vel',1);
 
 radius = 0.032;
+radius = 0.05;
 
+<<<<<<< Updated upstream
 stiffness = 10e6;
+=======
+stiffness = 10e6; %*sqrt(0.03/radius);
+>>>>>>> Stashed changes
 dissipation = 2;
 transitionVelocity = 0.2;
 staticFriction = 0.8;
@@ -74,8 +79,8 @@ f_BM_E = Function('f_BM_E',{pos,vel},{force(3),dist,disp,vol});
 
 %%
 f = 0.22; % Hz
-f = 5;
 f = 2.2;
+% f =20;
 ampl = 4e-3; % m
 
 t = SX.sym('t',1);
@@ -118,7 +123,9 @@ vol3 = full(vol3);
 W_loading = trapz(cmpr(1:N/2),load(1:N/2));
 W_unloading = trapz(cmpr(N/2+1:end),load(N/2+1:end));
 W_total = trapz(cmpr,load);
-W_diss = W_total/W_loading*100
+diss = W_total/W_loading*100;
+diss2 = (1-abs(W_unloading)/abs(W_loading))*100;
+disp([num2str(diss,'%.0f') ' % dissipation'])
 
 W_loading3 = trapz(cmpr3(1:N/2),load3(1:N/2));
 W_total3 = trapz(cmpr3,load3);
@@ -143,12 +150,37 @@ plot(time,disp3)
 nexttile
 plot(time,vol3)
 
+<<<<<<< Updated upstream
 
 figure(1)
 hold on
 plot(cmpr*1e3,load*1e-3);
 plot(cmpr*1e3,load2*1e-3);
 plot(cmpr3*1e3,load3*1e-3);
+=======
+legname = ['Stiffness = ' num2str(stiffness*1e-6) 'E6',...
+    ';  Radius = ' num2str(radius*1e3) ' mm',...
+%     ';  Loaded at ' num2str(f) ' Hz'
+    ];
+
+% figure
+% tiledlayout("flow")
+% nexttile
+% plot(time,cmpr)
+% nexttile
+% plot(time,pos)
+% nexttile
+% plot(time,vel)
+% nexttile
+% plot(time,load)
+
+figure(1)
+hold on
+plot(cmpr*1e3,load*1e-3,':','DisplayName',legname);
+>>>>>>> Stashed changes
 xlabel('Compression (mm)')
 ylabel('load (kN)')
+legend('Location','northwest')
+title('Force-displacement of heel pad, sine wave displacement.')
+
 

@@ -8,7 +8,7 @@ results_folder = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\co
 
 addpath('C:\GBW_MyPrograms\PredSim_test\PostProcessing')
 
-res_filt = dir(fullfile(results_folder,'Fal_s1_k*_d20_sF8_dF8_vF5_tV20_*.mat'));
+res_filt = dir(fullfile(results_folder,'Fal_s1_k*0_d20_sF8_dF8_vF5_tV20_*.mat'));
 figure_savename = 'fig_sweep_staticFriction';
 
 
@@ -18,8 +18,8 @@ for i=1:length(res_filt)
     result_paths{i} = fullfile(results_folder,res_filt(i).name);
     legend_names{i} = replace(res_filt(i).name(1:end-4),'_',' ');
 end
-result_paths = result_paths([2:end,1]);
-legend_names = legend_names([2:end,1]);
+% result_paths = result_paths([2:end,1]);
+% legend_names = legend_names([2:end,1]);
 % result_paths = result_paths([3,5,1]);
 % legend_names = legend_names([3,5,1]);
 

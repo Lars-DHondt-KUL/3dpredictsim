@@ -8,7 +8,11 @@ osimpath = (fullfile(pathRepo, 'OpenSimModel','subject1'));
 
 osimFiles = dir(fullfile(osimpath,[R.S.OsimFileName '*.osim']));
 
-model_path = fullfile(osimpath,osimFiles(1).name);
+if isfile(R.S.OsimFileName)
+    model_path = R.S.OsimFileName;
+else
+    model_path = fullfile(osimpath,osimFiles(1).name);
+end
 
 % load model
 model = Model(model_path);

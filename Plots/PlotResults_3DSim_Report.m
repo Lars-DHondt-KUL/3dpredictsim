@@ -1285,10 +1285,19 @@ for inr=1:nr
         end
 
         if isfield(R,'GRFs_separate') && ~isempty(R.GRFs_separate)
+            GRF_heel = sum(R.GRFs_separate(:,[2,5]),2);
+            if R.S.Foot.contactGeometryVersion >= 5
+                GRF_forefoot = sum(R.GRFs_separate(:,[8,11]),2);
+                GRF_toes = R.GRFs_separate(:,14);
+            else
+                GRF_forefoot = sum(R.GRFs_separate(:,[8,11,14]),2);
+                GRF_toes = R.GRFs_separate(:,17);
+            end
+
             subplot(3,4,5)
             hold on
             grid on
-            plot(x,sum(R.GRFs_separate(:,[2,5]),2),'Color',Cs);
+            plot(x,GRF_heel,'Color',Cs);
             ylabel({'Ground reaction force','(% body weight)'})
             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
             title('Vertical GRF Heel')
@@ -1300,7 +1309,7 @@ for inr=1:nr
             subplot(3,4,6)
             hold on
             grid on
-            plot(x,sum(R.GRFs_separate(:,[8,11,14]),2),'Color',Cs);
+            plot(x,GRF_forefoot,'Color',Cs);
             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
             title('Vertical GRF Forefoot')
             axis tight
@@ -1311,7 +1320,7 @@ for inr=1:nr
             subplot(3,4,7)
             hold on
             grid on
-            plot(x,R.GRFs_separate(:,17),'Color',Cs);
+            plot(x,GRF_toes,'Color',Cs);
             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
             title('Vertical GRF Toes')
             axis tight
@@ -1320,6 +1329,9 @@ for inr=1:nr
             xlim([0,100])
 
             for iGRF=1:6
+                if iGRF==6 && R.S.Foot.contactGeometryVersion >= 5
+                    continue
+                end
                 subplot(3,6,2*6+iGRF)
                 hold on
                 grid on

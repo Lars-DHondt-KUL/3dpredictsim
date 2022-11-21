@@ -228,30 +228,55 @@ GRFi.l = IO.GRFs.left_foot;
 GRFi.all = [GRFi.r,GRFi.l];
 NGRF = length(GRFi.all);
 
-GRFi.calcn.r = [IO.GRFs.contact_sphere_1,IO.GRFs.contact_sphere_2];
-GRFi.metatarsi.r = [IO.GRFs.contact_sphere_3,IO.GRFs.contact_sphere_4,IO.GRFs.contact_sphere_5];
-GRFi.toes.r = [IO.GRFs.contact_sphere_6];
-GRFi.calcn.l = [IO.GRFs.contact_sphere_7,IO.GRFs.contact_sphere_8];
-GRFi.metatarsi.l = [IO.GRFs.contact_sphere_9,IO.GRFs.contact_sphere_10,IO.GRFs.contact_sphere_11];
-GRFi.toes.l = [IO.GRFs.contact_sphere_12];
-GRFi.separate = GRFi.calcn.r(1):GRFi.toes.l(end);
+if S.Foot.contactGeometryVersion >= 5
+    GRFi.calcn.r = [IO.GRFs.contact_sphere_1,IO.GRFs.contact_sphere_2];
+    GRFi.metatarsi.r = [IO.GRFs.contact_sphere_3,IO.GRFs.contact_sphere_4];
+    GRFi.toes.r = [IO.GRFs.contact_sphere_5];
+    GRFi.calcn.l = [IO.GRFs.contact_sphere_6,IO.GRFs.contact_sphere_7];
+    GRFi.metatarsi.l = [IO.GRFs.contact_sphere_8,IO.GRFs.contact_sphere_9];
+    GRFi.toes.l = [IO.GRFs.contact_sphere_10];
+    GRFi.separate = GRFi.calcn.r(1):GRFi.toes.l(end);
+
+    % Contact sphere deformation power
+    if isfield(IO,'P_contact_deformation_y')
+        P_HCi.calcn.r = [IO.P_contact_deformation_y.contact_sphere_1,IO.P_contact_deformation_y.contact_sphere_2];
+        P_HCi.metatarsi.r = [IO.P_contact_deformation_y.contact_sphere_3,IO.P_contact_deformation_y.contact_sphere_4];
+        P_HCi.toes.r = [IO.P_contact_deformation_y.contact_sphere_5];
+        P_HCi.calcn.l = [IO.P_contact_deformation_y.contact_sphere_6,IO.P_contact_deformation_y.contact_sphere_7];
+        P_HCi.metatarsi.l = [IO.P_contact_deformation_y.contact_sphere_8,IO.P_contact_deformation_y.contact_sphere_9];
+        P_HCi.toes.l = [IO.P_contact_deformation_y.contact_sphere_10];
+        P_HCi.separate = P_HCi.calcn.r(1):P_HCi.toes.l(end);
+    end
+
+else
+    GRFi.calcn.r = [IO.GRFs.contact_sphere_1,IO.GRFs.contact_sphere_2];
+    GRFi.metatarsi.r = [IO.GRFs.contact_sphere_3,IO.GRFs.contact_sphere_4,IO.GRFs.contact_sphere_5];
+    GRFi.toes.r = [IO.GRFs.contact_sphere_6];
+    GRFi.calcn.l = [IO.GRFs.contact_sphere_7,IO.GRFs.contact_sphere_8];
+    GRFi.metatarsi.l = [IO.GRFs.contact_sphere_9,IO.GRFs.contact_sphere_10,IO.GRFs.contact_sphere_11];
+    GRFi.toes.l = [IO.GRFs.contact_sphere_12];
+    GRFi.separate = GRFi.calcn.r(1):GRFi.toes.l(end);
+
+    % Contact sphere deformation power
+    if isfield(IO,'P_contact_deformation_y')
+        P_HCi.calcn.r = [IO.P_contact_deformation_y.contact_sphere_1,IO.P_contact_deformation_y.contact_sphere_2];
+        P_HCi.metatarsi.r = [IO.P_contact_deformation_y.contact_sphere_3,IO.P_contact_deformation_y.contact_sphere_4,...
+            IO.P_contact_deformation_y.contact_sphere_5];
+        P_HCi.toes.r = [IO.P_contact_deformation_y.contact_sphere_6];
+        P_HCi.calcn.l = [IO.P_contact_deformation_y.contact_sphere_7,IO.P_contact_deformation_y.contact_sphere_8];
+        P_HCi.metatarsi.l = [IO.P_contact_deformation_y.contact_sphere_9,IO.P_contact_deformation_y.contact_sphere_10,...
+            IO.P_contact_deformation_y.contact_sphere_11];
+        P_HCi.toes.l = [IO.P_contact_deformation_y.contact_sphere_12];
+        P_HCi.separate = P_HCi.calcn.r(1):P_HCi.toes.l(end);
+    end
+
+end
 
 % GRF torques
 GRFTi.r = IO.GRMs.right_total;
 GRFTi.l = IO.GRMs.left_total;
 
-% Contact sphere deformation power
-if isfield(IO,'P_contact_deformation_y')
-    P_HCi.calcn.r = [IO.P_contact_deformation_y.contact_sphere_1,IO.P_contact_deformation_y.contact_sphere_2];
-    P_HCi.metatarsi.r = [IO.P_contact_deformation_y.contact_sphere_3,IO.P_contact_deformation_y.contact_sphere_4,...
-        IO.P_contact_deformation_y.contact_sphere_5];
-    P_HCi.toes.r = [IO.P_contact_deformation_y.contact_sphere_6];
-    P_HCi.calcn.l = [IO.P_contact_deformation_y.contact_sphere_7,IO.P_contact_deformation_y.contact_sphere_8];
-    P_HCi.metatarsi.l = [IO.P_contact_deformation_y.contact_sphere_9,IO.P_contact_deformation_y.contact_sphere_10,...
-        IO.P_contact_deformation_y.contact_sphere_11];
-    P_HCi.toes.l = [IO.P_contact_deformation_y.contact_sphere_12];
-    P_HCi.separate = P_HCi.calcn.r(1):P_HCi.toes.l(end);
-end
+
 
 %% Joints
 if mtj

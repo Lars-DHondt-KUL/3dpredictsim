@@ -45,7 +45,7 @@ for f = 1:nF
                     f_LoadSim_Gait92_FootModel(dpath,filename);
                     disp(filename);
                 catch
-                    disp([filename ' failed']);
+                    disp(['failed: ' filename]);
                 end
 % %                 f_LoadSim_Gait92_FootModel(dpath,filename);
             end

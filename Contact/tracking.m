@@ -83,7 +83,12 @@ csframe = {'calcn_r','calcn_r','forefoot_r','forefoot_r','toes_r','toes_r'};
     intrvl = R.t;
     GRF_r = R.GRFs(:,1:3);
 
-
+%     load('C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\contactmodel_param_sweep\Fal_s1_k60_d20_sF8_dF8_vF5_tV20_job464.mat','R','model_info');
+%     intrvl = R.time.mesh_GC;
+%     R.Qs = R.kinematics.Qs;
+%     R.Qdots = R.kinematics.Qdots;
+%     R.colheaders.joints = R.colheaders.coordinates;
+%     R.S.OsimFileName = model_info.osim_path;
 
 
 %%
