@@ -68,7 +68,7 @@ S.W.A       = 2000;     % weight muscle activations
 
 
 %% Tracking term
-S.TrackSim = 1;
+S.TrackSim = 0;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
 S.Track.Q_ref = 'mtjc4_custom';
@@ -115,7 +115,7 @@ S.MTparams = 'MTc5';    % MTc5
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 7; %(-1)
+S.Foot.contactGeometryVersion = 8; %(-1)
 S.Foot.contactSphereOffsetY = 0; %(3)    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
 S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)

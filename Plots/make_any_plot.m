@@ -428,7 +428,7 @@ else
 %     criteria{end+1} = 'not_FDB';
 %     criteria{end+1} = 'not_o1x25';
 %     criteria{end+1} = 'not_o45z10';
-%     criteria{end+1} = 'not_Track';
+    criteria{end+1} = 'not_Track';
     criteria{end+1} = 'not_table_x5';
     criteria{end+1} = 'not_test';
 %     criteria{end+1} = 'not_mtjc';
@@ -505,7 +505,7 @@ figNamePrefix = 'none';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\plots_for_Madhu\2022_11_17/weak_PIM';
 
 %%% select figures to make
-makeplot.kinematics_Qs                  = 0; % selected joint angles
+makeplot.kinematics_Qs                  = 1; % selected joint angles
 makeplot.kinematics_Qdots               = 0; % selected joint velocities
 makeplot.kinetics                       = 0; % selected joint torques
 makeplot.ankle_musc                     = 1; % ankle muscles
