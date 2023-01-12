@@ -43,7 +43,7 @@ AddCasadiPaths();
 % Full body gait simulation
 run_simulation = 0;         % run solver
 post_process_results = 0;   % postproces
-add_to_batch_queue = 1;     % save settings to run later
+add_to_batch_queue = 0;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
@@ -58,7 +58,7 @@ S.NThreads  = 6;        % number of threads for parallel computing
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'with_better_knee'; % 'with_better_knee'
 % S.suffixCasName = '';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'N100';        % suffix for name of file with results
+% S.suffixName = 'N60';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -78,7 +78,7 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc4';
+S.Foot.Model = 'mtj'; % 'mtjc4'
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
@@ -115,10 +115,10 @@ S.MTparams = 'MTc5';    % MTc5
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 8; %(-1)
-S.Foot.contactSphereOffsetY = 0; %(3)    % contact spheres are offset in y-direction to match static trial IK
+S.Foot.contactGeometryVersion = -1; %(-1)
+S.Foot.contactSphereOffsetY = 3; %(3)    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 0;   % heel contact sphere offset in x-direction (0.025)
+S.Foot.contactSphereOffset1X = 0.0;   % heel contact sphere offset in x-direction (0.025)
 
 %% metatarsophalangeal (mtp) joint
 if strcmp(S.Foot.Model(1:3),'mtp')
@@ -164,9 +164,11 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
+% optimal fibre length
+S.Foot.FDB_lMo = 19.7e-3; % 19.7e-3 23e-3
 % Tendon slack length
-S.Foot.FDB_lTs = 0.125;
+S.Foot.FDB_lTs = round(142.9 -0.9091*S.Foot.FDB_lMo*1e3)*1e-3; % 125mm at lMo=19.7mm, and 122 at 23
 % Shift fiber passive force-length curve
 S.Foot.FDB_shift = -0.1;
 % scale FMo

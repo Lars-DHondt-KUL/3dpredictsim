@@ -31,6 +31,8 @@ ML = lMT0*0.5; % Muscle belly has the same length as free tendon (visually estim
 FL = ML*FDB_FL_ML; % (m) fibre length
 lMo = FL; % (m) optimal fibre length
 
+% lMo = 23e-3;
+
 lTs = lMT0 - lMo*cos(alphao); % (m) the tendon covers the remaining length
 
 %%
@@ -42,7 +44,7 @@ FDBparameters(5,1) = 10*lMo;
 
 %%
 
-pathMusc = fullfile(pathRepo,'MuscleModel','Fal_s1_mtj_sc');
+% pathMusc = fullfile(pathRepo,'MuscleModel','Fal_s1_mtj_sc');
 
 % save(fullfile(pathMusc,'FDBparameters.mat'),'FDBparameters');
 

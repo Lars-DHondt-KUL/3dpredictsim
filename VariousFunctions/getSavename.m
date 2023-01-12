@@ -272,6 +272,10 @@ if isfield(S,'Foot')
             not{end+1} = 'not_FDB';
         end
         if S.Foot.FDB
+            if isfield(S.Foot,'FDB_lMo') && S.Foot.FDB_lMo ~= 19.7e-3
+                savenameparts{end+1} = ['lMo' num2str(round(S.Foot.FDB_lMo*1000))];
+                casfuncfolparts{end+1} = ['lMo' num2str(round(S.Foot.FDB_lMo*1000))];
+            end
             if isfield(S.Foot,'FDB_lTs')
                 savenameparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];
                 casfuncfolparts{end+1} = ['lTs' num2str(S.Foot.FDB_lTs*1000)];

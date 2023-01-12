@@ -139,6 +139,8 @@ if S.Foot.FDB
     passiveFiberForceShift(IndexFDB) = S.Foot.FDB_shift;
     MTparameters_m(1,IndexFDB) = MTparameters_m(1,IndexFDB)*S.Foot.FDB_sf_FMo;
     MTparameters_m(3,IndexFDB) = S.Foot.FDB_lTs;
+    MTparameters_m(2,IndexFDB) = S.Foot.FDB_lMo;
+    MTparameters_m(5,IndexFDB) = MTparameters_m(2,IndexFDB)*10;
 end
 
 %% Musculoskeletal geometry

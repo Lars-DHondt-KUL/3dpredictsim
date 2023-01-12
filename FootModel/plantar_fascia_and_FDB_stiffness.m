@@ -55,8 +55,10 @@ ML = lMT0*0.5; % Muscle belly has the same length as free tendon (visually estim
 FL = ML*FDB_FL_ML; % (m) fibre length
 lMo = FL; % (m) optimal fibre length
 
+% lMo = 23e-3;
+
 lTs = lMT0 - lMo*cos(alphao); % (m) the tendon covers the remaining length
-lTs = 0.125;
+% lTs = 0.125;
 FDBparameters(1,1) = FMo;
 FDBparameters(2,1) = lMo;
 FDBparameters(3,1) = lTs;
@@ -130,6 +132,7 @@ for j=1:N1
 end
 
 figure
+sgtitle({'Plantar intrinsic muscle with plantar fascia in parallel',['Static equibibrium for act = ' num2str(a)]})
 subplot(2,2,1)
 hold on
 for j=1:N1

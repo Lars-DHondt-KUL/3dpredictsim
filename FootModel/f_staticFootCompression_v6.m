@@ -120,6 +120,11 @@ end
 
 if strcmp(S.Foot.mtj_stiffness,'MG_table')
     f_getMtjLigamentMoment = Function.load((fullfile(PolyFolder,'f_getMtjLigamentMoment')));
+elseif contains(S.Foot.mtj_stiffness,'MG_exp') && contains(S.Foot.mtj_stiffness,'_table')
+    tmp = replace(S.Foot.mtj_stiffness,'MG_','');
+    tmp = replace(tmp,'_table','');
+    f_getMtjLigamentMoment = Function.load((fullfile(PolyFolder,['f_getMtjLigamentMoment_' tmp])));
+
 elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_table')
     f_getMtjLigamentMoment = Function.load((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp')));
 elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_d_table')
@@ -130,6 +135,8 @@ elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_f_table')
     f_getMtjLigamentMoment = Function.load((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp_f')));
 elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table')
     f_getMtjLigamentMoment = Function.load((fullfile(PolyFolder,'f_getMtjLigamentMoment_exp5')));
+else
+    error(S.Foot.mtj_stiffness)
 end
 
 %% Define specific casadi functions
@@ -358,7 +365,7 @@ for i=1:length(MAj_dof_idx)
 end
 
 % Get muscle-tendon forces and derive Hill-equilibrium
-akj = MX.ones(NMuscle,1)*0.0;  % adapt vector size to match full model
+akj = MX.ones(NMuscle,1)*S.activity;  % adapt vector size to match full model
 FTtildekj_nsc = MX.zeros(NMuscle,1);
 dFTtildej_nsc = MX.zeros(NMuscle,1);
 lMTj_lr = MX.zeros(NMuscle,1);
@@ -719,6 +726,10 @@ R.T_mtp_ext = T_mtp_ext;
 
 R.PF_stiffness = S.Foot.PF_stiffness;
 R.legname = legname;
+
+model_path = fullfile(pathRepo,'OpenSimModel\subject1',...
+    ['Foot_Fal_s1_' S.Foot.Model '_sc_cspx10_oy3.osim']);
+R.h_nav = getNavicularHeight(R,model_path);
 
 
 end

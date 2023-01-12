@@ -65,6 +65,12 @@ for inr=1:nr
 
 %     disp([num2str(R.S.Foot.FDB_sf_FMo) '  '  num2str(R.S.IGsel) '  ' num2str(R.COT)])
 
+%     pelvis_ty = R.Qs(:,5);
+%     dy = max(pelvis_ty) - min(pelvis_ty);
+%     dF = max(R.GRFs(:,2))*(R.body_mass*9.81)/100;
+%     K = dF/dy;
+%     disp(['leg stiffness = ' num2str(K*1e-3) ' N/mm'])
+
     if LN
         LegName = LegNames{inr};
     else
@@ -157,10 +163,10 @@ for inr=1:nr
     %% calculate power and work
 
     x = 1:(100-1)/(size(R.Qs,1)-1):100;
-    istance = 1:1:min(ceil(R.Event.Stance)+10,100);
+    istance = 1:1:min(ceil(R.Event.Stance/100*length(x))+length(x)/10,length(x));
     ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,17)>5);
-    istance0 = 1:1:ceil(R.Event.Stance);
-    iswing = istance0(end)+1:100;
+    istance0 = 1:1:ceil(R.Event.Stance/100*length(x));
+    iswing = istance0(end)+1:length(x);
     xst_10 = linspace(1,110,length(istance));
     xst = linspace(1,100,length(istance0));
 
@@ -335,6 +341,21 @@ for inr=1:nr
             Data.GRF.Fmean = ExperimentalData.GRFs.(RefData).mean;
             Data.GRF.Fstd = ExperimentalData.GRFs.(RefData).std;
 
+        elseif contains(RefData,'Poggensee')
+            refName = 'Poggensee';
+            load('C:\Users\u0150099\OneDrive - KU Leuven\WTK\thesis\model\3dpredictsim\Data/Pog_s1.mat','Dat')
+
+            Qref.Qall_mean = Dat.Normal.gc.Qall_mean*180/pi;
+            Qref.Qall_std = Dat.Normal.gc.Qall_std*180/pi;
+            Qref.colheaders = Dat.Normal.gc.colheaders;
+
+            Tref.Tall_mean = Dat.Normal.gc.Tall_mean;
+            Tref.Tall_std = Dat.Normal.gc.Tall_std;
+            Tref.colheaders = Dat.Normal.gc.colheaders;
+        
+            Data.GRF.Fmean = Dat.Normal.gc.GRF.Fmean*65;
+            Data.GRF.Fstd = Dat.Normal.gc.GRF.Fstd*65;
+
         else
             refName = 'Falisse';
             [pathHere,~,~] = fileparts(mfilename('fullpath'));
@@ -445,6 +466,9 @@ for inr=1:nr
             % Experimental data
             if  inr == 1 && md
                 idx_jref = strcmp(Qref.colheaders,joints_ref{idx_js(i)});
+                if sum(idx_jref) ~= 1
+                    idx_jref = strcmp(Qref.colheaders,[joints_ref{idx_js(i)} '_r']);
+                end
                 if sum(idx_jref) == 1
                     meanPlusSTD = (Qref.Qall_mean(:,idx_jref) + 2*Qref.Qall_std(:,idx_jref));
                     meanMinusSTD = (Qref.Qall_mean(:,idx_jref) - 2*Qref.Qall_std(:,idx_jref));
@@ -528,6 +552,9 @@ for inr=1:nr
             % Experimental data
             if  inr == 1 && md
                 idx_jref = strcmp(Qref.colheaders,joints_ref{idx_js(i)});
+                if sum(idx_jref) ~= 1
+                    idx_jref = strcmp(Qref.colheaders,[joints_ref{idx_js(i)} '_r']);
+                end
                 if sum(idx_jref) == 1
                     meanPlusSTD = (Qref.Qdotall_mean(:,idx_jref) + 2*Qref.Qdotall_std(:,idx_jref));
                     meanMinusSTD = (Qref.Qdotall_mean(:,idx_jref) - 2*Qref.Qdotall_std(:,idx_jref));
@@ -634,7 +661,11 @@ for inr=1:nr
             % Experimental data
             if  inr == 1 && md
                 idx_jref = strcmp(Tref.colheaders,joints_ref{idx_js(i)});
-                if sum(idx_jref) == 1
+                if sum(idx_jref) ~= 1
+                    idx_jref = strcmp(Qref.colheaders,[joints_ref{idx_js(i)} '_r']);
+                end
+                no_ID = contains(joints_ref{idx_js(i)},'mtj') || contains(joints_ref{idx_js(i)},'mtp');
+                if sum(idx_jref) == 1 && ~no_ID
                     meanPlusSTD = Tref.Tall_mean(:,idx_jref) + 2*Tref.Tall_std(:,idx_jref);
                     meanMinusSTD = Tref.Tall_mean(:,idx_jref) - 2*Tref.Tall_std(:,idx_jref);
                     stepID = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
@@ -736,6 +767,7 @@ for inr=1:nr
             imusd = [iSol_data,iGas_data,iGas2_data,iTibAnt_data,iPerL_data,iPerB_data];
             ankle_a = [ankle_act(ceil(end/2):end,:); ankle_act(1:ceil(end/2)-1,:)];
             
+            ankle_a = interp1(1:100,ankle_a,x);
             
 %             nn_msc = length(imusd);%+2;
             nn_msc = 4;
@@ -4794,7 +4826,7 @@ for inr=1:nr
             subplot(5,3,i)
             imus_i = find(strcmp(R.colheaders.muscles,musc_sim{i}));
             hold on
-            plot(R.a(:,imus_i),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.a(:,imus_i),'-','Color',CsV(inr,:),'DisplayName',LegName);
             ylabel('Activity (-)');
             axis tight
             yl = get(gca, 'ylim');
@@ -4825,7 +4857,7 @@ for inr=1:nr
             subplot(4,3,idx_act(i)+3)
             imus_i = find(strcmp(R.colheaders.muscles,musc_sim{i}));
             hold on
-            plot(R.a(:,imus_i),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.a(:,imus_i),'-','Color',CsV(inr,:),'DisplayName',LegName);
             ylabel('Activity (-)');
             axis tight
             yl = get(gca, 'ylim');
@@ -4836,7 +4868,7 @@ for inr=1:nr
             subplot(4,3,idx_act(i))
             imus_i = find(strcmp(R.colheaders.muscles,musc_sim{i}));
             hold on
-            plot(R.e(:,imus_i),'-','Color',CsV(inr,:),'DisplayName',LegName);
+            plot(x,R.e(:,imus_i),'-','Color',CsV(inr,:),'DisplayName',LegName);
             ylabel('Excitation (-)');
             axis tight
             yl = get(gca, 'ylim');

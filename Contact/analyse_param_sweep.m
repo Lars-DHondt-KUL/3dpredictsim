@@ -8,7 +8,7 @@ results_folder = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\co
 
 addpath('C:\GBW_MyPrograms\PredSim_test\PostProcessing')
 
-res_filt = dir(fullfile(results_folder,'Fal_s1_k*0_d20_sF8_dF8_vF5_tV20_*.mat'));
+res_filt = dir(fullfile(results_folder,'Fal_s1_k*_d20_sF8_dF8_vF5_tV20_*.mat'));
 figure_savename = 'fig_sweep_staticFriction';
 
 
@@ -23,11 +23,14 @@ end
 % result_paths = result_paths([3,5,1]);
 % legend_names = legend_names([3,5,1]);
 
+result_paths = result_paths([2,3,4,6,1,5]);
+legend_names = legend_names([2,3,4,6,1,5]);
+
 
 
 CsV = hsv(length(result_paths));
 figure('Position',[524   545   751   214])
-tiledlayout(1,3)
+tiledlayout(1,4)
 
 for i=1:length(result_paths)
 
@@ -53,7 +56,7 @@ for i=1:length(result_paths)
     pelvis_ty = R.kinematics.Qs(:,model_info.ExtFunIO.coordi.pelvis_ty);
     dy = max(pelvis_ty) - min(pelvis_ty);
     dF = max(R.ground_reaction.GRF_r(:,2));
-    K = dF/dy;
+    K(i) = dF/dy;
 
 
     eff = R.energetics_mech.Wpos_contact(:,1)/(-R.energetics_mech.Wneg_contact(:,1));
@@ -72,8 +75,8 @@ nexttile(3)
 ylabel('Torso Rx (°)')
 xlabel('Gait Cycle (%)')
 sgtitle({'Torso orientation in world (ZYX Euler angles)'})
-% lg = legend;
-% lg.Layout.Tile = 4;
+lg = legend;
+lg.Layout.Tile = 4;
 
 
 %%

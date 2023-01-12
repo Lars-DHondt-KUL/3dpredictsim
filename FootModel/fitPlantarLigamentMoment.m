@@ -8,11 +8,11 @@ pathmain = pwd;
 
 
 %%
-% ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_pinMTJ_sc.osim'];
-% pathPoly = [pathRepo '\Polynomials\Fal_s1_mtj_FK_sc_FDB2_MTc5'];
+% ModelPath = [pathRepo '\OpenSimModel\subject1\Fal_s1_mtjcf_FK_sc_FDB2_MTc5_cspx10_oy3.osim'];
+% pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf_FK_sc_FDB2_MTc5'];
 
-ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc4_sd.osim'];
-pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc4_FK_sd'];
+ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc5_sc.osim'];
+pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc5_FK_sc'];
 
 if ~isfolder(pathPoly)
     mkdir(pathPoly);
@@ -492,6 +492,22 @@ M_mtj_cas5 = f_getMtjLigamentMoment_exp5(q_mtj);
 plot(q_mtj*180/pi,full(M_mtj_cas5),'-','DisplayName','exp, scaled at \lambda = 1.05')
 
 f_getMtjLigamentMoment_exp5.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5')));
+
+% assume long plantar ligament removed
+M_mtj_G_exp5_d = sum(M_lig_G_exp3(:,5:end),2);
+f_getMtjLigamentMoment_exp5_d = interpolant('f_getMtjLigamentMoment_exp5_d','bspline',{q_mtj},M_mtj_G_exp5_d);
+f_getMtjLigamentMoment_exp5_d.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5_d')));
+
+% assume short plantar ligament also removed
+M_mtj_G_exp5_e = sum(M_lig_G_exp3(:,7:end),2);
+f_getMtjLigamentMoment_exp5_e = interpolant('f_getMtjLigamentMoment_exp5_e','bspline',{q_mtj},M_mtj_G_exp5_e);
+f_getMtjLigamentMoment_exp5_e.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5_e')));
+
+% assume spring ligament also removed
+M_mtj_G_exp5_f = sum(M_lig_G_exp3(:,10:end),2);
+f_getMtjLigamentMoment_exp5_f = interpolant('f_getMtjLigamentMoment_exp5_f','bspline',{q_mtj},M_mtj_G_exp5_f);
+f_getMtjLigamentMoment_exp5_f.save((fullfile(pathPoly,'f_getMtjLigamentMoment_exp5_f')));
+
 
 %%
 % M_mtj_G_exp4 = M_mtj_G_exp3;

@@ -117,6 +117,8 @@ load0 = f_HC(pos,vel,stiffness0);
 
 load = f_HC(pos,vel,stiffness);
 
+load4 = f_HC(pos,vel,6e7);
+
 load2 = f_BM(pos,vel);
 
 [pos3,vel3,cmpr3] = f_get_y_ydot(time,28e-3);
@@ -133,6 +135,7 @@ load0 = full(load0);
 load = full(load);
 load2 = full(load2);
 load3 = full(load3);
+load4 = full(load4);
 dist3 = full(dist3);
 disp3 = full(disp3);
 vol3 = full(vol3);
@@ -212,3 +215,10 @@ plot(cmpr*1e3,load_ID*1e-3,'-','DisplayName','Elastic foundation model');
 % plot(time,ID_ref.data(:,2)')
 % hold on
 % plot(time,ID.data(:,2)')
+
+
+%%
+% figure(1)
+% plot(cmpr*1e3,load4*1e-3,'-','DisplayName',['Hunt-Crossley sphere, stiffness = 60E6 N/m^2']);
+
+

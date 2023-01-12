@@ -59,14 +59,23 @@ else
     % get Qs and Qdots
     if isempty(intrvl)
         intrvl = mot_data.data(:,1);
+    elseif length(intrvl)==2
+        time = mot_data.data(:,1);
+        time_sel = time(time>=intrvl(1) & time<=intrvl(2));
+        intrvl = time_sel;
     end
     
-    for i=1:n_coord
-        qi = interp1(mot_data.data(:,1),mot_data.data(:,i+1),intrvl);
-        PP = spline(intrvl,qi);
-        [Qsi,Qdotsi,~] = SplineEval_ppuval(PP,intrvl,1);
-        Qs(:,i) = Qsi;
-        Qdots(:,i) = Qdotsi;
+    if length(intrvl)>1
+        for i=1:n_coord
+            qi = interp1(mot_data.data(:,1),mot_data.data(:,i+1),intrvl);
+            PP = spline(intrvl,qi);
+            [Qsi,Qdotsi,~] = SplineEval_ppuval(PP,intrvl,1);
+            Qs(:,i) = Qsi;
+            Qdots(:,i) = Qdotsi;
+        end
+    else
+        Qs = mot_data.data;
+        Qdots = zeros(size(Qs));
     end
 
 end
@@ -75,6 +84,7 @@ end
 
 %%
 H_all = nan(n_time,n_body,4,4);
+H_rel = nan(4,4,n_time,n_body);
 pos = nan(length(intrvl),n_body,3);
 vel = pos;
 omega = pos;
@@ -114,19 +124,34 @@ for i=1:length(intrvl)
         trl_ij = transform_ij.T().getAsMat;
     
         %
+        body_j = body_set.get(body_names{j});
         pos_ij = body_set.get(body_names{j}).getPositionInGround(state).getAsMat;
         vel_ij = body_set.get(body_names{j}).getVelocityInGround(state);
         v_ij = vel_ij.get(1).getAsMat;
         omega_ij = vel_ij.get(0).getAsMat;
 
-
-
+        
 
         pos(i,j,:) = pos_ij(:);
         vel(i,j,:) = v_ij(:);
         omega(i,j,:) = omega_ij(:);
         rot(i,j,:) = reshape(inv(rot_ij),9,1);
         eul(i,j,:) = rotm2eul(rot_ij);
+
+        if contains(body_names{j},'forefoot')
+            fr_j = body_j.findBaseFrame();
+            fr_parj = body_set.get(['calcn_' body_names{j}(end)]).findBaseFrame();
+
+            transform_ij_parj = fr_j.findTransformBetween(state,fr_parj);
+            rot_ij_parj = convert_Mat33(transform_ij_parj.R().asMat33());
+            trl_ij_parj = transform_ij_parj.T().getAsMat;
+            H_ij = eye(4);
+            H_ij(1:3,1:3) = rot_ij_parj;
+            H_ij(1:3,4) = trl_ij_parj;
+    
+            H_rel(:,:,i,j) = H_ij;
+
+        end
 
 %         % construct homogeneous transformation matrix
 %         H_ij = eye(4);
@@ -146,6 +171,7 @@ for j=1:n_body
     tmp.omega = squeeze(omega(:,j,:));
     tmp.R = squeeze(rot(:,j,:));
     tmp.eul = squeeze(eul(:,j,:));
+    tmp.H_rel = squeeze(H_rel(:,:,:,j));
 
     out.(char(body_names{j})) = tmp;
 end

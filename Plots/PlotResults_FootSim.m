@@ -450,6 +450,8 @@ if numFig <1 || numFig==4
     title('Detail view')
 
 
+    j1 = [];
+    j2 = [];
     j1 = find(R.Qs_mtp(:)==-30*pi/180);
     j2 = find(R.Qs_mtp(:)==30*pi/180);
 
@@ -466,7 +468,12 @@ if numFig <1 || numFig==4
         idx_ac = find(R.failed(idx(i),:)==0 & R.Fs_tib<=BW);
         F_ac{i} = R.Fs_tib(idx_ac);
         h0_ac = R.h_fa_ext(idx(i),1);
+%         h0_ac = max(R.h_fa_ext(idx(i),:));
         tmp = h0_ac - R.h_fa_ext(idx(i),idx_ac);
+
+        h_ac = squeeze(R.h_nav(idx(i),idx_ac));
+        tmp = h_ac(1) - h_ac;
+
         ac{i} = tmp;
         ac_max(i) = max(ac{i});
     end
@@ -483,7 +490,7 @@ if numFig <1 || numFig==4
     end
     xlabel('arch compression (-)')
     ylabel('vertical force / body weight (-)')
-    title({'Foot arch stiffness','\rm as defined by Welte and all, 2018'})
+    title({'Foot arch stiffness','\rm as defined by Welte et al. (2018)'})
     leg = legend('Location','southeast','Interpreter','none');
     title(leg,'mtp dorsiflexion')
     xlim([0,1])
@@ -664,6 +671,9 @@ if numFig <1 || numFig==7
     js = find(R.failed(idx0,:)==0);
     dH0 = min(R.talus_or(idx0,js))*1e3;
 
+    j1 = find(R.Qs_mtp(:)==0*pi/180);
+    j2 = find(R.Qs_mtp(:)==15*pi/180);
+
     for i=1:n_mtp
     %     axes('parent', tab3);
 
@@ -688,16 +698,44 @@ if numFig <1 || numFig==7
             [num2str(R.Qs_mtp(i)*180/pi) '°; ' R.legname])
         xlabel('vertical displacement ankle (mm)')
         ylabel('vertical force (N/BW)')
-        title('vertical stiffness')
+        title({'Vertical stiffness','\rm as defined by Yawar et al. (2021)'})
+
+        if ~isempty(j1) && ~isempty(j2)
+            if i==j1
+                dH_j1 = nan(size(dH));
+                dH_j1(idxH) = dH(idxH);
+            end
+
+            if i==j2
+                dH_j2 = nan(size(dH));
+                dH_j2(idxH) = dH(idxH);
+
+                dH_shift = dH_j1 - dH_j2;
+                dH_shift_mean = nanmean(dH_shift);
+                dH_shifted = dH_j2 + dH_shift_mean;
+
+                plot(dH_shifted(idxH),Fs_tib(idxH)/BW,'-k','DisplayName',...
+                    ['shifted by ' num2str(dH_shift_mean) ' mm; ' R.legname])
+
+            end
+
+
+        end
 
     end
 
+    subplot(2,2,2)
     legend('Location','best','Interpreter','none');
 
     subplot(2,2,1)
     hold on
     plot([0,2.5],[0,-1],'--k')
 
+
+
+
+
+    
 
 end
 
