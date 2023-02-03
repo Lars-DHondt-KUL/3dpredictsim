@@ -12,12 +12,12 @@ clc
 %% Inputs
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
-FootModel = 'mtjcf'; % mtp or mtj
+FootModel = 'mtjc5'; % mtp or mtj
 FixedKnee = 1; % 1 for fixed knee axis, 0 for moving
-FootScaling = 'custom'; % default, custom
+FootScaling = 'default'; % default, custom
 FDB = 2;
 tib_ant_Rajagopal2015 = 0;
-MTcustom = 5; % 5 is proper geometry for mtj models
+MTcustom = 0; % 5 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis
 Bool_RunMA = 1; 
 
@@ -73,7 +73,7 @@ if ~isfolder(pathMusc)
     mkdir(pathMusc);
 end
 
-OsimFileName = [OsimFileName '_cspx10_oy3'];
+OsimFileName = [OsimFileName '_cspx10_cg9_o1x10'];
 
 % Modelpath
 ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);

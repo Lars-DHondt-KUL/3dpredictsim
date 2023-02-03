@@ -139,8 +139,11 @@ end
 
 f_FiberLength_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberLength_TendonForce_tendon'));
 f_FiberVelocity_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberVelocity_TendonForce_tendon'));
-f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
-
+try
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium'));
+end
 f_AllPassiveTorques = Function.load(fullfile(PathDefaultFunc,'f_AllPassiveTorques'));
 if mtj
     f_PF_stiffness = Function.load(fullfile(PathDefaultFunc,'f_PF_stiffness'));
@@ -1137,10 +1140,13 @@ else
         jointi.sh_flex.l:jointi.sh_rot.l,...
         jointi.elb.r,jointi.elb.l]-jointi.hip_flex.l+1;
 end
+Tau_pass_opt_opp = [jointi.trunk.ben:jointi.trunk.rot]-jointi.hip_flex.l+1;
+
+
 Tau_pass_opt_GC = zeros(N*2,nq.all-nq.abs);
 Tau_pass_opt_GC(1:N-IC1i_c+1,:) = Tau_passk_opt_all(IC1i_c:end,:);
-Tau_pass_opt_GC(N-IC1i_c+2:N-IC1i_c+1+N,:) = ...
-    Tau_passk_opt_all(1:end,Tau_pass_opt_inv);
+Tau_pass_opt_GC(N-IC1i_c+2:N-IC1i_c+1+N,:) = Tau_passk_opt_all(1:end,Tau_pass_opt_inv);
+Tau_pass_opt_GC(N-IC1i_s+2:N-IC1i_s+1+N,Tau_pass_opt_opp) = -Tau_pass_opt_GC(1:end,Tau_pass_opt_opp);
 Tau_pass_opt_GC(N-IC1i_c+2+N:2*N,:) = Tau_passk_opt_all(1:IC1i_c-1,:);
 % If the first heel strike was on the left foot then we invert so that
 % we always start with the right foot, for analysis purpose

@@ -694,8 +694,11 @@ end
 
 f_FiberLength_TendonForce_tendon.save(fullfile(OutPath,'f_FiberLength_TendonForce_tendon'));
 f_FiberVelocity_TendonForce_tendon.save(fullfile(OutPath,'f_FiberVelocity_TendonForce_tendon'));
-f_forceEquilibrium_FtildeState_all_tendon.save(fullfile(OutPath,'f_forceEquilibrium_FtildeState_all_tendon'));
-
+try
+    f_forceEquilibrium_FtildeState_all_tendon.save(fullfile(OutPath,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon.save(fullfile(OutPath,'f_forceEquilibrium'));
+end
 f_ArmActivationDynamics.save(fullfile(OutPath,'f_ArmActivationDynamics'));
 f_MtpActivationDynamics.save(fullfile(OutPath,'f_MtpActivationDynamics'));
 

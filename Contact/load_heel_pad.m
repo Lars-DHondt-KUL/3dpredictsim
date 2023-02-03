@@ -76,7 +76,7 @@ f_BM_E = Function('f_BM_E',{pos,vel},{force(3),dist,displ,vol});
 %%
 f = 0.22; % Hz
 f = 2.2;
-% f =20;
+f = 10;
 ampl = 4e-3; % m
 stiffness = 10e6;
 stiffness0 = 1e6;
@@ -92,20 +92,20 @@ f_get_y_ydot = Function('f_get_y_ydot',{t,rds},{y,ydot,compr});
 
 %% plot ref data
 
-pathmain = pwd;
-[pathRepo,~,~]  = fileparts(pathmain);
-folder = '\Figures';
-file = 'heelpad_Ker90.png';
-pathRefImg = fullfile(pathRepo,folder,file);
-img_ref = imread(pathRefImg);
-
-figure(1)
-hold on
-hi = image([-0.03,3.85],[1.575,-0.04],img_ref);
-uistack(hi,'bottom')
-axis tight
-ax = gca;
-ax.XLim(2) = ampl*1e3*1.01;
+% pathmain = pwd;
+% [pathRepo,~,~]  = fileparts(pathmain);
+% folder = '\Figures';
+% file = 'heelpad_Ker90.png';
+% pathRefImg = fullfile(pathRepo,folder,file);
+% img_ref = imread(pathRefImg);
+% 
+% figure(1)
+% hold on
+% hi = image([-0.03,3.85],[1.575,-0.04],img_ref);
+% uistack(hi,'bottom')
+% axis tight
+% ax = gca;
+% ax.XLim(2) = ampl*1e3*1.01;
 
 %%
 N = 500;
@@ -180,8 +180,8 @@ figure(1)
 hold on
 plot(cmpr*1e3,load0*1e-3,'-','DisplayName',['Hunt-Crossley sphere, stiffness = ' num2str(stiffness0*1e-6) 'E6 N/m^2']);
 plot(cmpr*1e3,load*1e-3,'-','DisplayName',['Hunt-Crossley sphere, stiffness = ' num2str(stiffness*1e-6) 'E6 N/m^2']);
-plot(cmpr*1e3,load2*1e-3,'-','DisplayName',['Brown-McPhee sphere, stiffness = ' num2str(stiffness2*1e-6) 'E6 N/m^3']);
-plot(cmpr3*1e3,load3*1e-3,'-','DisplayName',['Brown-McPhee ellipsoid, stiffness = ' num2str(stiffness2*1e-6) 'E6 N/m^3']);
+% plot(cmpr*1e3,load2*1e-3,'-','DisplayName',['Brown-McPhee sphere, stiffness = ' num2str(stiffness2*1e-6) 'E6 N/m^3']);
+% plot(cmpr3*1e3,load3*1e-3,'-','DisplayName',['Brown-McPhee ellipsoid, stiffness = ' num2str(stiffness2*1e-6) 'E6 N/m^3']);
 xlabel('Compression (mm)')
 ylabel('load (kN)')
 legend('Location','northwest')
@@ -197,19 +197,19 @@ title('Force-displacement of heel pad, sine wave displacement.')
 % generateMotFile(data, colnames, filename);
 
 %%
-ID_path = fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\modelForLars',...
-    'inverse_dynamics_2p2Hz');
-
-ID_ref = importdata([ID_path '_ref.sto']);
-
-
-ID = importdata([ID_path '.sto']);
-
-load_ID = -(ID.data(:,2) - ID_ref.data(:,2))';
-
-figure(1)
-hold on
-plot(cmpr*1e3,load_ID*1e-3,'-','DisplayName','Elastic foundation model');
+% ID_path = fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\modelForLars',...
+%     'inverse_dynamics_2p2Hz');
+% 
+% ID_ref = importdata([ID_path '_ref.sto']);
+% 
+% 
+% ID = importdata([ID_path '.sto']);
+% 
+% load_ID = -(ID.data(:,2) - ID_ref.data(:,2))';
+% 
+% figure(1)
+% hold on
+% plot(cmpr*1e3,load_ID*1e-3,'-','DisplayName','Elastic foundation model');
 
 % figure
 % plot(time,ID_ref.data(:,2)')

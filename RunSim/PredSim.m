@@ -39,11 +39,15 @@ else
 end
 
 %% construct external function file name
-if S.Foot.contactStiffnessFactor == 10
-    ExternalFunc = [ExternalFunc '_cspx10'];
-elseif S.Foot.contactStiffnessFactor == 5
-    ExternalFunc = [ExternalFunc '_cspx5'];
+% if S.Foot.contactStiffnessFactor == 10
+%     ExternalFunc = [ExternalFunc '_cspx10'];
+% elseif S.Foot.contactStiffnessFactor == 5
+%     ExternalFunc = [ExternalFunc '_cspx5'];
+% end
+if S.Foot.contactStiffnessFactor > 1
+    ExternalFunc = [ExternalFunc '_cspx' num2str(S.Foot.contactStiffnessFactor)];
 end
+
 if S.Foot.contactGeometryVersion >= 0
     ExternalFunc = [ExternalFunc '_cg' num2str(S.Foot.contactGeometryVersion)];
 end

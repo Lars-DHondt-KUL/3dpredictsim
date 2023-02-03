@@ -1,7 +1,7 @@
 
 % clear
-% close all
-% clc
+close all
+clc
 
 addpath(genpath('C:\GBW_MyPrograms\NeuromechanicsToolkit'))
 
@@ -9,21 +9,36 @@ addpath(genpath('C:\GBW_MyPrograms\NeuromechanicsToolkit'))
 
 
 % res_file = fullfile(results_dir,'\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat');
-figure
+
+f1=figure;
 hold on
 legend
+
+f2=figure;
+hold on
+xlabel('gait cycle (%)')
+ylabel('COM height (m)')
+
 CsV = hsv(length(ResultsFile));
 for i=1:length(ResultsFile)
 
 %     disp(LegNames{i})
 
-    [k_leg] = calcLegStiffness(ResultsFile{i});
-
+    
+    [k_leg,com_y] = calcLegStiffness(ResultsFile{i});
+    
+    figure(f1)
     plot(i,k_leg,'.','DisplayName',LegNames{i},'MarkerSize',20,'Color',CsV(i,:))
+
+    figure(f2)
+    xgc = linspace(1,100,length(com_y));
+    plot(xgc,com_y,'Color',CsV(i,:))
+
 end
 
 
-function [k_leg] = calcLegStiffness(res_file)
+
+function [k_leg,com_y] = calcLegStiffness(res_file)
 
     load(res_file,'R');
     
@@ -43,6 +58,7 @@ function [k_leg] = calcLegStiffness(res_file)
     
     com_y = BodyKin.Pos(:,idx_com_y);
     com_y = com_y(1:length(com_y)/2);
+    
     
 
     L0 = 0.94 - 0.07;

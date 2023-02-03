@@ -213,6 +213,38 @@ Results = {};
 % Results{end+1} = R;
 
 %%
+S.Foot.Model = 'mtj';
+% S.Foot.PF_stiffness = 'Natali2010';
+S.Foot.PF_sf = 1; 
+S.Foot.PF_slack_length = 0.146;
+S.Foot.mtj_stiffness = 'MG_exp5_table';
+Fs_tib = [0:50:300,400:100:1000,1200:200:2000];
+Qs_mtp = [-30:30:30]*pi/180;
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.Model = 'mtjc1';
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.Model = 'mtjc2';
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.Model = 'mtjc3';
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.Model = 'mtjc4';
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+S.Foot.Model = 'mtjc5';
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+
+%%
 % call plot function
 nrf = length(Results);
 CsV = hsv(nrf);

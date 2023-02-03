@@ -28,10 +28,10 @@ else
             end
         end
         if isfield(S.Foot,'contactStiffnessFactor')
-            if S.Foot.contactStiffnessFactor == 10
-                savenameparts{end+1} = 'cspx10';
-            elseif S.Foot.contactStiffnessFactor == 5
-                savenameparts{end+1} = 'cspx5';
+            if S.Foot.contactStiffnessFactor > 1
+                savenameparts{end+1} = ['cspx' num2str(S.Foot.contactStiffnessFactor)];
+%             elseif S.Foot.contactStiffnessFactor == 5
+%                 savenameparts{end+1} = 'cspx5';
             elseif S.Foot.contactStiffnessFactor == 1
                 not{end+1} = 'not_cspx';
             end
