@@ -1,28 +1,48 @@
-clear
+% clear
 % close all
-clc
+% clc
+% 
+% ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+% 
+% results = {
+% %     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
+% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
+% %     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
+% %     '\with_better_knee\Fal_s1_mtjc4_FK_sd_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls141_FDB2_lTs120_Fpsl10_ig21'
+% %     '\different_speeds\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel27_ig1'
+% %     '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_vel27_ig23_igmtp'
+% %     '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel27_ig23_igmtp'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+%     };
+% 
+% % LegNames = {'Rigid midfoot','Plantar fascia','Plantar intrinsic muscles'};
+% LegNames = {'custom scaling','isometric scaling'};
 
-ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+nr = length(ResultsFile);
 
-results = {
-%     '\with_better_knee\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig21'
-%     '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig21'
-    '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21'
-    '\with_better_knee\Fal_s1_mtjc4_FK_sd_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls141_FDB2_lTs120_Fpsl10_ig21'
-%     '\different_speeds\Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel27_ig1'
-%     '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_vel27_ig23_igmtp'
-%     '\different_speeds\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel27_ig23_igmtp'
-    };
 
-% LegNames = {'Rigid midfoot','Plantar fascia','Plantar intrinsic muscles'};
-LegNames = {'custom scaling','isometric scaling'};
+CsV = hsv(nr);
 
-for ires = 1:length(results)
-resultsfile = fullfile(ResultsRepo,[results{ires} '_pp.mat']);
+for ires = 1:nr
+
+    if exist('results','var')
+        if ~contains(results{ires},'_pp.mat')
+            resultsfile = fullfile(ResultsRepo,[results{ires} '_pp.mat']);
+        else
+            resultsfile = fullfile(ResultsRepo,[results{ires}]);
+        end
+    end
+
+    if exist('ResultsFile','var')
+        resultsfile = ResultsFile{ires};
+    end
+
 
 load(resultsfile,'R')
 
-
+if nr>length(LegNames)
+    LegNames{ires} = R.S.savename;
+end
 
 S = R.S;
 
@@ -101,8 +121,11 @@ end
 
 f_FiberLength_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberLength_TendonForce_tendon'));
 f_FiberVelocity_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberVelocity_TendonForce_tendon'));
-f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
-
+try
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium'));
+end
 f_ArmActivationDynamics = Function.load(fullfile(PathDefaultFunc,'f_ArmActivationDynamics'));
 f_MtpActivationDynamics = Function.load(fullfile(PathDefaultFunc,'f_MtpActivationDynamics'));
 
@@ -179,6 +202,10 @@ FTtilde_sol = MX.sym('FTtilde_sol',NMuscle,1);
 % Left leg
 qinj_l          = Qskj_nsc(IndexLeft, 1);
 qdotinj_l       = Qdotskj_nsc(IndexLeft, 1);
+if mtj && ~S.Foot.mtj_muscles
+    qinj_l(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+    qdotinj_l(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+end
 [lMTj_l,vMTj_l,MAj_l] =  f_lMT_vMT_dM(qinj_l,qdotinj_l);
 for i=1:length(MAj_dof_idx)
     fieldname_i = MAj_fieldnames{MAj_dof_idx(i)};
@@ -195,6 +222,10 @@ MAj.trunk_rot    =  MAj_l([end-2:end,mai(nq.leg).mus.l]',nq.leg);
 % Right leg
 qinj_r      = Qskj_nsc(IndexRight,1);
 qdotinj_r   = Qdotskj_nsc(IndexRight,1);
+if mtj && ~S.Foot.mtj_muscles
+    qinj_r(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+    qdotinj_r(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+end
 [lMTj_r,vMTj_r,MAj_r] = f_lMT_vMT_dM(qinj_r,qdotinj_r);
 % Here we take the indices from left since the vector is 1:49
 for i=1:length(MAj_dof_idx)
@@ -376,6 +407,8 @@ if mtj
         Ft_mtj_r        = FTj(mai(mai_i).mus.r',1);
         T_mtj_r         = f_T9(MAj.mtj.r,Ft_mtj_r);
         T_mtj_tmp_r     = T_mtj_tmp_r + T_mtj_r;
+    else
+        T_mtj_r = 0;
     end
     if ~strcmp(S.Foot.PF_stiffness,'none') || S.Foot.PIM
         T_mtjPF_r       = MA_PFj.mtj.r*F_PF_PIMj.r;
@@ -472,22 +505,22 @@ end
 
 
 %%
-% DT = R.Tid-Ts;
-% errs_rel = max(abs(DT)-1e-5*abs(R.Tid),[],1);
-% errs_rel2 = max(abs(DT)./abs(R.Tid),[],1);
-% errs_abs = max(abs(DT),[],1);
-% 
-% if mtj
-%     T_mtj = [Tau_pass',T_pass',T_PF',T_mus'];
-%     T_mtj(:,5) = Tau_pass'+T_pass'+T_PF'+T_mus';
-% 
-%     diff_FT = R.FT-FT;
-%     diff_FT2 = diff_FT;
-%     diff_FT2(abs(diff_FT2)<1e-5) = 0;
-%     tmp = DT(:,strcmp(R.colheaders.joints,'mtj_angle_r'));
-%     tmp_M_PF = R.windlass.MA_PF.mtj.*R.windlass.F_PF;
-% end
-% 
+DT = R.Tid-Ts;
+errs_rel = max(abs(DT)-1e-5*abs(R.Tid),[],1);
+errs_rel2 = max(abs(DT)./abs(R.Tid),[],1);
+errs_abs = max(abs(DT),[],1);
+
+if mtj
+    T_mtj = [Tau_pass',T_pass',T_PF',T_mus'];
+    T_mtj(:,5) = Tau_pass'+T_pass'+T_PF'+T_mus';
+
+    diff_FT = R.FT-FT;
+    diff_FT2 = diff_FT;
+    diff_FT2(abs(diff_FT2)<1e-5) = 0;
+    tmp = DT(:,strcmp(R.colheaders.joints,'mtj_angle_r'));
+    tmp_M_PF = R.windlass.MA_PF.mtj.*R.windlass.F_PF;
+end
+
 % R.colheaders.joints{(errs_abs)>1e-4}
 
 %%
@@ -497,6 +530,10 @@ imtp = find(strcmp(R.colheaders.joints,'mtp_angle_r'));
 ihip = find(strcmp(R.colheaders.joints,'hip_flexion_r'));
 iknee = find(strcmp(R.colheaders.joints,'knee_angle_r'));
 
+if mtj
+    errs_mtj(ires) = errs_abs(imtj);
+end
+
 if ires==1
     f1=figure;
     tiledlayout('flow')
@@ -504,102 +541,157 @@ end
 
 figure(f1)
 
-nexttile(1)
-hold on
-p1=plot(squeeze(jac_Ts(:,iankle,iankle)));
+x = 1:(100-1)/(size(R.Qs,1)-1):100;
+
+x_to1 = x(R.GRFs(:,2) > 3);
+x_to2 = x(x>=R.Event.Stance);
+x_to12 = intersect(x_to1,x_to2);
+x_to = x_to12(end);
+
+cnt=1;
+
+% nexttile(cnt)
+% cnt=cnt+1;
+% hold on; grid on
+% plot(x,R.Qs(:,ihip),'Color',CsV(ires,:));
+% title('hip')
+% ylabel('angle (°)')
+% 
+% nexttile(cnt)
+% cnt=cnt+1;
+% hold on; grid on
+% plot(x,R.Qs(:,iknee),'Color',CsV(ires,:));
+% title('knee')
+% ylabel('angle (°)')
+
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+plot(x,R.Qs(:,iankle),'Color',CsV(ires,:));
+title('ankle')
+ylabel('angle (°)')
+
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+if ~isempty(imtj)
+plot(x,R.Qs(:,imtj),'Color',CsV(ires,:));
+end
+title('midtarsal')
+ylabel('angle (°)')
+
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+plot(x,R.Qs(:,imtp),'Color',CsV(ires,:));
+title('MTP')
+ylabel('angle (°)')
+
+%
+
+% nexttile(cnt)
+% cnt=cnt+1;
+% hold on; grid on
+% plot(x,squeeze(jac_Ts(:,ihip,ihip)),'Color',CsV(ires,:))
+% ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+% xlabel('% GC')
+% title('hip')
+% 
+% nexttile(cnt)
+% cnt=cnt+1;
+% hold on; grid on
+% plot(x,squeeze(jac_Ts(:,iknee,iknee)),'DisplayName',LegNames{ires},'Color',CsV(ires,:))
+% ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+% xlabel('% GC')
+% title('knee')
+
+
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+p1=plot(x,squeeze(jac_Ts(:,iankle,iankle)),'Color',CsV(ires,:));
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('ankle')
 
-nexttile(2)
-hold on
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
 if ~isempty(imtj)
-    plot(squeeze(jac_Ts(:,imtj,imtj)),'Color',p1.Color)
+    plot(x,squeeze(jac_Ts(:,imtj,imtj)),'Color',CsV(ires,:))
     ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
     xlabel('% GC')
     title('midtarsal')
-    plot(squeeze(jac_T_mus(:,imtj)),'--','Color',p1.Color)
+%     plot(squeeze(jac_T_mus(:,imtj)),'--','Color',p1.Color)
 end
 
-nexttile(3)
-hold on
-plot(squeeze(jac_Ts(:,imtp,imtp)))
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+plot(x,squeeze(jac_Ts(:,imtp,imtp)),'Color',CsV(ires,:))
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('mtp')
 
-nexttile(4)
-hold on
-plot(squeeze(jac_Ts(:,ihip,ihip)))
-ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
-xlabel('% GC')
-title('hip')
-
-nexttile(5)
-hold on
-plot(squeeze(jac_Ts(:,iknee,iknee)),'DisplayName',LegNames{ires})
-ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
-xlabel('% GC')
-title('knee')
-
-% yline(1/2.5*62*180/pi)
-
 %
 
-if ires==1
-    f2=figure;
-    tiledlayout('flow')
-end
+% nexttile(cnt)
+% cnt=cnt+1;
+% hold on; grid on
+% plot(x,squeeze(jac_Ts2(:,ihip,ihip)),'Color',CsV(ires,:))
+% ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+% xlabel('% GC')
+% title('hip')
+% 
+% nexttile(cnt)
+% cnt=cnt+1;
+% hold on; grid on
+% plot(x,squeeze(jac_Ts2(:,iknee,iknee)),'DisplayName',LegNames{ires},'Color',CsV(ires,:))
+% ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+% xlabel('% GC')
+% title('knee')
 
-figure(f2)
-
-nexttile(1)
-hold on
-p1=plot(squeeze(jac_Ts2(:,iankle,iankle)));
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+p1=plot(x,squeeze(jac_Ts2(:,iankle,iankle)),'Color',CsV(ires,:));
 ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('ankle')
 
-nexttile(2)
-hold on
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
 if ~isempty(imtj)
-    plot(squeeze(jac_Ts2(:,imtj,imtj)),'Color',p1.Color)
+    plot(x,squeeze(jac_Ts2(:,imtj,imtj)),'Color',CsV(ires,:))
     ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
     xlabel('% GC')
     title('midtarsal')
 end
 
-nexttile(3)
-hold on
-plot(squeeze(jac_Ts2(:,imtp,imtp)))
+nexttile(cnt)
+cnt=cnt+1;
+hold on; grid on
+plot(x,squeeze(jac_Ts2(:,imtp,imtp)),'Color',CsV(ires,:))
 ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('mtp')
 
-nexttile(4)
-hold on
-plot(squeeze(jac_Ts2(:,ihip,ihip)))
-ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
-xlabel('% GC')
-title('hip')
-
-nexttile(5)
-hold on
-plot(squeeze(jac_Ts2(:,iknee,iknee)),'DisplayName',LegNames{ires})
-ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
-xlabel('% GC')
-title('knee')
+for icnt=1:cnt-1
+    nexttile(icnt)
+    xline(x_to,'Color',CsV(ires,:))
+end
 
 end
-figure(f1)
-nexttile(5)
-lg=legend;
-lg.Layout.Tile = 6;
+% figure(f1)
+% nexttile(5)
+% lg=legend;
+% lg.Layout.Tile = 6;
 
-figure(f2)
-nexttile(5)
-lg=legend;
-lg.Layout.Tile = 6;
+% figure(f2)
+% nexttile(5)
+% lg=legend;
+% lg.Layout.Tile = 6;
 
 
 

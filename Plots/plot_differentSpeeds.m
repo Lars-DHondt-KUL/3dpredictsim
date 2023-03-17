@@ -9,14 +9,24 @@ clc
 
 ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
+
+% ResultFiles = {
+%     'different_speeds/Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel*'
+% %     'different_speeds/Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_vel*'
+%     'different_speeds/Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel*'
+% %     'different_speeds/Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_vel*'
+% %     'with_better_knee/Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel*tanh10*'
+% %     'with_better_knee/Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_vel*tanh10*'
+%     };
+% LegNames = {'Rigid midfoot','Plantar fascia','Plantar intrinsic muscles','Baseline','Rigid midfoot with tanh_b = 10','Baseline with tanh_b = 10'};
+
 ResultFiles = {
     'different_speeds/Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel*'
-    'different_speeds/Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_vel*'
     'different_speeds/Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel*'
-%     'different_speeds/Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_vel*'
-%     'with_better_knee/Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel*tanh10*'
-%     'with_better_knee/Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_vel*tanh10*'
+    '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel*_ig1_N100*'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_vel*_ig1_N100*'
     };
+LegNames = {'2-segment N=50','3-segment N=50','2-segment N=100','3-segment N=100'};
 
 colrs = [
     [0 0.4470 0.7410];
@@ -111,7 +121,7 @@ for i=1:length(ResultFiles)
     nexttile(3)
     hold on
     plot(vs,COTs,'.-','Color',colrs(i,:),'MarkerSize',15,'LineWidth',1.5);
-    plot(vs,COTbs,'x-','Color',colrs(i,:),'MarkerSize',15);
+%     plot(vs,COTbs,'x-','Color',colrs(i,:),'MarkerSize',15);
 
     nexttile(4)
     hold on
@@ -134,7 +144,7 @@ end
 
 figure(f1)
 nexttile(1)
-lg=legend(lgd,{'Rigid midfoot','Plantar fascia','Plantar intrinsic muscles','Baseline','Rigid midfoot with tanh_b = 10','Baseline with tanh_b = 10'},'Location','northeast');
+lg=legend(lgd,LegNames,'Location','northeast');
 title(lg,'Color -> model type','FontWeight','normal')
 xlim([0.7,2.8])
 xlabel('Velocity (m/s)')

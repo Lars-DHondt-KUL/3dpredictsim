@@ -657,11 +657,19 @@ for k=1:N
         % Left leg
         qin_l_opt_all = Xj_Qs_Qdots_opt(count,IndexLeft*2-1);
         qdotin_l_opt_all = Xj_Qs_Qdots_opt(count,IndexLeft*2);
+        if mtj && ~S.Foot.mtj_muscles
+            qin_l_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+            qdotin_l_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        end
         [lMTk_l_opt_all,vMTk_l_opt_all,~] = ...
             f_lMT_vMT_dM(qin_l_opt_all,qdotin_l_opt_all);
         % Right leg
         qin_r_opt_all = Xj_Qs_Qdots_opt(count,IndexRight*2-1);
         qdotin_r_opt_all = Xj_Qs_Qdots_opt(count,IndexRight*2);
+        if mtj && ~S.Foot.mtj_muscles
+            qin_r_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+            qdotin_r_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        end
         [lMTk_r_opt_all,vMTk_r_opt_all,~] = ...
             f_lMT_vMT_dM(qin_r_opt_all,qdotin_r_opt_all);
         % Both legs
@@ -889,14 +897,17 @@ if ~exist('HS1','var')
 end
 
 
-    
+   
 
 % GRFk_opt is at mesh points starting from k=2, we thus add 1 to IC1i
 % for the states
-% if phase_tran_tgridi ~= N
+if phase_tran_tgridi ~= N
     IC1i_c = IC1i;
     IC1i_s = IC1i + 1;
-% end
+else
+    IC1i_c = 1;
+    IC1i_s = 2;
+end
 
 % Qs
 Qs_GC = zeros(N*2,size(q_opt_unsc.deg,2));
@@ -1146,7 +1157,7 @@ Tau_pass_opt_opp = [jointi.trunk.ben:jointi.trunk.rot]-jointi.hip_flex.l+1;
 Tau_pass_opt_GC = zeros(N*2,nq.all-nq.abs);
 Tau_pass_opt_GC(1:N-IC1i_c+1,:) = Tau_passk_opt_all(IC1i_c:end,:);
 Tau_pass_opt_GC(N-IC1i_c+2:N-IC1i_c+1+N,:) = Tau_passk_opt_all(1:end,Tau_pass_opt_inv);
-Tau_pass_opt_GC(N-IC1i_s+2:N-IC1i_s+1+N,Tau_pass_opt_opp) = -Tau_pass_opt_GC(1:end,Tau_pass_opt_opp);
+% Tau_pass_opt_GC(N-IC1i_s+2:N-IC1i_s+1+N,Tau_pass_opt_opp) = -Tau_pass_opt_GC(1:end,Tau_pass_opt_opp);
 Tau_pass_opt_GC(N-IC1i_c+2+N:2*N,:) = Tau_passk_opt_all(1:IC1i_c-1,:);
 % If the first heel strike was on the left foot then we invert so that
 % we always start with the right foot, for analysis purpose

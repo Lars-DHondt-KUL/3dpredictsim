@@ -169,6 +169,10 @@ muscle_spanning_info_m = muscle_spanning_joint_INFO(musi_pol,:);
 MuscleInfo_m.muscle    = MuscleInfo.muscle(musi_pol);
 qin     = SX.sym('qin',1,nq.leg);
 qdotin  = SX.sym('qdotin',1,nq.leg);
+% if mtj && ~S.Foot.mtj_muscles
+%     qin(strcmp(MuscleData.dof_names,'mtj_angle_r')) = 0;
+%     qdotin(strcmp(MuscleData.dof_names,'mtj_angle_r')) = 0;
+% end
 lMT     = SX(NMuscle_pol,1);
 vMT     = SX(NMuscle_pol,1);
 dM      = SX(NMuscle_pol,nq.leg);
@@ -459,13 +463,13 @@ if mtj
     qin1     = MX.sym('qin_pass1',1);
     qdotin1  = MX.sym('qdotin_pass1',1);
 
-    if strcmp(S.Foot.mtj_stiffness,'MG_exp_table')
+    if strcmp(S.Foot.mtj_stiffness,'MG_exp_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
-    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table')
+    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp5')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
-    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_v2_table')
+    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_v2_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp_v2')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
     else

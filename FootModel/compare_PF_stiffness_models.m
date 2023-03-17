@@ -10,7 +10,7 @@ set(0,'defaultTextInterpreter','tex');
 
 %%
 N = 1000;
-ls = 0.150;
+ls = 0.146;
 S.R_mtth = 9.5e-3;
 S.sf_PF = 1;
 
@@ -24,7 +24,8 @@ q_mtp = linspace(-45,45,N)*pi/180;
 % PF_stiffness = {'linear','Natali2010','Cheng2008','Song2011','Gefen2002'};
 % PF_stiffness = {'linear','Natali2010','Cheng2008','Gefen2002'};
 % PF_stiffness = {'Natali2010','Natali2010','Natali2010','Natali2010'};
-PF_stiffness = {'Natali2010','Gefen2002'};
+% PF_stiffness = {'Natali2010','Gefen2002'};
+PF_stiffness = {'Natali2010','linear','Song2011','Gefen2002'};
 
 % mtj_stiffness = {'Gefen2002','Ker1987','fitted1'};
 % mtj_stiffness = {'Gefen2002','Ker1987','Song2011','signed_lin'};
@@ -187,11 +188,11 @@ CsV = hsv(numel(PF_stiffness));
 % CsV = hsv(4);
 for i=1:numel(PF_stiffness)
     hold on
-    if i==4
+%     if i==4
     plot((l-ls)*1000,F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
-    else
-         plot((l-ls)*1000,10*F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
-    end
+%     else
+%          plot((l-ls)*1000,10*F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
+%     end
     grid on
 %     legend('Location','best')
     xlabel('Elongation (mm)')

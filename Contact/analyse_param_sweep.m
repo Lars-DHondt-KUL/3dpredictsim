@@ -1,7 +1,7 @@
 
-close all
-clear
-clc
+% close all
+% clear
+% clc
 
 
 results_folder = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\contactmodel_param_sweep';
@@ -9,15 +9,17 @@ results_folder = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\co
 addpath('C:\GBW_MyPrograms\PredSim_test\PostProcessing')
 
 res_filt = dir(fullfile(results_folder,'Fal_s1_k1*_d20_sF8_dF8_vF5_tV20_*.mat'));
+
+
 figure_savename = 'fig_sweep_staticFriction';
 
 
 
 
-for i=1:length(res_filt)
-    result_paths{i} = fullfile(results_folder,res_filt(i).name);
-    legend_names{i} = replace(res_filt(i).name(1:end-4),'_',' ');
-end
+% for i=1:length(res_filt)
+%     result_paths{i} = fullfile(results_folder,res_filt(i).name);
+%     legend_names{i} = replace(res_filt(i).name(1:end-4),'_',' ');
+% end
 % result_paths = result_paths([2:end,1]);
 % legend_names = legend_names([2:end,1]);
 % result_paths = result_paths([3,5,1]);
@@ -53,15 +55,15 @@ for i=1:length(result_paths)
         plot(x,out.torso.eul(1:100,j)*180/pi,'DisplayName',legend_names{i},'Color',CsV(i,:))
     end
 
-    pelvis_ty = R.kinematics.Qs(:,model_info.ExtFunIO.coordi.pelvis_ty);
-    dy = max(pelvis_ty) - min(pelvis_ty);
-    dF = max(R.ground_reaction.GRF_r(:,2));
-    K(i) = dF/dy;
+%     pelvis_ty = R.kinematics.Qs(:,model_info.ExtFunIO.coordi.pelvis_ty);
+%     dy = max(pelvis_ty) - min(pelvis_ty);
+%     dF = max(R.ground_reaction.GRF_r(:,2));
+%     K(i) = dF/dy;
 
 
-    eff = R.energetics_mech.Wpos_contact(:,1)/(-R.energetics_mech.Wneg_contact(:,1));
-    loss = 1-eff;
-    disp(['Heelpad dissipates ' num2str(loss*100,2) ' % of absorbed energy.'])
+%     eff = R.energetics_mech.Wpos_contact(:,1)/(-R.energetics_mech.Wneg_contact(:,1));
+%     loss = 1-eff;
+%     disp(['Heelpad dissipates ' num2str(loss*100,2) ' % of absorbed energy.'])
 
 end
 

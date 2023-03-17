@@ -59,11 +59,14 @@ legname = [legname '; mtj: ' mtj_stiffness];
 S2 = S;
 S2.Foot.PF_stiffness = 'Natali2010';
 S2.Foot.PF_sf = 1;
-S2.Foot.PF_slack_length = 0.146;
+% S2.Foot.PF_slack_length = 0.146;
 S2.Foot.mtj_stiffness = 'MG_exp5_table';
 S2.Foot.mtj_sf = 1; 
 [S0] = getFileNames(S2);
 S2.fixed_knee = 1;
+S2.Foot.contactGeometryVersion = 9;
+S2.Foot.contactSphereOffset1X = 0.01;
+S2.Foot.contactSphereOffsetY = 0;
 [S2] = getFileNames(S2);
 [~, casfuncfol] = getSavename(S2);
 

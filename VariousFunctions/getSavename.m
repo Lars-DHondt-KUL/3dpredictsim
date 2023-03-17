@@ -272,6 +272,9 @@ if isfield(S,'Foot')
             not{end+1} = 'not_FDB';
         end
         if S.Foot.FDB
+            if isfield(S.Foot,'FDB_nerveBlock') && S.Foot.FDB_nerveBlock
+                savenameparts{end+1} = 'nb';
+            end
             if isfield(S.Foot,'FDB_lMo') && S.Foot.FDB_lMo ~= 19.7e-3
                 savenameparts{end+1} = ['lMo' num2str(round(S.Foot.FDB_lMo*1000))];
                 casfuncfolparts{end+1} = ['lMo' num2str(round(S.Foot.FDB_lMo*1000))];

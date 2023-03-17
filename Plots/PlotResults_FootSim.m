@@ -706,18 +706,18 @@ if numFig <1 || numFig==7
                 dH_j1(idxH) = dH(idxH);
             end
 
-            if i==j2
-                dH_j2 = nan(size(dH));
-                dH_j2(idxH) = dH(idxH);
-
-                dH_shift = dH_j1 - dH_j2;
-                dH_shift_mean = nanmean(dH_shift);
-                dH_shifted = dH_j2 + dH_shift_mean;
-
-                plot(dH_shifted(idxH),Fs_tib(idxH)/BW,'-k','DisplayName',...
-                    ['shifted by ' num2str(dH_shift_mean) ' mm; ' R.legname])
-
-            end
+%             if i==j2
+%                 dH_j2 = nan(size(dH));
+%                 dH_j2(idxH) = dH(idxH);
+% 
+%                 dH_shift = dH_j1 - dH_j2;
+%                 dH_shift_mean = nanmean(dH_shift);
+%                 dH_shifted = dH_j2 + dH_shift_mean;
+% 
+%                 plot(dH_shifted(idxH),Fs_tib(idxH)/BW,'-k','DisplayName',...
+%                     ['shifted by ' num2str(dH_shift_mean) ' mm; ' R.legname])
+% 
+%             end
 
 
         end

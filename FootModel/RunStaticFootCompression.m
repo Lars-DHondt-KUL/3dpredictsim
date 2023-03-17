@@ -1,4 +1,4 @@
-
+% close all
 clear
 clc
 
@@ -6,8 +6,9 @@ clc
 S.subject = 'Fal_s1';
 S.Foot.Model = 'mtjc4';
 S.Foot.Scaling = 'custom';
-% S.Foot.Scaling = 'default';
 S.MTparams = 'MTc5';
+% S.Foot.Scaling = 'default';
+% S.MTparams = '';
 S.Foot.contactStiffnessFactor = 10;
 S.Foot.contactSphereOffsetY = 3;
 S.passiveFiberForceShift = -0.1;
@@ -46,7 +47,7 @@ Fs_tib = [0];
 % Qs_mtp = [-30:30:30]*pi/180;
 % Qs_mtp = [0:5:30]*pi/180;
 % Qs_mtp = [-30:10:30]*pi/180;
-Qs_mtp = [0,15]*pi/180;
+% Qs_mtp = [0,15]*pi/180;
 
 % vertical forces on knee
 % Fs_tib = [0:100:1000];
@@ -79,21 +80,21 @@ Results = {};
 % S.Foot.PF_sf = 1; 
 % S.Foot.PF_slack_length = 0.146;
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
-% Fs_tib = [0:50:300,400:100:900,1000:250:3000];
+% Fs_tib = [0:50:300,400:100:900,1000:250:3500];
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 % 
 % S.Foot.PF_stiffness = 'Gefen2002';
 % S.Foot.PF_sf = 1; 
-% S.Foot.PF_slack_length = 0.146;
+% % S.Foot.PF_slack_length = 0.146;
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
-% Fs_tib = [0:50:300,400:100:900,1000:250:3000];
+% Fs_tib = [0:50:300,400:100:900,1000:250:3500];
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
-% 
+
 % S.Foot.PF_stiffness = 'none';
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
-% Fs_tib = [0:50:300,400:100:900,1000:250:2500];
+% Fs_tib = [0:50:300,400:100:900,1000:250:2750];
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 % 
@@ -145,11 +146,11 @@ Results = {};
 % S.Foot.PF_sf = 1; 
 % S.Foot.PF_slack_length = 0.146;
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
-% % Fs_tib = [0:50:1000];
-% % Qs_mtp = [-30:30:30]*pi/180;
+% Fs_tib = [10,50:50:1000];
+% Qs_mtp = [-30:15:30]*pi/180;
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
-% 
+
 % S.Foot.PF_stiffness = 'Gefen2002';
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
@@ -159,27 +160,37 @@ Results = {};
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 
-% S.Foot.PF_stiffness = 'Natali2010';
-% S.Foot.PF_sf = 1; 
+S.Foot.PF_stiffness = 'Natali2010';
+S.Foot.PF_sf = 1; 
 % S.Foot.PF_slack_length = 0.146;
-% S.Foot.mtj_stiffness = 'MG_exp5_table';
-% Fs_tib = [0:50:300,400:100:1000,1200:200:2000];
-% Qs_mtp = [0,15,30]*pi/180;
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
-% 
-% % S.Foot.PF_stiffness = 'none';
+S.Foot.mtj_stiffness = 'MG_exp5_table';
+Fs_tib = [0:10:90,100:50:1000,1200:200:2000];
+% Fs_tib = [10,50:50:300,400:100:1000,1200:200:2000];
+Qs_mtp = [-30,0,15,30]*pi/180;
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+% S.Foot.PF_stiffness = 'none';
+S.Foot.PF_stiffness = 'Gefen2002';
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results{end+1} = R;
+
+
+% % S.Foot.PF_stiffness = 'Natali2010';
 % S.Foot.PF_stiffness = 'Gefen2002';
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results{end+1} = R;
-
-
-% S.Foot.PF_stiffness = 'Natali2010';
+% % S.Foot.PF_stiffness = 'Song2011';
+% % S.Foot.PF_stiffness = 'linear';
 % S.Foot.PF_sf = 1; 
 % S.Foot.PF_slack_length = 0.146;
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
-% Fs_tib = [50];
+% Fs_tib = [1];
 % Qs_mtp = [0]*pi/180;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% S.Foot.PF_slack_length = 0.145;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% S.Foot.PF_slack_length = 0.147;
 % R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 % Results{end+1} = R;
 
@@ -213,35 +224,35 @@ Results = {};
 % Results{end+1} = R;
 
 %%
-S.Foot.Model = 'mtj';
-% S.Foot.PF_stiffness = 'Natali2010';
-S.Foot.PF_sf = 1; 
-S.Foot.PF_slack_length = 0.146;
-S.Foot.mtj_stiffness = 'MG_exp5_table';
-Fs_tib = [0:50:300,400:100:1000,1200:200:2000];
-Qs_mtp = [-30:30:30]*pi/180;
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results{end+1} = R;
-
-S.Foot.Model = 'mtjc1';
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results{end+1} = R;
-
-S.Foot.Model = 'mtjc2';
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results{end+1} = R;
-
-S.Foot.Model = 'mtjc3';
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results{end+1} = R;
-
-S.Foot.Model = 'mtjc4';
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results{end+1} = R;
-
-S.Foot.Model = 'mtjc5';
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results{end+1} = R;
+% S.Foot.Model = 'mtj';
+% % S.Foot.PF_stiffness = 'Natali2010';
+% S.Foot.PF_sf = 1; 
+% S.Foot.PF_slack_length = 0.146;
+% S.Foot.mtj_stiffness = 'MG_exp5_table';
+% Fs_tib = [0:50:300,400:100:1000,1200:200:2000];
+% Qs_mtp = [-30:30:30]*pi/180;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% 
+% S.Foot.Model = 'mtjc1';
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% 
+% S.Foot.Model = 'mtjc2';
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% 
+% S.Foot.Model = 'mtjc3';
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% 
+% S.Foot.Model = 'mtjc4';
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
+% 
+% S.Foot.Model = 'mtjc5';
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results{end+1} = R;
 
 
 %%

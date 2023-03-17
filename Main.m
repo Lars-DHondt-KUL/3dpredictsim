@@ -58,7 +58,7 @@ S.NThreads  = 6;        % number of threads for parallel computing
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'results_paper'; % 'with_better_knee' 'results_paper'
-% S.suffixCasName = '';     % suffix for name of folder with casadifunctions
+% S.suffixCasName = 'test';     % suffix for name of folder with casadifunctions
 S.suffixName = 'N100';        % suffix for name of file with results
 
 % Cost function weights
@@ -79,7 +79,7 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtp'; % 'mtjc4'
+S.Foot.Model = 'mtjc4'; % 'mtjc4'
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom
@@ -137,10 +137,6 @@ end
 % S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
 % S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
 
-S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
-
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
 S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
@@ -153,13 +149,13 @@ S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
 S.Foot.mtj_stiffness = 'MG_exp5_table';%'MG_exp5_table'
 S.Foot.mtj_sf = 1; 
 
-S.Foot.kMT_li = 0;        % angular stiffness in case of linear
-S.Foot.kMT_li2 = 0;        % angular stiffness in case of signed linear
+S.Foot.kMT_li = 400;        % angular stiffness in case of linear
+S.Foot.kMT_li2 = 50;        % angular stiffness in case of signed linear
 S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
 S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
-S.Foot.PF_sf = 1;
+S.Foot.PF_sf = 5;
 S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
 
@@ -173,11 +169,13 @@ S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
 % optimal fibre length
 S.Foot.FDB_lMo = 19.7e-3; % 19.7e-3 23e-3
 % Tendon slack length
-S.Foot.FDB_lTs = round(142.9 -0.9091*S.Foot.FDB_lMo*1e3)*1e-3; % 125mm at lMo=19.7mm, and 122 at 23
+S.Foot.FDB_lTs = 0.125; %round(142.9 -0.9091*S.Foot.FDB_lMo*1e3)*1e-3; % 125mm at lMo=19.7mm, and 122 at 23
 % Shift fiber passive force-length curve
 S.Foot.FDB_shift = -0.1;
 % scale FMo
 S.Foot.FDB_sf_FMo = 1;
+% apply nerve block (activation constrained to baseline)
+S.Foot.FDB_nerveBlock = 0;
 
 %% Initial guess
 %-------------------------------------------------------------------------%

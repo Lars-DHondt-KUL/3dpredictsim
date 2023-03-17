@@ -41,12 +41,12 @@ for f = 1:nF
             FolderIndex(ct) = f;
             ct= ct+1;
             if (~exist(OutName,'file') || S.OverWrite == 1)
-                try
+%                 try
                     f_LoadSim_Gait92_FootModel(dpath,filename);
                     disp(filename);
-                catch
-                    disp(['failed: ' filename]);
-                end
+%                 catch
+%                     disp(['failed: ' filename]);
+%                 end
 % %                 f_LoadSim_Gait92_FootModel(dpath,filename);
             end
         end

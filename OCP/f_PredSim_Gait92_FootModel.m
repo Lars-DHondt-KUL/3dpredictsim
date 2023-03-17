@@ -418,6 +418,25 @@ if S.Foot.PIM
     opti.set_initial(e_PIM, guess.e_PIM');
 end
 
+% nerve block intrinsic foot muscle
+if S.Foot.FDB_nerveBlock
+    iFDB = find(contains(muscleNames,'FDB_'));
+    if isempty(iFDB)
+        S.Foot.FDB_nerveBlock = 0;
+    else
+        % indices of left and right muscle
+        iFDB_lr = [iFDB, iFDB + length(muscleNames(1:end-3))];
+        a_FDB = a(iFDB_lr,:);
+        a_col_FDB = a_col(iFDB_lr,:);
+        vA_FDB = vA(iFDB_lr,:);
+        
+        % set activation to baseline
+        opti.subject_to(a_FDB(:) == bounds.a.lower(iFDB));
+        opti.subject_to(a_col_FDB(:) == bounds.a.lower(iFDB));
+        % no change in activation
+        opti.subject_to(vA_FDB(:) == 0);
+    end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define "slack" controls
 % Time derivative of muscle-tendon forces (states) at collocation points
@@ -529,6 +548,10 @@ for j=1:d
     % Left leg
     qinj_l          = Qskj_nsc(IndexLeft, j+1);
     qdotinj_l       = Qdotskj_nsc(IndexLeft, j+1);
+    if mtj && ~S.Foot.mtj_muscles
+        qinj_l(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        qdotinj_l(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+    end
     [lMTj_l,vMTj_l,MAj_l] =  f_lMT_vMT_dM(qinj_l,qdotinj_l);
     for i=1:length(MAj_dof_idx)
         fieldname_i = MAj_fieldnames{MAj_dof_idx(i)};
@@ -545,6 +568,10 @@ for j=1:d
     % Right leg
     qinj_r      = Qskj_nsc(IndexRight,j+1);
     qdotinj_r   = Qdotskj_nsc(IndexRight,j+1);
+    if mtj && ~S.Foot.mtj_muscles
+        qinj_r(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        qdotinj_r(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+    end
     [lMTj_r,vMTj_r,MAj_r] = f_lMT_vMT_dM(qinj_r,qdotinj_r);
     % Here we take the indices from left since the vector is 1:49
     for i=1:length(MAj_dof_idx)
