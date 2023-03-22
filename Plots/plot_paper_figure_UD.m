@@ -1,4 +1,4 @@
-
+ 
 
 clear
 close all
@@ -62,72 +62,74 @@ P_tot = P_HC + P_joints;
 
 %%
 
-label_fontsize = 9;
-legend_fontsize = 11;
-title_fontsize = 11;
+label_fontsize = 12;
+legend_fontsize = 12;
+title_fontsize = 12;
 
 
 line_linewidth = 2;
 
 fig2 = figure();
-fig2.Position = [269 136 1200 400];
+fig2.Position = [269 136 1200 300];
 
-tl2 = tiledlayout(2,4);
+tl2 = tiledlayout(1,6);
 tl2.TileSpacing = 'tight';
 
 nexttile(1)
 hold on
-grid on
+yline(0,'-k')
+plot(TKH17.shank(:,1),TKH17.shank(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4)
 plot(xst,P_tot(istance),'-','Color',[0.3, 0.3, 0.3],'linewidth',line_linewidth,'DisplayName','Distal to Shank');
-
-plot(TKH17.shank(:,1),TKH17.shank(:,2),'-.','Color',[1,1,1]*0.5,'linewidth',line_linewidth)
 
 
 ylim([-2.5,3.])
 xlim([0,100])
 ylabel('Power (W/kg)','Fontsize',label_fontsize);
 xlabel('Stance phase (%)','Fontsize',label_fontsize);
-title('Power distal to shank','Fontsize',title_fontsize);
+title('Distal to shank','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
 nexttile(2)
 hold on
-grid on
+yline(0,'-k')
+plot(TKH17.hindfoot(:,1),TKH17.hindfoot(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4)
 plot(xst,P_dist_hindfoot(istance),'-','Color',[0, 0.4470, 0.7410],'linewidth',line_linewidth,'DisplayName','Distal to Hindfoot');
-plot(TKH17.hindfoot(:,1),TKH17.hindfoot(:,2),'-.','Color',[1,1,1]*0.5,'linewidth',line_linewidth)
 
 ylim([-2.5,3.])
 xlim([0,100])
 % ylabel('Power (W/kg)');
+ylabel(' ','Fontsize',1);
 xlabel('Stance phase (%)','Fontsize',label_fontsize);
-title('Power distal to hindfoot','Fontsize',title_fontsize);
+title('Distal to hindfoot','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
 nexttile(3)
 hold on
-grid on
+yline(0,'-k')
+p2=plot(TKH17.forefoot(:,1),TKH17.forefoot(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4,'DisplayName','Power (Experimental, Takahashi et al., 2017)');
 p1=plot(xst,P_dist_forefoot(istance),'-','Color',[0.7, 0.1, 0.1],'linewidth',line_linewidth,'DisplayName','Power (Simulated)');
-p2=plot(TKH17.forefoot(:,1),TKH17.forefoot(:,2),'-.','Color',[1,1,1]*0.5,'linewidth',line_linewidth,'DisplayName','Power (Experimental, Takahashi et al., 2017)');
-leg = [p1,p2];
+leg = [p2,p1];
 
 ylim([-2.5,3.])
 xlim([0,100])
 % ylabel('Power (W/kg)');
 xlabel('Stance phase (%)','Fontsize',label_fontsize);
-title('Power distal to forefoot','Fontsize',title_fontsize);
+title('Distal to forefoot','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
 nexttile(4)
 hold on
-grid on
+yline(0,'-k')
+plot(TKH17.hallux(:,1),TKH17.hallux(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4)
 plot(xst,P_dist_hallux(istance),'-','Color',[0, 0.5, 0],'linewidth',line_linewidth,'DisplayName','Distal to Hallux');
-plot(TKH17.hallux(:,1),TKH17.hallux(:,2),'-.','Color',[1,1,1]*0.5,'linewidth',line_linewidth)
+
+
 
 ylim([-2.5,3.])
 xlim([0,100])
 % ylabel('Power (W/kg)');
 xlabel('Stance phase (%)','Fontsize',label_fontsize);
-title('Power distal to hallux','Fontsize',title_fontsize);
+title('Distal to hallux','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
 
@@ -172,53 +174,60 @@ W_ankles = trapz(R.t(istance),P_ankle(istance)+P_subt(istance));
 [W_ankle_pos,W_ankle_neg] = getWork(P_ankle(istance)+P_subt(istance),R.t(istance));
 
 nexttile(5)
+hold on
 W_pos = [W_dist_hallux_pos,W_dist_forefoot_pos,W_dist_hindfoot_pos,W_dist_shank_pos]';
 W_neg = [W_dist_hallux_neg,W_dist_forefoot_neg,W_dist_hindfoot_neg,W_dist_shank_neg]';
 
-br=bar(W_pos);
+br=bar(flip(W_pos));
 br.FaceColor = 'flat';
-br.CData(1,:) = [0, 0.5, 0];
-br.CData(2,:) = [0.7, 0.1, 0.1];
-br.CData(3,:) = [0, 0.4470, 0.7410];
-br.CData(4,:) = [0.3, 0.3, 0.3];
+br.CData(4,:) = [0, 0.5, 0];
+
+br.CData(2,:) = [0, 0.4470, 0.7410];
+br.CData(1,:) = [0.3, 0.3, 0.3];
+br.CData(3,:) = [0.7, 0.1, 0.1];
 hold on
 br.DisplayName = 'Work (simulated)';
-leg(3) = br;
+leg(4) = br;
 
-ebr=errorbar([1:4],ref_pos_m,-ref_pos_std,ref_pos_std);
+ebr=errorbar([4:-1:1],ref_pos_m,-ref_pos_std,ref_pos_std);
 ebr.Color = [0 0 0];                            
 ebr.LineStyle = 'none';
-ebr.LineWidth = 1;
+ebr.LineWidth = 1.5;
 
-grid on
-ylabel({'Work (J/kg)','Negative     Positive'},'Fontsize',label_fontsize);
+% grid on
+% ylabel('Work (J/kg)','Fontsize',label_fontsize);
+% ylabel({'Work (J/kg)','Negative     Positive'},'Fontsize',label_fontsize);
 tmp=gca;
-tmp.XTickLabel = {'Hallux','Forefoot','Hindfoot','Shank'};
+tmp.XTick = [0:4];
+tmp.XTickLabel = {'Distal to...','...shank','...hindfoot','...forefoot','...hallux'};
+% tmp.XTickLabel = {'Hallux','Forefoot','Hindfoot','Shank'};
 %         tmp.XAxisLocation = 'top';
 %         tmp.FontSize
-%         tmp.XTickLabelRotation = 90;
-%         title('Work distal to...')
+tmp.XTickLabelRotation = 90;
+title('Work')
 yl_1 = tmp.YLim;
 
+
 yyaxis right
-br=bar(W_neg);
+br=bar(flip(W_neg));
 br.FaceColor = 'flat';
-br.CData(1,:) = [0, 0.5, 0];
-br.CData(2,:) = [0.7, 0.1, 0.1];
-br.CData(3,:) = [0, 0.4470, 0.7410];
-br.CData(4,:) = [0.3, 0.3, 0.3];
+br.CData(4,:) = [0, 0.5, 0];
+br.CData(3,:) = [0.7, 0.1, 0.1];
+br.CData(2,:) = [0, 0.4470, 0.7410];
+br.CData(1,:) = [0.3, 0.3, 0.3];
 hold on
 
-ebr=errorbar([1:4],ref_neg_m,-ref_neg_std,ref_neg_std);
+ebr=errorbar([4:-1:1],ref_neg_m,-ref_neg_std,ref_neg_std);
 ebr.Color = [0 0 0];                            
 ebr.LineStyle = 'none'; 
-ebr.LineWidth = 1;
+ebr.LineWidth = 1.5;
 
 tmp2 = gca;
 yl_2 = tmp2.YLim;
         
 tmp2.YAxis(2).Color = 'k';
-tmp2.YTickLabel = '';
+tmp2.YAxis(1).Color = 'none';
+% tmp2.YTickLabel = '';
 
 yl_12 = [min([yl_1,yl_2]), max([yl_1,yl_2])];
 ylim(yl_12)
@@ -231,120 +240,137 @@ set(gca,'Fontsize',label_fontsize);
 
 
 nexttile(6)
+hold on
 W_net = [W_dist_hallux,W_dist_forefoot,W_dist_hindfoot,W_dist_shank]';
 
-br=bar(W_net);
+br=bar(flip(W_net));
 br.FaceColor = 'flat';
-br.CData(1,:) = [0, 0.5, 0];
-br.CData(2,:) = [0.7, 0.1, 0.1];
-br.CData(3,:) = [0, 0.4470, 0.7410];
-br.CData(4,:) = [0.3, 0.3, 0.3];
+br.CData(4,:) = [0, 0.5, 0];
+br.CData(3,:) = [0.7, 0.1, 0.1];
+br.CData(2,:) = [0, 0.4470, 0.7410];
+br.CData(1,:) = [0.3, 0.3, 0.3];
 hold on
 
-ebr=errorbar([1:4],ref_net_m,-ref_net_std,ref_net_std);
+ebr=errorbar([4:-1:1],ref_net_m,-ref_net_std,ref_net_std);
 ebr.Color = [0 0 0];                            
 ebr.LineStyle = 'none';
-ebr.LineWidth = 1;
+ebr.LineWidth = 1.5;
 
-grid on
-ylabel('Net Work (J/kg)')
-tmp=gca;
-tmp.XTickLabel = {'Hallux','Forefoot','Hindfoot','Shank'};
-%         tmp.XAxisLocation = 'top';
-%         tmp.XTickLabelRotation = 90;
-%         title('Work distal to...')
-ylim(yl_12)
-set(gca,'Fontsize',label_fontsize);
-
-
-nexttile(7)
-W_pos = [W_mtj_pos,W_mtjff_pos,W_ankle_pos]';
-W_neg = [W_mtj_neg,W_mtjff_neg,W_ankle_neg]';
-
-br=bar(W_pos);
-br.FaceColor = 'flat';
-br.CData(1,:) = [0.3010, 0.7450, 0.9330];
-br.CData(2,:) = [0.5, 0.5, 0.5];
-br.CData(3,:) = [0.4660, 0.6740, 0.1880];
-hold on
-
-ebr=errorbar([1:3],ref_pos_m2,-ref_pos_std2,ref_pos_std2);
-ebr.Color = [0 0 0];                            
-ebr.LineStyle = 'none';
-ebr.LineWidth = 1;
-
-grid on
-ylabel({'Work (J/kg)','Negative     Positive'},'Fontsize',label_fontsize);
-tmp=gca;
-tmp.XTickLabel = {'Midtarsal','MTJ + Forefoot','Ankle'};
-%         tmp.XAxisLocation = 'top';
-%         tmp.XTickLabelRotation = 90;
-%         title('Work distal to...')
-yl_1 = tmp.YLim;
-
-yyaxis right
-br=bar(W_neg);
-br.FaceColor = 'flat';
-br.CData(1,:) = [0.3010, 0.7450, 0.9330];
-br.CData(2,:) = [0.5, 0.5, 0.5];
-br.CData(3,:) = [0.4660, 0.6740, 0.1880];
-hold on
-
-ebr=errorbar([1:3],ref_neg_m2,-ref_neg_std2,ref_neg_std2);
-ebr.Color = [0 0 0];                            
-ebr.LineStyle = 'none'; 
-ebr.LineWidth = 1;
-
-tmp2 = gca;
-yl_2 = tmp2.YLim;
-        
-tmp2.YAxis(2).Color = 'k';
-tmp2.YTickLabel = '';
-
-%         yl_12 = [min([yl_1,yl_2]), max([yl_1,yl_2])];
-ylim(yl_12)
-set(gca,'Fontsize',label_fontsize);
-
-yyaxis left
-ylim(yl_12)
-set(gca,'Fontsize',label_fontsize);
-
-
-nexttile(8)
-W_net = [W_mtjs,W_mtjff,W_ankles]';
-
-br=bar(W_net);
-br.FaceColor = 'flat';
-br.CData(1,:) = [0.3010, 0.7450, 0.9330];
-br.CData(2,:) = [0.3, 0.3, 0.3];
-br.CData(3,:) = [0.4660, 0.6740, 0.1880];
-hold on
-
-ebr=errorbar([1:3],ref_net_m2,-ref_net_std2,ref_net_std2);
-ebr.Color = [0 0 0];                            
-ebr.LineStyle = 'none';
-ebr.LineWidth = 1;
 ebr.DisplayName = 'Work (Experimental, Takahashi et al., 2017)';
-leg(4) = ebr;
+leg(3) = ebr;
 
-grid on
-ylabel('Net Work (J/kg)','Fontsize',label_fontsize);
+% grid on
+% ylabel('Net Work (J/kg)')
+ylabel('Work (J/kg)','Fontsize',label_fontsize);
+
 tmp=gca;
-tmp.XTickLabel = {'Midtarsal','MTJ + Forefoot','Ankle'};
+tmp.XTick = [0:4];
+tmp.XTickLabel = {'Distal to...','...shank','...hindfoot','...forefoot','...hallux'};
+% tmp.XTickLabel = {'Hallux','Forefoot','Hindfoot','Shank'};
 %         tmp.XAxisLocation = 'top';
-%         tmp.XTickLabelRotation = 90;
-%         title('Work distal to...')
+tmp.XTickLabelRotation = 90;
+tmp.YAxisLocation = 'right';
+title('Net work')
 ylim(yl_12)
 set(gca,'Fontsize',label_fontsize);
+
+
+% nexttile(7)
+% W_pos = [W_mtj_pos,W_mtjff_pos,W_ankle_pos]';
+% W_neg = [W_mtj_neg,W_mtjff_neg,W_ankle_neg]';
+% 
+% br=bar(W_pos);
+% br.FaceColor = 'flat';
+% br.CData(1,:) = [0.3010, 0.7450, 0.9330];
+% br.CData(2,:) = [0.5, 0.5, 0.5];
+% br.CData(3,:) = [0.4660, 0.6740, 0.1880];
+% hold on
+% 
+% ebr=errorbar([1:3],ref_pos_m2,-ref_pos_std2,ref_pos_std2);
+% ebr.Color = [0 0 0];                            
+% ebr.LineStyle = 'none';
+% ebr.LineWidth = 1;
+% 
+% grid on
+% ylabel({'Work (J/kg)','Negative     Positive'},'Fontsize',label_fontsize);
+% tmp=gca;
+% tmp.XTickLabel = {'Midtarsal','MTJ + Forefoot','Ankle'};
+% %         tmp.XAxisLocation = 'top';
+% %         tmp.XTickLabelRotation = 90;
+% %         title('Work distal to...')
+% yl_1 = tmp.YLim;
+% 
+% yyaxis right
+% br=bar(W_neg);
+% br.FaceColor = 'flat';
+% br.CData(1,:) = [0.3010, 0.7450, 0.9330];
+% br.CData(2,:) = [0.5, 0.5, 0.5];
+% br.CData(3,:) = [0.4660, 0.6740, 0.1880];
+% hold on
+% 
+% ebr=errorbar([1:3],ref_neg_m2,-ref_neg_std2,ref_neg_std2);
+% ebr.Color = [0 0 0];                            
+% ebr.LineStyle = 'none'; 
+% ebr.LineWidth = 1;
+% 
+% tmp2 = gca;
+% yl_2 = tmp2.YLim;
+%         
+% tmp2.YAxis(2).Color = 'k';
+% tmp2.YTickLabel = '';
+% 
+% %         yl_12 = [min([yl_1,yl_2]), max([yl_1,yl_2])];
+% ylim(yl_12)
+% set(gca,'Fontsize',label_fontsize);
+% 
+% yyaxis left
+% ylim(yl_12)
+% set(gca,'Fontsize',label_fontsize);
+% 
+% 
+% nexttile(8)
+% W_net = [W_mtjs,W_mtjff,W_ankles]';
+% 
+% br=bar(W_net);
+% br.FaceColor = 'flat';
+% br.CData(1,:) = [0.3010, 0.7450, 0.9330];
+% br.CData(2,:) = [0.3, 0.3, 0.3];
+% br.CData(3,:) = [0.4660, 0.6740, 0.1880];
+% hold on
+% 
+% ebr=errorbar([1:3],ref_net_m2,-ref_net_std2,ref_net_std2);
+% ebr.Color = [0 0 0];                            
+% ebr.LineStyle = 'none';
+% ebr.LineWidth = 1;
+% ebr.DisplayName = 'Work (Experimental, Takahashi et al., 2017)';
+% leg(4) = ebr;
+% 
+% grid on
+% ylabel('Net Work (J/kg)','Fontsize',label_fontsize);
+% tmp=gca;
+% tmp.XTickLabel = {'Midtarsal','MTJ + Forefoot','Ankle'};
+% %         tmp.XAxisLocation = 'top';
+% %         tmp.XTickLabelRotation = 90;
+% %         title('Work distal to...')
+% ylim(yl_12)
+% set(gca,'Fontsize',label_fontsize);
 
 % legend({['Simulation (' LegName ')'],'Experiment (Takahashi et al., 2017)'},'Location','northwest')
         
 
-lg = legend(leg,'Orientation','Horizontal','Fontsize',legend_fontsize);
-title(lg,{'.','.'},'Color','w');
+% lg = legend(leg,'Orientation','Horizontal','Fontsize',legend_fontsize);
+lg = legend(leg,'Fontsize',legend_fontsize,'NumColumns',4);
+% title(lg,{'.','.'},'Color','w');
 lg.Color = 'none';
 lg.Box = 'off';
 lg.Layout.Tile = 'South';
+
+
+str = '(a)';
+annotation(gcf,'textbox',[0.06,0.96,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+
+str = '(b)';
+annotation(gcf,'textbox',[0.66,0.96,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';

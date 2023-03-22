@@ -34,8 +34,8 @@ resultFiles = {
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
     };
-LegNames = {'Compliant Achilles tendon (3-S)','Compliant Achilles tendon (2-S)',...
-    'Stiff Achilles tendon (3-S)','Stiff Achilles tendon (2-S)'};
+LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
+    'Stiffer Achilles tendon (3-segment)','Stiffer Achilles tendon (2-segment)'};
 
 
 joints_ref = {'knee_angle','ankle_angle'};
@@ -43,17 +43,19 @@ joints_tit = {'Knee','Ankle'};
 
 muscles_sim = {'soleus_r','med_gas_r'};
 muscles_ref = {'Soleus','Gastrocnemius-medialis'};
+muscles_title = {'Soleus','Gastrocnemius'};
 m_scale = [3.33, 2.94];
 
 % GRF_title = {'Forward','Vertical','Lateral'};
 
 %
 
-label_fontsize = 9;
-legend_fontsize = 11;
-title_fontsize = 11;
+label_fontsize = 12;
+legend_fontsize = 12;
+title_fontsize = 12;
 
-CsV = {'k','k',[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
+% CsV = {'k','k',[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
+CsV = {'k','k',[149, 117, 205]/256,[0.4940 0.1840 0.5560],[115, 45, 217]/256};
 mrk = {'-','-.','-','-.'};
 lw = [2,1,2,1];
 
@@ -61,7 +63,7 @@ set(0,'defaultFigureColor','w')
 
 %
 fig2 = figure();
-fig2.Position = [269 136 1200/2 600/2+50];
+fig2.Position = [269 136 1200/2 600/2+70];
 tl2 = tiledlayout(2,3);
 tl2.TileSpacing = 'tight';
 
@@ -118,19 +120,20 @@ for i_res=1:length(resultFiles)
             if i==1
                 leg = [leg,p1];
                 if i_res==length(resultFiles)
-                    lg = legend(leg,'Orientation','Horizontal','numcolumns',2,'Fontsize',legend_fontsize);
+                    lg = legend(leg,'numcolumns',2,'Fontsize',legend_fontsize);
 %                     lg.Position(2) = lg.Position(2)-0.5;
                     lg.Layout.Tile = 'South';
+                    lg.Box = 'off';
                 end
             end
         end
 
         % layout
         if i_res==length(resultFiles)
-%             if i == 1
+            if i == 1
                 ylb = ylabel('Angle (°)','Fontsize',label_fontsize);
-                ylb.Position(1) = -20;
-%             end
+                ylb.Position(1) = -27;
+            end
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
@@ -139,64 +142,14 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-%             xlabel('Gait cycle (%)','Fontsize',label_fontsize)
-
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
+            if i==1
+                set(gca,'YTick',[-60,-30,0]);
+            end
         end
     end % end of kinematics
 
-    %% kinetics
-%     for i=1:length(joints_ref)
-%         nexttile(i+length(joints_ref))
-%         % plot reference data
-%         if i_res==1 && i<6
-%             idx_jref = strcmp(Tref.colheaders,joints_ref{i});
-%             if sum(idx_jref) == 1
-%                 meanPlusSTD = (Tref.Tall_mean(:,idx_jref) + 2*Tref.Tall_std(:,idx_jref))/R.body_mass;
-%                 meanMinusSTD = (Tref.Tall_mean(:,idx_jref) - 2*Tref.Tall_std(:,idx_jref))/R.body_mass;
-% 
-%                 stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
-%                 intervalQ = 1:stepQ:size(R.Qs,1);
-%                 sampleQ = 1:size(R.Qs,1);
-%                 meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
-%                 meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
-% 
-%                 hold on
-%                 fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
-% 
-%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
-% 
-%             end
-%         end % end plot ref data
-% 
-%         % plot sim result
-%         idx_jsim = strcmp(R.colheaders.joints,[joints_ref{i} '_r']);
-%         if any(idx_jsim)
-%             hold on
-%             plot(x,R.Tid(:,idx_jsim)/R.body_mass,'linewidth',line_linewidth,'Color',CsV{i_res},...
-%                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
-%             hold on
-%             px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-%             uistack(px,"bottom");
-%         end
-% 
-%         % layout
-%         if i_res==length(resultFiles)
-%             if i == 1
-%                 ylb = ylabel('Moment (Nm/kg)','Fontsize',label_fontsize);
-% %                 ylb.Position(1) = -27;
-%             end
-%             axis tight
-%             yl = get(gca, 'ylim');
-%             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-%             xlim([0,100])
-%             set(gca,'XTick',[0:50:100]);
-%             set(gca,'Fontsize',label_fontsize);
-%             set(gca,'XTickLabelRotation',0)
-%             title(joints_tit{i},'Fontsize',label_fontsize);
-%             xlabel('Gait cycle (%)','Fontsize',label_fontsize)
-%         end
-%     end % end of kinetics
+
 
 
     %% powers
@@ -236,69 +189,25 @@ for i_res=1:length(resultFiles)
 
         % layout
         if i_res==length(resultFiles)
-%             if i == 2
+            if i == 1
                 ylb = ylabel('Power (W/kg)','Fontsize',label_fontsize);
-                ylb.Position(1) = -20;
-%             end
+                ylb.Position(1) = -27;
+            end
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-            ylim([-1.6,3.3])
+            ylim([-1.7,3.4])
             xlim([0,100])
             set(gca,'XTick',[0:50:100]);
+%             set(gca,'YTick',[-1,0,1.5,3]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
         end
     end % end of powers
 
 
-    %% GRFs
-%     for i=1:3
-%         nexttile(i+2*length(joints_ref)+4)
-%         % plot reference data
-%         if i_res==1
-%             meanPlusSTD = Data.GRF.Fmean(:,i) + 2*Data.GRF.Fstd(:,i);
-%             meanMinusSTD = Data.GRF.Fmean(:,i) - 2*Data.GRF.Fstd(:,i);
-% 
-%             stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
-%             intervalQ = 1:stepQ:size(R.Qs,1);
-%             sampleQ = 1:size(R.Qs,1);
-%             meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
-%             meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
-% 
-%             hold on
-%             fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
-% 
-%             xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
-% 
-%         end % end plot ref data
-% 
-%         % plot sim result
-%         hold on
-%         plot(x,R.GRFs(:,i),'linewidth',line_linewidth,'Color',CsV{i_res},...
-%             'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
-%         hold on
-%         px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-%                     'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-%         uistack(px,"bottom");
-% 
-%         % layout
-%         if i_res==length(resultFiles)
-%             if i == 1
-%                 ylabel('GRF (% BW)','Fontsize',label_fontsize);
-%             end
-%             axis tight
-%             yl = get(gca, 'ylim');
-%             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-%             xlim([0,100])
-%             set(gca,'XTick',[0:50:100]);
-%             set(gca,'Fontsize',label_fontsize);
-%             set(gca,'XTickLabelRotation',0)
-%             title(GRF_title{i});
-%         end
-%     end % end of GRFs
 
     %% muscle activity
     for i=1:length(muscles_sim)
@@ -342,6 +251,7 @@ for i_res=1:length(resultFiles)
                 ylb = ylabel('Activation (-)','Fontsize',label_fontsize);
 %                 ylb.Position(1) = -27;
 %             end
+            set(gca,'YAxisLocation','right')
             axis tight
             yl = get(gca, 'ylim');
             ylim([-0.02,yl(2)+0.1*norm(yl)])
@@ -349,9 +259,9 @@ for i_res=1:length(resultFiles)
             set(gca,'XTick',[0:50:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
-            title(replace(muscles_ref{i},'-',' '),'Fontsize',title_fontsize);
+            title(replace(muscles_title{i},'-',' '),'Fontsize',title_fontsize);
             if i==2
-                xlabel('Gait cycle (%)','Fontsize',label_fontsize)    
+                xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)    
             end
         end
     end % end of activity
@@ -383,18 +293,19 @@ for i_res=1:length(resultFiles)
     if i_res==length(resultFiles)
 %         if i == 1
             ylb = ylabel('Power (W/kg)','Fontsize',label_fontsize);
-            ylb.Position(1) = -20;
+            ylb.Position(1) = -27;
 %         end
         axis tight
         yl = get(gca, 'ylim');
         ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-        ylim([-1.6,3.3])
+        ylim([-1.7,3.4])
         xlim([0,100])
         set(gca,'XTick',[0:50:100]);
+%         set(gca,'YTick',[-1,0,1.5,3]);
         set(gca,'Fontsize',label_fontsize);
         set(gca,'XTickLabelRotation',0)
         title('Achilles tendon','Fontsize',title_fontsize);
-        xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+        xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
     end
 
 

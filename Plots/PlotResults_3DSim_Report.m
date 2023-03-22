@@ -63,7 +63,12 @@ if nr<=3
     CsV = [[0 0.4470 0.7410];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840]];
 end
 mrk = {'-',':','-',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
-        
+  
+if nr==4
+    CsV = [[0 0 0];[0.6350 0.0780 0.1840]; [0.3010 0.7450 0.9330];[0.4660 0.6740 0.1880]];
+    mrk = {'-','-.','-.',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
+end
+
 for inr=1:nr
     load(ResultsFile{inr},'R');
 
@@ -345,7 +350,10 @@ for inr=1:nr
     W_tot = W_HC + W_joints;
     P_leg_joints = P_hip + P_knee + P_ankle + P_subt + P_mtj + P_mtp;
 
-    
+    % impulse
+    p_GRF = trapz(R.t,vecnorm(R.GRFs(:,1:3),2,2));
+    p_mtj = trapz(R.t,R.Tid(:,imtj));
+
     
 %%
 
@@ -3853,8 +3861,8 @@ for inr=1:nr
             if inr == 1
                 Ws_cat = categorical({'Hip','Knee','Ankle','Subt','Mtj',...
                     'Mtp','Joints total','Heel pad','Forefoot pad','Toes pad',...
-                    'Achilles tendon','Plantar fascia','Mtj ligaments',...
-                    'Plantar Intr. Mus.'});
+                    'Achilles tendon','Plantar fascia','Plantar Intr. Mus.',...
+                    'Foot deformation'});
                 Ws_pos = zeros(length(Ws_cat),nr);
                 Ws_neg = Ws_pos;
                 Ws_pos_gc = Ws_pos;
@@ -3905,62 +3913,38 @@ for inr=1:nr
             
             Wi_pos = [W_hip_pos;W_knee_pos;W_ankle_pos;W_subt_pos;W_mtj_pos;W_mtp_pos];
             Ws_pos_gc(:,inr) = [Wi_pos;W_sum_pos;W_heel_pos;W_fft_pos;W_toes_pos;...
-                W_At_pos;W_PF_pos;W_mtj_li_pos;W_PIM_pos]/dist_trav;
+                W_At_pos;W_PF_pos;W_PIM_pos;W_mtj_li_pos];
             
             Wi_neg = [W_hip_neg;W_knee_neg;W_ankle_neg;W_subt_neg;W_mtj_neg;W_mtp_neg];
             Ws_neg_gc(:,inr) = [Wi_neg;W_sum_neg;W_heel_neg;W_fft_neg;W_toes_neg;...
-                W_At_neg;W_PF_neg;W_mtj_li_neg;W_PIM_neg]/dist_trav;
+                W_At_neg;W_PF_neg;W_PIM_neg;W_mtj_li_neg];
             
             Wi_net = [W_hip_net;W_knee_net;W_ankle_net;W_subt_net;W_mtj_net;W_mtp_net];
             Ws_net_gc(:,inr) = [Wi_net;W_sum_net;W_heel_net;W_fft_net;W_toes_net;...
-                W_At_net;W_PF_net;W_mtj_li_net;W_PIM_net]/dist_trav;
+                0;0;W_PIM_net;W_mtj_li_net];
 
+            div_by_dist_trav = 1;
+            if div_by_dist_trav
+                Ws_pos_gc(:,inr) = Ws_pos_gc(:,inr)/dist_trav;
+                Ws_neg_gc(:,inr) = Ws_neg_gc(:,inr)/dist_trav;
+                Ws_net_gc(:,inr) = Ws_net_gc(:,inr)/dist_trav;
+            end
+
+            if inr==2
+                increase_pct_pos = (Ws_pos_gc(:,2)-Ws_pos_gc(:,1))./Ws_pos_gc(:,1)*100;
+            end
             legW{inr} = LegName;
             
             % make figures
             if inr == nr
-               Ws_cat = reordercats(Ws_cat,[5,7,2,13,8,10,6, 4,3,14, 1,11,12,9]);
-               
-%                % stance
-%                figure
-%                subplot(311)
-%                br1=bar(Ws_cat,Ws_pos);
-%                grid on
-%                ylim([0,1.1*max(max(Ws_pos))])
-%                for ibr=1:length(br1)
-%                    br1(ibr).FaceColor = 'flat';
-%                    br1(ibr).CData = CsV(ibr,:);
-%                end
-%                title('Mechanical joint work in stance phase')
-%                ylabel('positive W (J/kg)')
-% 
-%                subplot(312)
-%                br2=bar(Ws_cat,Ws_neg);
-%                grid on
-%                ylim([-1.1*max(max(Ws_pos)),0])
-%                for ibr=1:length(br2)
-%                    br2(ibr).FaceColor = 'flat';
-%                    br2(ibr).CData = CsV(ibr,:);
-%                end
-%                ylabel('negative W (J/kg)')
-%                
-%                subplot(313)
-%                br3=bar(Ws_cat,(Ws_pos+Ws_neg));
-%                grid on
-%                xl = get(gca, 'xlim');
-%                axis tight
-%                yl = get(gca, 'ylim');
-%                ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-%                xlim(xl)
-%                for ibr=1:length(br3)
-%                    br3(ibr).FaceColor = 'flat';
-%                    br3(ibr).CData = CsV(ibr,:);
-%                end
-%                ylabel('net W (J/kg)')
+               Ws_cat = reordercats(Ws_cat,string(Ws_cat));
                
                % full gait cycle
                h20 = figure('Position',[fpos(2,:),fhigh1]);
-               subplot(311)
+               tl20 = tiledlayout(3,1);
+               tl20.TileSpacing = 'none';
+
+               nexttile(1)
                br1=bar(Ws_cat,Ws_pos_gc);
                grid on
                ylim([0,1.1*max(max(Ws_pos_gc))])
@@ -3969,18 +3953,25 @@ for inr=1:nr
                    br1(ibr).CData = CsV(ibr,:);
                end
                title('Mechanical work right leg')
-               ylabel('positive W (Jkg^{-1}m^{-1})')
+               if div_by_dist_trav
+                   ylabel('positive W (Jkg^{-1}m^{-1})')
+               else
+                   ylabel('positive W (Jkg^{-1})')
+               end
                tmp=gca;
                tmp.XTickLabelRotation = 90;
+               tmp.XTickLabel = 'none';
 
-               lh20=legend(legW,'location','northeast','Interpreter',lgInt);
-               lhPos = lh20.Position;
-%                lhPos(1) = lhPos(1)+0.1;
-               lhPos(2) = lhPos(2)+0.05;
-               set(lh20,'position',lhPos);
-               title(lh20,'Legend')
+               lh20=legend(legW,'location','northeast','Interpreter',lgInt,'NumColumns',2);
+               lh20.Layout.Tile = 'South';
                 
-               subplot(312)
+%                lhPos = lh20.Position;
+% %                lhPos(1) = lhPos(1)+0.1;
+%                lhPos(2) = lhPos(2)+0.05;
+%                set(lh20,'position',lhPos);
+% %                title(lh20,'Legend')
+                
+               nexttile(2)
                br2=bar(Ws_cat,Ws_neg_gc);
                grid on
                ylim([-1.1*max(max(Ws_pos_gc)),0])
@@ -3988,23 +3979,32 @@ for inr=1:nr
                    br2(ibr).FaceColor = 'flat';
                    br2(ibr).CData = CsV(ibr,:);
                end
-               ylabel('negative W (Jkg^{-1}m^{-1})')
+               if div_by_dist_trav
+                   ylabel('negative W (Jkg^{-1}m^{-1})')
+               else
+                   ylabel('negative W (Jkg^{-1})')
+               end
                tmp=gca;
                tmp.XTickLabelRotation = 90;
+               tmp.XTickLabel = 'none';
                
-               subplot(313)
+               nexttile(3)
                br3=bar(Ws_cat,(Ws_net_gc));
                grid on
                xl = get(gca, 'xlim');
                axis tight
                yl = get(gca, 'ylim');
                ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-               xlim(xl)
+%                xlim(xl)
                for ibr=1:length(br3)
                    br3(ibr).FaceColor = 'flat';
                    br3(ibr).CData = CsV(ibr,:);
                end
-               ylabel('net W (Jkg^{-1}m^{-1})')
+               if div_by_dist_trav
+                   ylabel('net W (Jkg^{-1}m^{-1})')
+               else
+                   ylabel('net W (Jkg^{-1})')
+               end
                tmp=gca;
                tmp.XTickLabelRotation = 90;
                
@@ -4535,11 +4535,11 @@ for inr=1:nr
             end
             title('Metabolic energy of muscles')
             xlabel('E_{metab} (Jkg^{-1}m^{-1})')
-            lh24=legend(legMus,'location','northeast','Interpreter',lgInt);
+            lh24=legend(legMus,'location','northeast','Interpreter',lgInt,'NumColumns',2);
             lhPos = lh24.Position;
             lhPos(1) = lhPos(1)+0.1;
             set(lh24,'position',lhPos);
-            title(lh24,'Legend')
+%             title(lh24,'Legend')
 
             subplot(1,2,2)
             hold on
@@ -5562,6 +5562,7 @@ for inr=1:nr
     if makeplot.windlass_mtp
         if inr==1
             h34 = figure('Position',[fpos(4,:),fwide]);
+            tiledlayout(2,3)
             lg34 = [];
         end
         
@@ -5569,22 +5570,25 @@ for inr=1:nr
         
         if ~isempty(imtj)
 
-            subplot(2,3,1)
+            nexttile(1)
             p1=plot(R.Qs(:,imtj),-R.Tid(:,imtj),'.','color',Cs,'DisplayName',LegName);
-            lg34(end+1) = p1;
+            
             hold on
             xlabel('mtj angle (°)')
             ylabel('mtj torque (Nm)')
 
-            plot(R.Qs(iheel_contact(1),imtj),-R.Tid(iheel_contact(1),imtj),'o','Color',p1.Color,'MarkerSize',15)
-            plot(R.Qs(iheel_contact(end),imtj),-R.Tid(iheel_contact(end),imtj),'*','Color',p1.Color,'MarkerSize',15)
-            plot(R.Qs(iff_contact(1),imtj),-R.Tid(iff_contact(1),imtj),'+','Color',p1.Color,'MarkerSize',15)
-            plot(R.Qs(iff_contact(end),imtj),-R.Tid(iff_contact(end),imtj),'x','Color',p1.Color,'MarkerSize',15)
-            plot(R.Qs(itoe_contact(1),imtj),-R.Tid(itoe_contact(1),imtj),'<','Color',p1.Color,'MarkerSize',15)
-            plot(R.Qs(itoe_contact(end),imtj),-R.Tid(itoe_contact(end),imtj),'d','Color',p1.Color,'MarkerSize',15)
+            lg34a(1)=plot(R.Qs(iheel_contact(1),imtj),-R.Tid(iheel_contact(1),imtj),'o','Color',p1.Color,'MarkerSize',15,'DisplayName','first heel contact');
+            lg34a(2)=plot(R.Qs(iheel_contact(end),imtj),-R.Tid(iheel_contact(end),imtj),'*','Color',p1.Color,'MarkerSize',15,'DisplayName','last heel contact');
+            lg34a(3)=plot(R.Qs(iff_contact(1),imtj),-R.Tid(iff_contact(1),imtj),'+','Color',p1.Color,'MarkerSize',15,'DisplayName','first forefoot contact');
+            lg34a(4)=plot(R.Qs(iff_contact(end),imtj),-R.Tid(iff_contact(end),imtj),'x','Color',p1.Color,'MarkerSize',15,'DisplayName','last forefoot contact');
+            lg34a(5)=plot(R.Qs(itoe_contact(1),imtj),-R.Tid(itoe_contact(1),imtj),'<','Color',p1.Color,'MarkerSize',15,'DisplayName','first toe contact');
+            lg34a(6)=plot(R.Qs(itoe_contact(end),imtj),-R.Tid(itoe_contact(end),imtj),'d','Color',p1.Color,'MarkerSize',15,'DisplayName','last toe contact');
+            if inr==nr
+                lh34a=legend(lg34a);
+                lh34a.Layout.Tile = 6;
+            end
             
-            
-            subplot(2,3,3)
+            nexttile(3)
             p2=plot(R.Qs(:,imtj),R.Qs(:,imtp),'.','Color',Cs);
             hold on
             plot(R.Qs(iheel_contact(1),imtj),R.Qs(iheel_contact(1),imtp),'o','Color',Cs,'MarkerSize',15)
@@ -5593,9 +5597,12 @@ for inr=1:nr
             plot(R.Qs(iff_contact(end),imtj),R.Qs(iff_contact(end),imtp),'x','Color',Cs,'MarkerSize',15)
             plot(R.Qs(itoe_contact(1),imtj),R.Qs(itoe_contact(1),imtp),'<','Color',Cs,'MarkerSize',15)
             plot(R.Qs(itoe_contact(end),imtj),R.Qs(itoe_contact(end),imtp),'d','Color',Cs,'MarkerSize',15)
-            ylabel('mtp angle (°)')
+            ylabel('mtpj angle (°)')
+            xlabel('mtj angle (°)')
 
-            subplot(2,3,2)
+            lg34(end+1) = p2;
+
+            nexttile(2)
             plot(R.Qs(:,imtp),-R.Tid(:,imtp),'.','color',Cs,'DisplayName',LegName);
             hold on
             xlabel('mtpj angle (°)')
@@ -5608,8 +5615,11 @@ for inr=1:nr
             plot(R.Qs(itoe_contact(1),imtp),-R.Tid(itoe_contact(1),imtp),'<','Color',p1.Color,'MarkerSize',15)
             plot(R.Qs(itoe_contact(end),imtp),-R.Tid(itoe_contact(end),imtp),'d','Color',p1.Color,'MarkerSize',15)
             
+            [~,imaxmtp] = max(-R.Tid(:,imtp));
+            ply_mtp = polyfit(R.Qs(imaxmtp:iff_contact(end),imtp),-R.Tid(imaxmtp:iff_contact(end),imtp),1);
+            k_mtp = ply_mtp(1)
 
-            subplot(2,3,4)
+            nexttile(4)
             plot(R.Qs(:,imtp),l_PF,'.','color',Cs,'DisplayName',LegName);
             hold on
             xlabel('mtpj angle (°)')
@@ -5622,7 +5632,7 @@ for inr=1:nr
             plot(R.Qs(itoe_contact(1),imtp),l_PF(itoe_contact(1)),'<','Color',p1.Color,'MarkerSize',15)
             plot(R.Qs(itoe_contact(end),imtp),l_PF(itoe_contact(end)),'d','Color',p1.Color,'MarkerSize',15)
             
-            subplot(2,3,5)
+            nexttile(5)
             plot(R.Qs(:,imtp),F_PF,'.','color',Cs,'DisplayName',LegName);
             hold on
             xlabel('mtpj angle (°)')
@@ -5638,9 +5648,9 @@ for inr=1:nr
 
 
             if inr==nr
-                subplot(2,3,1)
+                nexttile(3)
                 lh34 = legend(lg34,'Location','north');
-                annotation('textbox',[0.15,0.6,0.2,0.27],'String',{'o  first heel contact','*   last heel contact','+  first forefoot contact','x  last forefoot contact','<  first toe contact','d  last toe contact'})
+%                 annotation('textbox',[0.15,0.6,0.2,0.27],'String',{'o  first heel contact','*   last heel contact','+  first forefoot contact','x  last forefoot contact','<  first toe contact','d  last toe contact'})
             end
             
         end

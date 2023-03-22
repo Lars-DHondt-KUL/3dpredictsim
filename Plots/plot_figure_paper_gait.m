@@ -49,13 +49,13 @@ GRF_title = {'Forward','Vertical','Lateral'};
 
 %
 
-label_fontsize = 9;
+label_fontsize = 10;
 legend_fontsize = 12;
 title_fontsize = 11;
 
 % CsV = {[0.4660 0.6740 0.1880],'k','k'};
-% CsV = {[0.8500 0.3250 0.0980],'k','k'};
-CsV = {[85, 186, 70]/256,'k','k'};
+CsV = {[0.8500 0.3250 0.0980],'k','k'};
+% CsV = {[85, 186, 70]/256,'k','k'};
 mrk = {'-','-.','-','--'};
 lw = [2,1,2];
 
@@ -347,7 +347,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(muscles_title{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
 
         end
     end % end of activity
@@ -359,21 +359,21 @@ end
 %%
 
 str = '(a)';
-annotation(gcf,'textbox',[0.05,0.93,0.05,0.05],'String',str,'EdgeColor','none','FontSize',12);
+annotation(gcf,'textbox',[0.05,0.93,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(b)';
-annotation(gcf,'textbox',[0.05,0.7,0.05,0.05],'String',str,'EdgeColor','none','FontSize',12);
+annotation(gcf,'textbox',[0.05,0.7,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(c)';
-annotation(gcf,'textbox',[0.05,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',12);
+annotation(gcf,'textbox',[0.05,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 str = '(d)';
-annotation(gcf,'textbox',[0.55,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',12);
+annotation(gcf,'textbox',[0.54,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 str = '(e)';
-annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',12);
+annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 

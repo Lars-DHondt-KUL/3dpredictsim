@@ -43,8 +43,11 @@ function [k_leg,com_y] = calcLegStiffness(res_file)
     load(res_file,'R');
     
     % model = 'Fal_s1_mtjc4_FK_sc_FDB2_MTc5_cspx10_cg9_o1x10';
-    model = [R.S.OsimFileName '_cspx10_oy3'];
-    
+    model = [R.S.OsimFileName '_cspx10_cg9_o1x10'];
+    if ~contains(model,'FDB2') && contains(model,'mtj')
+        model = replace(model,'MTc5','FDB2_MTc5');
+    end
+
     filename_model = fullfile('C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1',[model '.osim']);
     
     % kinematics_file = fullfile(results_dir,'\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100.mot');

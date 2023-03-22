@@ -34,7 +34,8 @@ resultFiles = {
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
     };
-LegNames = {'Stiff contact (3-S)','Stiff contact (2-S)','Compliant contact (3-S)','Compliant contact (2-S)'};
+LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
+    'Compliant contact (3-segment)','Compliant contact (2-segment)'};
 
 
 joints_ref = {'knee_angle'};
@@ -48,11 +49,11 @@ joints_tit = {'Knee'};
 
 %
 
-label_fontsize = 9;
-legend_fontsize = 11;
-title_fontsize = 11;
+label_fontsize = 12;
+legend_fontsize = 12;
+title_fontsize = 12;
 
-CsV = {'k','k',[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
+CsV = {'k','k',[0.4660 0.6740 0.1880],[0,0.4,0],[85, 186, 70]/256,[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
 mrk = {'-','-.','-','-.'};
 lw = [2,1,2,1];
 
@@ -120,6 +121,7 @@ for i_res=1:length(resultFiles)
                     lg = legend(leg,'Location','northwest','Fontsize',legend_fontsize);
                     lg.Position(2) = lg.Position(2)-0.45;
                     lg.Position(1) = lg.Position(1)-0.05;
+                    lg.Box = 'off';
 %                     lg.Layout.Tile = 4;
                 end
             end
@@ -139,7 +141,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
 
         end
     end % end of kinematics
@@ -194,7 +196,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
         end
     end % end of kinetics
 
@@ -249,7 +251,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
         end
     end % end of powers
 
@@ -350,7 +352,7 @@ for i_res=1:length(resultFiles)
 %             set(gca,'Fontsize',label_fontsize);
 %             set(gca,'XTickLabelRotation',0)
 %             title(replace(muscles_ref{i},'-',' '),'Fontsize',label_fontsize);
-%             xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
 % 
 %         end
 %     end % end of activity
@@ -388,7 +390,7 @@ for i_res=1:length(resultFiles)
         set(gca,'Fontsize',label_fontsize);
         set(gca,'XTickLabelRotation',0)
         title('Heel pad','Fontsize',title_fontsize);
-        xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+        xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
     end
 
 

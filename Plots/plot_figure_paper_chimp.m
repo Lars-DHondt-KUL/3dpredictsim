@@ -161,7 +161,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
 
         end
     end % end of kinematics
@@ -235,7 +235,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
         end
     end % end of kinetics
 
@@ -286,7 +286,7 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(GRF_title{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize)
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
         end
     end % end of GRFs
 

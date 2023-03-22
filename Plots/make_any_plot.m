@@ -194,14 +194,14 @@ S.Foot.PF_sf = 5;
 % LegNames = {'3-segment model: custom scaling','2-segment model: custom scaling','3-segment model: isometric scaling','2-segment model: isometric scaling'};
 
 
-% extrinsic foot muscles
-%  results = {
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
-%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100_v2'   
-%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100'
-%     };
-%  LegNames = {'3-segment model: muscle-driven mtj, mtpj', '2-segment model: passive mtpj', '3-segment model: passive mtj, mtpj','2-segment model: muscle-driven mtpj'};
+% % extrinsic foot muscles
+ results = {
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+    '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100_v2'   
+    '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100'
+    };
+ LegNames = {'3-segment model: muscle-driven mtj, mtpj', '2-segment model: passive mtpj', '3-segment model: passive mtj, mtpj','2-segment model: muscle-driven mtpj'};
 
 % % intrinsic foot muscle, plantar fascia stiffness
 %  results = {
@@ -216,15 +216,14 @@ S.Foot.PF_sf = 5;
 % LegNames = [{'2-segment'}, LegNames];
 
 % % 
-results = {
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig21_N100_v2'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig1_N100_v2'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x2_ls146_ig1_N100'
-
-    };
-LegNames = {'with PIM','PIM nerve block','PIM nerve block (ig1)','w/o PIM','w/o PIM, PF stiff x2'};
+% results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig21_N100_v2'
+% %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig1_N100_v2'
+% %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100'
+% %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x2_ls146_ig1_N100'
+%     };
+% LegNames = {'with PIM','PIM nerve block','PIM nerve block (ig1)','w/o PIM','w/o PIM, PF stiff x2'};
     
 % % 
 % results = {
@@ -238,10 +237,11 @@ LegNames = {'with PIM','PIM nerve block','PIM nerve block (ig1)','w/o PIM','w/o 
 % results = {
 %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Gefen2002_ls146_ig1_N100'
 %     '\results_paper\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls141_FDB2_lTs120_Fpsl10_ig1_N100'
 %     };
-% LegNames = {'3-segment','2-segment','3-s w/o PIM','3-s low arch'};
+% LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
+%     'Compliant plantar fascia, without intrinsic muscle','Low arch height (3-segment)'};
 
 
 % results = {
@@ -578,10 +578,10 @@ makeplot.allQdots                       = 0; % all joint velocities
 makeplot.allQddots                      = 0; % all joint accelerations
 makeplot.allPs                          = 0; % all joint powers
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
-makeplot.windlass                       = 0; % plantar fascia and foot arch info
+makeplot.windlass                       = 1; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
 makeplot.mtj_moments                    = 0; % mtj moment decomposition    
-makeplot.power_main                     = 0; % main power components of foot
+makeplot.power_main                     = 1; % main power components of foot
 makeplot.power_windlass                 = 0; % windlass power transfer
 makeplot.power                          = 0; % datailed power decomposition
 makeplot.work                           = 0; % same as power, but work over GC
@@ -597,7 +597,7 @@ makeplot.Energy_cost                    = 0; % decompose metabolic cost componen
 makeplot.muscle_act                     = 0; % muscle activity
 makeplot.muscle_act_exc                 = 0; % muscle activity and excitation   
 makeplot.muscle_joint_moment            = 0; % moments of muscles around ankle-foot joints
-makeplot.muscle_joint_power             = 0; % powers of muscles around ankle-foot joints
+makeplot.muscle_joint_power             = 1; % powers of muscles around ankle-foot joints
 makeplot.Objective_cost                 = 0; % cost function decomposition
 makeplot.tau_pass                       = 0; % passive joint torques
 makeplot.ankle_gearing                  = 0; % ankle gearing ratio (pf vs grf)

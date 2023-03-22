@@ -147,7 +147,8 @@ Ker87.e = Ker87_dat.data(:,13:14);
 Ker87.f = Ker87_dat.data(:,15:16);
 
 hold on
-plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'Color',CsV(2,:),'LineWidth',1)
+plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'Color',CsV(1,:),'LineWidth',1)
+plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'--','Color',CsV(2,:),'LineWidth',1)
 plot(Ker87.c(:,1)*sqrt(65/85)-1,Ker87.c(:,2)*65/85,'Color',CsV(4,:),'LineWidth',1)
 plot(Ker87.d(:,1)*sqrt(65/85)-1,Ker87.d(:,2)*65/85,'Color',CsV(5,:),'LineWidth',1)
 plot(Ker87.e(:,1)*sqrt(65/85)-1,Ker87.e(:,2)*65/85,'Color',CsV(6,:),'LineWidth',1)
@@ -181,7 +182,7 @@ ylim([0,3.3])
 
 % Welte et al., 2018
 
-colours = {[0.4660 0.6740 0.1880],[0 0.4470 0.7410],[0.6350 0.0780 0.1840]};
+colours = {[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0 0.4470 0.7410]};
 mrk = {'o','d','p','.','x','s','h','+','<','^'};
 
 subplot(3,3,[3,6])
