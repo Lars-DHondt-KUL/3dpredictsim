@@ -12,11 +12,12 @@ clc
 %% Inputs
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
-FootModel = 'mtjc2'; % mtp or mtj
+FootModel = 'mtj'; % mtp or mtj
+FixedKnee = 1; % 1 for fixed knee axis, 0 for moving
 FootScaling = 'custom'; % default, custom
-FDB = 2;
+FDB = 0;
 tib_ant_Rajagopal2015 = 0;
-MTcustom = 4; % 2 is proper geometry for mtj models
+MTcustom = 5; % 5 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis
 Bool_RunMA = 1; 
 
@@ -31,6 +32,9 @@ addpath(fullfile(pathRepo,'\Polynomials'));
 %%
 % OpenSim file name from settings
 OsimFileName = [Subject '_' FootModel];
+if FixedKnee
+    OsimFileName = [OsimFileName '_FK'];
+end
 if strcmp(FootScaling,'default')
     OsimFileName = [OsimFileName '_sd'];
 elseif strcmp(FootScaling,'custom')
@@ -69,16 +73,18 @@ if ~isfolder(pathMusc)
     mkdir(pathMusc);
 end
 
+OsimFileName = [OsimFileName '_cspx10_cg9_o1x10'];
+
 % Modelpath
 ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
-if ~isfile(ModelPath)
-    OsimFileName = [OsimFileName '_cspx10_oy'];
-    ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
-    if ~isfile(ModelPath)
-        OsimFileName = [OsimFileName '2'];
-        ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
-    end
-end
+% if ~isfile(ModelPath)
+%     OsimFileName = [OsimFileName '_cspx10_oy'];
+%     ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
+%     if ~isfile(ModelPath)
+%         OsimFileName = [OsimFileName '2'];
+%         ModelPath = fullfile(pathRepo,'OpenSimModel/subject1',[OsimFileName '.osim']);
+%     end
+% end
 disp(OsimFileName)
 
 

@@ -23,7 +23,7 @@ end
 pathmain = mfilename('fullpath');
 [filepath,~,~] =  fileparts(pathmain);
 [pathRepo,~,~] = fileparts(filepath);
-OutFolder = fullfile(pathRepo,'Results',ResultsFolder);
+OutFolder = fullfile(ResultsFolder);
 Outname = fullfile(OutFolder,[loadname '.mat']);
 load(Outname,'w_opt','stats','Sopt','setup');
 S = Sopt;
@@ -139,8 +139,11 @@ end
 
 f_FiberLength_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberLength_TendonForce_tendon'));
 f_FiberVelocity_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberVelocity_TendonForce_tendon'));
-f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
-
+try
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium'));
+end
 f_AllPassiveTorques = Function.load(fullfile(PathDefaultFunc,'f_AllPassiveTorques'));
 if mtj
     f_PF_stiffness = Function.load(fullfile(PathDefaultFunc,'f_PF_stiffness'));
@@ -228,30 +231,55 @@ GRFi.l = IO.GRFs.left_foot;
 GRFi.all = [GRFi.r,GRFi.l];
 NGRF = length(GRFi.all);
 
-GRFi.calcn.r = [IO.GRFs.contact_sphere_1,IO.GRFs.contact_sphere_2];
-GRFi.metatarsi.r = [IO.GRFs.contact_sphere_3,IO.GRFs.contact_sphere_4,IO.GRFs.contact_sphere_5];
-GRFi.toes.r = [IO.GRFs.contact_sphere_6];
-GRFi.calcn.l = [IO.GRFs.contact_sphere_7,IO.GRFs.contact_sphere_8];
-GRFi.metatarsi.l = [IO.GRFs.contact_sphere_9,IO.GRFs.contact_sphere_10,IO.GRFs.contact_sphere_11];
-GRFi.toes.l = [IO.GRFs.contact_sphere_12];
-GRFi.separate = GRFi.calcn.r(1):GRFi.toes.l(end);
+if S.Foot.contactGeometryVersion >= 5
+    GRFi.calcn.r = [IO.GRFs.contact_sphere_1,IO.GRFs.contact_sphere_2];
+    GRFi.metatarsi.r = [IO.GRFs.contact_sphere_3,IO.GRFs.contact_sphere_4];
+    GRFi.toes.r = [IO.GRFs.contact_sphere_5];
+    GRFi.calcn.l = [IO.GRFs.contact_sphere_6,IO.GRFs.contact_sphere_7];
+    GRFi.metatarsi.l = [IO.GRFs.contact_sphere_8,IO.GRFs.contact_sphere_9];
+    GRFi.toes.l = [IO.GRFs.contact_sphere_10];
+    GRFi.separate = GRFi.calcn.r(1):GRFi.toes.l(end);
+
+    % Contact sphere deformation power
+    if isfield(IO,'P_contact_deformation_y')
+        P_HCi.calcn.r = [IO.P_contact_deformation_y.contact_sphere_1,IO.P_contact_deformation_y.contact_sphere_2];
+        P_HCi.metatarsi.r = [IO.P_contact_deformation_y.contact_sphere_3,IO.P_contact_deformation_y.contact_sphere_4];
+        P_HCi.toes.r = [IO.P_contact_deformation_y.contact_sphere_5];
+        P_HCi.calcn.l = [IO.P_contact_deformation_y.contact_sphere_6,IO.P_contact_deformation_y.contact_sphere_7];
+        P_HCi.metatarsi.l = [IO.P_contact_deformation_y.contact_sphere_8,IO.P_contact_deformation_y.contact_sphere_9];
+        P_HCi.toes.l = [IO.P_contact_deformation_y.contact_sphere_10];
+        P_HCi.separate = P_HCi.calcn.r(1):P_HCi.toes.l(end);
+    end
+
+else
+    GRFi.calcn.r = [IO.GRFs.contact_sphere_1,IO.GRFs.contact_sphere_2];
+    GRFi.metatarsi.r = [IO.GRFs.contact_sphere_3,IO.GRFs.contact_sphere_4,IO.GRFs.contact_sphere_5];
+    GRFi.toes.r = [IO.GRFs.contact_sphere_6];
+    GRFi.calcn.l = [IO.GRFs.contact_sphere_7,IO.GRFs.contact_sphere_8];
+    GRFi.metatarsi.l = [IO.GRFs.contact_sphere_9,IO.GRFs.contact_sphere_10,IO.GRFs.contact_sphere_11];
+    GRFi.toes.l = [IO.GRFs.contact_sphere_12];
+    GRFi.separate = GRFi.calcn.r(1):GRFi.toes.l(end);
+
+    % Contact sphere deformation power
+    if isfield(IO,'P_contact_deformation_y')
+        P_HCi.calcn.r = [IO.P_contact_deformation_y.contact_sphere_1,IO.P_contact_deformation_y.contact_sphere_2];
+        P_HCi.metatarsi.r = [IO.P_contact_deformation_y.contact_sphere_3,IO.P_contact_deformation_y.contact_sphere_4,...
+            IO.P_contact_deformation_y.contact_sphere_5];
+        P_HCi.toes.r = [IO.P_contact_deformation_y.contact_sphere_6];
+        P_HCi.calcn.l = [IO.P_contact_deformation_y.contact_sphere_7,IO.P_contact_deformation_y.contact_sphere_8];
+        P_HCi.metatarsi.l = [IO.P_contact_deformation_y.contact_sphere_9,IO.P_contact_deformation_y.contact_sphere_10,...
+            IO.P_contact_deformation_y.contact_sphere_11];
+        P_HCi.toes.l = [IO.P_contact_deformation_y.contact_sphere_12];
+        P_HCi.separate = P_HCi.calcn.r(1):P_HCi.toes.l(end);
+    end
+
+end
 
 % GRF torques
 GRFTi.r = IO.GRMs.right_total;
 GRFTi.l = IO.GRMs.left_total;
 
-% Contact sphere deformation power
-if isfield(IO,'P_contact_deformation_y')
-    P_HCi.calcn.r = [IO.P_contact_deformation_y.contact_sphere_1,IO.P_contact_deformation_y.contact_sphere_2];
-    P_HCi.metatarsi.r = [IO.P_contact_deformation_y.contact_sphere_3,IO.P_contact_deformation_y.contact_sphere_4,...
-        IO.P_contact_deformation_y.contact_sphere_5];
-    P_HCi.toes.r = [IO.P_contact_deformation_y.contact_sphere_6];
-    P_HCi.calcn.l = [IO.P_contact_deformation_y.contact_sphere_7,IO.P_contact_deformation_y.contact_sphere_8];
-    P_HCi.metatarsi.l = [IO.P_contact_deformation_y.contact_sphere_9,IO.P_contact_deformation_y.contact_sphere_10,...
-        IO.P_contact_deformation_y.contact_sphere_11];
-    P_HCi.toes.l = [IO.P_contact_deformation_y.contact_sphere_12];
-    P_HCi.separate = P_HCi.calcn.r(1):P_HCi.toes.l(end);
-end
+
 
 %% Joints
 if mtj
@@ -552,7 +580,7 @@ for i = 1:d*N
     Tau_passj_opt_all(i,:) = full(f_AllPassiveTorques(q_col_opt_unsc.rad(i,:),qdot_col_opt_unsc.rad(i,:)));
     Tau_passj_opt_all_noDamping(i,:) = full(f_AllPassiveTorques(q_col_opt_unsc.rad(i,:),zeros(size(qdot_col_opt_unsc.rad(i,:)))));
 end
-if S.W.noDamping
+if isfield(S.W,'noDamping') && S.W.noDamping
     if mtj
         Tau_passj_J = Tau_passj_opt_all_noDamping(:,[1:12 17:end]);
     else
@@ -629,11 +657,19 @@ for k=1:N
         % Left leg
         qin_l_opt_all = Xj_Qs_Qdots_opt(count,IndexLeft*2-1);
         qdotin_l_opt_all = Xj_Qs_Qdots_opt(count,IndexLeft*2);
+        if mtj && ~S.Foot.mtj_muscles
+            qin_l_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+            qdotin_l_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        end
         [lMTk_l_opt_all,vMTk_l_opt_all,~] = ...
             f_lMT_vMT_dM(qin_l_opt_all,qdotin_l_opt_all);
         % Right leg
         qin_r_opt_all = Xj_Qs_Qdots_opt(count,IndexRight*2-1);
         qdotin_r_opt_all = Xj_Qs_Qdots_opt(count,IndexRight*2);
+        if mtj && ~S.Foot.mtj_muscles
+            qin_r_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+            qdotin_r_opt_all(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        end
         [lMTk_r_opt_all,vMTk_r_opt_all,~] = ...
             f_lMT_vMT_dM(qin_r_opt_all,qdotin_r_opt_all);
         % Both legs
@@ -730,7 +766,7 @@ for k=1:N
             (f_J8(qdotdot_col_opt(count,armsi)))*h_opt;
         count = count + 1;
     end
-    if S.TrackSim
+    if isfield(S,'TrackSim') && S.TrackSim
         if S.Track.Q_ankle
             track_err = q_opt_unsc.rad(k,[jointi.ankle.l, jointi.ankle.r]) - Qref_lr(1:2,k)';
             J_opt = J_opt + W.Q_track * f_J2(track_err)*h_opt;
@@ -861,14 +897,17 @@ if ~exist('HS1','var')
 end
 
 
-    
+   
 
 % GRFk_opt is at mesh points starting from k=2, we thus add 1 to IC1i
 % for the states
-% if phase_tran_tgridi ~= N
+if phase_tran_tgridi ~= N
     IC1i_c = IC1i;
     IC1i_s = IC1i + 1;
-% end
+else
+    IC1i_c = 1;
+    IC1i_s = 2;
+end
 
 % Qs
 Qs_GC = zeros(N*2,size(q_opt_unsc.deg,2));
@@ -1112,10 +1151,13 @@ else
         jointi.sh_flex.l:jointi.sh_rot.l,...
         jointi.elb.r,jointi.elb.l]-jointi.hip_flex.l+1;
 end
+Tau_pass_opt_opp = [jointi.trunk.ben:jointi.trunk.rot]-jointi.hip_flex.l+1;
+
+
 Tau_pass_opt_GC = zeros(N*2,nq.all-nq.abs);
 Tau_pass_opt_GC(1:N-IC1i_c+1,:) = Tau_passk_opt_all(IC1i_c:end,:);
-Tau_pass_opt_GC(N-IC1i_c+2:N-IC1i_c+1+N,:) = ...
-    Tau_passk_opt_all(1:end,Tau_pass_opt_inv);
+Tau_pass_opt_GC(N-IC1i_c+2:N-IC1i_c+1+N,:) = Tau_passk_opt_all(1:end,Tau_pass_opt_inv);
+% Tau_pass_opt_GC(N-IC1i_s+2:N-IC1i_s+1+N,Tau_pass_opt_opp) = -Tau_pass_opt_GC(1:end,Tau_pass_opt_opp);
 Tau_pass_opt_GC(N-IC1i_c+2+N:2*N,:) = Tau_passk_opt_all(1:IC1i_c-1,:);
 % If the first heel strike was on the left foot then we invert so that
 % we always start with the right foot, for analysis purpose
@@ -1123,7 +1165,7 @@ if strcmp(HS1,'l')
     Tau_pass_opt_GC(:,Tau_pass_opt_inv) = Tau_pass_opt_GC(:,:);
 end
 
-if length(S.Foot.PF_sf_var)==2*N
+if isfield(S.Foot,'PF_sf_var') && length(S.Foot.PF_sf_var)==2*N
     PF_sf_var(:,1) = horzcat(S.Foot.PF_sf_var(1:N));
     PF_sf_var(:,2) = horzcat(S.Foot.PF_sf_var(N+1:end));
     PF_sf_var_GC = zeros(2*N,2);
@@ -1178,7 +1220,7 @@ if writeIKmotion
         JointAngleMuscleAct.labels{i+size(q_opt_GUI_GC_2,2)} = ...
             [muscleNamesAll{i},'/activation'];
     end
-    OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
+%     OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
     filenameJointAngles = fullfile(OutFolder,[S.savename '.mot']);
     write_motionFile(JointAngleMuscleAct, filenameJointAngles);
 end
@@ -1277,6 +1319,11 @@ metab_Adot  = zeros(2*N, NMuscle);
 metab_Mdot  = zeros(2*N, NMuscle);
 metab_Sdot  = zeros(2*N, NMuscle);
 metab_Wdot  = zeros(2*N, NMuscle);
+metab_smooth_Etot  = zeros(2*N, NMuscle);
+metab_smooth_Adot  = zeros(2*N, NMuscle);
+metab_smooth_Mdot  = zeros(2*N, NMuscle);
+metab_smooth_Sdot  = zeros(2*N, NMuscle);
+metab_smooth_Wdot  = zeros(2*N, NMuscle);
 FT_opt      = zeros(2*N, NMuscle);
 lMT_Vect    = zeros(2*N, NMuscle);
 vMT_Vect    = zeros(2*N, NMuscle);
@@ -1331,6 +1378,13 @@ for nn = 1:2*N
         Acts_GC(nn,:)',full(lMtilde_opt),full(vM_opt),...
         full(Fce_optt),full(Fpass_optt),MuscleMass.MassM',pctsts,...
         full(Fiso_optt)',body_mass,1e9);
+
+    [energy_totalb,Adotb,Mdotb,Sdotb,Wdotb,eBarghb] = ...
+        f_getMetabolicEnergySmooth2004all(Acts_GC(nn,:)',...
+        Acts_GC(nn,:)',full(lMtilde_opt),full(vM_opt),...
+        full(Fce_optt),full(Fpass_optt),MuscleMass.MassM',pctsts,...
+        full(Fiso_optt)',body_mass,S.tanh_b);
+
     
 %     % Umberger 2003
 %     vMtildeUmbk_opt = full(vM_opt)./(MTparameters_m(2,:)');
@@ -1377,12 +1431,17 @@ for nn = 1:2*N
     
     % store results
     e_mo_opt(nn) = full(eBargh)';
-    e_mo_optb(nn) = full(eBargh)';
+    e_mo_optb(nn) = full(eBarghb)';
     metab_Etot(nn,:) = full(energy_total)';
     metab_Adot(nn,:) = full(Adot)';
     metab_Mdot(nn,:) = full(Mdot)';
     metab_Sdot(nn,:) = full(Sdot)';
     metab_Wdot(nn,:) = full(Wdot)';
+    metab_smooth_Etot(nn,:) = full(energy_totalb)';
+    metab_smooth_Adot(nn,:) = full(Adotb)';
+    metab_smooth_Mdot(nn,:) = full(Mdotb)';
+    metab_smooth_Sdot(nn,:) = full(Sdotb)';
+    metab_smooth_Wdot(nn,:) = full(Wdotb)';
     FT_opt(nn,:)     = full(FT_optt)';
     Fce_opt(nn,:)    = full(Fce_optt)';
     
@@ -1411,10 +1470,12 @@ end
 dist_trav_opt_GC = Qs_opt_rad(end,jointi.pelvis.tx) - ...
     Qs_opt_rad(1,jointi.pelvis.tx); % distance traveled
 time_GC = q_opt_GUI_GC(:,1);
-e_mo_opt_trb = trapz(time_GC,e_mo_optb);
+e_mo_opt_trb = trapz(time_GC,e_mo_opt);
+e_mo_opt_trb_b = trapz(time_GC,e_mo_optb);
 % Cost of transport: J/kg/m
 % Energy model from Bhargava et al. (2004)
 COT_GC = e_mo_opt_trb/body_mass/dist_trav_opt_GC;
+COT_GCb = e_mo_opt_trb_b/body_mass/dist_trav_opt_GC;
 
 % % COT for all models
 % COTv.Bargh2004 = trapz(time_GC,metab_Bargh2004)/body_mass/dist_trav_opt_GC;
@@ -1536,6 +1597,7 @@ R.Tid       = Ts_opt.*body_mass;
 R.a         = Acts_GC;
 R.e         = e_GC;
 R.COT       = COT_GC;
+R.COT_smoothed = COT_GCb;
 R.StrideLength = StrideLength_opt;
 R.StepWidth = stride_width_mean;
 R.vMtilde   = vMtilde_opt_all;
@@ -1545,6 +1607,11 @@ R.MetabB.Adot = metab_Adot;
 R.MetabB.Mdot = metab_Mdot;
 R.MetabB.Sdot = metab_Sdot;
 R.MetabB.Wdot = metab_Wdot;
+R.MetabB_smooth.Etot = metab_smooth_Etot;
+R.MetabB_smooth.Adot = metab_smooth_Adot;
+R.MetabB_smooth.Mdot = metab_smooth_Mdot;
+R.MetabB_smooth.Sdot = metab_smooth_Sdot;
+R.MetabB_smooth.Wdot = metab_smooth_Wdot;
 R.S           = S;  % settings for post processing
 R.Sopt        = Sopt; % original settings used to solve the OCP
 R.body_mass   = body_mass;
@@ -1616,7 +1683,7 @@ end
 % script information
 R.info.script = 'f_LoadSim_Gait92_FootModel.m';
 % Save data
-OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
+% OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
 FilenameAnalysis = fullfile(OutFolder,[S.savename '_pp.mat']);
 save(FilenameAnalysis,'R');
 

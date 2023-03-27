@@ -17,7 +17,7 @@ clc
 % results from the static foot compression simultion
 plot_static_foot = 0;
 % results from the dynamic whole-body gait simulation
-plot_full_separate = 1; % separate figures like  in the report
+plot_full_separate = 0; % separate figures like  in the report
 plot_full_tabbed = 0; % single figure with different tabs
 
 
@@ -30,440 +30,443 @@ addpath([pathRepo '/PassiveMoments']);
 addpath([pathRepo '/FootModel']);
 ResultsFolder = {'MidTarsalJoint'};
 
+% resultsRepo = fullfile(pathRepo,'\Results\');
+resultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results/';
+
 for i=1:numel(ResultsFolder)
     pathResult{i} = fullfile([pathRepo '/Results/' ResultsFolder{i}]);
 end
 scs = get(0,'ScreenSize');
 
 %%
-ref{1} = fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig21_pp.mat']);
+ref{1} = fullfile([resultsRepo 'Final\Fal_s1_bCst_ig21_pp.mat']);
 
 %% groups of results
 
 % default, best COT
 groupNames{1} = 'd_m_t_j = 0 Nms/rad, k_m_t_p = 5 Nm/rad';
 Results_default = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_v2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k5000_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10000_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100000_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000000_MTP_T5_ig23_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_v2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k5000_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10000_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100000_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000000_MTP_T5_ig23_pp.mat'])};
 
 % default, all ig
 groupNames{end+1} = 'd_m_t_j = 0 Nms/rad, k_m_t_p = 5 Nm/rad (ig21)';
 Results_default_ig21 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig21_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig21_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 0 Nms/rad, k_m_t_p = 5 Nm/rad (ig23)';
 Results_default_ig23 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k5000_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10000_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100000_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000000_MTP_T5_ig23_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k5000_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10000_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100000_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000000_MTP_T5_ig23_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 0 Nms/rad, k_m_t_p = 5 Nm/rad (ig24)';
 Results_default_ig24 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_v2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T5_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_v2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T5_ig24_pp.mat'])};
 
 
 % damping 1, best COT
 groupNames{end+1} = 'd_m_t_j = 1 Nms/rad, k_m_t_p = 5 Nm/rad';
 Results_d010 = {
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig21_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d010_MTP_T5_ig24_pp.mat'])};
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig21_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d010_MTP_T5_ig24_pp.mat'])};
 
 % damping 1, all ig
 groupNames{end+1} = 'd_m_t_j = 1 Nms/rad, k_m_t_p = 5 Nm/rad (ig21)';
 Results_d010_ig21 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig21_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig21_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 1 Nms/rad, k_m_t_p = 5 Nm/rad (ig23)';
 Results_d010_ig23 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig23_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig23_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 1 Nms/rad, k_m_t_p = 5 Nm/rad (ig24)';
 Results_d010_ig24 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d010_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d010_MTP_T5_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d010_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d010_MTP_T5_ig24_pp.mat'])};
 
 % damping 2, best COT
 groupNames{end+1} = 'd_m_t_j = 2 Nms/rad, k_m_t_p = 5 Nm/rad';
 Results_d020 = {
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig21_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d020_MTP_T5_ig24_pp.mat'])};
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig21_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d020_MTP_T5_ig24_pp.mat'])};
 
 % damping 2, all ig
 groupNames{end+1} = 'd_m_t_j = 2 Nms/rad, k_m_t_p = 5 Nm/rad (ig21)';
 Results_d020_ig21 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig21_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig21_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig21_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 2 Nms/rad, k_m_t_p = 5 Nm/rad (ig23)';
 Results_d020_ig23 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig23_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig23_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 2 Nms/rad, k_m_t_p = 5 Nm/rad (ig24)';
 Results_d020_ig24 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d020_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d020_MTP_T5_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_d020_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_d020_MTP_T5_ig24_pp.mat'])};
 
 
 groupNames{end+1} = 'd_m_t_j = 5 Nms/rad, k_m_t_p = 5 Nm/rad';
 Results_d050 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d050_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d050_MTP_T5_ig24_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d050_MTP_T5_ig24_pp.mat']) % not converged
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d050_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d050_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d050_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d050_MTP_T5_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_d050_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_d050_MTP_T5_ig24_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_d050_MTP_T5_ig24_pp.mat']) % not converged
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_d050_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_d050_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_d050_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_d050_MTP_T5_ig24_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 0 Nms/rad, k_m_t_p = 2 Nm/rad';
 Results_T2 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T2_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T2_ig24_pp.mat'])};
 
 groupNames{end+1} = 'd_m_t_j = 0 Nms/rad, k_m_t_p = 10 Nm/rad';
 Results_T10 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T10_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T10_ig24_pp.mat'])};
 
 groupNames{end+1} = 'k_P_F x2';
 Results_PFx2 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig24_PFx2_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T5_ig24_PFx2_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k150_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k250_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig24_PFx2_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1000_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k1500_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k2000_MTP_T5_ig24_PFx2_pp.mat'])};
 
 groupNames{end+1} = 'vs Falisse 2019';
 Results_vs = {
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v8_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v10_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v12_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v14_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v16_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v18_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_ig1_v27_pp.mat'])};
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v8_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v10_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v12_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v14_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v16_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v18_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_ig1_v27_pp.mat'])};
     
 groupNames{end+1} = 'vs Song 2011';
 Results_vs_Song = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v8_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v12_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v14_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v16_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v18_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v27_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v8_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v12_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v14_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v16_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v18_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu0_ig1_v27_pp.mat'])};
 
 groupNames{end+1} = 'PF only';
 Results_PFonly = {
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10_MTP_T5_ig24_PFx10_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10_MTP_T2_ig24_PFx10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T2_ig24_PFx10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx5_pp.mat'])};
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10_MTP_T5_ig24_PFx10_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k10_MTP_T2_ig24_PFx10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T2_ig24_PFx10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx5_pp.mat'])};
 
 groupNames{end+1} = 'Muscle-driven mtp';
 Results_Musc = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_ig23_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_ig24_pp.mat']) % local min
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_np_ig23_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_spx2_ig24_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu5_np_ig23_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_Mu2_ig24_PFx10_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_Mu5_ig24_PFx10_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_Mu5_ig24_PFx5_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k20_MTP_Mu5_ig24_PFx5_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_fitted6_MTP_Mu5_ig24_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_ig23_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_ig24_pp.mat']) % local min
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_np_ig23_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_spx2_ig24_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu5_np_ig23_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_Mu2_ig24_PFx10_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_Mu5_ig24_PFx10_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_Mu5_ig24_PFx5_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k20_MTP_Mu5_ig24_PFx5_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_fitted6_MTP_Mu5_ig24_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_Mu5_ig24_pp.mat'])
     };
     
 groupNames{end+1} = 'k_m_t_j_,_n_e_g = 10 Nm/rad';
 Results_singed_lin = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k100_10_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k200_10_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k300_10_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k400_10_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k500_10_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k800_10_MTP_T5_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k100_10_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k200_10_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k300_10_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k400_10_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k500_10_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_k800_10_MTP_T5_ig24_pp.mat'])};
 
 groupNames{end+1} = 'k_m_t_j_,_n_e_g test';
 Results_singed_lin_test = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig1_300_50_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_30_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_500_30_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_500_50_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_aCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_500_50_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_Mu5_ig24_300_10_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig1_300_50_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_30_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_500_30_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_500_50_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_aCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_T5_ig24_500_50_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_signed_lin_MTP_Mu5_ig24_300_10_pp.mat'])};
 
 groupNames{end+1} = 'other PF models';
 Results_other_PF = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_signed_lin_MTP_T5_ig24_800_50_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_linear_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_signed_lin_MTP_T5_ig24_800_50_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_linear_ls150_MT_nl_signed_lin_MTP_T5_ig24_300_10_pp.mat'])};
 
 groupNames{end+1} = 'no PF';
 Results_no_PF = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k250_MTP_T17_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k500_MTP_T17_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k800_MTP_T17_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k1000_MTP_T17_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k1500_MTP_T17_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k2000_MTP_T17_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k250_MTP_T17_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k500_MTP_T17_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k800_MTP_T17_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k1000_MTP_T17_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k1500_MTP_T17_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k2000_MTP_T17_ig24_pp.mat'])};
     
 groupNames{end+1} = 'd_m_t_p = 0 Nms/rad';
 Results_mtp_d0 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_d00_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_d00_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_d00_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_d00_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_d00_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_d00_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k100_MTP_T5_d00_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k200_MTP_T5_d00_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_d00_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k400_MTP_T5_d00_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k500_MTP_T5_d00_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_d00_ig24_pp.mat'])};
 
 groupNames{end+1} = 'stiffer contact';
 Results_stiff_contact = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_spx10_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_np_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_spx2_ig24_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_spx10_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_np_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_spx2_ig24_pp.mat'])};
 
 groupNames{end+1} = 'misc';
 Results_misc = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_fitted6_MTP_T2_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_fitted6_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_none_ls148_MT_k1000_MTP_k10_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_none_ls148_MT_k500_MTP_k10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_fitted6_MTP_T2_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_fitted6_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_none_ls148_MT_k1000_MTP_k10_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_none_ls148_MT_k500_MTP_k10_ig24_pp.mat'])
     };
 
-best_COT = fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat']);
+best_COT = fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat']);
 
 main_results_walking = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k500_MTP_T17_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k500_MTP_T17_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])};
 
 main_results_running = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k1000_MTP_T17_ig23_v27_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig23_PFx10_v27_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_v27_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_None_ls150_MT_k1000_MTP_T17_ig23_v27_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig23_PFx10_v27_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_v27_pp.mat'])};
 
 Results_PF_models = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_linear_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Cheng2008_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_linear_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Cheng2008_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T5_ig23_pp.mat'])
     };
     
 
 PF_stiffening = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_v2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx2_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx5_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_v2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx2_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k50_MTP_T5_ig24_PFx5_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k30_MTP_T5_ig24_PFx10_pp.mat'])};
 
 Results_mtp_wrt_k_mtj = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_T5_ig24_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig21_pp.mat'])};
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_nl_Song2011_MTP_T5_ig24_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T5_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k800_MTP_T5_ig21_pp.mat'])};
 
 
 Results_combination = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_spx10_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T5_ig23_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_spx10_ig23_PFx10_pp.mat']) % wrong GRF, not sure if caused by sim or pp
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_v133_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_spx10_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T5_ig23_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_spx10_ig23_PFx10_pp.mat']) % wrong GRF, not sure if caused by sim or pp
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_v133_pp.mat'])
     };
     
 Results_active = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_PFact_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+06_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w5e+02_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+04_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_PFact_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+06_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w5e+02_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+04_w1e+04_ig23_pp.mat'])
     };
 
 Results_active_muscle = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w5e+02_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig21_pp.mat']) % geometry errors
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_v0_pp.mat'])
-%     fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+04_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w5e+02_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig21_pp.mat']) % geometry errors
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_v0_pp.mat'])
+%     fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_PIM_w1e+04_w1e+04_ig23_pp.mat'])
     };
 
 Results_active_muscle_v0 = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_v0_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_ig23_v0_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mf1_spx10_ig23_v0_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_k200_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_T1_spx10_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_v0_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_ig23_v0_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mf1_spx10_ig23_v0_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Gefen2002_ls150_MT_nl_Gefen2002_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Song2011_ls150_MT_k200_MTP_Mf1_spx10_PIM_w1e+03_w1e+04_ig23_pp.mat'])
     };
 
 Results_local_min = {
-    fullfile([pathRepo '\Results\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_ig24_pp.mat']) % local min
+    fullfile([resultsRepo 'MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_Mu1_ig24_pp.mat']) % local min
     };
 
 Results_tanh = {
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_tanh10_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_tanh50_ig21_pp.mat'])
-    fullfile([pathRepo '\Results\Final\Fal_s1_bCst_tanh100_ig21_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_tanh10_ig21_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_tanh50_ig21_pp.mat'])
+    fullfile([resultsRepo 'Final\Fal_s1_bCst_tanh100_ig21_pp.mat'])
     };
 
 %%
@@ -510,8 +513,8 @@ filteredResultsWithRef{end+1} = {ref{:}, Results_active_muscle{:}};     % 35
 filteredResultsWithRef{end+1} = {ref{:}, Results_active_muscle_v0{:}};  % 36
 filteredResultsWithRef{end+1} = {Results_tanh{:}};                      % 37
 
-idx = [1,5,9,13:16,21]; % for comparison plots in function of k_mtj
-idx = [1,16];
+idx = [1,5,9,13:16,21,25]; % for comparison plots in function of k_mtj
+% idx = [1,5,9];
 
 
 %% check for unused results
@@ -520,7 +523,7 @@ idx = [1,16];
 %     Results_all = {Results_all{:},filteredResultsWithRef{i}{2:end}};
 % end
 % 
-% dpath = fullfile([pathRepo '\Results\MidTarsalJoint';
+% dpath = fullfile([resultsRepo 'MidTarsalJoint';
 % MatFiles = dir(fullfile(dpath,'*_pp.mat'));
 % 
 % 
@@ -558,7 +561,7 @@ idx = [1,16];
 
 %%%
 % ResultsFile = filteredResultsWithRef{28};
-LegNames = {'Falisse 2019','Elastic arch','Windlass','Elastic arch & windlass'};
+% LegNames = {'Falisse 2019','Elastic arch','Windlass','Elastic arch & windlass'};
 
 %%%
 % ResultsFile = {best_COT};
@@ -933,124 +936,377 @@ if plot_aSol_k
     
 end
 
+%% objective function term for metabolic energy
+plot_cost_E_k = 0;
+if plot_cost_E_k
+%     idx = [1,5,9,13:16,21,25];
+%     idx = [1,5,9];
+%     idx = [1,13:16];   
+% idx=1;
+
+    scs = get(0,'ScreenSize');
+    figure('Position',[1+scs(3)/2,scs(4)/2+20,scs(3)/2, scs(4)/2-100]);
+    CsV = hsv(length(idx)+1);
+    load(ref{1},'R');
+    dist_trav = R.Qs(end,strcmp(R.colheaders.joints,'pelvis_tx')) - ...
+                R.Qs(1,strcmp(R.colheaders.joints,'pelvis_tx'));
+    subplot(1,3,1:2)
+    plot([0,1e6],[1,1]*R.Obj.E/dist_trav*2,'Color',CsV(1,:),'DisplayName','Falisse 2019')
+    hold on
+    grid on
+    subplot(2,3,6)
+    semilogx([10,2e6],[1,1]*R.Obj.E/dist_trav*2,'Color',CsV(1,:),'DisplayName','Falisse 2019')
+    hold on
+    grid on
+    ds = zeros(9,20);
+    for i=1:length(idx)
+        k_cost_E = zeros(4,numel(filteredResultsWithRef{idx(i)}));
+
+        for j=1:numel(filteredResultsWithRef{idx(i)})
+            load(filteredResultsWithRef{idx(i)}{j},'R');
+            has_mtj = isfield(R.S,'mtj') && ~isempty(R.S.mtj) && R.S.mtj;
+            if has_mtj
+                k_cost_E(1,j) = R.S.kMT_li;
+                k_cost_E(2,j) = R.Obj.E/dist_trav*2;
+                
+                dist_trav = R.Qs(end,strcmp(R.colheaders.joints,'pelvis_tx')) - R.Qs(1,strcmp(R.colheaders.joints,'pelvis_tx'));
+                imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
+                imtp = find(strcmp(R.colheaders.joints,'mtp_angle_r'));
+                qdot_mtj = R.Qdots(:,imtj)*pi/180;
+                M_li = R.windlass.M_li;
+                P_mtj_li = qdot_mtj.*M_li/R.body_mass/dist_trav;
+                P_mtj_li_pos = P_mtj_li;
+                P_mtj_li_pos(P_mtj_li_pos<0) = 0;
+                W_mtj_li = trapz(R.t,P_mtj_li_pos);
+                k_cost_E(3,j) = W_mtj_li;
+                
+                
+                iarch_stance = find(R.GRFs_separate(:,2)>5 & R.GRFs_separate(:,8)>5);
+                ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,8)>5);
+    
+                c1 = polyfit(R.Qs(iarch_stance,imtp)*pi/180,-R.Tid(iarch_stance,imtp),1);
+                k_cost_E(4,j) = c1(1);
+
+                c2 = polyfit(R.Qs(ipush_off,imtp)*pi/180,-R.Tid(ipush_off,imtp),1);
+                k_cost_E(5,j) = c2(1);
+                
+            end
+
+        end
+        subplot(1,3,1:2)
+        plot(k_cost_E(1,2:end),k_cost_E(2,2:end),'.-','MarkerSize',20,'Color',CsV(1+i,:),'DisplayName',groupNames{idx(i)})
+        subplot(2,3,6)
+        semilogx(k_cost_E(1,2:end),k_cost_E(2,2:end),'.-','MarkerSize',10,'Color',CsV(1+i,:),'DisplayName',groupNames{idx(i)})
+    end
+
+    subplot(1,3,1:2)
+    lh=legend('Location','northwest');
+    lhPos = lh.Position;
+    lhPos(1) = lhPos(1)+0.5;
+    lhPos(2) = lhPos(2)+0.05;
+    set(lh,'position',lhPos);
+    xlabel('mtj stiffness (Nm/rad)')
+    ylabel('objective (-)','Interpreter','tex')
+    title('Metabolic energy objective and midtarsal joint stiffness')
+    xlim([0,2050])
+    
+    subplot(2,3,6)
+    xlabel('\fontsize{10} mtj stiffness (Nm/rad)','Interpreter','tex')
+    ylabel('\fontsize{10} objective (-)','Interpreter','tex')
+    title('\fontsize{10} Convergence','Interpreter','tex')
+    xlim([20,1e6])
+    a1 = gca;
+    a1.YAxisLocation = 'right';
+    
+end
+
+%% objective function term for fatigue
+plot_cost_a_k = 0;
+if plot_cost_a_k
+%     idx = [1,5,9,13:16,21,25];
+%     idx = [1,5,9];
+%     idx = [1,13:16];   
+% idx=1;
+
+    scs = get(0,'ScreenSize');
+    figure('Position',[1+scs(3)/2,scs(4)/2+20,scs(3)/2, scs(4)/2-100]);
+    CsV = hsv(length(idx)+1);
+    load(ref{1},'R');
+    dist_trav = R.Qs(end,strcmp(R.colheaders.joints,'pelvis_tx')) - ...
+                R.Qs(1,strcmp(R.colheaders.joints,'pelvis_tx'));
+    subplot(1,3,1:2)
+    plot([0,1e6],[1,1]*R.Obj.A/dist_trav*2,'Color',CsV(1,:),'DisplayName','Falisse 2019')
+    hold on
+    grid on
+    subplot(2,3,6)
+    semilogx([10,2e6],[1,1]*R.Obj.A/dist_trav*2,'Color',CsV(1,:),'DisplayName','Falisse 2019')
+    hold on
+    grid on
+    ds = zeros(9,20);
+    for i=1:length(idx)
+        k_cost_E = zeros(4,numel(filteredResultsWithRef{idx(i)}));
+
+        for j=1:numel(filteredResultsWithRef{idx(i)})
+            load(filteredResultsWithRef{idx(i)}{j},'R');
+            has_mtj = isfield(R.S,'mtj') && ~isempty(R.S.mtj) && R.S.mtj;
+            if has_mtj
+                k_cost_E(1,j) = R.S.kMT_li;
+                k_cost_E(2,j) = R.Obj.A/dist_trav*2;
+                
+                dist_trav = R.Qs(end,strcmp(R.colheaders.joints,'pelvis_tx')) - R.Qs(1,strcmp(R.colheaders.joints,'pelvis_tx'));
+                imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
+                imtp = find(strcmp(R.colheaders.joints,'mtp_angle_r'));
+                qdot_mtj = R.Qdots(:,imtj)*pi/180;
+                M_li = R.windlass.M_li;
+                P_mtj_li = qdot_mtj.*M_li/R.body_mass/dist_trav;
+                P_mtj_li_pos = P_mtj_li;
+                P_mtj_li_pos(P_mtj_li_pos<0) = 0;
+                W_mtj_li = trapz(R.t,P_mtj_li_pos);
+                k_cost_E(3,j) = W_mtj_li;
+                
+                
+                iarch_stance = find(R.GRFs_separate(:,2)>5 & R.GRFs_separate(:,8)>5);
+                ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,8)>5);
+    
+                c1 = polyfit(R.Qs(iarch_stance,imtp)*pi/180,-R.Tid(iarch_stance,imtp),1);
+                k_cost_E(4,j) = c1(1);
+
+                c2 = polyfit(R.Qs(ipush_off,imtp)*pi/180,-R.Tid(ipush_off,imtp),1);
+                k_cost_E(5,j) = c2(1);
+                
+            end
+
+        end
+        subplot(1,3,1:2)
+        plot(k_cost_E(1,2:end),k_cost_E(2,2:end),'.-','MarkerSize',20,'Color',CsV(1+i,:),'DisplayName',groupNames{idx(i)})
+        subplot(2,3,6)
+        semilogx(k_cost_E(1,2:end),k_cost_E(2,2:end),'.-','MarkerSize',10,'Color',CsV(1+i,:),'DisplayName',groupNames{idx(i)})
+    end
+
+    subplot(1,3,1:2)
+    lh=legend('Location','northwest');
+    lhPos = lh.Position;
+    lhPos(1) = lhPos(1)+0.5;
+    lhPos(2) = lhPos(2)+0.05;
+    set(lh,'position',lhPos);
+    xlabel('mtj stiffness (Nm/rad)')
+    ylabel('objective (-)','Interpreter','tex')
+    title('Muscle activity objective and midtarsal joint stiffness')
+    xlim([0,2050])
+    
+    subplot(2,3,6)
+    xlabel('\fontsize{10} mtj stiffness (Nm/rad)','Interpreter','tex')
+    ylabel('\fontsize{10} objective (-)','Interpreter','tex')
+    title('\fontsize{10} Convergence','Interpreter','tex')
+    xlim([20,1e6])
+    a1 = gca;
+    a1.YAxisLocation = 'right';
+    
+end
+
+%% work by mtj stiffness
+plot_W_mtj_k = 1;
+if plot_W_mtj_k
+%     idx = [1,5,9,13:16,21,25];
+%     idx = [1,5,9];
+%     idx = [1,13:16];   
+% idx=1;
+
+    scs = get(0,'ScreenSize');
+    figure('Position',[1+scs(3)/2,scs(4)/2+20,scs(3)/2, scs(4)/2-100]);
+    CsV = hsv(length(idx)+1);
+    load(ref{1},'R');
+    dist_trav = R.Qs(end,strcmp(R.colheaders.joints,'pelvis_tx')) - ...
+                R.Qs(1,strcmp(R.colheaders.joints,'pelvis_tx'));
+    subplot(1,3,1:2)
+    plot([0,1e6],[1,1]*0,'Color',CsV(1,:),'DisplayName','Falisse 2019')
+    hold on
+    grid on
+    subplot(2,3,6)
+    semilogx([10,2e6],[1,1]*0,'Color',CsV(1,:),'DisplayName','Falisse 2019')
+    hold on
+    grid on
+    ds = zeros(9,20);
+    for i=1:length(idx)
+        k_cost_E = zeros(4,numel(filteredResultsWithRef{idx(i)}));
+
+        for j=1:numel(filteredResultsWithRef{idx(i)})
+            load(filteredResultsWithRef{idx(i)}{j},'R');
+            has_mtj = isfield(R.S,'mtj') && ~isempty(R.S.mtj) && R.S.mtj;
+            if has_mtj
+                k_cost_E(1,j) = R.S.kMT_li;
+                k_cost_E(2,j) = R.Obj.A/dist_trav*2;
+                
+                dist_trav = R.Qs(end,strcmp(R.colheaders.joints,'pelvis_tx')) - R.Qs(1,strcmp(R.colheaders.joints,'pelvis_tx'));
+                imtj = find(strcmp(R.colheaders.joints,'mtj_angle_r'));
+                imtp = find(strcmp(R.colheaders.joints,'mtp_angle_r'));
+                qdot_mtj = R.Qdots(:,imtj)*pi/180;
+                M_li = R.windlass.M_li;
+                P_mtj_li = qdot_mtj.*M_li/R.body_mass/dist_trav;
+                P_mtj_li_pos = P_mtj_li;
+                P_mtj_li_pos(P_mtj_li_pos<0) = 0;
+                W_mtj_li = trapz(R.t,P_mtj_li_pos);
+                k_cost_E(3,j) = W_mtj_li;
+                
+                
+                iarch_stance = find(R.GRFs_separate(:,2)>5 & R.GRFs_separate(:,8)>5);
+                ipush_off = find(R.GRFs_separate(:,2)<5 & R.GRFs_separate(:,8)>5);
+    
+                c1 = polyfit(R.Qs(iarch_stance,imtp)*pi/180,-R.Tid(iarch_stance,imtp),1);
+                k_cost_E(4,j) = c1(1);
+
+                c2 = polyfit(R.Qs(ipush_off,imtp)*pi/180,-R.Tid(ipush_off,imtp),1);
+                k_cost_E(5,j) = c2(1);
+                
+            end
+
+        end
+        subplot(1,3,1:2)
+        plot(k_cost_E(1,2:end),k_cost_E(3,2:end),'.-','MarkerSize',20,'Color',CsV(1+i,:),'DisplayName',groupNames{idx(i)})
+        subplot(2,3,6)
+        semilogx(k_cost_E(1,2:end),k_cost_E(3,2:end),'.-','MarkerSize',10,'Color',CsV(1+i,:),'DisplayName',groupNames{idx(i)})
+    end
+
+    subplot(1,3,1:2)
+    lh=legend('Location','northwest');
+    lhPos = lh.Position;
+    lhPos(1) = lhPos(1)+0.5;
+    lhPos(2) = lhPos(2)+0.05;
+    set(lh,'position',lhPos);
+    xlabel('mtj stiffness (Nm/rad)')
+    ylabel('W (J kg^-^1 m^-^1)','Interpreter','tex')
+    title('Positive work by midtarsal joint stiffness')
+    xlim([0,2050])
+    
+    subplot(2,3,6)
+    xlabel('\fontsize{10} mtj stiffness (Nm/rad)','Interpreter','tex')
+    ylabel('\fontsize{10} objective (-)','Interpreter','tex')
+    title('\fontsize{10} Convergence','Interpreter','tex')
+    xlim([20,1e6])
+    a1 = gca;
+    a1.YAxisLocation = 'right';
+    
+end
+
+
 %%
 
 if plot_static_foot
     
-%     resultFiles = {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_3000_WLv3_ls150.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_none_Gefen2002_Q-30_30_F0_3000_WLv3_ls150.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_none_Ker1987_Q-30_30_F0_3000_WLv3_ls150.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_3000_WLv3_ls150_sb1.mat'])};
+%     resultFiles = {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_3000_WLv3_ls150.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_none_Gefen2002_Q-30_30_F0_3000_WLv3_ls150.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_none_Ker1987_Q-30_30_F0_3000_WLv3_ls150.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_3000_WLv3_ls150_sb1.mat'])};
     
-% resultFiles = {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_3000_WLv3_ls150.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_fitted6_Q-30_30_F0_1000_WLv3_ls150_sb1_PFx2.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_3000_WLv3_ls150_sb1.mat'])};
+% resultFiles = {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_3000_WLv3_ls150.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_fitted6_Q-30_30_F0_1000_WLv3_ls150_sb1_PFx2.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_3000_WLv3_ls150_sb1.mat'])};
             
-% resultFiles = {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_k300_Q0_0_F0_1000_WLv3_ls150_sb1.mat'])
-%                fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt2_v1_Gefen2002_k300_Q0_0_F0_1000_WLv3_ls150_sb1.mat'])
-%                fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt3_v1_Gefen2002_k300_Q0_0_F0_1000_WLv3_ls150_sb1.mat'])};
-
-            
-% resultFiles = {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_3000_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_1000_WLv3_ls150_sb1_PFx10.mat'])};
+% resultFiles = {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_k300_Q0_0_F0_1000_WLv3_ls150_sb1.mat'])
+%                fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt2_v1_Gefen2002_k300_Q0_0_F0_1000_WLv3_ls150_sb1.mat'])
+%                fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt3_v1_Gefen2002_k300_Q0_0_F0_1000_WLv3_ls150_sb1.mat'])};
 
             
-%     resultFiles = {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_fitted4_Q-20_30_F0_0_WLv3_ls148_mtp1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_fitted4_Q-20_30_F0_0_WLv3_ls148_mtp2.mat'])};
+% resultFiles = {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_3000_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_1000_WLv3_ls150_sb1_PFx10.mat'])};
+
+            
+%     resultFiles = {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_fitted4_Q-20_30_F0_0_WLv3_ls148_mtp1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_fitted4_Q-20_30_F0_0_WLv3_ls148_mtp2.mat'])};
     
-%     resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k50_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_linear_k300_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_Song2011_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])};
+%     resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k50_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_linear_k300_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_Song2011_Q0_30_F0_1000_WLv3_ls150_sb1.mat'])};
     
-%     resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k30_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k50_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k100_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k150_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k200_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k250_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k350_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k380_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k400_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k450_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k500_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k600_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k700_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k900_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1000_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1200_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1500_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k2000_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k5000_Q0_30_F0_960_WLv3_ls150_sb1.mat'])};
+%     resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k30_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k50_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k100_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k150_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k200_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k250_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k350_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k380_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k400_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k450_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k500_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k600_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k700_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k900_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1000_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1200_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1500_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k2000_Q0_30_F0_960_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k5000_Q0_30_F0_960_WLv3_ls150_sb1.mat'])};
 
 
-%     resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k10_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k30_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k50_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k150_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k250_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k350_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k400_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k450_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k500_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k550_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k600_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k650_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k700_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k750_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k900_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1000_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1500_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                     fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k2000_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%     resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k10_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k30_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k50_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k150_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k250_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k350_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k400_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k450_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k500_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k550_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k600_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k650_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k700_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k750_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k900_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1000_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k1500_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                     fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k2000_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
 %                     };
                 
 
-% resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
-% %                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k300_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
-% %                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k800_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
+% resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
+% %                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k800_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k300_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
+% %                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k800_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
 %                 };
 
 
-% resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k50_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k150_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k250_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k300_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k350_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k400_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k450_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k500_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k550_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k600_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k650_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k700_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k750_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k800_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k900_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k1000_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k1100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k1200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])};
+% resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k50_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k150_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k250_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k300_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k350_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k400_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k450_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k500_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k550_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k600_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k650_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k700_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k750_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k800_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k900_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k1000_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k1100_Q0_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Song2011_k1200_Q0_30_F0_945_WLv3_ls150_sb1.mat'])};
 
 
-% resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_945_WLv3_ls150_sb2.mat'])
-%                 fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_945_WLv3_ls150_sb3.mat'])};
+% resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_945_WLv3_ls150_sb1.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_945_WLv3_ls150_sb2.mat'])
+%                 fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Gefen2002_Gefen2002_Q-30_30_F0_945_WLv3_ls150_sb3.mat'])};
 
-% resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-45_45_F0_0_WLv3_ls150_sb1.mat'])};
+% resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Fal_s1_mtj_subt1_v5_Natali2010_k300_Q-45_45_F0_0_WLv3_ls150_sb1.mat'])};
 
-resultFiles =  {fullfile([pathRepo '\Results\FootModel\Foot_3D_Pog_s1_mtj_v6_Gefen2002_Gefen2002_Q0_0_F0_945_WLv3_ls150_sb1.mat'])};
+resultFiles =  {fullfile([resultsRepo 'FootModel\Foot_3D_Pog_s1_mtj_v6_Gefen2002_Gefen2002_Q0_0_F0_945_WLv3_ls150_sb1.mat'])};
             
             
     % call plot function

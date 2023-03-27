@@ -105,6 +105,54 @@ for i=1:5
     Data.(fieldname_i).Qddotall_std = Qref.subject1.Qdotdots.std;
 end
 
+for i=1:5
+    load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_Fal_s1_mtjc' num2str(i) '_FK_sc_FDB2_MTc5_cspx0_oy3.mat']);
+    fieldname_i = ['IK_mtjc' num2str(i) '_FK_custom'];
+    Data.(fieldname_i).colheaders = Qref.subject1.colheaders;
+    Data.(fieldname_i).Qall_mean = Qref.subject1.Qs.mean;
+    Data.(fieldname_i).Qall_std = Qref.subject1.Qs.std;
+    Data.(fieldname_i).Qdotall_mean = Qref.subject1.Qdots.mean;
+    Data.(fieldname_i).Qdotall_std = Qref.subject1.Qdots.std;
+    Data.(fieldname_i).Qddotall_mean = Qref.subject1.Qdotdots.mean;
+    Data.(fieldname_i).Qddotall_std = Qref.subject1.Qdotdots.std;
+    
+    load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\IDref_Fal_s1_mtjc' num2str(i) '_FK_sc_FDB2_MTc5_cspx0_oy3.mat']);
+    fieldname_i = ['ID_mtjc' num2str(i) '_FK_custom'];
+    Data.(fieldname_i).colheaders = IDref.subject1.colheaders;
+    Data.(fieldname_i).Tall_mean = IDref.subject1.mean;
+    Data.(fieldname_i).Tall_std = IDref.subject1.std;
+    
+    load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Pref_Fal_s1_mtjc' num2str(i) '_FK_sc_FDB2_MTc5_cspx0_oy3.mat']);
+    fieldname_i = ['P_mtjc' num2str(i) '_FK_custom'];
+    Data.(fieldname_i).colheaders = Pref.subject1.colheaders;
+    Data.(fieldname_i).Pall_mean = Pref.subject1.mean;
+    Data.(fieldname_i).Pall_std = Pref.subject1.std;
+end
+
+for i=4
+    load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Qref_Fal_s1_mtjc' num2str(i) '_FK_sc_FDB2_MTc5_cspx0_oy3.mat']);
+    fieldname_i = ['IK_mtjc' num2str(i) '_FK_custom_right'];
+    Data.(fieldname_i).colheaders = Qref.subject1.colheaders;
+    Data.(fieldname_i).Qall_mean = Qref.subject1.Qs.mean;
+    Data.(fieldname_i).Qall_std = Qref.subject1.Qs.std;
+    Data.(fieldname_i).Qdotall_mean = Qref.subject1.Qdots.mean;
+    Data.(fieldname_i).Qdotall_std = Qref.subject1.Qdots.std;
+    Data.(fieldname_i).Qddotall_mean = Qref.subject1.Qdotdots.mean;
+    Data.(fieldname_i).Qddotall_std = Qref.subject1.Qdotdots.std;
+    
+    load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\IDref_r_Fal_s1_mtjc' num2str(i) '_FK_sc_FDB2_MTc5_cspx0_oy3.mat']);
+    fieldname_i = ['ID_mtjc' num2str(i) '_FK_custom_right'];
+    Data.(fieldname_i).colheaders = IDref.subject1.colheaders;
+    Data.(fieldname_i).Tall_mean = IDref.subject1.mean;
+    Data.(fieldname_i).Tall_std = IDref.subject1.std;
+    
+    load(['C:\Users\u0150099\Documents\master_thesis\ReferenceData\ModelScaling\reference_data\Analysis\Pref_r_Fal_s1_mtjc' num2str(i) '_FK_sc_FDB2_MTc5_cspx0_oy3.mat']);
+    fieldname_i = ['P_mtjc' num2str(i) '_FK_custom_right'];
+    Data.(fieldname_i).colheaders = Pref.subject1.colheaders;
+    Data.(fieldname_i).Pall_mean = Pref.subject1.mean;
+    Data.(fieldname_i).Pall_std = Pref.subject1.std;
+end
+
 Data.ID_original.colheaders = ExperimentalData.Q.subject1.Qs.colheaders;
 Data.ID_original.Tall_mean = ExperimentalData.Torques.subject1.mean;
 Data.ID_original.Tall_std = ExperimentalData.Torques.subject1.std;

@@ -1,5 +1,5 @@
 clear
-% close all
+close all
 clc
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
@@ -10,7 +10,7 @@ addpath([pathRepo '/Musclemodel']);
 %%
 N = 100;
 ls = 0.146;
-l = linspace(ls,ls*1.1,N);
+l = linspace(ls,ls*1.04,N);
 lambda = l/ls;
 
 %% plantar fascia
@@ -47,7 +47,7 @@ AH_FL_ML = 0.31; % (-)
 % derive parameters needed for model
 alphao = FDB_alphao*pi/180; % (rad)
 PCSA = FDB_PCSA + AH_PCSA; % (mm^2)
-PCSA = PCSA*2;
+PCSA = PCSA*2; PCSA = 1000;
 FMo = PCSA*tension; % (N)
 
 lMT0 = ls; % (m) plantar fascia slack length
@@ -55,8 +55,10 @@ ML = lMT0*0.5; % Muscle belly has the same length as free tendon (visually estim
 FL = ML*FDB_FL_ML; % (m) fibre length
 lMo = FL; % (m) optimal fibre length
 
+% lMo = 23e-3;
+
 lTs = lMT0 - lMo*cos(alphao); % (m) the tendon covers the remaining length
-lTs = 0.125;
+% lTs = 0.125;
 FDBparameters(1,1) = FMo;
 FDBparameters(2,1) = lMo;
 FDBparameters(3,1) = lTs;
@@ -100,8 +102,9 @@ title('Flexor Digitorum Brevis')
 legend('Location','northwest')
 
 %% Solve for tendon force
-a = 0.5; % activity
-lTs_vec = 0.12:0.0025:0.13;
+a = 0.4; % activity
+% lTs_vec = 0.12:0.0025:0.13;
+lTs_vec = 0.122:0.001:0.128;
 N1 = length(lTs_vec);
 
 % allocate result matrices
@@ -130,6 +133,7 @@ for j=1:N1
 end
 
 figure
+sgtitle({'Plantar intrinsic muscle with plantar fascia in parallel',['Static equibibrium for act = ' num2str(a)]})
 subplot(2,2,1)
 hold on
 for j=1:N1
@@ -162,6 +166,7 @@ subplot(2,2,3)
 hold on
 for j=1:N1
     plot(lambda,lMtilde(:,j),'DisplayName',['FDB lTs = ' num2str(lTs_vec(j))])
+    disp(['FDB lTs = ' num2str(lTs_vec(j)) '      ' num2str(mean(lMtilde(:,j)))]);
 end
 xlabel('\lambda (-)')
 ylabel('lMtilde (-)')

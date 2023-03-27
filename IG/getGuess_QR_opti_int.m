@@ -8,7 +8,7 @@
 % Author: Antoine Falisse
 % Date: 12/19/2018
 % 
-function guess = getGuess_QR_opti_int_tmt(N,nq,NMuscle,scaling,v_tgt,jointi,d,PelvisY)
+function guess = getGuess_QR_opti_int(N,nq,NMuscle,scaling,v_tgt,jointi,d,PelvisY)
 
 
 if ~exist('PelvisY','var')
@@ -23,6 +23,10 @@ if isempty(idx_speed)
     idx_speed = find(all_speeds > v_tgt,1,'first');
 end
 guess.tf = all_tf(idx_speed);
+
+if isempty(idx_speed)
+    guess.tf = -0.1750*v_tgt + 0.8277;
+end
 
 %% Qs
 % The model is moving forward but with a standing position (Qs=0)
@@ -70,8 +74,6 @@ orderQsInv = [jointi.pelvis.tilt:2*jointi.pelvis.tz,...
     2*jointi.ankle.l-1:2*jointi.ankle.l,...
     2*jointi.subt.r-1:2*jointi.subt.r,...
     2*jointi.subt.l-1:2*jointi.subt.l,...
-    2*jointi.tmt.r-1:2*jointi.tmt.r,...
-    2*jointi.tmt.l-1:2*jointi.tmt.l,...
     2*jointi.mtp.r-1:2*jointi.mtp.r,...
     2*jointi.mtp.l-1:2*jointi.mtp.l,...
     2*jointi.trunk.ext-1:2*jointi.trunk.rot,...
@@ -85,7 +87,8 @@ orderQsOpp = [2*jointi.pelvis.list-1:2*jointi.pelvis.list,...
     2*jointi.trunk.ben-1:2*jointi.trunk.ben,...
     2*jointi.trunk.rot-1:2*jointi.trunk.rot];
 % For "symmetric" joints, we invert right and left
-inv_X = guess.QsQdots(1,orderQsInv);
+inv_X = zeros(1,nq.all);
+inv_X(1,sort(orderQsInv)) = guess.QsQdots(1,orderQsInv);
 % For other joints, we take the opposite right and left
 inv_X(orderQsOpp) = -guess.QsQdots(1,orderQsOpp);           
 dx = guess.QsQdots(end,2*jointi.pelvis.tx-1) - ...
@@ -105,8 +108,8 @@ orderArmInv = [jointi.sh_flex.r:jointi.sh_rot.r,...
 guess.a_a = [guess.a_a; guess.a_a(1,orderArmInv)];
 
 %% Mtp activations
-guess.a_mtp = 0.1*ones(N+1,nq.mtp);
-guess.e_mtp = 0.1*ones(N,nq.mtp);
+% guess.a_mtp = 0.1*ones(N+1,nq.mtp);
+% guess.e_mtp = 0.1*ones(N,nq.mtp);
 
 %% Mtp lumbar activations
 % Only used when no muscles actuate the lumbar joints (e.g. Rajagopal
@@ -122,7 +125,7 @@ guess.FTtilde   = (guess.FTtilde)./repmat(scaling.FTtilde,N+1,1);
 guess.vA        = (guess.vA)./repmat(scaling.vA,N,size(guess.vA,2));
 guess.dFTtilde  = (guess.dFTtilde)./repmat(scaling.dFTtilde,N,...
     size(guess.dFTtilde,2));
-guess.a_mtp_col = zeros(d*N,nq.mtp);
+% guess.a_mtp_col = zeros(d*N,nq.mtp);
 guess.a_lumbar_col = zeros(d*N,nq.trunk);
 
 

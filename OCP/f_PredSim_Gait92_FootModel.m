@@ -87,8 +87,11 @@ end
 
 f_FiberLength_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberLength_TendonForce_tendon'));
 f_FiberVelocity_TendonForce_tendon = Function.load(fullfile(PathDefaultFunc,'f_FiberVelocity_TendonForce_tendon'));
-f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
-
+try
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium'));
+end
 f_ArmActivationDynamics = Function.load(fullfile(PathDefaultFunc,'f_ArmActivationDynamics'));
 f_MtpActivationDynamics = Function.load(fullfile(PathDefaultFunc,'f_MtpActivationDynamics'));
 
@@ -256,7 +259,7 @@ bounds = AdaptBounds(bounds,S,mai);
 pathIG = [pathRepo,'/IG'];
 addpath(genpath(pathIG));
 if S.IGsel == 1 % Quasi-random initial guess
-    guess = getGuess_QR_opti_int_tmt(N,nq,NMuscle,scaling,S.v_tgt,jointi,d,S.IG_PelvisY);
+    guess = getGuess_QR_opti_int(N,nq,NMuscle,scaling,S.v_tgt,jointi,d,S.IG_PelvisY);
 elseif S.IGsel == 2 % Data-informed initial guess
     if S.IGmodeID  < 2 % Data from average walking motion
         IKfile_guess    = fullfile(pathRepo, S.IKfile_guess);
@@ -267,7 +270,7 @@ elseif S.IGsel == 2 % Data-informed initial guess
     elseif S.IGmodeID == 3 || S.IGmodeID == 4 % Data from selected motion
         % Extract joint positions from existing motion (previous results)
         if S.IGmodeID == 3
-            GuessFolder = fullfile(pathRepo,'Results',S.ResultsF_ig);
+            GuessFolder = S.ResultsF_ig;
         elseif S.IGmodeID ==4
             GuessFolder = fullfile(pathRepo,'IG','data');
         end
@@ -415,6 +418,25 @@ if S.Foot.PIM
     opti.set_initial(e_PIM, guess.e_PIM');
 end
 
+% nerve block intrinsic foot muscle
+if S.Foot.FDB_nerveBlock
+    iFDB = find(contains(muscleNames,'FDB_'));
+    if isempty(iFDB)
+        S.Foot.FDB_nerveBlock = 0;
+    else
+        % indices of left and right muscle
+        iFDB_lr = [iFDB, iFDB + length(muscleNames(1:end-3))];
+        a_FDB = a(iFDB_lr,:);
+        a_col_FDB = a_col(iFDB_lr,:);
+        vA_FDB = vA(iFDB_lr,:);
+        
+        % set activation to baseline
+        opti.subject_to(a_FDB(:) == bounds.a.lower(iFDB));
+        opti.subject_to(a_col_FDB(:) == bounds.a.lower(iFDB));
+        % no change in activation
+        opti.subject_to(vA_FDB(:) == 0);
+    end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define "slack" controls
 % Time derivative of muscle-tendon forces (states) at collocation points
@@ -526,6 +548,10 @@ for j=1:d
     % Left leg
     qinj_l          = Qskj_nsc(IndexLeft, j+1);
     qdotinj_l       = Qdotskj_nsc(IndexLeft, j+1);
+    if mtj && ~S.Foot.mtj_muscles
+        qinj_l(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        qdotinj_l(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+    end
     [lMTj_l,vMTj_l,MAj_l] =  f_lMT_vMT_dM(qinj_l,qdotinj_l);
     for i=1:length(MAj_dof_idx)
         fieldname_i = MAj_fieldnames{MAj_dof_idx(i)};
@@ -542,6 +568,10 @@ for j=1:d
     % Right leg
     qinj_r      = Qskj_nsc(IndexRight,j+1);
     qdotinj_r   = Qdotskj_nsc(IndexRight,j+1);
+    if mtj && ~S.Foot.mtj_muscles
+        qinj_r(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+        qdotinj_r(find(strcmp(MuscleData.dof_names,'mtj_angle_r'))) = 0;
+    end
     [lMTj_r,vMTj_r,MAj_r] = f_lMT_vMT_dM(qinj_r,qdotinj_r);
     % Here we take the indices from left since the vector is 1:49
     for i=1:length(MAj_dof_idx)
@@ -1165,7 +1195,7 @@ options.ipopt.linear_solver         = S.linear_solver;
 options.ipopt.tol                   = 1*10^(-S.tol_ipopt);
 opti.solver('ipopt', options);
 % Create and save diary
-OutFolder = fullfile(pathRepo,'Results',S.ResultsFolder);
+OutFolder = fullfile(S.ResultsRepo,S.ResultsFolder);
 if ~isfolder(OutFolder)
     mkdir(OutFolder);
 end

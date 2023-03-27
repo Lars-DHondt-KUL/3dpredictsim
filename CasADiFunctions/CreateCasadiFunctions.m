@@ -106,16 +106,22 @@ if S.SoleusTendonShorter
     IndexSoleus = find(contains(muscleNames,'soleus'));
     MTparameters(3,IndexSoleus) = MTparameters(3,IndexSoleus) - S.SoleusTendonShorter;
 end
-MTparameters_m = [MTparameters(:,musi),MTparameters(:,musi)];
+IndexGastroc = find(contains(muscleNames,'_gas'));
+MTparameters(3,IndexGastroc) = MTparameters(3,IndexGastroc) - S.GastrocTendonShorter;
+
+
 
 % By default, the tendon stiffness is 35 and the shift is 0.
 aTendon = 35*ones(NMuscle,1);
 % adjust stiffness of the calf muscles
-% IndexCalf = [32 33 34 78 79 80]; 
 IndexCalf = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus'));
+MTparameters(1,IndexCalf) = MTparameters(1,IndexCalf)*S.TricepsFMoScale;
+
 IndexCalf = [IndexCalf,IndexCalf+musi(end)];
 aTendon(IndexCalf) = 35*S.AchillesTendonScaleFactor;
 shift = getShift(aTendon);
+
+
 
 IndexAnkle = find(contains(muscleNames,'_gas') | contains(muscleNames,'soleus')...
      | contains(muscleNames,'tib_') | contains(muscleNames,'per_')...
@@ -125,11 +131,16 @@ passiveFiberForceShift = zeros(NMuscle,1);
 passiveFiberForceShift(IndexAnkle) = S.passiveFiberForceShift;
 
 % disp(muscleNames(IndexAnkle(1:12)));
+MTparameters_m = [MTparameters(:,musi),MTparameters(:,musi)];
 
 if S.Foot.FDB
     IndexFDB = find(contains(muscleNames,'FDB'));
     IndexFDB = [IndexFDB, IndexFDB+musi(end)];
     passiveFiberForceShift(IndexFDB) = S.Foot.FDB_shift;
+    MTparameters_m(1,IndexFDB) = MTparameters_m(1,IndexFDB)*S.Foot.FDB_sf_FMo;
+    MTparameters_m(3,IndexFDB) = S.Foot.FDB_lTs;
+    MTparameters_m(2,IndexFDB) = S.Foot.FDB_lMo;
+    MTparameters_m(5,IndexFDB) = MTparameters_m(2,IndexFDB)*10;
 end
 
 %% Musculoskeletal geometry
@@ -158,6 +169,10 @@ muscle_spanning_info_m = muscle_spanning_joint_INFO(musi_pol,:);
 MuscleInfo_m.muscle    = MuscleInfo.muscle(musi_pol);
 qin     = SX.sym('qin',1,nq.leg);
 qdotin  = SX.sym('qdotin',1,nq.leg);
+% if mtj && ~S.Foot.mtj_muscles
+%     qin(strcmp(MuscleData.dof_names,'mtj_angle_r')) = 0;
+%     qdotin(strcmp(MuscleData.dof_names,'mtj_angle_r')) = 0;
+% end
 lMT     = SX(NMuscle_pol,1);
 vMT     = SX(NMuscle_pol,1);
 dM      = SX(NMuscle_pol,nq.leg);
@@ -448,13 +463,13 @@ if mtj
     qin1     = MX.sym('qin_pass1',1);
     qdotin1  = MX.sym('qdotin_pass1',1);
 
-    if strcmp(S.Foot.mtj_stiffness,'MG_exp_table')
+    if strcmp(S.Foot.mtj_stiffness,'MG_exp_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
-    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table')
+    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp5')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
-    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_v2_table')
+    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_v2_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp_v2')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
     else
@@ -683,8 +698,11 @@ end
 
 f_FiberLength_TendonForce_tendon.save(fullfile(OutPath,'f_FiberLength_TendonForce_tendon'));
 f_FiberVelocity_TendonForce_tendon.save(fullfile(OutPath,'f_FiberVelocity_TendonForce_tendon'));
-f_forceEquilibrium_FtildeState_all_tendon.save(fullfile(OutPath,'f_forceEquilibrium_FtildeState_all_tendon'));
-
+try
+    f_forceEquilibrium_FtildeState_all_tendon.save(fullfile(OutPath,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon.save(fullfile(OutPath,'f_forceEquilibrium'));
+end
 f_ArmActivationDynamics.save(fullfile(OutPath,'f_ArmActivationDynamics'));
 f_MtpActivationDynamics.save(fullfile(OutPath,'f_MtpActivationDynamics'));
 

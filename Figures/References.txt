@@ -27,3 +27,6 @@ L. Welte, L. A. Kelly, G. A. Lichtwark, and M. J. Rainbow, “Influence of
 the windlass mechanism on arch-spring mechanics during dynamic foot arch
 deformation,” Journal of the Royal Society interface, vol. 15, no. 145, p. 20180270,
 2018.
+
+M. B. Bennett and R. F. Ker, “The mechanical properties of the human subcalcaneal fat pad in compression.,”
+ J Anat, vol. 171, pp. 131–138, Aug. 1990.

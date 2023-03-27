@@ -28,7 +28,7 @@ constexpr int n_out = 1;
 constexpr int nCoordinates = 31; 
 constexpr int NX = nCoordinates*2; 
 constexpr int NU = nCoordinates; 
-constexpr int NR = 109; 
+constexpr int NR = 127; 
 
 template<typename T> 
 T value(const Recorder& e) { return e; }; 
@@ -223,14 +223,22 @@ int F_generic(const T** arg, T** res) {
 	st_knee_r[1].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
 	st_knee_r[2].setFunction(new Constant(0.00000000000000000000));
 	st_knee_r[2].setAxis(Vec3(1.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
-	st_knee_r[3].setFunction(new MultiplierFunction(new Constant(0.00000000000000000000), 1.00274504572764011634));
+	st_knee_r[3].setCoordinateNames(OpenSim::Array<std::string>("knee_angle_r", 1, 1));
+	osim_double_adouble st_knee_r_3_coeffs[4] = {0.00314798598167599988, 0.00299342020719000007, -0.00785771128325800025, -0.00402347226004100018}; 
+	Vector st_knee_r_3_coeffs_vec(4); 
+	for (int i = 0; i < 4; ++i) st_knee_r_3_coeffs_vec[i] = st_knee_r_3_coeffs[i]; 
+	st_knee_r[3].setFunction(new PolynomialFunction(st_knee_r_3_coeffs_vec));
 	st_knee_r[3].setAxis(Vec3(1.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
-	st_knee_r[4].setFunction(new MultiplierFunction(new Constant(0.00000000000000000000), 1.00274504572764011634));
+	st_knee_r[4].setCoordinateNames(OpenSim::Array<std::string>("knee_angle_r", 1, 1));
+	osim_double_adouble st_knee_r_4_coeffs[3] = {-0.00368203588865299988, 0.00524491850058900026, -0.39565045284385197411}; 
+	Vector st_knee_r_4_coeffs_vec(3); 
+	for (int i = 0; i < 3; ++i) st_knee_r_4_coeffs_vec[i] = st_knee_r_4_coeffs[i]; 
+	st_knee_r[4].setFunction(new PolynomialFunction(st_knee_r_4_coeffs_vec));
 	st_knee_r[4].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
-	st_knee_r[5].setFunction(new MultiplierFunction(new Constant(0.00000000000000000000), 1.00274504572764011634));
+	st_knee_r[5].setFunction(new Constant(0.00000000000000000000));
 	st_knee_r[5].setAxis(Vec3(0.00000000000000000000, 0.00000000000000000000, 1.00000000000000000000));
 	OpenSim::CustomJoint* knee_r;
-	knee_r = new OpenSim::CustomJoint("knee_r", *femur_r, Vec3(-0.00501372522863820051, -0.39658566558528168811, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *tibia_r, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), st_knee_r);
+	knee_r = new OpenSim::CustomJoint("knee_r", *femur_r, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *tibia_r, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), st_knee_r);
 
 	SpatialTransform st_ankle_r;
 	st_ankle_r[0].setCoordinateNames(OpenSim::Array<std::string>("ankle_angle_r", 1, 1));
@@ -272,8 +280,22 @@ int F_generic(const T** arg, T** res) {
 	OpenSim::WeldJoint* tarsometatarsal_r;
 	tarsometatarsal_r = new OpenSim::WeldJoint("tarsometatarsal_r", *midfoot_r, Vec3(0.02300583064432199301, -0.01558453111874999811, 0.00524434781000000013), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *forefoot_r, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
 
-	OpenSim::PinJoint* mtp_r;
-	mtp_r = new OpenSim::PinJoint("mtp_r", *forefoot_r, Vec3(0.06194209122232211678, -0.01664216467649999587, 0.00328990568999999993), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *toes_r, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
+	SpatialTransform st_mtp_r;
+	st_mtp_r[0].setCoordinateNames(OpenSim::Array<std::string>("mtp_angle_r", 1, 1));
+	st_mtp_r[0].setFunction(new LinearFunction(1.0000, 0.0000));
+	st_mtp_r[0].setAxis(Vec3(-0.28299699999999999855, 0.04242230000000000306, 0.95818199999999997818));
+	st_mtp_r[1].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_r[1].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
+	st_mtp_r[2].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_r[2].setAxis(Vec3(0.81393610999999999045, -0.00000000000000000000, 0.58095439999999998193));
+	st_mtp_r[3].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_r[3].setAxis(Vec3(1.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
+	st_mtp_r[4].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_r[4].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
+	st_mtp_r[5].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_r[5].setAxis(Vec3(0.00000000000000000000, 0.00000000000000000000, 1.00000000000000000000));
+	OpenSim::CustomJoint* mtp_r;
+	mtp_r = new OpenSim::CustomJoint("mtp_r", *forefoot_r, Vec3(0.06194209122232211678, -0.01664216467649999587, 0.00328990568999999993), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *toes_r, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), st_mtp_r);
 
 	SpatialTransform st_hip_l;
 	st_hip_l[0].setCoordinateNames(OpenSim::Array<std::string>("hip_flexion_l", 1, 1));
@@ -302,14 +324,22 @@ int F_generic(const T** arg, T** res) {
 	st_knee_l[1].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
 	st_knee_l[2].setFunction(new Constant(0.00000000000000000000));
 	st_knee_l[2].setAxis(Vec3(1.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
-	st_knee_l[3].setFunction(new MultiplierFunction(new Constant(0.00000000000000000000), 1.00274504572764011634));
+	st_knee_l[3].setCoordinateNames(OpenSim::Array<std::string>("knee_angle_l", 1, 1));
+	osim_double_adouble st_knee_l_3_coeffs[4] = {0.00314798598167599988, 0.00299342020719000007, -0.00785771128325800025, -0.00402347226004100018}; 
+	Vector st_knee_l_3_coeffs_vec(4); 
+	for (int i = 0; i < 4; ++i) st_knee_l_3_coeffs_vec[i] = st_knee_l_3_coeffs[i]; 
+	st_knee_l[3].setFunction(new PolynomialFunction(st_knee_l_3_coeffs_vec));
 	st_knee_l[3].setAxis(Vec3(1.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
-	st_knee_l[4].setFunction(new MultiplierFunction(new Constant(0.00000000000000000000), 1.00274504572764011634));
+	st_knee_l[4].setCoordinateNames(OpenSim::Array<std::string>("knee_angle_l", 1, 1));
+	osim_double_adouble st_knee_l_4_coeffs[3] = {-0.00368203588865299988, 0.00524491850058900026, -0.39565045284385197411}; 
+	Vector st_knee_l_4_coeffs_vec(3); 
+	for (int i = 0; i < 3; ++i) st_knee_l_4_coeffs_vec[i] = st_knee_l_4_coeffs[i]; 
+	st_knee_l[4].setFunction(new PolynomialFunction(st_knee_l_4_coeffs_vec));
 	st_knee_l[4].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
-	st_knee_l[5].setFunction(new MultiplierFunction(new Constant(0.00000000000000000000), 1.00274504572764011634));
+	st_knee_l[5].setFunction(new Constant(0.00000000000000000000));
 	st_knee_l[5].setAxis(Vec3(0.00000000000000000000, 0.00000000000000000000, 1.00000000000000000000));
 	OpenSim::CustomJoint* knee_l;
-	knee_l = new OpenSim::CustomJoint("knee_l", *femur_l, Vec3(-0.00501372522863820051, -0.39658566558528168811, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *tibia_l, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), st_knee_l);
+	knee_l = new OpenSim::CustomJoint("knee_l", *femur_l, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *tibia_l, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), st_knee_l);
 
 	SpatialTransform st_ankle_l;
 	st_ankle_l[0].setCoordinateNames(OpenSim::Array<std::string>("ankle_angle_l", 1, 1));
@@ -351,8 +381,22 @@ int F_generic(const T** arg, T** res) {
 	OpenSim::WeldJoint* tarsometatarsal_l;
 	tarsometatarsal_l = new OpenSim::WeldJoint("tarsometatarsal_l", *midfoot_l, Vec3(0.02300583064432199301, -0.01558453111874999811, -0.00524434781000000013), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *forefoot_l, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
 
-	OpenSim::PinJoint* mtp_l;
-	mtp_l = new OpenSim::PinJoint("mtp_l", *forefoot_l, Vec3(0.06194209122232211678, -0.01664216467649999587, -0.00328990568999999993), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *toes_l, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
+	SpatialTransform st_mtp_l;
+	st_mtp_l[0].setCoordinateNames(OpenSim::Array<std::string>("mtp_angle_l", 1, 1));
+	st_mtp_l[0].setFunction(new LinearFunction(1.0000, 0.0000));
+	st_mtp_l[0].setAxis(Vec3(0.28299699999999999855, -0.04242230000000000306, 0.95818199999999997818));
+	st_mtp_l[1].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_l[1].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
+	st_mtp_l[2].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_l[2].setAxis(Vec3(0.81393610999999999045, -0.00000000000000000000, 0.58095439999999998193));
+	st_mtp_l[3].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_l[3].setAxis(Vec3(1.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000));
+	st_mtp_l[4].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_l[4].setAxis(Vec3(0.00000000000000000000, 1.00000000000000000000, 0.00000000000000000000));
+	st_mtp_l[5].setFunction(new Constant(0.00000000000000000000));
+	st_mtp_l[5].setAxis(Vec3(0.00000000000000000000, 0.00000000000000000000, 1.00000000000000000000));
+	OpenSim::CustomJoint* mtp_l;
+	mtp_l = new OpenSim::CustomJoint("mtp_l", *forefoot_l, Vec3(0.06194209122232211678, -0.01664216467649999587, -0.00328990568999999993), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), *toes_l, Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), Vec3(0.00000000000000000000, 0.00000000000000000000, 0.00000000000000000000), st_mtp_l);
 
 	SpatialTransform st_back;
 	st_back[0].setCoordinateNames(OpenSim::Array<std::string>("lumbar_extension", 1, 1));
@@ -520,8 +564,8 @@ int F_generic(const T** arg, T** res) {
 	model->addComponent(SmoothSphereHalfSpaceForce_s2_r);
 
 	OpenSim::SmoothSphereHalfSpaceForce* SmoothSphereHalfSpaceForce_s3_r;
-	SmoothSphereHalfSpaceForce_s3_r = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s3_r", *midfoot_r, model->getGround());
-	Vec3 SmoothSphereHalfSpaceForce_s3_r_location(0.08697599999999999776, -0.02699054124456095466, 0.02799300000000000052);
+	SmoothSphereHalfSpaceForce_s3_r = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s3_r", *forefoot_r, model->getGround());
+	Vec3 SmoothSphereHalfSpaceForce_s3_r_location(0.06397016935567800822, -0.01140601012581093227, 0.02274865219000000646);
 	SmoothSphereHalfSpaceForce_s3_r->set_contact_sphere_location(SmoothSphereHalfSpaceForce_s3_r_location);
 	double SmoothSphereHalfSpaceForce_s3_r_radius = (0.02299999999999999961);
 	SmoothSphereHalfSpaceForce_s3_r->set_contact_sphere_radius(SmoothSphereHalfSpaceForce_s3_r_radius );
@@ -533,13 +577,13 @@ int F_generic(const T** arg, T** res) {
 	SmoothSphereHalfSpaceForce_s3_r->set_dynamic_friction(0.80000000000000004441);
 	SmoothSphereHalfSpaceForce_s3_r->set_viscous_friction(0.50000000000000000000);
 	SmoothSphereHalfSpaceForce_s3_r->set_transition_velocity(0.20000000000000001110);
-	SmoothSphereHalfSpaceForce_s3_r->connectSocket_sphere_frame(*midfoot_r);
+	SmoothSphereHalfSpaceForce_s3_r->connectSocket_sphere_frame(*forefoot_r);
 	SmoothSphereHalfSpaceForce_s3_r->connectSocket_half_space_frame(model->getGround());
 	model->addComponent(SmoothSphereHalfSpaceForce_s3_r);
 
 	OpenSim::SmoothSphereHalfSpaceForce* SmoothSphereHalfSpaceForce_s4_r;
-	SmoothSphereHalfSpaceForce_s4_r = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s4_r", *midfoot_r, model->getGround());
-	Vec3 SmoothSphereHalfSpaceForce_s4_r_location(0.08697599999999999776, -0.02699054124456095466, -0.00318970000000000017);
+	SmoothSphereHalfSpaceForce_s4_r = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s4_r", *forefoot_r, model->getGround());
+	Vec3 SmoothSphereHalfSpaceForce_s4_r_location(0.06397016935567800822, -0.01140601012581093227, -0.00843404780999999423);
 	SmoothSphereHalfSpaceForce_s4_r->set_contact_sphere_location(SmoothSphereHalfSpaceForce_s4_r_location);
 	double SmoothSphereHalfSpaceForce_s4_r_radius = (0.02100000000000000130);
 	SmoothSphereHalfSpaceForce_s4_r->set_contact_sphere_radius(SmoothSphereHalfSpaceForce_s4_r_radius );
@@ -551,7 +595,7 @@ int F_generic(const T** arg, T** res) {
 	SmoothSphereHalfSpaceForce_s4_r->set_dynamic_friction(0.80000000000000004441);
 	SmoothSphereHalfSpaceForce_s4_r->set_viscous_friction(0.50000000000000000000);
 	SmoothSphereHalfSpaceForce_s4_r->set_transition_velocity(0.20000000000000001110);
-	SmoothSphereHalfSpaceForce_s4_r->connectSocket_sphere_frame(*midfoot_r);
+	SmoothSphereHalfSpaceForce_s4_r->connectSocket_sphere_frame(*forefoot_r);
 	SmoothSphereHalfSpaceForce_s4_r->connectSocket_half_space_frame(model->getGround());
 	model->addComponent(SmoothSphereHalfSpaceForce_s4_r);
 
@@ -628,8 +672,8 @@ int F_generic(const T** arg, T** res) {
 	model->addComponent(SmoothSphereHalfSpaceForce_s2_l);
 
 	OpenSim::SmoothSphereHalfSpaceForce* SmoothSphereHalfSpaceForce_s3_l;
-	SmoothSphereHalfSpaceForce_s3_l = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s3_l", *midfoot_l, model->getGround());
-	Vec3 SmoothSphereHalfSpaceForce_s3_l_location(0.08697599999999999776, -0.02699054124456095466, -0.02799300000000000052);
+	SmoothSphereHalfSpaceForce_s3_l = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s3_l", *forefoot_l, model->getGround());
+	Vec3 SmoothSphereHalfSpaceForce_s3_l_location(0.06397016935567800822, -0.01140601012581093227, -0.02274865219000000646);
 	SmoothSphereHalfSpaceForce_s3_l->set_contact_sphere_location(SmoothSphereHalfSpaceForce_s3_l_location);
 	double SmoothSphereHalfSpaceForce_s3_l_radius = (0.02299999999999999961);
 	SmoothSphereHalfSpaceForce_s3_l->set_contact_sphere_radius(SmoothSphereHalfSpaceForce_s3_l_radius );
@@ -641,13 +685,13 @@ int F_generic(const T** arg, T** res) {
 	SmoothSphereHalfSpaceForce_s3_l->set_dynamic_friction(0.80000000000000004441);
 	SmoothSphereHalfSpaceForce_s3_l->set_viscous_friction(0.50000000000000000000);
 	SmoothSphereHalfSpaceForce_s3_l->set_transition_velocity(0.20000000000000001110);
-	SmoothSphereHalfSpaceForce_s3_l->connectSocket_sphere_frame(*midfoot_l);
+	SmoothSphereHalfSpaceForce_s3_l->connectSocket_sphere_frame(*forefoot_l);
 	SmoothSphereHalfSpaceForce_s3_l->connectSocket_half_space_frame(model->getGround());
 	model->addComponent(SmoothSphereHalfSpaceForce_s3_l);
 
 	OpenSim::SmoothSphereHalfSpaceForce* SmoothSphereHalfSpaceForce_s4_l;
-	SmoothSphereHalfSpaceForce_s4_l = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s4_l", *midfoot_l, model->getGround());
-	Vec3 SmoothSphereHalfSpaceForce_s4_l_location(0.08697599999999999776, -0.02699054124456095466, 0.00318970000000000017);
+	SmoothSphereHalfSpaceForce_s4_l = new SmoothSphereHalfSpaceForce("SmoothSphereHalfSpaceForce_s4_l", *forefoot_l, model->getGround());
+	Vec3 SmoothSphereHalfSpaceForce_s4_l_location(0.06397016935567800822, -0.01140601012581093227, 0.00843404780999999423);
 	SmoothSphereHalfSpaceForce_s4_l->set_contact_sphere_location(SmoothSphereHalfSpaceForce_s4_l_location);
 	double SmoothSphereHalfSpaceForce_s4_l_radius = (0.02100000000000000130);
 	SmoothSphereHalfSpaceForce_s4_l->set_contact_sphere_radius(SmoothSphereHalfSpaceForce_s4_l_radius );
@@ -659,7 +703,7 @@ int F_generic(const T** arg, T** res) {
 	SmoothSphereHalfSpaceForce_s4_l->set_dynamic_friction(0.80000000000000004441);
 	SmoothSphereHalfSpaceForce_s4_l->set_viscous_friction(0.50000000000000000000);
 	SmoothSphereHalfSpaceForce_s4_l->set_transition_velocity(0.20000000000000001110);
-	SmoothSphereHalfSpaceForce_s4_l->connectSocket_sphere_frame(*midfoot_l);
+	SmoothSphereHalfSpaceForce_s4_l->connectSocket_sphere_frame(*forefoot_l);
 	SmoothSphereHalfSpaceForce_s4_l->connectSocket_half_space_frame(model->getGround());
 	model->addComponent(SmoothSphereHalfSpaceForce_s4_l);
 
@@ -759,14 +803,14 @@ int F_generic(const T** arg, T** res) {
 	SpatialVec GRF_2;
 	GRF_2[0] = Vec3(Force_2[3], Force_2[4], Force_2[5]);
 	GRF_2[1] = Vec3(Force_2[0], Force_2[1], Force_2[2]);
-	int c_idx_2 = model->getBodySet().get("midfoot_r").getMobilizedBodyIndex();
+	int c_idx_2 = model->getBodySet().get("forefoot_r").getMobilizedBodyIndex();
 	appliedBodyForces[c_idx_2] += GRF_2;
 
 	Array<osim_double_adouble> Force_3 = SmoothSphereHalfSpaceForce_s4_r->getRecordValues(*state);
 	SpatialVec GRF_3;
 	GRF_3[0] = Vec3(Force_3[3], Force_3[4], Force_3[5]);
 	GRF_3[1] = Vec3(Force_3[0], Force_3[1], Force_3[2]);
-	int c_idx_3 = model->getBodySet().get("midfoot_r").getMobilizedBodyIndex();
+	int c_idx_3 = model->getBodySet().get("forefoot_r").getMobilizedBodyIndex();
 	appliedBodyForces[c_idx_3] += GRF_3;
 
 	Array<osim_double_adouble> Force_4 = SmoothSphereHalfSpaceForce_s5_r->getRecordValues(*state);
@@ -801,14 +845,14 @@ int F_generic(const T** arg, T** res) {
 	SpatialVec GRF_8;
 	GRF_8[0] = Vec3(Force_8[3], Force_8[4], Force_8[5]);
 	GRF_8[1] = Vec3(Force_8[0], Force_8[1], Force_8[2]);
-	int c_idx_8 = model->getBodySet().get("midfoot_l").getMobilizedBodyIndex();
+	int c_idx_8 = model->getBodySet().get("forefoot_l").getMobilizedBodyIndex();
 	appliedBodyForces[c_idx_8] += GRF_8;
 
 	Array<osim_double_adouble> Force_9 = SmoothSphereHalfSpaceForce_s4_l->getRecordValues(*state);
 	SpatialVec GRF_9;
 	GRF_9[0] = Vec3(Force_9[3], Force_9[4], Force_9[5]);
 	GRF_9[1] = Vec3(Force_9[0], Force_9[1], Force_9[2]);
-	int c_idx_9 = model->getBodySet().get("midfoot_l").getMobilizedBodyIndex();
+	int c_idx_9 = model->getBodySet().get("forefoot_l").getMobilizedBodyIndex();
 	appliedBodyForces[c_idx_9] += GRF_9;
 
 	Array<osim_double_adouble> Force_10 = SmoothSphereHalfSpaceForce_s5_l->getRecordValues(*state);
@@ -846,6 +890,8 @@ int F_generic(const T** arg, T** res) {
 	Vec3 tibia_l_or = tibia_l->getPositionInGround(*state);
 	Vec3 toes_r_or = toes_r->getPositionInGround(*state);
 	Vec3 toes_l_or = toes_l->getPositionInGround(*state);
+	Vec3 midfoot_r_or = midfoot_r->getPositionInGround(*state);
+	Vec3 midfoot_l_or = midfoot_l->getPositionInGround(*state);
 
 	/// Ground reaction forces.
 	SpatialVec GRF_r;
@@ -884,19 +930,19 @@ int F_generic(const T** arg, T** res) {
 	Vec3 GRM_1 = (TR_GB_calcn_r*SmoothSphereHalfSpaceForce_s2_r_locationCP_B) % GRF_1[1];
 	GRM_r += GRM_1;
 
-	SimTK::Transform TR_GB_midfoot_r = midfoot_r->getMobilizedBody().getBodyTransform(*state);
-	Vec3 SmoothSphereHalfSpaceForce_s3_r_location_G = midfoot_r->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s3_r_location);
+	SimTK::Transform TR_GB_forefoot_r = forefoot_r->getMobilizedBody().getBodyTransform(*state);
+	Vec3 SmoothSphereHalfSpaceForce_s3_r_location_G = forefoot_r->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s3_r_location);
 	Vec3 SmoothSphereHalfSpaceForce_s3_r_locationCP_G = SmoothSphereHalfSpaceForce_s3_r_location_G - SmoothSphereHalfSpaceForce_s3_r_radius * normal;
 	Vec3 locationCP_G_adj_2 = SmoothSphereHalfSpaceForce_s3_r_locationCP_G - 0.5*SmoothSphereHalfSpaceForce_s3_r_locationCP_G[1] * normal;
-	Vec3 SmoothSphereHalfSpaceForce_s3_r_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_2, *midfoot_r);
-	Vec3 GRM_2 = (TR_GB_midfoot_r*SmoothSphereHalfSpaceForce_s3_r_locationCP_B) % GRF_2[1];
+	Vec3 SmoothSphereHalfSpaceForce_s3_r_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_2, *forefoot_r);
+	Vec3 GRM_2 = (TR_GB_forefoot_r*SmoothSphereHalfSpaceForce_s3_r_locationCP_B) % GRF_2[1];
 	GRM_r += GRM_2;
 
-	Vec3 SmoothSphereHalfSpaceForce_s4_r_location_G = midfoot_r->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s4_r_location);
+	Vec3 SmoothSphereHalfSpaceForce_s4_r_location_G = forefoot_r->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s4_r_location);
 	Vec3 SmoothSphereHalfSpaceForce_s4_r_locationCP_G = SmoothSphereHalfSpaceForce_s4_r_location_G - SmoothSphereHalfSpaceForce_s4_r_radius * normal;
 	Vec3 locationCP_G_adj_3 = SmoothSphereHalfSpaceForce_s4_r_locationCP_G - 0.5*SmoothSphereHalfSpaceForce_s4_r_locationCP_G[1] * normal;
-	Vec3 SmoothSphereHalfSpaceForce_s4_r_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_3, *midfoot_r);
-	Vec3 GRM_3 = (TR_GB_midfoot_r*SmoothSphereHalfSpaceForce_s4_r_locationCP_B) % GRF_3[1];
+	Vec3 SmoothSphereHalfSpaceForce_s4_r_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_3, *forefoot_r);
+	Vec3 GRM_3 = (TR_GB_forefoot_r*SmoothSphereHalfSpaceForce_s4_r_locationCP_B) % GRF_3[1];
 	GRM_r += GRM_3;
 
 	SimTK::Transform TR_GB_toes_r = toes_r->getMobilizedBody().getBodyTransform(*state);
@@ -929,19 +975,19 @@ int F_generic(const T** arg, T** res) {
 	Vec3 GRM_7 = (TR_GB_calcn_l*SmoothSphereHalfSpaceForce_s2_l_locationCP_B) % GRF_7[1];
 	GRM_l += GRM_7;
 
-	SimTK::Transform TR_GB_midfoot_l = midfoot_l->getMobilizedBody().getBodyTransform(*state);
-	Vec3 SmoothSphereHalfSpaceForce_s3_l_location_G = midfoot_l->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s3_l_location);
+	SimTK::Transform TR_GB_forefoot_l = forefoot_l->getMobilizedBody().getBodyTransform(*state);
+	Vec3 SmoothSphereHalfSpaceForce_s3_l_location_G = forefoot_l->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s3_l_location);
 	Vec3 SmoothSphereHalfSpaceForce_s3_l_locationCP_G = SmoothSphereHalfSpaceForce_s3_l_location_G - SmoothSphereHalfSpaceForce_s3_l_radius * normal;
 	Vec3 locationCP_G_adj_8 = SmoothSphereHalfSpaceForce_s3_l_locationCP_G - 0.5*SmoothSphereHalfSpaceForce_s3_l_locationCP_G[1] * normal;
-	Vec3 SmoothSphereHalfSpaceForce_s3_l_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_8, *midfoot_l);
-	Vec3 GRM_8 = (TR_GB_midfoot_l*SmoothSphereHalfSpaceForce_s3_l_locationCP_B) % GRF_8[1];
+	Vec3 SmoothSphereHalfSpaceForce_s3_l_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_8, *forefoot_l);
+	Vec3 GRM_8 = (TR_GB_forefoot_l*SmoothSphereHalfSpaceForce_s3_l_locationCP_B) % GRF_8[1];
 	GRM_l += GRM_8;
 
-	Vec3 SmoothSphereHalfSpaceForce_s4_l_location_G = midfoot_l->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s4_l_location);
+	Vec3 SmoothSphereHalfSpaceForce_s4_l_location_G = forefoot_l->findStationLocationInGround(*state, SmoothSphereHalfSpaceForce_s4_l_location);
 	Vec3 SmoothSphereHalfSpaceForce_s4_l_locationCP_G = SmoothSphereHalfSpaceForce_s4_l_location_G - SmoothSphereHalfSpaceForce_s4_l_radius * normal;
 	Vec3 locationCP_G_adj_9 = SmoothSphereHalfSpaceForce_s4_l_locationCP_G - 0.5*SmoothSphereHalfSpaceForce_s4_l_locationCP_G[1] * normal;
-	Vec3 SmoothSphereHalfSpaceForce_s4_l_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_9, *midfoot_l);
-	Vec3 GRM_9 = (TR_GB_midfoot_l*SmoothSphereHalfSpaceForce_s4_l_locationCP_B) % GRF_9[1];
+	Vec3 SmoothSphereHalfSpaceForce_s4_l_locationCP_B = model->getGround().findStationLocationInAnotherFrame(*state, locationCP_G_adj_9, *forefoot_l);
+	Vec3 GRM_9 = (TR_GB_forefoot_l*SmoothSphereHalfSpaceForce_s4_l_locationCP_B) % GRF_9[1];
 	GRM_l += GRM_9;
 
 	SimTK::Transform TR_GB_toes_l = toes_l->getMobilizedBody().getBodyTransform(*state);
@@ -959,6 +1005,31 @@ int F_generic(const T** arg, T** res) {
 	Vec3 GRM_11 = (TR_GB_toes_l*SmoothSphereHalfSpaceForce_s6_l_locationCP_B) % GRF_11[1];
 	GRM_l += GRM_11;
 
+	/// Contact spheres deformation power.
+	Vec3 SmoothSphereHalfSpaceForce_s1_r_velocity_G = calcn_r->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s1_r_location);
+	osim_double_adouble P_HC_y_0 = SmoothSphereHalfSpaceForce_s1_r_velocity_G[1]*GRF_0[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s2_r_velocity_G = calcn_r->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s2_r_location);
+	osim_double_adouble P_HC_y_1 = SmoothSphereHalfSpaceForce_s2_r_velocity_G[1]*GRF_1[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s3_r_velocity_G = forefoot_r->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s3_r_location);
+	osim_double_adouble P_HC_y_2 = SmoothSphereHalfSpaceForce_s3_r_velocity_G[1]*GRF_2[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s4_r_velocity_G = forefoot_r->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s4_r_location);
+	osim_double_adouble P_HC_y_3 = SmoothSphereHalfSpaceForce_s4_r_velocity_G[1]*GRF_3[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s5_r_velocity_G = toes_r->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s5_r_location);
+	osim_double_adouble P_HC_y_4 = SmoothSphereHalfSpaceForce_s5_r_velocity_G[1]*GRF_4[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s6_r_velocity_G = toes_r->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s6_r_location);
+	osim_double_adouble P_HC_y_5 = SmoothSphereHalfSpaceForce_s6_r_velocity_G[1]*GRF_5[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s1_l_velocity_G = calcn_l->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s1_l_location);
+	osim_double_adouble P_HC_y_6 = SmoothSphereHalfSpaceForce_s1_l_velocity_G[1]*GRF_6[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s2_l_velocity_G = calcn_l->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s2_l_location);
+	osim_double_adouble P_HC_y_7 = SmoothSphereHalfSpaceForce_s2_l_velocity_G[1]*GRF_7[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s3_l_velocity_G = forefoot_l->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s3_l_location);
+	osim_double_adouble P_HC_y_8 = SmoothSphereHalfSpaceForce_s3_l_velocity_G[1]*GRF_8[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s4_l_velocity_G = forefoot_l->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s4_l_location);
+	osim_double_adouble P_HC_y_9 = SmoothSphereHalfSpaceForce_s4_l_velocity_G[1]*GRF_9[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s5_l_velocity_G = toes_l->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s5_l_location);
+	osim_double_adouble P_HC_y_10 = SmoothSphereHalfSpaceForce_s5_l_velocity_G[1]*GRF_10[1][1];
+	Vec3 SmoothSphereHalfSpaceForce_s6_l_velocity_G = toes_l->findStationVelocityInGround(*state, SmoothSphereHalfSpaceForce_s6_l_location);
+	osim_double_adouble P_HC_y_11 = SmoothSphereHalfSpaceForce_s6_l_velocity_G[1]*GRF_11[1][1];
 	/// Outputs.
 	/// Residual forces (OpenSim and Simbody have different state orders).
 	auto indicesSimbodyInOS = getIndicesSimbodyInOS(*model);
@@ -975,25 +1046,40 @@ int F_generic(const T** arg, T** res) {
 	for (int i = 0; i < 3; ++i) res[0][i + NU + 21] = value<T>(tibia_l_or[i]);
 	for (int i = 0; i < 3; ++i) res[0][i + NU + 24] = value<T>(toes_r_or[i]);
 	for (int i = 0; i < 3; ++i) res[0][i + NU + 27] = value<T>(toes_l_or[i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 30] = value<T>(midfoot_r_or[i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 33] = value<T>(midfoot_l_or[i]);
 	/// Ground reaction forces.
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 30] = value<T>(GRF_r[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 33] = value<T>(GRF_l[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 36] = value<T>(GRF_r[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 39] = value<T>(GRF_l[1][i]);
 	/// Separate Ground reaction forces.
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 36] = value<T>(GRF_0[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 39] = value<T>(GRF_1[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 42] = value<T>(GRF_2[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 45] = value<T>(GRF_3[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 48] = value<T>(GRF_4[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 51] = value<T>(GRF_5[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 54] = value<T>(GRF_6[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 57] = value<T>(GRF_7[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 60] = value<T>(GRF_8[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 63] = value<T>(GRF_9[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 66] = value<T>(GRF_10[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 69] = value<T>(GRF_11[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 42] = value<T>(GRF_0[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 45] = value<T>(GRF_1[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 48] = value<T>(GRF_2[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 51] = value<T>(GRF_3[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 54] = value<T>(GRF_4[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 57] = value<T>(GRF_5[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 60] = value<T>(GRF_6[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 63] = value<T>(GRF_7[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 66] = value<T>(GRF_8[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 69] = value<T>(GRF_9[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 72] = value<T>(GRF_10[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 75] = value<T>(GRF_11[1][i]);
 	/// Ground reaction moments.
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 72] = value<T>(GRM_r[1][i]);
-	for (int i = 0; i < 3; ++i) res[0][i + NU + 75] = value<T>(GRM_l[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 78] = value<T>(GRM_r[1][i]);
+	for (int i = 0; i < 3; ++i) res[0][i + NU + 81] = value<T>(GRM_l[1][i]);
+	/// Contact spheres deformation power.
+	res[0][NU + 84] = value<T>(P_HC_y_0);
+	res[0][NU + 85] = value<T>(P_HC_y_1);
+	res[0][NU + 86] = value<T>(P_HC_y_2);
+	res[0][NU + 87] = value<T>(P_HC_y_3);
+	res[0][NU + 88] = value<T>(P_HC_y_4);
+	res[0][NU + 89] = value<T>(P_HC_y_5);
+	res[0][NU + 90] = value<T>(P_HC_y_6);
+	res[0][NU + 91] = value<T>(P_HC_y_7);
+	res[0][NU + 92] = value<T>(P_HC_y_8);
+	res[0][NU + 93] = value<T>(P_HC_y_9);
+	res[0][NU + 94] = value<T>(P_HC_y_10);
+	res[0][NU + 95] = value<T>(P_HC_y_11);
 
 	return 0;
 }
