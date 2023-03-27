@@ -30,13 +30,13 @@ stance_ref_std = 0.8233;
 
 
 % % Triceps surae parameters
-results = {
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox150_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-};
-LegNames = {'Max isometric force: 100%', 'Max isometric force: 120%', 'Max isometric force: 150%',};
-figName = 'TS_force';
+% results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox150_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+% };
+% LegNames = {'Max isometric force: 100%', 'Max isometric force: 120%', 'Max isometric force: 150%',};
+% figName = 'TS_force';
 
 % % Ankle passive stiffness parameters
 % results = {
@@ -132,14 +132,14 @@ figName = 'TS_force';
 % figName = 'PIM_lTs';
 
 % % heel sphere x-position
-% results = {
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x15_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x20_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     };
-% LegNames = {'x = 0 mm', 'x = 10 mm', 'x = 15 mm', 'x = 20 mm'};
-% figName = 'contact_x';
+results = {
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x15_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x20_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    };
+LegNames = {'x = 0 mm', 'x = 10 mm', 'x = 15 mm', 'x = 20 mm'};
+figName = 'contact_x';
 
 % % contact sphere configuration
 % results = {
@@ -153,18 +153,45 @@ figName = 'TS_force';
 % LegNames = {'nominal 3-segment foot model','A','B','C','D','E'};
 % figName = 'contact_geometry';
 
+
+% results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig21_N100_v2_pp.mat'
+% };
+% LegNames = {'Nominal 3-segment foot model','Intrinsic foot muscle nerve block'};
+% figName = 'PIM_nerve_block';
+
+% results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100_v2_pp.mat'
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100_pp.mat'
+% };
+% LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
+%     'Passive midtarsal and MTP (3-segment)','Muscle-driven MTP (2-segment)'};
+% figName = 'extrinsic_large';
+
+% results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_tanh10_pp.mat'
+% };
+% LegNames = {'Nominal 3-segment foot model, smoothing factor 100','Nominal 3-segment foot model, smoothing factor 10'};
+% figName = 'tanh_smoothing';
+
+
 resultFiles = results;
 
 
 
 CsV = [[0 0.4470 0.7410];[0.8500 0.3250 0.0980];[0.4660 0.6740 0.1880];[0.3010 0.7450 0.9330];[0.4940 0.1840 0.5560];[0.6350 0.0780 0.1840]];
 
+% CsV = [[0 0 0];[0.6350 0.0780 0.1840]; [0.3010 0.7450 0.9330];[0.4660 0.6740 0.1880]];
 % CsV = parula(length(resultFiles)+1);
 % CsV = hsv(length(resultFiles));
 
-CsV(2,:) = 0;
+CsV(3,:) = 0;
 
-mrk = {'-','-','-.',':','-.',':'};
+mrk = {'-','-.','-.',':','-.',':'};
 lw = [2,2,2,2,2,2,2];
 
 % mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
@@ -260,7 +287,7 @@ for i_res=1:length(resultFiles)
             if i==1
                 leg = [leg,p1];
                 if i_res==length(resultFiles)
-                    lg = legend(leg,'Orientation','Horizontal','Fontsize',legend_fontsize);
+                    lg = legend(leg,'Orientation','Horizontal','Fontsize',legend_fontsize); %,'NumColumns',3
                     lg.Layout.Tile = 'South';
                     lg.Box = 'off';
                 end

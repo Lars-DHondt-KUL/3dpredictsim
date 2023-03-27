@@ -42,8 +42,8 @@ AddCasadiPaths();
 %-------------------------------------------------------------------------%
 % Full body gait simulation
 run_simulation = 0;         % run solver
-post_process_results = 0;   % postproces
-add_to_batch_queue = 1;     % save settings to run later
+post_process_results = 1;   % postproces
+add_to_batch_queue = 0;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
@@ -155,7 +155,7 @@ S.Foot.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
 S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
-S.Foot.PF_sf = 5;
+S.Foot.PF_sf = 1;
 S.Foot.PF_sf_isvar = 0; 
 S.Foot.PF_slack_length = 0.146; % (m) slack length
 
@@ -165,7 +165,7 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
 % optimal fibre length
 S.Foot.FDB_lMo = 19.7e-3; % 19.7e-3 23e-3
 % Tendon slack length

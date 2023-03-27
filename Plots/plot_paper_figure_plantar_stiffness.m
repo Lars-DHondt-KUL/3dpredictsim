@@ -328,6 +328,27 @@ for i_res=1:length(resultFiles)
 
     nexttile(8)
 
+    % plot reference data
+        if i_res==1
+            idx_jref = strcmp(Pref.colheaders,'leg_total');
+            if sum(idx_jref) == 1
+                meanPlusSTD = (Pref.Pall_mean(:,idx_jref) + 2*Pref.Pall_std(:,idx_jref))/R.body_mass;
+                meanMinusSTD = (Pref.Pall_mean(:,idx_jref) - 2*Pref.Pall_std(:,idx_jref))/R.body_mass;
+
+                stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
+                intervalQ = 1:stepQ:size(R.Qs,1);
+                sampleQ = 1:size(R.Qs,1);
+                meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
+                meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
+
+                hold on
+                fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],  0.8*[1,1,1],'LineStyle','none');
+
+                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+
+            end
+        end % end plot ref data
+
     % plot sim result
     leg_joints = {'hip_flexion_r','hip_adduction_r','hip_rotation_r','knee_angle_r',...
         'ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
@@ -430,7 +451,7 @@ annotation(gcf,'textbox',[0.35,0.49,0.05,0.05],'String',str,'EdgeColor','none','
 
 
 %%
-exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness.jpeg'),'Resolution',300);
 
 
 

@@ -1319,6 +1319,11 @@ metab_Adot  = zeros(2*N, NMuscle);
 metab_Mdot  = zeros(2*N, NMuscle);
 metab_Sdot  = zeros(2*N, NMuscle);
 metab_Wdot  = zeros(2*N, NMuscle);
+metab_smooth_Etot  = zeros(2*N, NMuscle);
+metab_smooth_Adot  = zeros(2*N, NMuscle);
+metab_smooth_Mdot  = zeros(2*N, NMuscle);
+metab_smooth_Sdot  = zeros(2*N, NMuscle);
+metab_smooth_Wdot  = zeros(2*N, NMuscle);
 FT_opt      = zeros(2*N, NMuscle);
 lMT_Vect    = zeros(2*N, NMuscle);
 vMT_Vect    = zeros(2*N, NMuscle);
@@ -1374,7 +1379,7 @@ for nn = 1:2*N
         full(Fce_optt),full(Fpass_optt),MuscleMass.MassM',pctsts,...
         full(Fiso_optt)',body_mass,1e9);
 
-    [~,~,~,~,~,eBarghb] = ...
+    [energy_totalb,Adotb,Mdotb,Sdotb,Wdotb,eBarghb] = ...
         f_getMetabolicEnergySmooth2004all(Acts_GC(nn,:)',...
         Acts_GC(nn,:)',full(lMtilde_opt),full(vM_opt),...
         full(Fce_optt),full(Fpass_optt),MuscleMass.MassM',pctsts,...
@@ -1432,6 +1437,11 @@ for nn = 1:2*N
     metab_Mdot(nn,:) = full(Mdot)';
     metab_Sdot(nn,:) = full(Sdot)';
     metab_Wdot(nn,:) = full(Wdot)';
+    metab_smooth_Etot(nn,:) = full(energy_totalb)';
+    metab_smooth_Adot(nn,:) = full(Adotb)';
+    metab_smooth_Mdot(nn,:) = full(Mdotb)';
+    metab_smooth_Sdot(nn,:) = full(Sdotb)';
+    metab_smooth_Wdot(nn,:) = full(Wdotb)';
     FT_opt(nn,:)     = full(FT_optt)';
     Fce_opt(nn,:)    = full(Fce_optt)';
     
@@ -1597,6 +1607,11 @@ R.MetabB.Adot = metab_Adot;
 R.MetabB.Mdot = metab_Mdot;
 R.MetabB.Sdot = metab_Sdot;
 R.MetabB.Wdot = metab_Wdot;
+R.MetabB_smooth.Etot = metab_smooth_Etot;
+R.MetabB_smooth.Adot = metab_smooth_Adot;
+R.MetabB_smooth.Mdot = metab_smooth_Mdot;
+R.MetabB_smooth.Sdot = metab_smooth_Sdot;
+R.MetabB_smooth.Wdot = metab_smooth_Wdot;
 R.S           = S;  % settings for post processing
 R.Sopt        = Sopt; % original settings used to solve the OCP
 R.body_mass   = body_mass;

@@ -11,8 +11,8 @@ pathmain = pwd;
 % ModelPath = [pathRepo '\OpenSimModel\subject1\Fal_s1_mtjcf_FK_sc_FDB2_MTc5_cspx10_oy3.osim'];
 % pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf_FK_sc_FDB2_MTc5'];
 
-ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc3_sc.osim'];
-pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc3_FK_sc_FDB2_MTc5'];
+ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc4_sc.osim'];
+pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc4_FK_sc_FDB2_MTc5'];
 
 % if ~isfolder(pathPoly)
 %     mkdir(pathPoly);
@@ -360,10 +360,16 @@ legend(ligament_names,'Interpreter','none','Location','northeastoutside')
 fg5=figure;
 % plot(q_mtj*180/pi,M_mtj,'DisplayName','Linear')
 hold on
-plot(q_mtj*180/pi,M_mtj_G,'DisplayName','Gefen (2002)')
-legend('Location','best','Interpreter','tex')
-xlabel('mtj angle (°)')
-ylabel('mtj moment (Nm)')
+plot(q_mtj*180/pi,M_mtj_G,'DisplayName','Polynomial')
+plot(q_mtj*180/pi,M_mtj_G_exp3,'LineWidth',2,'DisplayName','Exponential')
+legend('Location','best','Interpreter','tex','FontSize',12,'Box','off')
+xlabel('Angle (°)','FontSize',12)
+ylabel('Moment (Nm)','FontSize',12)
+title('Midtarsal joint ligament moment','FontSize',12)
+ylim([-120,20])
+
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft/supplement';
+exportgraphics(fg5,fullfile(FigRepo,'midtarsal_ligament_moment.jpeg'),'Resolution',300);
 
 
 %%

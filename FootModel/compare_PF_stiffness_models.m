@@ -1,3 +1,4 @@
+close all
 clear
 clc
 
@@ -11,6 +12,7 @@ set(0,'defaultTextInterpreter','tex');
 %%
 N = 1000;
 ls = 0.146;
+A0 = 60;
 S.R_mtth = 9.5e-3;
 S.sf_PF = 1;
 
@@ -25,7 +27,9 @@ q_mtp = linspace(-45,45,N)*pi/180;
 % PF_stiffness = {'linear','Natali2010','Cheng2008','Gefen2002'};
 % PF_stiffness = {'Natali2010','Natali2010','Natali2010','Natali2010'};
 % PF_stiffness = {'Natali2010','Gefen2002'};
-PF_stiffness = {'Natali2010','linear','Song2011','Gefen2002'};
+PF_stiffness = {'Natali2010','Gefen2002','linear','Song2011'};
+
+PF_legNames = {'Natali et al., 2010','Gefen, 2002','linear (E = 350 MPa)','Song et al., 2011'};
 
 % mtj_stiffness = {'Gefen2002','Ker1987','fitted1'};
 % mtj_stiffness = {'Gefen2002','Ker1987','Song2011','signed_lin'};
@@ -182,28 +186,37 @@ plot(q_mt*180/pi,-q_mt*k_mtj,'DisplayName',['k = ' num2str(k_mtj) ' Nm/rad'])
 
 scs = get(0,'ScreenSize');
 fsq = [scs(3)/2, scs(4)*0.6];
-h1=figure('Position',[100,500,fsq*0.5]);
+h1=figure('Position',[100,500,500,500]);
 % h1=figure;
-CsV = hsv(numel(PF_stiffness));
-% CsV = hsv(4);
+% CsV = hsv(numel(PF_stiffness));
+CsV = [[0 0 0];[0.8500 0.3250 0.0980];[0.4660 0.6740 0.1880];[0.3010 0.7450 0.9330];[0.4940 0.1840 0.5560];[0.6350 0.0780 0.1840]];
+mrk = {'-','-','-.','--'};
+
 for i=1:numel(PF_stiffness)
     hold on
 %     if i==4
-    plot((l-ls)*1000,F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
+    plot((l-ls)/ls*100,F_PF(i,:)/A0,mrk{i},'Color',CsV(i,:),'DisplayName',PF_legNames{i},'LineWidth',2)
 %     else
 %          plot((l-ls)*1000,10*F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
 %     end
-    grid on
+%     grid on
 %     legend('Location','best')
-    xlabel('Elongation (mm)')
-    ylabel('Force (N)')
-    title('Plantar fascia force')
-    ylim([0,2000])
+    xlabel('Strain (%)','FontSize',12)
+    ylabel('Stress (MPa)','FontSize',12)
+    title('Plantar fascia models','FontSize',12)
+%     ylim([0,2000])
+    xlim([0,8])
+    ylim([0,60])
 end
+legend('FontSize',12,'Location','southoutside','NumColumns',2,'Box','off')
 
 % set(h1,'PaperPositionMode','auto')
 % print(h1,[figNamePrefix '_PF'],'-dpng','-r0')
     
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft/supplement';
+% exportgraphics(h1,fullfile(FigRepo,'PF_stiffness.jpeg'),'Resolution',300);
+
+
 % h2=figure;
 % for i=1:numel(mtj_stiffness)
 %     hold on

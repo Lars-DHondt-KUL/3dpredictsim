@@ -54,7 +54,7 @@ label_fontsize = 12;
 legend_fontsize = 12;
 title_fontsize = 12;
 
-CsV = {'k','k',[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
+CsV = {[0 0 0],[0.6350 0.0780 0.1840], [0.3010 0.7450 0.9330],[0.4660 0.6740 0.1880]};
 mrk = {'-','-.','-','-.'};
 lw = [2,1,2,1];
 
@@ -152,7 +152,6 @@ for i_res=1:length(resultFiles)
 end
 
 exportgraphics(fig2,fullfile(FigRepo,'figure_extrinsic_muscles.jpeg'),'Resolution',300);
-% exportgraphics(fig2,fullfile(FigRepo,'figure_extrinsic_muscles.pdf'),'BackgroundColor','none','ContentType','vector');
 
 
 

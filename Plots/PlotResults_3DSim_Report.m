@@ -59,7 +59,11 @@ label_fontsize  = 12;
 line_linewidth  = 1;
 NumTicks = 6;
 CsV = hsv(nr);
-if nr<=3
+
+if nr==2
+    CsV = [[0 0 0];[0.8500 0.3250 0.0980]];
+end
+if nr==3
     CsV = [[0 0.4470 0.7410];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840]];
 end
 mrk = {'-',':','-',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
@@ -2431,7 +2435,7 @@ for inr=1:nr
         
         j = 0;
         label_fontsize  = 12;
-        line_linewidth  = 0.5;
+        line_linewidth  = 1;
         for i = 1:length(idx_title)
             subplot(7,3,i)
             x = 1:(100-1)/(size(R.Qs,1)-1):100;
@@ -2449,8 +2453,8 @@ for inr=1:nr
                     meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
 
                     hold on
-                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
-                    alpha(.25);
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
+                    'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
                 end
             end
 
@@ -2516,7 +2520,10 @@ for inr=1:nr
                 set(gca,'Fontsize',label_fontsize);
                 title(joints_tit{idx_title(i)},'Fontsize',label_fontsize);
                 % Y-axis
-                if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 || i == 16 || i == 19
+                if i == 1
+                    ylabel('Distance (m)','Fontsize',label_fontsize);
+                end
+                if i == 4 || i == 7 || i == 10 || i == 13 || i == 16 || i == 19
                     ylabel('Angle (°)','Fontsize',label_fontsize);
                 end
                 % X-axis
@@ -2532,6 +2539,7 @@ for inr=1:nr
                 lhQ.Interpreter = lgInt;
                 lhQ.Orientation = 'horizontal';
                 lhQ.NumColumns = ceil((nr+1)/2);
+                lhQ.Box = 'off';
             end
             if inr==nr && i==1
                 lhPos = lhQ.Position;
@@ -2543,20 +2551,36 @@ for inr=1:nr
 
         
         figure(h10)
-%         joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
-%                 'hip_flexion','hip_adduction','hip_rotation',...
-%                 'knee_angle','ankle_angle','subtalar_angle','mtj_angle0','mtp_angle0',...
-%                 'lumbar_extension','lumbar_bending','lumbar_rotation',...
-%                 'arm_flex','arm_add','arm_rot','elbow_flex'};
+
+
+        if has_no_tmt && has_no_mtj
+            idx_Qs = [10,11,12,14,16,18,20,21,22,23];
+        else
+            idx_Qs = [10,11,12,14,16,18,20,22,23,24,25];
+        end
+        idx_title = [10,11,12,14,16,18,20,24,25,26,27];
+        joints_ref = {'hip_flexion','hip_adduction','hip_rotation',...
+                'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle',...
+                'lumbar_extension','lumbar_bending','lumbar_rotation'};
+        
+
+
         j = 0;
         label_fontsize  = 12;
-        line_linewidth  = 0.5;
+        line_linewidth  = 1;
         for i = 1:length(idx_title)
-            subplot(7,3,i)
+            if i>8
+                subplot(6,3,i+1)
+            else
+                subplot(6,3,i)
+            end
             x = 1:(100-1)/(size(R.Qs,1)-1):100;
             % Experimental data
             if  inr == 1 && md
                 idx_jref = strcmp(Tref.colheaders,joints_ref{i});
+                if contains(joints_ref{i},'mtj') || contains(joints_ref{i},'mtp')
+                    idx_jref = 0;
+                end
                 if sum(idx_jref) == 1
                     meanPlusSTD = Tref.Tall_mean(:,idx_jref) + 2*Tref.Tall_std(:,idx_jref);
                     meanMinusSTD = Tref.Tall_mean(:,idx_jref) - 2*Tref.Tall_std(:,idx_jref);
@@ -2564,11 +2588,11 @@ for inr=1:nr
                     stepID = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
                     intervalID = 1:stepID:size(R.Qs,1);
                     sampleID = 1:size(R.Qs,1);
-                    meanPlusSTD = interp1(intervalID,meanPlusSTD,sampleID);
-                    meanMinusSTD = interp1(intervalID,meanMinusSTD,sampleID);
+                    meanPlusSTD = interp1(intervalID,meanPlusSTD,sampleID)/R.body_mass;
+                    meanMinusSTD = interp1(intervalID,meanMinusSTD,sampleID)/R.body_mass;
                     hold on
-                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
-                    alpha(.25);
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
+                    'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
                 end
             end
 
@@ -2582,7 +2606,7 @@ for inr=1:nr
                 % skip this plot
             else
                 j=j+1;
-                plot(x,R.Tid(:,idx_Qs(j)),'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                plot(x,R.Tid(:,idx_Qs(j))/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
             
                 if md
                     idx_jref = strcmp(Tref.colheaders,joints_ref{i});
@@ -2633,14 +2657,14 @@ for inr=1:nr
                 set(gca,'Fontsize',label_fontsize);
                 title(joints_tit{idx_title(i)},'Fontsize',label_fontsize);
                 % Y-axis
-                if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 || i == 16 || i == 19
-                    ylabel('Torque (Nm)','Fontsize',label_fontsize);
+                if i == 1 || i == 4 || i == 7 || i == 9
+                    ylabel('(Nm/kg)','Fontsize',label_fontsize);
                 end
                 % X-axis
                 L = get(gca,'XLim');
                 NumTicks = 3;
                 set(gca,'XTick',linspace(L(1),L(2),NumTicks))
-                if i > 18
+                if i > 8
                     xlabel('Gait cycle (%)','Fontsize',label_fontsize);
                 end
             end
@@ -2649,6 +2673,7 @@ for inr=1:nr
                 lhT.Interpreter = lgInt;
                 lhT.Orientation = 'horizontal';
                 lhT.NumColumns = ceil((nr+1)/2);
+                lhT.Box = 'off';
             end
             if inr==nr && i==1
                 lhPos = lhT.Position;
@@ -3923,7 +3948,7 @@ for inr=1:nr
             Ws_net_gc(:,inr) = [Wi_net;W_sum_net;W_heel_net;W_fft_net;W_toes_net;...
                 0;0;W_PIM_net;W_mtj_li_net];
 
-            div_by_dist_trav = 1;
+            div_by_dist_trav = 0;
             if div_by_dist_trav
                 Ws_pos_gc(:,inr) = Ws_pos_gc(:,inr)/dist_trav;
                 Ws_neg_gc(:,inr) = Ws_neg_gc(:,inr)/dist_trav;
@@ -6078,6 +6103,95 @@ for inr=1:nr
     end
 
 %%
+
+    if makeplot.Energy_smoothing
+        if inr==1
+            h40 = figure('Position',[fpos(3,:),fwide]);
+            tiledlayout(1,5)
+   
+        end
+    
+        E_sum = sum( trapz(R.t,R.MetabB.Etot,1) )/R.body_mass/dist_trav;
+        A_sum = sum( trapz(R.t,R.MetabB.Adot,1) )/R.body_mass/dist_trav;
+        M_sum = sum( trapz(R.t,R.MetabB.Mdot,1) )/R.body_mass/dist_trav;
+        S_sum = sum( trapz(R.t,R.MetabB.Sdot,1) )/R.body_mass/dist_trav;
+        W_sum = sum( trapz(R.t,R.MetabB.Wdot,1) )/R.body_mass/dist_trav;
+        
+        if isfield(R,'MetabB_smooth')
+            E_smooth_sum = sum( trapz(R.t,R.MetabB_smooth.Etot,1) )/R.body_mass/dist_trav;
+            A_smooth_sum = sum( trapz(R.t,R.MetabB_smooth.Adot,1) )/R.body_mass/dist_trav;
+            M_smooth_sum = sum( trapz(R.t,R.MetabB_smooth.Mdot,1) )/R.body_mass/dist_trav;
+            S_smooth_sum = sum( trapz(R.t,R.MetabB_smooth.Sdot,1) )/R.body_mass/dist_trav;
+            W_smooth_sum = sum( trapz(R.t,R.MetabB_smooth.Wdot,1) )/R.body_mass/dist_trav;      
+        else
+            E_smooth_sum = 0;
+            A_smooth_sum = 0;
+            M_smooth_sum = 0;
+            S_smooth_sum = 0;
+            W_smooth_sum = 0;
+        end
+
+            figure(h40);
+ 
+            nexttile(1)
+            hold on
+            bar(inr-0.2,A_smooth_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (smoothed)']);
+            bar(inr+0.2,A_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (unsmoothed)']);
+
+            ylabel('(J kg^-^1 m^-^1)')
+            title('Activation')
+
+            nexttile(2)
+            hold on
+            bar(inr-0.2,M_smooth_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (smoothed)']);
+            bar(inr+0.2,M_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (unsmoothed)']);
+
+            ylabel('(J kg^-^1 m^-^1)')
+            title('Maintenance')
+
+            nexttile(3)
+            hold on
+            bar(inr-0.2,S_smooth_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (smoothed)']);
+            bar(inr+0.2,A_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (unsmoothed)']);
+
+            ylabel('(J kg^-^1 m^-^1)')
+            title('Shortening')
+
+            nexttile(4)
+            hold on
+            bar(inr-0.2,W_smooth_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (smoothed)']);
+            bar(inr+0.2,A_sum,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (unsmoothed)']);
+
+            ylabel('(J kg^-^1 m^-^1)')
+            title('Work')
+
+            nexttile(5)
+            hold on
+            bar(inr-0.2,R.COT_smoothed,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (smoothed)']);
+            bar(inr+0.2,R.COT,0.3,'FaceColor','flat','LineStyle','-','CData',CsV(inr,:),...
+                'DisplayName',[LegName ' (unsmoothed)']);
+
+            ylabel('(J kg^-^1 m^-^1)')
+            title('Cost of Transport')
+        
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h40,'PaperPositionMode','auto')
+            print(h40,[figNamePrefix '_E_smooth'],'-dpng','-r0')
+    %                 print(h28,[figNamePrefix '_musc_E'],'-depsc')
+        end
+        
+    end
+%%
+
 
 
 end

@@ -157,7 +157,7 @@ S.Foot.PF_sf = 5;
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
 %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
 %     };
-% LegNames = {'State-of-the-art 2-segment model','new 2-segment model','3-segment model'};
+% LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
 
 % % 3-segment and 2-segment model
 % results = {
@@ -195,13 +195,13 @@ S.Foot.PF_sf = 5;
 
 
 % % extrinsic foot muscles
- results = {
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
-    '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100_v2'   
-    '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100'
-    };
- LegNames = {'3-segment model: muscle-driven mtj, mtpj', '2-segment model: passive mtpj', '3-segment model: passive mtj, mtpj','2-segment model: muscle-driven mtpj'};
+%  results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100_v2'   
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100'
+%     };
+%  LegNames = {'3-segment model: muscle-driven mtj, mtpj', '2-segment model: passive mtpj', '3-segment model: passive mtj, mtpj','2-segment model: muscle-driven mtpj'};
 
 % % intrinsic foot muscle, plantar fascia stiffness
 %  results = {
@@ -215,15 +215,12 @@ S.Foot.PF_sf = 5;
 %      'compliant plantar fascia, with intrinsic muscle','compliant plantar fascia, without intrinsic muscle'};
 % LegNames = [{'2-segment'}, LegNames];
 
-% % 
+% % effect of intrinsic muscle nerve block
 % results = {
 %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
 %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig21_N100_v2'
-% %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_nb_lTs125_Fpsl10_ig1_N100_v2'
-% %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_ig1_N100'
-% %     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_x2_ls146_ig1_N100'
 %     };
-% LegNames = {'with PIM','PIM nerve block','PIM nerve block (ig1)','w/o PIM','w/o PIM, PF stiff x2'};
+% LegNames = {'Nominal 3-segment foot model','Intrinsic foot muscle nerve block'};
     
 % % 
 % results = {
@@ -249,6 +246,14 @@ S.Foot.PF_sf = 5;
 %     '\with_better_knee\Fal_s1_mtjc4_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_none_ls141_FDB2_lTs120_Fpsl10_ig21_pp.mat'
 %     };
 % LegNames = {'Nominal 3-segment foot model','Low-arched foot without plantar fascia'};
+
+% % effect of intrinsic muscle nerve block
+results = {
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_tanh10'
+    };
+LegNames = {'tanh b = 100','tanh b = 10'};
+
 
 %% supplementary
 % % number of mesh intervals
@@ -554,7 +559,7 @@ figNamePrefix = 'none';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\Conferences\ESMAC 2022\presentation\extra';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\midfoot_stiffness';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Optimisation_Meeting/mesh';
-% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft/3seg';
+% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft/supplement/figure_nerveblock';
 
 %%% select figures to make
 makeplot.kinematics_Qs                  = 0; % selected joint angles
@@ -578,14 +583,14 @@ makeplot.allQdots                       = 0; % all joint velocities
 makeplot.allQddots                      = 0; % all joint accelerations
 makeplot.allPs                          = 0; % all joint powers
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
-makeplot.windlass                       = 1; % plantar fascia and foot arch info
+makeplot.windlass                       = 0; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
 makeplot.mtj_moments                    = 0; % mtj moment decomposition    
-makeplot.power_main                     = 1; % main power components of foot
+makeplot.power_main                     = 0; % main power components of foot
 makeplot.power_windlass                 = 0; % windlass power transfer
 makeplot.power                          = 0; % datailed power decomposition
 makeplot.work                           = 0; % same as power, but work over GC
-makeplot.work_bar                       = 1; % positive, negative and net work bar plot
+makeplot.work_bar                       = 0; % positive, negative and net work bar plot
 makeplot.work_bar_small                 = 0; % positive, negative and net work bar plot
 makeplot.spatiotemp                     = 0; % stridelength etc.
 makeplot.ankle_correlation              = 0; % correlation of ankle 
@@ -594,10 +599,11 @@ makeplot.W_muscle_bar                   = 0; % muscle fibre work totals
 makeplot.E_muscle_bar_small             = 0; % metabolic energy and work by selected muscle groups
 makeplot.Edot_all                       = 0; % summed metabolic energy rate
 makeplot.Energy_cost                    = 0; % decompose metabolic cost components
+makeplot.Energy_smoothing               = 1; % effect of smoothing energy model
 makeplot.muscle_act                     = 0; % muscle activity
 makeplot.muscle_act_exc                 = 0; % muscle activity and excitation   
 makeplot.muscle_joint_moment            = 0; % moments of muscles around ankle-foot joints
-makeplot.muscle_joint_power             = 1; % powers of muscles around ankle-foot joints
+makeplot.muscle_joint_power             = 0; % powers of muscles around ankle-foot joints
 makeplot.Objective_cost                 = 0; % cost function decomposition
 makeplot.tau_pass                       = 0; % passive joint torques
 makeplot.ankle_gearing                  = 0; % ankle gearing ratio (pf vs grf)
