@@ -333,7 +333,7 @@ str = '(a)';
 annotation(gcf,'textbox',[0.08,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(b)';
-annotation(gcf,'textbox',[0.37,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.36,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(c)';
 annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
@@ -342,7 +342,7 @@ annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','
 
 FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';
 
-exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
+% exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
 
 
 

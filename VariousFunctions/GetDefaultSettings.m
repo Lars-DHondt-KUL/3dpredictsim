@@ -34,7 +34,7 @@ end
 
 % default number of mesh intervals
 if ~isfield(S,'N') || isempty(S.N)
-    S.N         = 50;       
+    S.N         = 100;       
 end
 
 % default number of mesh intervals
@@ -53,10 +53,8 @@ end
 
 % quasi random initial guess
 if ~isfield(S,'IG_PelvisY') || isempty(S.IG_PelvisY)
-    if strcmp(S.subject,'s1_Poggensee')
-        S.IG_PelvisY = 0.896;   % subject 1 poggensee
-    else
-        S.IG_PelvisY = 0.9385;  % subject 1
+    if strcmp(S.subject,'Fal_s1')
+        S.IG_PelvisY = 0.9385;
     end
 end
 
@@ -66,7 +64,6 @@ if ~isfield(S,'v_tgt') || isempty(S.v_tgt)
 end
 
 
-S.ModelName = 'Gait92';
 
 %% default weights
 if isfield(S,'W')
@@ -127,35 +124,35 @@ if ~isfield(S,'IGmodeID')
     S.IGmodeID  = 1;        
 end
 
-% initial guess case identifier
-if ~isfield(S,'IGcase')    
-    S.IGcase    = 0;        
-end
+% % initial guess case identifier
+% if ~isfield(S,'IGcase')    
+%     S.IGcase    = 0;        
+% end
 
-% weakness hip actuators
-if ~isfield(S,'h_weak')
-    S.h_weak    = 0;     
-end
+% % weakness hip actuators
+% if ~isfield(S,'h_weak')
+%     S.h_weak    = 0;     
+% end
 
-% maximal contraction velocity identifier
-if ~isfield(S,'Max_s')
-    S.Max_s     = 0;    
-end
+% % maximal contraction velocity identifier
+% if ~isfield(S,'Max_s')
+%     S.Max_s     = 0;    
+% end
 
-% weakness ankle plantaflexors
-if ~isfield(S,'pf_weak')
-    S.pf_weak   = 0;      
-end
+% % weakness ankle plantaflexors
+% if ~isfield(S,'pf_weak')
+%     S.pf_weak   = 0;      
+% end
 
-% metabolic energy model identifier
-if ~isfield(S,'mE')
-    S.mE        = 0;       
-end
+% % metabolic energy model identifier
+% if ~isfield(S,'mE')
+%     S.mE        = 0;       
+% end
 
-% co-contraction identifier
-if ~isfield(S,'coCont')
-    S.coCont    = 0;        
-end
+% % co-contraction identifier
+% if ~isfield(S,'coCont')
+%     S.coCont    = 0;        
+% end
 
 % Kinematics Constraints - Default Settings
 if isfield(S,'Constr')
@@ -201,20 +198,20 @@ if ~isfield(S.Bounds,'tf')
     S.Bounds.tf = [];
 end
 
-% scaling exoskeleton timing
-if isfield(S,'PercStance')
-    if ~isfield(S.PercStance,'bool')
-        S.PercStance.bool = 0;        
-    end
-    if ~isfield(S.PercStance,'xStanceOr')
-        S.PercStance.xStanceOr = 0.61; % duration stance phase in experiment
-    end
-    if ~isfield(S.PercStance,'xStanceNew')
-        S.PercStance.xStanceNew = 0.58; % duration stance phase in simulation
-    end
-else
-    S.PercStance.bool = 0;
-end
+% % scaling exoskeleton timing
+% if isfield(S,'PercStance')
+%     if ~isfield(S.PercStance,'bool')
+%         S.PercStance.bool = 0;        
+%     end
+%     if ~isfield(S.PercStance,'xStanceOr')
+%         S.PercStance.xStanceOr = 0.61; % duration stance phase in experiment
+%     end
+%     if ~isfield(S.PercStance,'xStanceNew')
+%         S.PercStance.xStanceNew = 0.58; % duration stance phase in simulation
+%     end
+% else
+%     S.PercStance.bool = 0;
+% end
 
 % symmetric motion ?
 if ~isfield(S,'Symmetric')
@@ -258,29 +255,29 @@ if ~isfield(S,'IKfile_guess')
     end
 end
 
-% path with exoskeleton torque profile
-if ~isfield(S,'DataSet')
-    S.DataSet = 'PoggenSee2020_AFO';
-end
+% % path with exoskeleton torque profile
+% if ~isfield(S,'DataSet')
+%     S.DataSet = 'PoggenSee2020_AFO';
+% end
 
-% Boolean for exoskeleton use
-if ~isfield(S,'ExoBool')
-    S.ExoBool       = 0;
-end
+% % Boolean for exoskeleton use
+% if ~isfield(S,'ExoBool')
+%     S.ExoBool       = 0;
+% end
 
-% scaling assistance profile
-if ~isfield(S,'ExoScale')
-    S.ExoScale      = 0;        % scale factor of exoskeleton assistance profile = 0 (i.e. no assistance)
-end
+% % scaling assistance profile
+% if ~isfield(S,'ExoScale')
+%     S.ExoScale      = 0;        % scale factor of exoskeleton assistance profile = 0 (i.e. no assistance)
+% end
 
-% choosing assistance profile or control law
-if ~isfield(S,'ExoController')
-    S.ExoController = 's1 Pog';
-end
+% % choosing assistance profile or control law
+% if ~isfield(S,'ExoController')
+%     S.ExoController = 's1 Pog';
+% end
 
 %%
 if ~isfield(S,'AchillesTendonScaleFactor') || isempty(S.AchillesTendonScaleFactor)
-    S.AchillesTendonScaleFactor = 1;
+    S.AchillesTendonScaleFactor = 0.5;
 end
 
 if ~isfield(S,'SoleusTendonShorter') || isempty(S.SoleusTendonShorter)
@@ -307,6 +304,20 @@ if ~isfield(S.Foot,'FDB') || isempty(S.Foot.FDB)
 end
 if S.Foot.FDB
     S.Foot.PIM = 0;
+end
+
+% custom or isometric scaling
+if ~isfield(S.Foot,'Scaling') || isempty(S.Foot.Scaling)
+    S.Foot.Scaling = 'custom';
+end
+
+% use adapted muscle insertions on midfoot
+if ~isfield(S,'MTparams') || isempty(S.MTparams)
+    if strcmp(S.Foot.Scaling,'custom')
+        S.MTparams = 'MTc5';
+    else
+        S.MTparams = '';
+    end
 end
 
 % Print the settings to the screen

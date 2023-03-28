@@ -119,7 +119,7 @@ S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stif
 S.Foot.contactGeometryVersion = 9; %(-1)
 S.Foot.contactSphereOffsetY = 0; %(3)    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 0.01;   % heel contact sphere offset in x-direction (0.025)
+S.Foot.contactSphereOffset1X = 0.010;   % heel contact sphere offset in x-direction (0.025)
 
 %% metatarsophalangeal (mtp) joint
 if strcmp(S.Foot.Model(1:3),'mtp')
