@@ -9,11 +9,14 @@
 /Data/
 !/Data/Fal_s1.mat
 
+/Debug
+
 /ExperimentalData
 
 /ExternalFunctions/old
 
 /Figures/*
+/Figures2/*
 
 /IG/Data
 
