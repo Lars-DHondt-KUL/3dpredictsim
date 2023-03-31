@@ -1,141 +1,16 @@
 Predictive simulations human movement
 ============
 
-This repository is a fork of the code and data to generate three-dimensional muscle-driven predictive simulations of human gait as described in: Falisse A, Serrancoli G, Dembia C, Gillis J, Jonkers J, De Groote F. 2019 Rapid predictive simulations with complex musculoskeletal models suggest that diverse healthy and pathological human gaits can emerge from similar control strategies. Journal of the Royal Society Interface 16: 20190402. http://dx.doi.org/10.1098/rsif.2019.0402. 
-
-In this repository the original code of Falisse et al. was adapted to:
-
-- Simulate walking with external support of an exoskeleton
-- Simulate model with mtp joint
-- Simulate Rajagopal model
-- Make input-output a bit easier (in my opinion)
-
-Besides that, the code was also adapted in accordance with recent (October 2020) adjustments in the original repository of Falisse et al.
-
-- Adjusted version of the collocation scheme (now really being an orthogonal radau scheme).
-- support for parallel computing
-- formulation with opti
-
-This branch exists in the context of the master's thesis "Effects of elastic foot arch and windlass mechanism on predictive simulation of human walking" by Lars D'Hondt.
-introduced adaptations are:
-
-- Inclusing of the midtarsal joint, with passive visco-elastic behaviour, and a plantar fascia in the sagittal plane.
-- Expanded post-processing with the focus on ground interactions and energetics.
-- Additional plots for analysis of energetics, and foot biomechanics.
-
-The main script, (/RunSim/Test_Lars.m), allows to select parameters to describe the foot biomechanics, and use the resulting model to run the simulation.
-To freely filter from the simulation results to plot figures, use the script (/Plots/make_any_plot.m).
-The script (/Plots/make_preselected_plots.m) allows to plot figures for readily available groups of results. This is the advised script to explore the simulation results.
-
-The implementation should be treated as a proof of concept. It is advised to rely on the OpenSim api for calculation of the plantar fascia-related lengths and distances, rather than the manual matlab code it is now.
-
-The readme from the original repository is still valid, so it remains:
+This repository contains all code and models used to generate the simulations discussed in: L. D’Hondt, F. D. Groote, and M. Afschrift, “A dynamic foot model for predictive simulations of gait reveals causal relations between foot structure and whole body mechanics.” bioRxiv, p. 2023.03.22.533790, Mar. 24, 2023. https://doi.org/10.1101/2023.03.22.533790.
 
 
-### Create all input for the simulations
+## Reproducing the results and figures shown in the paper
 
-When using a new/adapted musclulosketal model, you have to execute three steps to create the surrogate models and equations needed for optimization. An example of these steps are shown in the matlab script **./ConvertOsimModel/Example_PrepareOptimimzation.m** 
+1. [Download CasADi](https://web.casadi.org/get/)
+2. Open MATLAB (code is tested for R2021b)
+3. Run `./ReproduceResultsPaper.m` after setting `casadiPath = ` to the folder you selected in step 1.
 
-A summary of the steps:
-
-#### 1. Polynomial fitting
-
-The funciton FitPolynomials create a surrogate model, based on polynomial functions, to compute muscle-tendon lengths and moment arms from the joint kinematics. 
-
-- First, we create a sample of joint angles (i.e. dummy motion) and run muscle analysis on this dummy motion to create a training dataset. Note that running the muscle analysis takes about 20 minutes. 
-- Second, we fit the polynomials functions and save it in a spefici folder (input argument PolyFolder). You'll have to point to this folder using the settings *S.PolyFolder* when running the optimization
-
-#### 2. Create casadi functions
-
-In the next step we read the muscle-tendon parameters from the model, combine it with the polynomial functions and create a casadi function for most of the equations used in the optimization. This includes:
-
-- Equations for metabolic energy
-- Equations for muscle dynamics
-- Equations for activation dynamaics
-- Casadi version of the polynomial functions
-- ....
-
-These functions are saved in a specific folder (input argument CasadiFunc_Folders). You'll have to point to this folder using the settings *S.CasadiFunc_Folders* when running the optimization
-
-#### 3. Automatically create .dll files
-
-You have to provide a .cpp file that solves inverse dynamics with the current model you are using. Note that creating this .cpp file (with the correct modelling parameters) is still a manual step. The conversion from .cpp to .dll is automized in the function CreateDllFileFromCpp, which you can download here https://github.com/MaartenAfschrift/CreateDll_PredSim
-
-#### 4. Run your simulation
-
-You can now run your tracking or predictive simulations when pointing to the correct:
-
-- Folder with polynomial functions: **S.PolyFolder**
-- Casadi functions:  **S.CasadiFunc_Folders**
-- .dll files including the file used:
-  - the optimization: **S.ExternalFunction**
-  - the post processing: **S.ExternalFunction2**
-
-
-
-### Run Tracking and predictive simulations
-
-You can run the tracking and predictive simulations using the functions in the folder **OCP**. This includes
-
-**Gait 92 model**:  (https://simtk-confluence.stanford.edu/display/OpenSim/Gait+2392+and+2354+Models)
-
-- f_PredSim_Gait92.m solves the predictive simulations with the gait 92 model
-- f_TrackSim_Gait92.m solves the tracking simulations with the gait 92 model [not finished yet]
-- f_LoadSim_Gait92.m post processing/analysis from the simulated states and controls (both tracking and predictive simulations). 
-
-**Rajagopal model**:  (https://simtk.org/projects/full_body)
-
-- f_PredSim_Rajagopal.m sovles the predictive simulations with the gait 92 model
-- f_TrackSim_Rajagopal.m solves the tracking simulations with the Rajagopal model
-- f_LoadSim_Rajagopal.m post processing/analysis from the simulated states and controls (both tracking and predictive simulations). 
-
-This functions requires a matlabstructure (here S) with the settings for the optimization as input. The default settings for the optimization are added to this settings structure using the function *GetDefaultSettings(S)*. You can find an overview of the settings below.
-
-Typically you well run the optimization with a specific setup structure and then analyse the simulation results. As an example:
-
-```matlab
-% settings....
-S.ResultsFolder = 'NameFolderSimResults';
-S.savename      = 'Resuls_DefaultGait92';
-
-% her also other required settings
-
-% Run simulation
-f_PredSim_Gait92(S);     % run the optimization
-f_LoadSim_Gait92(S.ResultsFolder,S.savename) % post-process simulation results
-```
-
-
-
-### Plot output
-
-You can use the function PlotResults_3DSim the create a default figure with a summary of the results. You can easily add multiple simulations to this figure. For example
-
-
-
-```matlab
-
-%.....
-% simulation walking 1.25 m/s
-S.v_tgt = 1.25;
-S.savename = 'WalkingNormal'
-f_PredSim_Gait92(S);     % run the optimization
-f_LoadSim_Gait92(S.ResultsFolder,S.savename) % post-process simulation results (saves results as S.savename with the extension _pp)
-
-% simulate walking 0.5 m/s
-S.v_tgt = 0.5;
-S.savename = 'WalkingSlow'
-f_PredSim_Gait92(S);     % run the optimization
-f_LoadSim_Gait92(S.ResultsFolder,S.savename) % post-process simulation results (saves results as S.savename with the extension _pp)
-
-% plot figure to compare results (with the three optional input arguments here)
-h = figure(); 	% new figure with handle
-PlotResults_3DSim(fullfile(S.ResultsFolder,'WalkingNormal_pp.mat'),[1 0 0],'Normal',h,1.25,'speed'); 	% plot results of normal walking
-PlotResults_3DSim(fullfile(S.ResultsFolder,'WalkingSlow_pp.mat'),[0 0 1],'Slow',h,0.5,'speed'); 	% plot results of slow walking on same figure
-
-```
-
-
+## 
 
 #### Settings- Required
 
