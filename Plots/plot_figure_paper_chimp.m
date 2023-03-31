@@ -3,13 +3,14 @@ clear
 close all
 clc
 
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';
-ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-
-%% load rference data
+%% load reference data
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
+
+FigRepo = fullfile(pathRepo,'Figures');
+ResultsRepo = fullfile(pathRepo,'Results');
+
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
 RefData = 'Fal_s1_mtjc4_FK_custom_right';
@@ -66,33 +67,47 @@ tl2.TileSpacing = 'tight';
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
 
+% Digitised data from: 
+% [1] M. C. O’Neill, B. Demes, N. E. Thompson, and B. R. Umberger, 
+% “Three-dimensional kinematics and the origin of the hominin walking stride,” 
+% Journal of The Royal Society Interface, vol. 15, no. 145, p. 20180205, Aug. 2018, 
+% doi: 10.1098/rsif.2018.0205.
+% [2] M. C. O’Neill, B. Demes, N. E. Thompson, S. G. Larson, J. T. Stern, and 
+% B. R. Umberger, “Adaptations for bipedal walking: Musculoskeletal structure and 
+% three-dimensional joint mechanics of humans and bipedal chimpanzees (Pan troglodytes),” 
+% Journal of Human Evolution, vol. 168, p. 103195, Jul. 2022, doi: 10.1016/j.jhevol.2022.103195.
 
 x_ch = linspace(1,100,100);
 x_ch_s = linspace(1,stance_ref_mean,100);
+if exist(fullfile(pathRepo,'Figures','chimp_ankle_df.csv'),'file')
+    chimp_ankle_dat = importdata(fullfile(pathRepo,'Figures','chimp_ankle_df.csv'));
+    chimp_ankle_df = interp1(chimp_ankle_dat.data(:,1),chimp_ankle_dat.data(:,2),x_ch,"spline","extrap");
+    
+    chimp_knee_dat = importdata(fullfile(pathRepo,'Figures','chimp_knee_flex.csv'));
+    chimp_knee_flex = interp1(chimp_knee_dat.data(:,1),chimp_knee_dat.data(:,2),x_ch,"spline","extrap");
+    
+    chimp_qs = [-chimp_knee_flex', chimp_ankle_df'];
+    
+    chimp_ankle_dat = importdata(fullfile(pathRepo,'Figures','chimp_ankle.csv'));
+    chimp_ankle = interp1(chimp_ankle_dat.data(:,1),chimp_ankle_dat.data(:,2),x_ch,"spline","extrap");
+    
+    chimp_knee_dat = importdata(fullfile(pathRepo,'Figures','chimp_knee.csv'));
+    chimp_knee = interp1(chimp_knee_dat.data(:,1),chimp_knee_dat.data(:,2),x_ch,"spline","extrap");
+    
+    chimp_Ts = [chimp_knee', chimp_ankle'];
+    
+    chimp_GRFx_dat = importdata(fullfile(pathRepo,'Figures','chimp_GRFx.csv'));
+    chimp_GRFx = interp1(chimp_GRFx_dat.data(:,1),chimp_GRFx_dat.data(:,2),x_ch,"spline","extrap");
+    
+    chimp_GRFy_dat = importdata(fullfile(pathRepo,'Figures','chimp_GRFy.csv'));
+    chimp_GRFy = interp1(chimp_GRFy_dat.data(:,1),chimp_GRFy_dat.data(:,2),x_ch,"spline","extrap");
+    
+    chimp_GRF = [chimp_GRFx',chimp_GRFy'];
 
-chimp_ankle_dat = importdata(fullfile(pathRepo,'Figures','chimp_ankle_df.csv'));
-chimp_ankle_df = interp1(chimp_ankle_dat.data(:,1),chimp_ankle_dat.data(:,2),x_ch,"spline","extrap");
-
-chimp_knee_dat = importdata(fullfile(pathRepo,'Figures','chimp_knee_flex.csv'));
-chimp_knee_flex = interp1(chimp_knee_dat.data(:,1),chimp_knee_dat.data(:,2),x_ch,"spline","extrap");
-
-chimp_qs = [-chimp_knee_flex', chimp_ankle_df'];
-
-chimp_ankle_dat = importdata(fullfile(pathRepo,'Figures','chimp_ankle.csv'));
-chimp_ankle = interp1(chimp_ankle_dat.data(:,1),chimp_ankle_dat.data(:,2),x_ch,"spline","extrap");
-
-chimp_knee_dat = importdata(fullfile(pathRepo,'Figures','chimp_knee.csv'));
-chimp_knee = interp1(chimp_knee_dat.data(:,1),chimp_knee_dat.data(:,2),x_ch,"spline","extrap");
-
-chimp_Ts = [chimp_knee', chimp_ankle'];
-
-chimp_GRFx_dat = importdata(fullfile(pathRepo,'Figures','chimp_GRFx.csv'));
-chimp_GRFx = interp1(chimp_GRFx_dat.data(:,1),chimp_GRFx_dat.data(:,2),x_ch,"spline","extrap");
-
-chimp_GRFy_dat = importdata(fullfile(pathRepo,'Figures','chimp_GRFy.csv'));
-chimp_GRFy = interp1(chimp_GRFy_dat.data(:,1),chimp_GRFy_dat.data(:,2),x_ch,"spline","extrap");
-
-chimp_GRF = [chimp_GRFx',chimp_GRFy'];
+    refdat=1;
+else
+    refdat=0;
+end
 
 %%
 for i_res=1:length(resultFiles)
@@ -110,7 +125,7 @@ for i_res=1:length(resultFiles)
     for i=1:length(joints_ref)
         nexttile(i)
         % plot reference data
-        if i_res==1
+        if i_res==1 && refdat
             idx_jref = strcmp(Qref.colheaders,joints_ref{i});
             if sum(idx_jref) == 1
                 meanPlusSTD = (Qref.Qall_mean(:,idx_jref) + 2*Qref.Qall_std(:,idx_jref));
@@ -171,7 +186,7 @@ for i_res=1:length(resultFiles)
     for i=1:length(joints_ref)
         nexttile(i+2)
         % plot reference data
-        if i_res==1 && i<6
+        if i_res==1 && i<6 && refdat
             idx_jref = strcmp(Tref.colheaders,joints_ref{i});
             if sum(idx_jref) == 1
                 meanPlusSTD = (Tref.Tall_mean(:,idx_jref) + 2*Tref.Tall_std(:,idx_jref))/R.body_mass;
@@ -246,7 +261,7 @@ for i_res=1:length(resultFiles)
     for i=1:2
         nexttile(i+2+2)
         % plot reference data
-        if i_res==1
+        if i_res==1 && refdat
             meanPlusSTD = Data.GRF.Fmean(:,i) + 2*Data.GRF.Fstd(:,i);
             meanMinusSTD = Data.GRF.Fmean(:,i) - 2*Data.GRF.Fstd(:,i);
 

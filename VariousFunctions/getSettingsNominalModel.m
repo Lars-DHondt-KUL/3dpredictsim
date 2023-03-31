@@ -1,5 +1,10 @@
 function [S] = getSettingsNominalModel(Nsegments)
 
+[pathRepo,~,~] = fileparts(mfilename('fullpath'));
+[pathRepo,~,~] = fileparts(pathRepo);
+
+S.ResultsRepo = fullfile(pathRepo,'Results');
+S.ResultsFolder = 'results_paper';
 
 %% settings for optimization
 S.N         = 100;       % number of mesh intervals
@@ -14,7 +19,7 @@ if Nsegments == 2 % foot with mtp joint
    S.Foot.Model = 'mtp';
 
 elseif Nsegments == 3 % foot with mtp and midtarsal joint
-    S.Foot.Model = 'mtjc4';
+    S.Foot.Model = 'mtjc4'; % axis orientation 4
 else
     error('number of foot segments should be 2 or 3')
 end
@@ -32,8 +37,6 @@ S.TricepsFMoScale = 1.2;
 
 % Shift passive force-length curve of ankle muscle fibers
 S.passiveFiberForceShift = -0.1;
-
-
 
 
 % Contact spheres
@@ -65,17 +68,17 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
 S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
-S.Foot.mtj_stiffness = 'MG_exp5_table';%'MG_exp5_table'
+S.Foot.mtj_stiffness = 'MG_exp5_table';
 S.Foot.mtj_sf = 1; 
 
 S.Foot.kMT_li = 400;        % angular stiffness in case of linear
 S.Foot.kMT_li2 = 50;        % angular stiffness in case of signed linear
-S.Foot.dMT = 0.1;                % (Nms/rad) damping
+S.Foot.dMT = 0.1;           % (Nms/rad) damping
 
 % plantar fascia
 S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
-S.Foot.PF_sf = 1;
-S.Foot.PF_sf_isvar = 0; 
+S.Foot.PF_sf = 1; % scale factor on force
+S.Foot.PF_sf_isvar = 0; % scale factor variable over gait cycle
 S.Foot.PF_slack_length = 0.146; % (m) slack length
 
 

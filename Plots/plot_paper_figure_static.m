@@ -2,6 +2,9 @@ close all
 clear
 clc
 
+[pathHere,~,~] = fileparts(mfilename('fullpath'));
+[pathRepo,~,~] = fileparts(pathHere);
+FigRepo = fullfile(pathRepo,'Figures');
 addpath('../FootModel')
 
 %%
@@ -123,11 +126,9 @@ Results3{end+1} = R;
 
 %%
 
-label_fontsize = 12;
+label_fontsize = 10;
 legend_fontsize = 12;
-title_fontsize = 12;
-
-
+title_fontsize = 11;
 
 %
 
@@ -136,23 +137,27 @@ set(fig1,'Color','w');
 
 % Ker et al., 1987
 
-subplot(3,3,[1,4])
+subplot(3,4,[2,6])
+hold on
 CsV = hsv(length(Results1));
 
-Ker87_dat = importdata('Ker_et_al_1987.csv');
-Ker87.a = [Ker87_dat.data(:,1:2); flip(Ker87_dat.data(:,3:4))];
-Ker87.c = [Ker87_dat.data(:,5:6); flip(Ker87_dat.data(:,7:8))];
-Ker87.d = [Ker87_dat.data(:,9:10); flip(Ker87_dat.data(:,11:12))];
-Ker87.e = Ker87_dat.data(:,13:14);
-Ker87.f = Ker87_dat.data(:,15:16);
-
-hold on
-plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'Color',CsV(1,:),'LineWidth',1)
-plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'--','Color',CsV(2,:),'LineWidth',1)
-plot(Ker87.c(:,1)*sqrt(65/85)-1,Ker87.c(:,2)*65/85,'Color',CsV(4,:),'LineWidth',1)
-plot(Ker87.d(:,1)*sqrt(65/85)-1,Ker87.d(:,2)*65/85,'Color',CsV(5,:),'LineWidth',1)
-plot(Ker87.e(:,1)*sqrt(65/85)-1,Ker87.e(:,2)*65/85,'Color',CsV(6,:),'LineWidth',1)
-plot(Ker87.f(:,1)*sqrt(65/85)-1,Ker87.f(:,2)*65/85,'Color',CsV(7,:),'LineWidth',1)
+% Ker RF, Alexander RM, Kester RC, Bibby SR, Bennett MB. The spring in the 
+% arch of the human foot. Nat Lond. 1987;325(6100):147–9. 
+if exist(fullfile(pathRepo,'Figures','Ker_et_al_1987.csv'),'file')
+    Ker87_dat = importdata(fullfile(pathRepo,'Figures','Ker_et_al_1987.csv'));
+    Ker87.a = [Ker87_dat.data(:,1:2); flip(Ker87_dat.data(:,3:4))];
+    Ker87.c = [Ker87_dat.data(:,5:6); flip(Ker87_dat.data(:,7:8))];
+    Ker87.d = [Ker87_dat.data(:,9:10); flip(Ker87_dat.data(:,11:12))];
+    Ker87.e = Ker87_dat.data(:,13:14);
+    Ker87.f = Ker87_dat.data(:,15:16);
+    
+    plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'Color',CsV(1,:),'LineWidth',1)
+    plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'--','Color',CsV(2,:),'LineWidth',1)
+    plot(Ker87.c(:,1)*sqrt(65/85)-1,Ker87.c(:,2)*65/85,'Color',CsV(4,:),'LineWidth',1)
+    plot(Ker87.d(:,1)*sqrt(65/85)-1,Ker87.d(:,2)*65/85,'Color',CsV(5,:),'LineWidth',1)
+    plot(Ker87.e(:,1)*sqrt(65/85)-1,Ker87.e(:,2)*65/85,'Color',CsV(6,:),'LineWidth',1)
+    plot(Ker87.f(:,1)*sqrt(65/85)-1,Ker87.f(:,2)*65/85,'Color',CsV(7,:),'LineWidth',1)
+end
 
 for i=1:length(Results1)
     R = Results1{i};
@@ -185,15 +190,20 @@ ylim([0,3.3])
 colours = {[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0 0.4470 0.7410]};
 mrk = {'o','d','p','.','x','s','h','+','<','^'};
 
-subplot(3,3,[3,6])
-
-Welte18_dat = importdata('Welte_et_al_2018.csv');
-Welte18.pf = [Welte18_dat.data(:,1:2); flip(Welte18_dat.data(:,3:4))];
-Welte18.df = [Welte18_dat.data(:,5:6); flip(Welte18_dat.data(:,7:8))];
-
+subplot(3,4,[4,8])
 hold on
-plot(Welte18.pf(:,1),Welte18.pf(:,2),'Color',colours{1},'LineWidth',1,'DisplayName','Toe DF = -30° (Welte et al., 2018)')
-plot(Welte18.df(:,1),Welte18.df(:,2),'Color',colours{2},'LineWidth',1,'DisplayName','Toe DF =  30° (Welte et al., 2018)')
+
+% Welte L, Kelly LA, Lichtwark GA, Rainbow MJ. Influence of the windlass 
+% mechanism on arch-spring mechanics during dynamic foot arch deformation. 
+% J R Soc Interface. 2018;15(145):20180270.
+if exist(fullfile(pathRepo,'Figures','Welte_et_al_2018.csv'),'file')
+    Welte18_dat = importdata(fullfile(pathRepo,'Figures','Welte_et_al_2018.csv'));
+    Welte18.pf = [Welte18_dat.data(:,1:2); flip(Welte18_dat.data(:,3:4))];
+    Welte18.df = [Welte18_dat.data(:,5:6); flip(Welte18_dat.data(:,7:8))];
+    
+    plot(Welte18.pf(:,1),Welte18.pf(:,2),'Color',colours{1},'LineWidth',1,'DisplayName','Toe DF: -30° (Welte et al.)')
+    plot(Welte18.df(:,1),Welte18.df(:,2),'Color',colours{2},'LineWidth',1,'DisplayName','Toe DF:  30° (Welte et al.)')
+end
 
 for j=1:length(Results2)
     R = Results2{j};
@@ -226,19 +236,21 @@ for j=1:length(Results2)
 
     for i=1:n_i
         ac_rel = ac{i}/max(ac_max);
-        if R.Qs_mtp(idx(i))<0
-            tmp_lg = ['Toe DF = ' num2str(R.Qs_mtp(idx(i))*180/pi) '°, activation = ' num2str(R.S.activity) ''];
+
+       if R.Qs_mtp(idx(i))<0
+            tmp_lg = ['Toe DF: ' num2str(R.Qs_mtp(i)*180/pi) '°'];
         else
-            tmp_lg = ['Toe DF =  ' num2str(R.Qs_mtp(idx(i))*180/pi) '°, activation = ' num2str(R.S.activity) ''];
+            tmp_lg = ['Toe DF:  ' num2str(R.Qs_mtp(i)*180/pi) '°'];
         end
+
+        if R.S.activity==0
+            tmp_lg = [tmp_lg ', no activation'];
+        else
+            tmp_lg = [tmp_lg ', baseline act'];
+        end
+
         plot(ac_rel(:),F_ac{i}/BW,mrk{i+2*(j-1)},'Color',colours{i},'DisplayName',tmp_lg)
     
-%         ac_rel_all(:,i) = ac_rel;
-% 
-%         if i==2
-%             ac_rel_shifted = ac_rel_all(:,2) + nanmean(ac_rel_all(:,1)-ac_rel_all(:,2));
-%             plot(ac_rel_shifted,F_ac{i}/BW,mrk{i+2*(j-1)},'color','k')
-%         end
     end
 
     
@@ -259,16 +271,19 @@ lh2.Box = 'off';
 
 % Yawar et al., 2021
 
-subplot(3,3,[2,5])
-
-
-Yawar21_dat = importdata('Yawar_et_al_2021.csv');
-Yawar21.pf = [Yawar21_dat.data(:,1:2); flip(Yawar21_dat.data(:,3:4))];
-Yawar21.df = [Yawar21_dat.data(:,5:6); flip(Yawar21_dat.data(:,7:8))];
-
+subplot(3,4,[3,7])
 hold on
-plot(Yawar21.pf(:,1),Yawar21.pf(:,2),'Color',colours{1},'LineWidth',1,'DisplayName','Toe DF =   0° (Yawar et al., 2021)')
-plot(Yawar21.df(:,1),Yawar21.df(:,2),'Color',colours{2},'LineWidth',1,'DisplayName','Toe DF = 15° (Yawar et al., 2021)')
+
+% Yawar A, Eng MC, Tommasini S, Venkadesan M. Stiffness and work contributions 
+% of the windlass in human feet. 2021 Jun;51.
+if exist(fullfile(pathRepo,'Figures','Yawar_et_al_2021.csv'),'file')
+    Yawar21_dat = importdata(fullfile(pathRepo,'Figures','Yawar_et_al_2021.csv'));
+    Yawar21.pf = [Yawar21_dat.data(:,1:2); flip(Yawar21_dat.data(:,3:4))];
+    Yawar21.df = [Yawar21_dat.data(:,5:6); flip(Yawar21_dat.data(:,7:8))];
+    
+    plot(Yawar21.pf(:,1),Yawar21.pf(:,2),'Color',colours{1},'LineWidth',1,'DisplayName','Toe DF:   0° (Yawar et al.)')
+    plot(Yawar21.df(:,1),Yawar21.df(:,2),'Color',colours{2},'LineWidth',1,'DisplayName','Toe DF: 15° (Yawar et al.)')
+end
 
 for j=1:length(Results3)
     R = Results3{j};
@@ -293,22 +308,24 @@ for j=1:length(Results3)
         ddH = dH(2:end) - dH(1:end-1);
         idxH = find(ddH>=0);
         if R.Qs_mtp(i)~=0
-            tmp_lg = ['Toe DF = ' num2str(R.Qs_mtp(i)*180/pi) '°, activation = ' num2str(R.S.activity) ''];
+            tmp_lg = ['Toe DF: ' num2str(R.Qs_mtp(i)*180/pi) '°'];
         else
-            tmp_lg = ['Toe DF =   ' num2str(R.Qs_mtp(i)*180/pi) '°, activation = ' num2str(R.S.activity) ''];
+            tmp_lg = ['Toe DF:   ' num2str(R.Qs_mtp(i)*180/pi) '°'];
         end
+
+        if R.S.activity==0
+            tmp_lg = [tmp_lg ', no activation'];
+        else
+            tmp_lg = [tmp_lg ', baseline act'];
+        end
+
+
         plot(dH(idxH),(Fs_tib(idxH)-Ft0)/BW,mrk{i},'Color',colours{i},'DisplayName',tmp_lg)
     
         dHs(:,i) = dH;
         dHs(:,i) = nan;
         dHs(idxH,i) = dH(idxH);
     end
-
-%     dH_shift = dHs(:,1) - dHs(:,2);
-%     dH_shift_mean = nanmean(dH_shift);
-%     dH_shifted = dHs(:,2) + dH_shift_mean;
-% 
-%     plot(dH_shifted(idxH),(Fs_tib(idxH)-Ft0)/BW,mrk{i+1},'Color','k')
 
 end
 
@@ -330,19 +347,21 @@ lh3.Box = 'off';
 %
 
 str = '(a)';
-annotation(gcf,'textbox',[0.08,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.0,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(b)';
-annotation(gcf,'textbox',[0.36,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.29,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(c)';
-annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.5,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+
+str = '(d)';
+annotation(gcf,'textbox',[0.7,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+
 
 %%
 
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';
-
-% exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
+exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
 
 
 

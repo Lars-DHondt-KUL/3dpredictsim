@@ -27284,3 +27284,187 @@
 [2023-03-20 14:16:26.886] [warning] Couldn't find file 'metacarpal1_lvs.vtp'.
 [2023-03-20 14:16:26.886] [warning] Couldn't find file 'thumb_proximal_lvs.vtp'.
 [2023-03-20 14:16:26.886] [warning] Couldn't find file 'thumb_distal_lvs.vtp'.
+[2023-03-28 11:43:39.822] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:43:39.823] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:43:41.507] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:43:41.507] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:43:41.507] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:43:41.508] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:43:41.508] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:43:41.508] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:43:41.508] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:43:41.508] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:43:42.937] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:43:42.938] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:37.337] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:37.337] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:38.814] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:38.814] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:40.234] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:40.235] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:41.375] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:41.375] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:42.441] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:42.441] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:42.441] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:42.441] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:42.441] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:42.441] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:42.441] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:42.442] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:43.339] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:43.340] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:44.210] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:44.210] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:46.569] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:46.570] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:48.836] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:48.836] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:44:50.982] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:44:50.982] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:26.067] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:26.068] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:27.626] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:27.627] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:29.080] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:29.081] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:30.247] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:30.247] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:31.416] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:31.416] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:31.416] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:31.417] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:31.417] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:31.417] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:31.417] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:31.417] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:32.292] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:32.292] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:32.292] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:32.293] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:32.293] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:32.293] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:32.293] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:32.293] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:33.140] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:33.140] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:33.141] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:33.141] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:33.141] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:33.141] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:33.141] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:33.141] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:35.483] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:35.483] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:37.786] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:37.787] [warning] Couldn't find file 'model_r_toes.stl'.
+[2023-03-28 11:48:39.914] [info] Loaded model subject1_withMTJ_locked_scaled_custom from file C:\Users\u0150099\Documents\master_thesis\3dpredictsim\OpenSimModel\subject1\Foot_Fal_s1_mtjc4_sc_cspx10_oy3.osim
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'tibia_r.vtp'.
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'fibula_r.vtp'.
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'talus_rv.vtp'.
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'calcaneous_rv.vtp'.
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'model_r_midfoot.stl'.
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'model_r_forefoot.stl'.
+[2023-03-28 11:48:39.914] [warning] Couldn't find file 'model_r_toes.stl'.

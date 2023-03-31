@@ -321,7 +321,7 @@ if ~isfield(S,'MTparams') || isempty(S.MTparams)
 end
 
 % Print the settings to the screen
-disp(S);
+% disp(S);
 
 
 

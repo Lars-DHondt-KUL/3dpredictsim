@@ -3,13 +3,15 @@ clear
 close all
 clc
 
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';
-ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 %% load rference data
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
+
+FigRepo = fullfile(pathRepo,'Figures');
+ResultsRepo = fullfile(pathRepo,'Results');
+
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
 RefData = 'Fal_s1_mtjc4_FK_custom_right';

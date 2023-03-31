@@ -3,13 +3,14 @@ clear
 close all
 clc
 
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';
-ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-
 %% load rference data
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
+
+FigRepo = fullfile(pathRepo,'Figures');
+ResultsRepo = fullfile(pathRepo,'Results');
+
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
 RefData = 'Fal_s1_mtjc4_FK_custom_right';
@@ -38,23 +39,20 @@ LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
     'Stiffer Achilles tendon (3-segment)','Stiffer Achilles tendon (2-segment)'};
 
 
-joints_ref = {'knee_angle','ankle_angle'};
-joints_tit = {'Knee','Ankle'};
+joints_ref = {'ankle_angle'};
+joints_tit = {'Ankle'};
 
-muscles_sim = {'soleus_r','med_gas_r'};
-muscles_ref = {'Soleus','Gastrocnemius-medialis'};
-muscles_title = {'Soleus','Gastrocnemius'};
+muscles_sim = {'soleus_r'};
+muscles_ref = {'Soleus'};
+muscles_title = {'Soleus'};
 m_scale = [3.33, 2.94];
 
-% GRF_title = {'Forward','Vertical','Lateral'};
-
-%
 
 label_fontsize = 12;
 legend_fontsize = 12;
 title_fontsize = 12;
 
-% CsV = {'k','k',[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
+
 CsV = {'k','k',[149, 117, 205]/256,[0.4940 0.1840 0.5560],[115, 45, 217]/256};
 mrk = {'-','-.','-','-.'};
 lw = [2,1,2,1];
@@ -63,8 +61,8 @@ set(0,'defaultFigureColor','w')
 
 %
 fig2 = figure();
-fig2.Position = [269 136 1200/2 600/2+70];
-tl2 = tiledlayout(2,3);
+fig2.Position = [269 136 1200/2 270];
+tl2 = tiledlayout(1,3);
 tl2.TileSpacing = 'tight';
 
 for i_res=1:length(resultFiles)
@@ -132,7 +130,7 @@ for i_res=1:length(resultFiles)
         if i_res==length(resultFiles)
             if i == 1
                 ylb = ylabel('Angle (°)','Fontsize',label_fontsize);
-                ylb.Position(1) = -27;
+%                 ylb.Position(1) = -27;
             end
             axis tight
             yl = get(gca, 'ylim');
@@ -142,10 +140,10 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
-%             xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
-            if i==1
-                set(gca,'YTick',[-60,-30,0]);
-            end
+            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
+%             if i==1
+%                 set(gca,'YTick',[-60,-30,0]);
+%             end
         end
     end % end of kinematics
 
@@ -153,8 +151,8 @@ for i_res=1:length(resultFiles)
 
 
     %% powers
-    for i=2 %1:length(joints_ref)
-        nexttile(5)
+    for i=1 %1:length(joints_ref)
+        nexttile(2)
         % plot reference data
         if i_res==1 && i<5
             idx_jref = strcmp(Pref.colheaders,joints_ref{i});
@@ -191,12 +189,12 @@ for i_res=1:length(resultFiles)
         if i_res==length(resultFiles)
             if i == 1
                 ylb = ylabel('Power (W/kg)','Fontsize',label_fontsize);
-                ylb.Position(1) = -27;
+%                 ylb.Position(1) = -27;
             end
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-            ylim([-1.7,3.4])
+%             ylim([-1.7,3.4])
             xlim([0,100])
             set(gca,'XTick',[0:50:100]);
 %             set(gca,'YTick',[-1,0,1.5,3]);
@@ -211,7 +209,7 @@ for i_res=1:length(resultFiles)
 
     %% muscle activity
     for i=1:length(muscles_sim)
-        nexttile(i*3)
+        nexttile(3)
         % plot reference data
         if i_res==1
             imus = strcmp(Data.EMGheaders,muscles_ref{i});
@@ -251,7 +249,7 @@ for i_res=1:length(resultFiles)
                 ylb = ylabel('Activation (-)','Fontsize',label_fontsize);
 %                 ylb.Position(1) = -27;
 %             end
-            set(gca,'YAxisLocation','right')
+%             set(gca,'YAxisLocation','right')
             axis tight
             yl = get(gca, 'ylim');
             ylim([-0.02,yl(2)+0.1*norm(yl)])
@@ -260,53 +258,11 @@ for i_res=1:length(resultFiles)
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(replace(muscles_title{i},'-',' '),'Fontsize',title_fontsize);
-            if i==2
+%             if i==2
                 xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)    
-            end
+%             end
         end
     end % end of activity
-
-
-
-    %% Achilles tendon power
-
-    nexttile(4)
-
-    % plot sim result
-    iSol = find(strcmp(R.colheaders.muscles,'soleus_r'));
-    iGas = find(strcmp(R.colheaders.muscles,'lat_gas_r'));
-    iGas2 = find(strcmp(R.colheaders.muscles,'med_gas_r'));
-    P_T_Sol = -R.FT(:,iSol).*R.vT(:,iSol)/R.body_mass;
-    P_T_Gas = -R.FT(:,iGas).*R.vT(:,iGas)/R.body_mass;
-    P_T_Gas2 = -R.FT(:,iGas2).*R.vT(:,iGas2)/R.body_mass;
-    P_At = P_T_Sol+P_T_Gas+P_T_Gas2;
-
-    hold on
-    plot(x,P_At,'linewidth',line_linewidth,'Color',CsV{i_res},...
-        'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
-    hold on
-    px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-                'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-    uistack(px,"bottom");
-
-    % layout
-    if i_res==length(resultFiles)
-%         if i == 1
-            ylb = ylabel('Power (W/kg)','Fontsize',label_fontsize);
-            ylb.Position(1) = -27;
-%         end
-        axis tight
-        yl = get(gca, 'ylim');
-        ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-        ylim([-1.7,3.4])
-        xlim([0,100])
-        set(gca,'XTick',[0:50:100]);
-%         set(gca,'YTick',[-1,0,1.5,3]);
-        set(gca,'Fontsize',label_fontsize);
-        set(gca,'XTickLabelRotation',0)
-        title('Achilles tendon','Fontsize',title_fontsize);
-        xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
-    end
 
 
 

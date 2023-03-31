@@ -56,7 +56,7 @@ S.subject = 'Fal_s1';
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc4';
+S.Foot.Model = 'mtp';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom, personalised
@@ -92,7 +92,7 @@ S.useMtpPinExtF = 0;
 S.MTparams = 'MTc5'; % 
 
 % Contact spheres
-S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
+% S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
 S.Foot.contactGeometryVersion = 9;
 % S.Foot.contactSphereOffsetY = 0;    % contact spheres are offset in y-direction to match static trial IK
 % % S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
@@ -117,9 +117,9 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 
 % plantar fascia
 S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Natali2010''Song2011'
-S.Foot.PF_sf = 5;
+S.Foot.PF_sf = 1;
 % S.Foot.PF_sf_isvar = 0; 
-% S.Foot.PF_slack_length = 0.146; % (m) slack length
+S.Foot.PF_slack_length = 0.146; % (m) slack length
 
 % Plantar Intrinsic Muscles represented by and ideal force actuator
 % S.Foot.PIM = 0;             % include PIM actuator
@@ -144,7 +144,7 @@ S.Foot.PF_sf = 5;
 % % scale FMo
 % S.Foot.FDB_sf_FMo = 1;
 % % apply nerve block (activation constrained to baseline)
-% S.Foot.FDB_nerveBlock = 1;
+% S.Foot.FDB_nerveBlock = 0;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -160,11 +160,11 @@ S.Foot.PF_sf = 5;
 % LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
 
 % % 3-segment and 2-segment model
-% results = {
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
-%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
-%     };
-% LegNames = {'3-segment model', 'new 2-segment model'};
+results = {
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+    '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100'
+    };
+LegNames = {'3-segment model', 'new 2-segment model'};
 
 % Achilles tendon
 % results = {
@@ -238,7 +238,7 @@ S.Foot.PF_sf = 5;
 %     '\results_paper\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls141_FDB2_lTs120_Fpsl10_ig1_N100'
 %     };
 % LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
-%     'Compliant plantar fascia, without intrinsic muscle','Low arch height (3-segment)'};
+%     'Compliant plantar fascia, without intrinsic muscle','Reduced arch height (3-segment)'};
 
 
 % results = {
@@ -248,11 +248,11 @@ S.Foot.PF_sf = 5;
 % LegNames = {'Nominal 3-segment foot model','Low-arched foot without plantar fascia'};
 
 % % effect of intrinsic muscle nerve block
-results = {
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
-    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_tanh10'
-    };
-LegNames = {'tanh b = 100','tanh b = 10'};
+% results = {
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100'
+%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_tanh10'
+%     };
+% LegNames = {'tanh b = 100','tanh b = 10'};
 
 
 %% supplementary
@@ -531,7 +531,7 @@ ref{end+1} = fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9
 filteredResultsWithRef = filteredResults';
 % filteredResultsWithRef = [ref, filteredResults]';
 % filteredResultsWithRef = [filteredResults, ref]';
-% filteredResultsWithRef = ref;
+filteredResultsWithRef = ref;
 
 ResultsFile = filteredResultsWithRef;
 
@@ -585,7 +585,8 @@ makeplot.allPs                          = 0; % all joint powers
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
 makeplot.windlass                       = 0; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
-makeplot.mtj_moments                    = 0; % mtj moment decomposition    
+makeplot.mtj_moments                    = 0; % mtj moment decomposition
+makeplot.mtj_powers                     = 1; % mtj power decomposition
 makeplot.power_main                     = 0; % main power components of foot
 makeplot.power_windlass                 = 0; % windlass power transfer
 makeplot.power                          = 0; % datailed power decomposition
@@ -599,7 +600,7 @@ makeplot.W_muscle_bar                   = 0; % muscle fibre work totals
 makeplot.E_muscle_bar_small             = 0; % metabolic energy and work by selected muscle groups
 makeplot.Edot_all                       = 0; % summed metabolic energy rate
 makeplot.Energy_cost                    = 0; % decompose metabolic cost components
-makeplot.Energy_smoothing               = 1; % effect of smoothing energy model
+makeplot.Energy_smoothing               = 0; % effect of smoothing energy model
 makeplot.muscle_act                     = 0; % muscle activity
 makeplot.muscle_act_exc                 = 0; % muscle activity and excitation   
 makeplot.muscle_joint_moment            = 0; % moments of muscles around ankle-foot joints

@@ -69,7 +69,7 @@ end
 mrk = {'-',':','-',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
   
 if nr==4
-    CsV = [[0 0 0];[0.6350 0.0780 0.1840]; [0.3010 0.7450 0.9330];[0.4660 0.6740 0.1880]];
+    CsV = [[0 0 0];[0.9290 0.6940 0.1250]; [0.3010 0.7450 0.9330];[0.8500 0.3250 0.0980]];
     mrk = {'-','-.','-.',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
 end
 
@@ -210,6 +210,8 @@ for inr=1:nr
        W_subt(iw) = trapz(R.t(1:iw),P_subt(1:iw));
        W_mtp(iw) = trapz(R.t(1:iw),P_mtp(1:iw));
     end
+
+    qdot_mtp = R.Qdots(:,imtp)*pi/180;
 
     if ~isempty(imtj)
         P_mtj = R.Qdots(:,imtj)*pi/180.*R.Tid(:,imtj)/R.body_mass;
@@ -3948,7 +3950,7 @@ for inr=1:nr
             Ws_net_gc(:,inr) = [Wi_net;W_sum_net;W_heel_net;W_fft_net;W_toes_net;...
                 0;0;W_PIM_net;W_mtj_li_net];
 
-            div_by_dist_trav = 0;
+            div_by_dist_trav = 1;
             if div_by_dist_trav
                 Ws_pos_gc(:,inr) = Ws_pos_gc(:,inr)/dist_trav;
                 Ws_neg_gc(:,inr) = Ws_neg_gc(:,inr)/dist_trav;
@@ -5939,9 +5941,9 @@ for inr=1:nr
         if ~has_no_mtj && R.S.Foot.mtj_muscles
             musi_mtj = find(R.dM(1,:,7)~=0);
     
-            nr_musi_mtj = length(musi_mtj);
+            nr_musi_mtp = length(musi_mtj);
             
-            musi_mtj = musi_mtj(nr_musi_mtj/2+1:end);
+            musi_mtj = musi_mtj(nr_musi_mtp/2+1:end);
             nr_musi_mtj_1 = length(musi_mtj);
 %             nr_musi_mtj = 13;
     
@@ -6190,6 +6192,161 @@ for inr=1:nr
         end
         
     end
+%%
+
+    if makeplot.mtj_powers
+        if inr==1
+            h41 = figure('Position',[fpos(4,:),fsq]);
+            tl2=tiledlayout(13,3);
+            tl2.TileSpacing = 'tight';
+        end   
+
+        figure(h41)
+
+        P_mtj_mtp = zeros(13,length(x));
+
+        nexttile(2)
+        hold on
+        P_mtj_mtp(1,:) = R.Tid(:,imtp).*qdot_mtp/R.body_mass;
+        plot(x,R.Tid(:,imtp).*qdot_mtp/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+        title('MTP (total)')
+        xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+
+%         ylabel('P (W/kg)','Fontsize',label_fontsize);
+
+%         nexttile(4)
+%         hold on
+%         plot(x,M_mtj_li.*qdot_mtj/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+%         title('Ligaments')
+%         xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+%         ylabel('P (W/kg)','Fontsize',label_fontsize);
+
+        
+
+        if ~has_no_mtj
+            
+            nexttile(1)
+            hold on
+            P_mtj_mtp(1,:) = P_mtj_mtp(1,:) + R.Tid(:,imtj).*qdot_mtj/R.body_mass;
+            plot(x,R.Tid(:,imtj).*qdot_mtj/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Midtarsal (total)')
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('P (W/kg)','Fontsize',label_fontsize);
+
+            nexttile(4)
+            hold on
+            P_mtj_mtp(2,:) = M_mtj_li.*qdot_mtj/R.body_mass;
+            plot(x,M_mtj_li.*qdot_mtj/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Ligaments')
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('P (W/kg)','Fontsize',label_fontsize);
+
+            nexttile(7)
+            hold on
+            plot(x,M_mtj_PF.*qdot_mtj/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Plantar fascia')
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+            ylabel('P (W/kg)','Fontsize',label_fontsize);
+
+            nexttile(8)
+            hold on
+            plot(x,M_mtp_PF.*qdot_mtp/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+            title('Plantar fascia')
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+%             ylabel('P (W/kg)','Fontsize',label_fontsize);
+
+            P_mtj_mtp(3,:) = M_mtj_PF.*qdot_mtj/R.body_mass + M_mtp_PF.*qdot_mtp/R.body_mass;
+        end
+
+        if ~has_no_mtj && R.S.Foot.mtj_muscles
+            musi_mtj = find(R.dM(1,:,7)~=0);
+    
+            nr_musi_mtj = length(musi_mtj);
+            
+            musi_mtj = musi_mtj(nr_musi_mtj/2+1:end);
+            nr_musi_mtj_1 = length(musi_mtj);
+%             nr_musi_mtj = 13;
+    
+
+            for i=1:nr_musi_mtj_1
+               nexttile(3*i+9-2)
+               hold on
+               if ~has_no_mtj && R.S.Foot.mtj_muscles
+                   T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
+                   if norm(T_mus)>0
+                       P_mtj_mtp(3+i,:) = T_mus;
+                       plot(x,T_mus.*qdot_mtj/R.body_mass,'Color',CsV(inr,:),'DisplayName',LegName);
+                   end
+               elseif ~has_no_mtj
+                   T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
+                   if norm(T_mus)>0
+    %                    plot(x,T_mus,':','Color',CsV(inr,:),'DisplayName',LegName);
+                   end
+               end
+    
+               title(R.colheaders.muscles{musi_mtj(i)},'interpreter','none')
+%                 xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+                ylabel('P (W/kg)','Fontsize',label_fontsize);
+                
+            end
+
+        end
+        xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+
+        if R.S.Foot.mtp_muscles
+%             musi_mtj = find(R.dM(1,:,8)~=0);
+%     
+%             nr_musi_mtp = length(musi_mtj);
+%             
+%             musi_mtj = musi_mtj(nr_musi_mtp/2+1:end);
+%             nr_musi_mtj_1 = length(musi_mtj);
+%             nr_musi_mtj = 13;
+    
+
+            for i=1:nr_musi_mtj_1
+               nexttile(3*i+9-1)
+               hold on
+               if R.S.Foot.mtp_muscles
+                   T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),8);
+                   if norm(T_mus)>0
+                       P_mtj_mtp(3+i,:) = P_mtj_mtp(3+i,:) + T_mus;
+                       plot(x,T_mus.*qdot_mtp/R.body_mass,'Color',CsV(inr,:),'DisplayName',LegName);
+                   end
+               elseif ~has_no_mtp
+                   T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
+                   if norm(T_mus)>0
+    %                    plot(x,T_mus,':','Color',CsV(inr,:),'DisplayName',LegName);
+                   end
+               end
+    
+               title(R.colheaders.muscles{musi_mtj(i)},'interpreter','none')
+%                xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+%                ylabel('P (W/kg)','Fontsize',label_fontsize);
+                
+            end
+
+        end
+        xlabel('Gait cycle (%)','Fontsize',label_fontsize);
+
+
+        for i=1:13
+            nexttile(3*i)
+               hold on
+               plot(x,P_mtj_mtp(i,:),'Color',CsV(inr,:),'DisplayName',LegName);
+
+        end
+        for i_pl=1:13*3
+            nexttile(i_pl)
+            yline(0,'Color',[1,1,1]*0.5)
+            ylim([-0.9,1.2])
+        end
+
+        if inr==nr && ~strcmp(figNamePrefix,'none')
+            set(h41,'PaperPositionMode','auto')
+            print(h41,[figNamePrefix '_musc_moment'],'-dpng','-r0')
+        end
+    end
+
 %%
 
 
