@@ -1,88 +1,56 @@
-Predictive simulations human movement
+Predictive simulations of human gait
 ============
 
 This repository contains all code and models used to generate the simulations discussed in: L. D’Hondt, F. D. Groote, and M. Afschrift, “A dynamic foot model for predictive simulations of gait reveals causal relations between foot structure and whole body mechanics.” bioRxiv, p. 2023.03.22.533790, Mar. 24, 2023. https://doi.org/10.1101/2023.03.22.533790.
 
 
-## Reproducing the results and figures shown in the paper
+## Running predictive simulations
+The code in this repository is tailored to simulating gait for specific models. 
+If you want to use predictive simulations for your own research, consider using [PredSim](https://github.com/KULeuvenNeuromechanics/PredSim) instead.
 
-1. [Download CasADi](https://web.casadi.org/get/)
-2. Open MATLAB (code is tested for R2021b)
-3. Run `./ReproduceResultsPaper.m` after setting `casadiPath = ` to the folder you selected in step 1.
+### Dependencies
+Minimally required software
+* [CasADi](https://web.casadi.org/get/) version 3.5.5
+* MATLAB (code is tested for R2021b)
 
-## 
+### Reproducing the results and figures shown in the paper
 
-#### Settings- Required
-
-- **PolyFolder**: Folder with the surrogate model for the muscle-tendon length and moment arms (from step 1 of the section "Create all input for the simulations"). This path to the folder is relative to the folder (./Polynomials) [string]
-- **CasadiFunc_Folders**: Name of the folder with the casadifunctions (exported in step 2 of the section "Create all input for the simulations"). This path to the folder is relative to the folder (./CasadiFunctions) [string]
-- **v_tgt**: imposed walking speed [double]
-- **ModelName**: select type of musculoskeletal model. Currently the two options are (1) Gait92 or (2) Rajagopal [string] 
-- **Mass**: mass of the subject in kg [double]
-- **ExternalFunc:** Name of the .dll file used in the optimization (used for solving inverse dynamics). This file should be in the folder *./ExternalFunctions*. See step three of the section "Create all input for the simulations". [string].
-- **ExternalFunc2:** Name of the .dll file used for post processing. This file should be in the folder *./ExternalFunctions*. See step three of the section "Create all input for the simulations" [string]
-- **ResultsFolder**: folder the save the results [string]
-- **Savename**: the of the results file [string]
+1. Open `./ReproduceResultsPaper.m` and set `casadiPath = ` to your CasADi download folder.
+2. Run `./ReproduceResultsPaper.m`.
 
 
+### Running predictive simulations
 
-#### Settings - optional
+**1. Generate functions that describe model dynamics.** These functions are included for all simulations we used for the paper and supplementary material. *Try skipping to step 2*, and only perform step 1 if you get an error about missing files.
+    
+* Use [opensimAD](https://github.com/Lars-DHondt-KUL/opensimAD) to generate a function describing the skeletal and contact dynamics of your model, and *manually* place the resulting files in `./ExternalFunctions/`.
+* Run `./ConvertOsimModel/PrepareOptimization.m` to read muscle parameters and generate polynomial approximations of muscle-tendon and plantar fascia lengths and momentarms in function of joint angles.
+* Run `./FootModel/fitPlantarLigamentMoment.m` to generate a look-up table with midtarsal joint moment due to ligaments. It will be added to the indicated folder with polynomials. 
 
-**Simulated motion**
+**2. Run simulation**
 
-- **Symmetric**: simulate symmetric motion (i.e. half a gait cycle), default is true [boolean]
-- **Periodic**: simulate a periodic motion (i.e. full gait cycle), default is false [boolean]
+You can use a script based on `./ReproduceResultsPaper.m` (or simply add more code blocks there).
 
-**Settings formulation and solving NLP**
+a. Get the settings for the nominal model. 
+```matlab
+[S] = getSettingsNominalModel(3);
+```
+Input argument `3` will return settings for 3-segment foot model, `2` for 2-segment.
 
-- **N**: number of mesh intervals (default is 50) [double]
-- **NThreads**: number of threads for parallel computing (default is 2) [double]
-- **linear_solver**: default is mumps [string]
-- **tol_ipopt:** tolerance of ipopt solver
-- **parallelMode**: default is thread
+b. Overwrite settings you want to change. See [list of settings](SettingsOverview.md).
 
-**Weights **
+c. Run simulation
+```matlab
+PredSim(S,1,1,0);
+```
 
-- **W.E**: weight metabolic energy rate (default is 500)
-- **W.Ak**: weight joint accelerations (default is 50000)
-- **W.ArmE**: weight arm excitations (default is 10^6)
-- **W.passMom**: weight passive torques (default is 1000)
-- **W.A**: weight muscle activations (default is 2000)
-- **W.exp_E**: power metabolic energy (default is 2)
-- **W.Mtp**: weight mtp excitations (default is 10^6)
-- **W.u**: weight on excitations arms actuators (default is 0.001)
-- **W.Lumbar: ** weight on miniizing lumbar activations (in Rajagopal model) (default is 10^5)
 
-**Initial guess** (Note: I should improve this in the future)
+Alternatively, you can select all settings in `./Main.m`, then run that script.
 
-- **IGmodeID**: initial guess based on (1)walking motion, (2) running motion, (3) previous solution in the *Results* folder, (4) previous solution in the *./IG/data folder* default is (1)
 
-- **IGsel**: (1) quasi random initial guess (2) data-based initial guess (default is 2)
 
-- **IKfile_guess**: relative path to IK file used for initial guess (used when IGsel = 2 and IGmodeID is 1 or 2). Default is *OpenSimModel\IK_Guess_Default.mat*
 
-- **savename_ig**: name of the IK file used for initial guess (used when IGmodelID is 4). This file should be in *./IG/data folder*. [string]
+## Nominal models
+This implementation reads information from different .osim model files and combines it in matlab, since this provided flexibility during development. 
+The nominal models will be made available as single .osim files soon.
 
-- **ResultsF_ig:** name of Folder with IK file for setting *savename_ig* (see above) when IGmodelID is 3 [string].
-
-- **IG_PelvisY**: height of the pelvis in the quasi-random initial guess (in m) [double]
-
-**Adapting bounds**
-
-- **IKfile_Bounds**: relative path to IK file used to determine bounds (i.e. 3 times ROM in IK file for all DOFs). Default is *OpenSimModel\IK_Guess_Default.mat*
-- **Bounds.ActLower**: lower bound on all muscle activations
-- **Bounds.ActLowerHip**: lower bound on activation of the hip muscles
-- **Bounds.ActLowerKnee**: lower bound on activation of the knee muscles
-- **S.Bounds.ActLowerAnkle**: lower bound on activation of the ankle muscles
-
-**Kinematic constraints**
-
-- **Constr.calcn:** minimal distance between calcneneus (origin) in the transversal plane. default is 0.09m [double]
-- **Constr.toes:** minimal distance between toes (origin) in the transversal plane. default is 0.09m [double]
-- **Constr.tibia:** minimal distance between tibia(?s) (origin) in the transversal plane. default is 0.09m [double]
-
-**Exoskeleton control **
-
-- **DataSet**: name of the folder with exoskeleton assistance profile (saved in the folder *./Data*) with a .mat file named *torque_profile.mat*. This mat file should contain the variables *time* and *torque* with the torque profile for one full stride.
-- **ExoBool:** Boolean to select if you want to include the torque profile (i.e. use exoskeleton)
-- **ExoScale:** scale factor for the torque profile.
