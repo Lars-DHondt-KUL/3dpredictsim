@@ -42,8 +42,8 @@ AddCasadiPaths();
 %-------------------------------------------------------------------------%
 % Full body gait simulation
 run_simulation = 0;         % run solver
-post_process_results = 1;   % postproces
-add_to_batch_queue = 0;     % save settings to run later
+post_process_results = 0;   % postproces
+add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed

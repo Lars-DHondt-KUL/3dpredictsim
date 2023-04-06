@@ -31,7 +31,7 @@
 
 /StaticStanding
 
-/Polynomials/MuscleAnalysis/ResultsMA/
+/Polynomials/*/MuscleAnalysis/*
 
 /OpenSimModel/Generic/
 /OpenSimModel/subject1/old/

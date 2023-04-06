@@ -12,10 +12,10 @@ clc
 %% Inputs
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
-FootModel = 'mtj'; % mtp or mtj
-FixedKnee = 1; % 1 for fixed knee axis, 0 for moving
+FootModel = 'mtjc4'; % mtp or mtj
+FixedKnee = 0; % 1 for fixed knee axis, 0 for moving
 FootScaling = 'custom'; % default, custom
-FDB = 0;
+FDB = 2;
 tib_ant_Rajagopal2015 = 0;
 MTcustom = 5; % 5 is proper geometry for mtj models
 % Boolean to select if we have to run the muscle analysis

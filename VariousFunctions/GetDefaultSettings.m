@@ -124,35 +124,6 @@ if ~isfield(S,'IGmodeID')
     S.IGmodeID  = 1;        
 end
 
-% % initial guess case identifier
-% if ~isfield(S,'IGcase')    
-%     S.IGcase    = 0;        
-% end
-
-% % weakness hip actuators
-% if ~isfield(S,'h_weak')
-%     S.h_weak    = 0;     
-% end
-
-% % maximal contraction velocity identifier
-% if ~isfield(S,'Max_s')
-%     S.Max_s     = 0;    
-% end
-
-% % weakness ankle plantaflexors
-% if ~isfield(S,'pf_weak')
-%     S.pf_weak   = 0;      
-% end
-
-% % metabolic energy model identifier
-% if ~isfield(S,'mE')
-%     S.mE        = 0;       
-% end
-
-% % co-contraction identifier
-% if ~isfield(S,'coCont')
-%     S.coCont    = 0;        
-% end
 
 % Kinematics Constraints - Default Settings
 if isfield(S,'Constr')
@@ -198,20 +169,6 @@ if ~isfield(S.Bounds,'tf')
     S.Bounds.tf = [];
 end
 
-% % scaling exoskeleton timing
-% if isfield(S,'PercStance')
-%     if ~isfield(S.PercStance,'bool')
-%         S.PercStance.bool = 0;        
-%     end
-%     if ~isfield(S.PercStance,'xStanceOr')
-%         S.PercStance.xStanceOr = 0.61; % duration stance phase in experiment
-%     end
-%     if ~isfield(S.PercStance,'xStanceNew')
-%         S.PercStance.xStanceNew = 0.58; % duration stance phase in simulation
-%     end
-% else
-%     S.PercStance.bool = 0;
-% end
 
 % symmetric motion ?
 if ~isfield(S,'Symmetric')
@@ -255,25 +212,6 @@ if ~isfield(S,'IKfile_guess')
     end
 end
 
-% % path with exoskeleton torque profile
-% if ~isfield(S,'DataSet')
-%     S.DataSet = 'PoggenSee2020_AFO';
-% end
-
-% % Boolean for exoskeleton use
-% if ~isfield(S,'ExoBool')
-%     S.ExoBool       = 0;
-% end
-
-% % scaling assistance profile
-% if ~isfield(S,'ExoScale')
-%     S.ExoScale      = 0;        % scale factor of exoskeleton assistance profile = 0 (i.e. no assistance)
-% end
-
-% % choosing assistance profile or control law
-% if ~isfield(S,'ExoController')
-%     S.ExoController = 's1 Pog';
-% end
 
 %%
 if ~isfield(S,'AchillesTendonScaleFactor') || isempty(S.AchillesTendonScaleFactor)
