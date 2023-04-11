@@ -13,7 +13,7 @@ clc
 % OpenSim model information
 Subject = 'Fal_s1'; % (= subject1 from Falisse et al.) fixed for now
 FootModel = 'mtjc4'; % mtp or mtj
-FixedKnee = 0; % 1 for fixed knee axis, 0 for moving
+FixedKnee = 1; % 1 for fixed knee axis, 0 for moving
 FootScaling = 'custom'; % default, custom
 FDB = 2;
 tib_ant_Rajagopal2015 = 0;

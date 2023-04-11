@@ -24,12 +24,6 @@ if ~isfield(S,'OsimFileName')
     elseif S.Foot.FDB == 2
         OsimFileName = [OsimFileName '_FDB2'];
     end
-    if S.tib_ant_Rajagopal2015
-        OsimFileName = [OsimFileName '_TAR'];
-    end
-    if S.useMtpPinPoly
-        OsimFileName = [OsimFileName '_old'];
-    end
     if isfield(S,'MTparams') && ~isempty(S.MTparams)
         OsimFileName = [OsimFileName '_' S.MTparams];
     end
@@ -61,9 +55,6 @@ if S.Foot.contactSphereOffset45Z
 end
 if S.Foot.contactSphereOffset1X
     ExternalFunc = [ExternalFunc '_o1x' num2str(S.Foot.contactSphereOffset1X*1e3)];
-end
-if S.useMtpPinExtF
-    ExternalFunc = [ExternalFunc '_old'];
 end
 
 S.ExternalFunc = ExternalFunc;

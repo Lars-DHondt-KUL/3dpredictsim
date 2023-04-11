@@ -525,14 +525,15 @@ ref = {};
 % ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig21_pp.mat']);
 % ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_pp.mat']);
 % ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_pp.mat']);
-ref{end+1} = fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat']);
+ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig21_pp.mat']);
+% ref{end+1} = fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat']);
 % ref{end+1} = fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
 % ref{end+1} = fullfile([ResultsRepo '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
 
 filteredResultsWithRef = filteredResults';
 filteredResultsWithRef = [ref, filteredResults]';
 % filteredResultsWithRef = [filteredResults, ref]';
-% filteredResultsWithRef = ref;
+filteredResultsWithRef = ref;
 
 ResultsFile = filteredResultsWithRef;
 
@@ -582,7 +583,7 @@ makeplot.compareZelik15b                = 0; % leg joint powers
 makeplot.allQsTs                        = 1; % all joint angles and torques
 makeplot.allQdots                       = 0; % all joint velocities
 makeplot.allQddots                      = 0; % all joint accelerations
-makeplot.allPs                          = 1; % all joint powers
+makeplot.allPs                          = 0; % all joint powers
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
 makeplot.windlass                       = 0; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
