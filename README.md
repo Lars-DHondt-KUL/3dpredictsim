@@ -52,5 +52,5 @@ Alternatively, you can select all settings in `./Main.m`, then run that script.
 
 ## Nominal models
 This implementation reads information from different .osim model files and combines it in matlab, since this provided flexibility during development. 
-The nominal models will be made available as single .osim files soon.
+The nominal models can be found in `./OpenSimModel/Nominal models/`
 

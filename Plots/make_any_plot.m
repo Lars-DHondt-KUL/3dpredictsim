@@ -325,15 +325,16 @@ S.Foot.FDB_nerveBlock = 0;
 % LegNames = {'Natali et al. (2010)','linear','Song et al. (2011)','Gefen (2002)'};
 
 % % mtj axis orientation
-% results = {
+results = {
 %     '\results_paper\Fal_s1_mtj_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtjc1_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc2_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper\Fal_s1_mtjc2_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper\Fal_s1_mtjc3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtjc5_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'
-%     };
+    };
 % LegNames = {'Sagittal','Orientation 1','Orientation 2','Orientation 3','Orientation 4','Orientation 5'};
+LegNames = {'Orientation 2','Orientation 3','Orientation 4'};
 
 % % mtj axis orientation - isometric scaling
 % results = {
@@ -503,7 +504,7 @@ else
 %     criteria{end+1} = 'N100';
 %     criteria{end+1} = 'not_1_N';
     criteria{end+1} = 'not_tol';
-    criteria{end+1} = 'not_FK';
+%     criteria{end+1} = 'not_FK';
     
     % filter filenames
     [filteredResults] = filterResultfolderByParameters(pathResult,criteria);
@@ -531,9 +532,9 @@ ref{end+1} = fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtjc4_FK_sc_cspx10_
 % ref{end+1} = fullfile([ResultsRepo '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
 
 filteredResultsWithRef = filteredResults';
-filteredResultsWithRef = [ref, filteredResults]';
+% filteredResultsWithRef = [ref, filteredResults]';
 % filteredResultsWithRef = [filteredResults, ref]';
-filteredResultsWithRef = ref;
+% filteredResultsWithRef = ref;
 
 ResultsFile = filteredResultsWithRef;
 
@@ -580,7 +581,7 @@ makeplot.compareTakahashi17_mtj_only    = 0; % plot mtj power over experimental 
 makeplot.compareTakahashi17_W_bar       = 0; % "distal to segment" work analysis
 makeplot.compareZelik15                 = 0; % foot muscle activity coordination
 makeplot.compareZelik15b                = 0; % leg joint powers            
-makeplot.allQsTs                        = 1; % all joint angles and torques
+makeplot.allQsTs                        = 0; % all joint angles and torques
 makeplot.allQdots                       = 0; % all joint velocities
 makeplot.allQddots                      = 0; % all joint accelerations
 makeplot.allPs                          = 0; % all joint powers
@@ -591,7 +592,7 @@ makeplot.mtj_moments                    = 0; % mtj moment decomposition
 makeplot.mtj_powers                     = 0; % mtj power decomposition
 makeplot.power_main                     = 0; % main power components of foot
 makeplot.power_windlass                 = 0; % windlass power transfer
-makeplot.power                          = 1; % datailed power decomposition
+makeplot.power                          = 0; % datailed power decomposition
 makeplot.work                           = 0; % same as power, but work over GC
 makeplot.work_bar                       = 0; % positive, negative and net work bar plot
 makeplot.work_bar_small                 = 0; % positive, negative and net work bar plot
@@ -603,7 +604,7 @@ makeplot.E_muscle_bar_small             = 0; % metabolic energy and work by sele
 makeplot.Edot_all                       = 0; % summed metabolic energy rate
 makeplot.Energy_cost                    = 0; % decompose metabolic cost components
 makeplot.Energy_smoothing               = 0; % effect of smoothing energy model
-makeplot.muscle_act                     = 1; % muscle activity
+makeplot.muscle_act                     = 0; % muscle activity
 makeplot.muscle_act_exc                 = 0; % muscle activity and excitation   
 makeplot.muscle_joint_moment            = 0; % moments of muscles around ankle-foot joints
 makeplot.muscle_joint_power             = 0; % powers of muscles around ankle-foot joints
