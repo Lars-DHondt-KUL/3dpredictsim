@@ -318,6 +318,55 @@ FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figur
     
     
     
-    
+%%
+clearvars
+
+PF_stiffness = {'Natali2010','Gefen2002','linear'};
+
+PF_legNames = {'Natali et al., 2010','Gefen, 2002','linear (E = 350 MPa)'};
+
+l = linspace(1,1.10,200);
+
+for i=1:numel(PF_stiffness)
+    [f_PF_stiffness,grad,Hess,f_PF_stiffness_nonsmoothed] = f_getPlantarFasciaStiffnessModelCasADiFunction(PF_stiffness{i},'ls',1,'A0',1);
+    F_PF(i,:) = full(f_PF_stiffness(l));
+    g_F_PF(i,:) = full(grad(l));
+
+end
+
+h1=figure('Position',[100,500,500,500]);
+tiledlayout(1,2)
+
+
+CsV = [[0 0 0];[0.8500 0.3250 0.0980];[0.4660 0.6740 0.1880];[0.3010 0.7450 0.9330];[0.4940 0.1840 0.5560];[0.6350 0.0780 0.1840]];
+mrk = {'-','-','-.','--'};
+
+
+for i=1:numel(PF_stiffness)
+    nexttile(1)
+    hold on
+%     if i==4
+    plot((l-1)*100,F_PF(i,:),mrk{i},'Color',CsV(i,:),'DisplayName',PF_legNames{i},'LineWidth',2)
+%     else
+%          plot((l-ls)*1000,10*F_PF(i,:),'Color',CsV(i,:),'DisplayName',PF_stiffness{i})
+%     end
+%     grid on
+%     legend('Location','best')
+    xlabel('Strain (%)','FontSize',12)
+    ylabel('Stress (MPa)','FontSize',12)
+    title('Plantar fascia models','FontSize',12)
+%         xlim([0,8])
+%         ylim([0,60])
+
+    nexttile(2)
+    hold on
+    plot((l),g_F_PF(i,:),mrk{i},'Color',CsV(i,:),'DisplayName',PF_legNames{i},'LineWidth',2)
+    xlabel('Stretch (-)','FontSize',12)
+    ylabel('Stiffness (MPa)','FontSize',12)
+
+end
+
+lg=legend('FontSize',12,'Location','southoutside','NumColumns',2,'Box','off');
+lg.Layout.Tile = 'south';
     
     

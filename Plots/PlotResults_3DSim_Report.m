@@ -438,7 +438,8 @@ for inr=1:nr
     
     if inr==1
         hleg = figure('Position',[fpos(3,1),500,fwide]);
-        subplot(1,5,1)
+        tiledlayout('flow')
+        nexttile(1)
         hold on
         plot(inr,R.COT,'o','Color',Cs,'MarkerFaceColor',Cs,'DisplayName',LegName);
         lh=legend('location','northeast','Interpreter',lgInt);
@@ -447,10 +448,11 @@ for inr=1:nr
         else
             lh.Interpreter = 'none';
         end
-        lhPos = lh.Position;
-        lhPos(1) = lhPos(1)+0.38;
-        lhPos(2) = lhPos(2)-0.34;
-        set(lh,'position',lhPos);
+%         lhPos = lh.Position;
+%         lhPos(1) = lhPos(1)+0.38;
+%         lhPos(2) = lhPos(2)-0.34;
+%         set(lh,'position',lhPos);
+        lh.Layout.Tile = 'south';
         title(lh,'Legend')
         title('Cost of transport')
         ylabel('\fontsize{10} COT (J kg^-^1 m^-^1)','Interpreter','tex')
@@ -460,7 +462,7 @@ for inr=1:nr
         grid on
     else
         figure(hleg)
-        subplot(1,5,1)
+        nexttile(1)
         hold on
         plot(inr,R.COT,'o','Color',Cs,'MarkerFaceColor',Cs,'DisplayName',LegName);  
     end
@@ -5875,30 +5877,47 @@ for inr=1:nr
 
         end
     
-        if ~isfield(R,'COP_in_calcn') || ~isfield(R,'COP_wrt_talus_in_calcn')
-            [COP_in_calcn, COP_wrt_talus_in_calcn] = getCOPInFootFrame(R);
+        if ~isfield(R,'COP_in_calcn') || ~isfield(R,'COP_wrt_talus_in_calcn') ...
+                || ~isfield(R,'talus_in_gnd') %|| true
+            [COP_in_calcn, COP_wrt_talus_in_calcn,talus_in_gnd] = getCOPInFootFrame(R);
             R.COP_in_calcn = COP_in_calcn*1e3;
             R.COP_wrt_talus_in_calcn = COP_wrt_talus_in_calcn*1e3;
+            R.talus_in_gnd = talus_in_gnd;
 
             save(ResultsFile{inr},'R','-append');
         end
 
+        GRF_lever = nan(size(R.talus_in_gnd,1),1);
+        for igr=1:size(R.talus_in_gnd,1)
 
-        GRF_lever = sqrt(sum(R.COP_wrt_talus_in_calcn.^2,2));
+            vec_a = R.talus_in_gnd(igr,:) - R.COPR(igr,:);
+            vec_b = R.GRFs(igr,1:3);
+%             vec_a(3) = 0;
+%             vec_b(3) = 0;
+            vec_ap = dot(vec_a,vec_b)/dot(vec_b,vec_b)*vec_b; % orthogonal projection of a onto b
+            vec_an = vec_a - vec_ap; % component of a that is normal to b 
+
+            GRF_lever(igr) = norm(vec_an)*1e3 *(-sign(vec_a(1)));
+
+        end
+%         GRF_lever = sqrt(sum(R.COP_wrt_talus_in_calcn.^2,2));
 
         PF_lever = -R.dM(:,iSol,5)*1e3;
 
         figure(h37)
         subplot(131)
         hold on
+%         plot(x,GRF_lever,'-','Color',CsV(inr,:),'DisplayName',LegName);
         plot(xst,GRF_lever(istance0),'-','Color',CsV(inr,:),'DisplayName',LegName);
 
         subplot(132)
         hold on
+%         plot(x,PF_lever,'-','Color',CsV(inr,:),'DisplayName',LegName);
         plot(xst,PF_lever(istance0),'-','Color',CsV(inr,:),'DisplayName',LegName);
 
         subplot(133)
         hold on
+%         plot(x,GRF_lever./PF_lever,'-','Color',CsV(inr,:),'DisplayName',LegName);
         plot(xst,GRF_lever(istance0)./PF_lever(istance0),'-','Color',CsV(inr,:),'DisplayName',LegName);
 
     end
@@ -6354,7 +6373,7 @@ for inr=1:nr
 end
 
 figure(hleg)
-subplot(1,3,3)
+nexttile(2)
 COT_rel(:) = (COT_all(2:end)-COT_all(1))./COT_all(1)*100;
 COT_rel = COT_rel';
 brc = bar(COT_rel);

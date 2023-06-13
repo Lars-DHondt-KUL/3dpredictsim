@@ -41,14 +41,14 @@ AddCasadiPaths();
 %% General settings
 %-------------------------------------------------------------------------%
 % Full body gait simulation
-run_simulation = 0;         % run solver
-post_process_results = 0;   % postproces
-add_to_batch_queue = 1;     % save settings to run later
+run_simulation = 1;         % run solver
+post_process_results = 1;   % postproces
+add_to_batch_queue = 0;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
-S.N         = 100;       % number of mesh intervals
-S.NThreads  = 6;        % number of threads for parallel computing
+S.N         = 50;       % number of mesh intervals
+S.NThreads  = 8;        % number of threads for parallel computing
 % S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.linear_solver = 'ma86';
 
@@ -57,9 +57,9 @@ S.NThreads  = 6;        % number of threads for parallel computing
 
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-S.ResultsFolder = 'results_paper'; % 'with_better_knee' 'results_paper'
+S.ResultsFolder = 'model_tuning'; % 'with_better_knee' 'results_paper'
 % S.suffixCasName = 'test';     % suffix for name of folder with casadifunctions
-S.suffixName = 'N100';        % suffix for name of file with results
+% S.suffixName = 'N100';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -79,7 +79,7 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjc4'; % 'mtjc4'
+S.Foot.Model = 'mtjcf2'; % 'mtjc4'
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom
@@ -94,13 +94,13 @@ S.AchillesTendonScaleFactor = 0.5; % 0.5
 S.TricepsFMoScale = 1.2; %round(1.2*0.8,2);
 
 % Reduce tendon slack length of Soleus
-S.SoleusTendonShorter = 0;
+S.SoleusTendonShorter = 3e-3;
 
 % Reduce tendon slack length of gastrocnemius
-S.GastrocTendonShorter = 0;
+S.GastrocTendonShorter = 5e-3;
 
 % Shift passive force-length curve of ankle muscle fibers
-S.passiveFiberForceShift = -0.1;
+S.passiveFiberForceShift = -0.05*0;
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -116,10 +116,10 @@ S.MTparams = 'MTc5';    % MTc5
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 9; %(-1)
+S.Foot.contactGeometryVersion = 10; %(-1)
 S.Foot.contactSphereOffsetY = 0; %(3)    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 0.010;   % heel contact sphere offset in x-direction (0.025)
+S.Foot.contactSphereOffset1X = 0; % heel contact sphere offset in x-direction (0.010)
 
 %% metatarsophalangeal (mtp) joint
 if strcmp(S.Foot.Model(1:3),'mtp')
@@ -182,7 +182,7 @@ S.Foot.FDB_nerveBlock = 0;
 
 
 % initial guess identifier                  
-S.IGsel         = 1;   % (1: quasi random, 2: data-based)
+S.IGsel         = 2;   % (1: quasi random, 2: data-based)
 % initial guess mode identifier
 S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
 

@@ -23,12 +23,12 @@ import casadi.*
 %     S.OsimFileName = OsimFileName;
 % end
 
-S.Foot.contactGeometryVersion = 0;
+% S.Foot.contactGeometryVersion = 0;
 S.Foot.kMTP = 1;
 S.Foot.dMTP = 0.1;
 S.Foot.mtp_tau_pass = 1;
 S.Foot.contactSphereOffset45Z = 0;
-S.Foot.contactSphereOffset1X = 0;
+% S.Foot.contactSphereOffset1X = 0;
 S.tib_ant_Rajagopal2015 = 0;
 S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
@@ -109,8 +109,11 @@ cd(pathmain);
 
 f_lMT_vMT_dM = Function.load(fullfile(PathDefaultFunc,'f_lMT_vMT_dM'));
 f_lLi_vLi_dM = Function.load(fullfile(PathDefaultFunc,'f_lLi_vLi_dM'));
-f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,...
-    'f_forceEquilibrium_FtildeState_all_tendon'));
+try
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium_FtildeState_all_tendon'));
+catch
+    f_forceEquilibrium_FtildeState_all_tendon = Function.load(fullfile(PathDefaultFunc,'f_forceEquilibrium'));
+end
 f_AllPassiveTorques = Function.load(fullfile(PathDefaultFunc,'f_AllPassiveTorques'));
 
 f_T4 = Function.load(fullfile(PathDefaultFunc,'f_T4'));
@@ -264,9 +267,9 @@ tensions = getSpecificTensions(muscleNamesFoot);
 %% Get Boundaries
 jointi = getJointi_mtj();
 
-bounds_qs = [[-2,2]*pi/180; % tibia rx
-             [-15,-0]*pi/180; % tibia rz
-             [0.2,0.6]; % tibia ty
+bounds_qs = [[-5,5]*pi/180; % tibia rx
+             [-20,0]*pi/180; % tibia rz
+             [0.4,0.55]; % tibia ty
              [-50, 50]*pi/180; % ankle
              [-50, 50]*pi/180; % subt
              [-30,30]*pi/180]; % mtj
@@ -485,12 +488,15 @@ fh = Hilldiff;
 ff = [f1;f2;f3;f4;f5;fh;];
 
 % Objective
-fo1 = (Tj(jointfi.calcn_or(2),1) - Tj(jointfi.toes_or(2),1) - 0.01)^2; % square to get positive value
+% fo1 = (Tj(jointfi.calcn_or(2),1) - Tj(jointfi.toes_or(2),1) - 0.01)^2; % square to get positive value
+% fo1 = (Tj(jointfi.forefoot_GRF(2)) - Tj(jointfi.forefoot_GRF(5)))^2 *1e-3;
+% fo1 = Tj(jointfi.tibia.rx)^2 + Tj(jointfi.tibia.ry)^2 + Tj(jointfi.tibia.rz)^2;
+
 fo2 = Tj(jointfi.midfoot_or(1),1)^2 + Tj(jointfi.midfoot_or(3),1)^2; % Knee position above navicular bone
-%     fo2 = Tj(jointfi.talus_or(1),1)^2 + Tj(jointfi.talus_or(3),1)^2; % Knee position above talus
+% fo2 = Tj(jointfi.talus_or(1),1)^2 + Tj(jointfi.talus_or(3),1)^2; % Knee position above talus
 
-fo = fo1*1e2 + fo2;
-
+% fo = fo1 + fo2*1e4;
+fo = fo2;
 
 %     % knee should be above arch, so on line connecting calcn and toes
 %     % origin in xz-plane
@@ -581,7 +587,7 @@ temp = [];
 %% run solver        
 for i=1:n_mtp
     % get initial guess
-    qs_init = [0;0;0.45;0;0;0]./scale_qs;
+    qs_init = [0;0;0.49;0;0;0]./scale_qs;
     FTs_init = zeros(NM_f,1);
 
     for j=1:n_tib
@@ -732,6 +738,10 @@ R.legname = legname;
 
 model_path = fullfile(pathRepo,'OpenSimModel\subject1',...
     ['Foot_Fal_s1_' S.Foot.Model '_sc_cspx10_oy3.osim']);
+if ~isfile(model_path)
+    model_path = fullfile(pathRepo,'OpenSimModel\subject1',...
+        ['Foot_Fal_s1_' S.Foot.Model '_sc_cspx10_cg9_o1x10.osim']);
+end
 R.h_nav = getNavicularHeight(R,model_path);
 
 

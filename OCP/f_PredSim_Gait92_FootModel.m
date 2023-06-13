@@ -138,7 +138,7 @@ end
 residualsi          = 1:length(fieldnames(IO.coordi)); % all
 ground_pelvisi      = double(IO.jointi.floating_base); % ground-pelvis
 trunki              = double(IO.jointi.torso); % trunk
-armsi               = double([IO.jointi.arm_l,IO.jointi.arm_r]); % arms
+armsi               = double([IO.jointi.arm_l, IO.jointi.arm_r]); % arms
 residuals_noarmsi   = setdiff(residualsi,armsi); % all but arms
 
 % Number of degrees of freedom for later use
@@ -1137,10 +1137,7 @@ if S.Symmetric
     % Muscle-tendon forces
     opti.subject_to(FTtilde(:,end) - FTtilde(orderMusInv,1) == 0);
     % Arm activations
-    orderArmInv = [jointi.sh_flex.r:jointi.sh_rot.r,...
-        jointi.sh_flex.l:jointi.sh_rot.l,...
-        jointi.elb.r:jointi.elb.r,...
-        jointi.elb.l:jointi.elb.l]-jointi.sh_flex.l+1;
+    orderArmInv = [4:6,1:3,8,7];
     opti.subject_to(a_a(:,end) - a_a(orderArmInv,1) == 0);
     % Mtp activations
     if S.Foot.mtp_actuator

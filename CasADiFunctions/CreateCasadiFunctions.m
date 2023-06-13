@@ -102,7 +102,7 @@ NMuscle = length(muscleNames(1:end-3))*2;
 % fiber lengths; Row 3: tendon slack lengths; Row 4: optimal pennation
 % angles; Row 5: maximal contraction velocities
 load([pathmusclemodel,'/MTparameters.mat'],'MTparameters');
-if S.SoleusTendonShorter
+if S.SoleusTendonShorter ~= 0
     IndexSoleus = find(contains(muscleNames,'soleus'));
     MTparameters(3,IndexSoleus) = MTparameters(3,IndexSoleus) - S.SoleusTendonShorter;
 end

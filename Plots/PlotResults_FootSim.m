@@ -1,5 +1,5 @@
 function [varargout] = PlotResults_FootSim(R,varargin)
-fig2 = 0;
+fig2 = 1;
 
 % if ~isfield(R,'legname')
 %     if ~isfield(R.S,'mtj_stiffness')

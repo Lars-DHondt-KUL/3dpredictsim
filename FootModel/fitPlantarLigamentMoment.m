@@ -1,6 +1,6 @@
 
 clear
-% close all
+close all
 clc
 
 pathmain = pwd;
@@ -11,9 +11,9 @@ pathmain = pwd;
 % ModelPath = [pathRepo '\OpenSimModel\subject1\Fal_s1_mtjcf_FK_sc_FDB2_MTc5_cspx10_oy3.osim'];
 % pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf_FK_sc_FDB2_MTc5'];
 
-ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjc4_sc.osim'];
-pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjc4_FK_sc_FDB2_MTc5'];
-save_lookup_table = 0;
+ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjcf2_sc.osim'];
+pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf2_FK_sc_MTc5'];
+save_lookup_table = 1;
 
 % if ~isfolder(pathPoly)
 %     mkdir(pathPoly);
@@ -370,7 +370,7 @@ title('Midtarsal joint ligament moment','FontSize',12)
 ylim([-120,20])
 
 FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft/supplement';
-exportgraphics(fg5,fullfile(FigRepo,'midtarsal_ligament_moment.jpeg'),'Resolution',300);
+% exportgraphics(fg5,fullfile(FigRepo,'midtarsal_ligament_moment.jpeg'),'Resolution',300);
 
 
 %%

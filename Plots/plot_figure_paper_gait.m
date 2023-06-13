@@ -3,14 +3,14 @@ clear
 close all
 clc
 
-%% load rference data
+%% load reference data
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
 
 FigRepo = fullfile(pathRepo,'Figures');
 ResultsRepo = fullfile(pathRepo,'Results');
-
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
@@ -31,11 +31,12 @@ stance_ref_std = 0.8233;
 %% figure 2
 
 resultFiles = {
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
+%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
+%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
     };
-LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
+LegNames = {'Predictive simulation with 3-segment foot model'};
+% LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
 
 
 joints_sim = {'hip_flexion_r','hip_adduction_r','knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
@@ -57,9 +58,9 @@ title_fontsize = 11;
 
 % CsV = {[0.4660 0.6740 0.1880],'k','k'};
 CsV = {[0.8500 0.3250 0.0980],'k','k'};
-% CsV = {[85, 186, 70]/256,'k','k'};
+CsV = {'k','k','k'};
 mrk = {'-','-.','-','--'};
-lw = [2,1,2];
+lw = [1,1,2];
 
 set(0,'defaultFigureColor','w')
 
@@ -381,7 +382,7 @@ annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
+exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait2.jpeg'),'Resolution',300);
 
 
 

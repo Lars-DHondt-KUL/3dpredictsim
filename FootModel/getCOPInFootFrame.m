@@ -1,4 +1,4 @@
-function [COP_in_calcn,COP_wrt_talus_in_calcn] = getCOPInFootFrame(R)
+function [COP_in_calcn,COP_wrt_talus_in_calcn,talus_or] = getCOPInFootFrame(R)
 import org.opensim.modeling.*;
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
@@ -45,9 +45,10 @@ gnd = model.getGround();
 COP_in_ground = R.COPR;
 COP_in_calcn = nan(size(COP_in_ground));
 COP_wrt_talus_in_calcn = nan(size(COP_in_ground));
+talus_or = nan(size(COP_in_ground));
 
 % loop over time
-for i=1:round(R.Event.Stance)
+for i=1:ceil(R.Event.Stance/100*(size(R.Qs,1)-1))
     % loop over coordinates to set value
     for j=1:n_coord
         % index of coordinate in data from mot file
@@ -75,6 +76,8 @@ for i=1:round(R.Event.Stance)
     COP_in_calcn(i,:) = COPf_i;
     COP_wrt_talus_in_calcn(i,:) = COP_tf_i;
 
+
+    talus_or(i,:) = model.getBodySet().get('talus_r').findBaseFrame().getPositionInGround(state).getAsMat;
 
 end
 
