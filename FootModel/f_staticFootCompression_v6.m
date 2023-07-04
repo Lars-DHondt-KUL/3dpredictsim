@@ -59,8 +59,9 @@ legname = [legname '; mtj: ' mtj_stiffness];
 S2 = S;
 S2.Foot.PF_stiffness = 'Natali2010';
 S2.Foot.PF_sf = 1;
-% S2.Foot.PF_slack_length = 0.146;
-S2.Foot.mtj_stiffness = 'MG_exp5_table';
+S2.Foot.PF_slack_length = 0.146;
+% S2.Foot.mtj_stiffness = 'MG_exp5_table';
+S2.Foot.mtj_stiffness = 'lig';
 S2.Foot.mtj_sf = 1; 
 [S0] = getFileNames(S2);
 S2.fixed_knee = 1;
@@ -492,10 +493,16 @@ ff = [f1;f2;f3;f4;f5;fh;];
 % fo1 = (Tj(jointfi.forefoot_GRF(2)) - Tj(jointfi.forefoot_GRF(5)))^2 *1e-3;
 % fo1 = Tj(jointfi.tibia.rx)^2 + Tj(jointfi.tibia.ry)^2 + Tj(jointfi.tibia.rz)^2;
 
-fo2 = Tj(jointfi.midfoot_or(1),1)^2 + Tj(jointfi.midfoot_or(3),1)^2; % Knee position above navicular bone
-% fo2 = Tj(jointfi.talus_or(1),1)^2 + Tj(jointfi.talus_or(3),1)^2; % Knee position above talus
+fo1 = Tj(jointfi.toes_or(3),1)^2*1e6;
 
-% fo = fo1 + fo2*1e4;
+if S.activity == 0
+    fo2 = Tj(jointfi.talus_or(1),1)^2 + Tj(jointfi.talus_or(3),1)^2; % Knee position above talus
+else
+    fo2 = Tj(jointfi.midfoot_or(1),1)^2 + Tj(jointfi.midfoot_or(3),1)^2; % Knee position above navicular bone
+end
+
+fo = fo1 + fo2;
+
 fo = fo2;
 
 %     % knee should be above arch, so on line connecting calcn and toes
@@ -675,6 +682,10 @@ for i=1:n_mtp
             
             % calculate arch length
             l_fa_ext(i,j) = norm(squeeze(toes_or(i,j,:)-calcn_or(i,j,:)));
+
+            if Qs_mtp(i)==0 && l_fa_ext(i,j) < L0
+                L0 = l_fa_ext(i,j);
+            end
 
             % calculate arch height (orthogonal decomposition)
             vec_a = squeeze(midfoot_or(i,j,:) - toes_or(i,j,:)); % mtpj to tmtj/mtj

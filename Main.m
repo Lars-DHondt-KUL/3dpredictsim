@@ -41,14 +41,14 @@ AddCasadiPaths();
 %% General settings
 %-------------------------------------------------------------------------%
 % Full body gait simulation
-run_simulation = 1;         % run solver
-post_process_results = 1;   % postproces
-add_to_batch_queue = 0;     % save settings to run later
+run_simulation = 0;         % run solver
+post_process_results = 0;   % postproces
+add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
-S.N         = 50;       % number of mesh intervals
-S.NThreads  = 8;        % number of threads for parallel computing
+S.N         = 100;      % number of mesh intervals
+S.NThreads  = 6;        % number of threads for parallel computing
 % S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.linear_solver = 'ma86';
 
@@ -57,9 +57,9 @@ S.NThreads  = 8;        % number of threads for parallel computing
 
 % output folder
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-S.ResultsFolder = 'model_tuning'; % 'with_better_knee' 'results_paper'
+S.ResultsFolder = 'results_paper_v2'; % 'with_better_knee' 'results_paper'
 % S.suffixCasName = 'test';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'N100';        % suffix for name of file with results
+% S.suffixName = '';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -79,7 +79,7 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjcf2'; % 'mtjc4'
+S.Foot.Model = 'mtjcf3';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
 S.Foot.Scaling = 'custom'; % default, custom
@@ -88,19 +88,22 @@ S.Foot.Scaling = 'custom'; % default, custom
 S.fixed_knee = 1;
 
 % Achilles tendon stiffness
-S.AchillesTendonScaleFactor = 0.5; % 0.5
+S.AchillesTendonScaleFactor = 0.5;
 
 % Triceps surae optimal force scale
 S.TricepsFMoScale = 1.2; %round(1.2*0.8,2);
 
 % Reduce tendon slack length of Soleus
-S.SoleusTendonShorter = 3e-3;
+S.SoleusTendonShorter = 0;
 
 % Reduce tendon slack length of gastrocnemius
-S.GastrocTendonShorter = 5e-3;
+S.GastrocTendonShorter = 0;
+
+% TA tendon shorter
+S.TATendonShorter = 0;
 
 % Shift passive force-length curve of ankle muscle fibers
-S.passiveFiberForceShift = -0.05*0;
+S.passiveFiberForceShift = -0.1;
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -116,10 +119,10 @@ S.MTparams = 'MTc5';    % MTc5
 
 % Contact spheres
 S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 10; %(-1)
+S.Foot.contactGeometryVersion = 9; %(-1)
 S.Foot.contactSphereOffsetY = 0; %(3)    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 0; % heel contact sphere offset in x-direction (0.010)
+S.Foot.contactSphereOffset1X = 0.01; % heel contact sphere offset in x-direction (0.010)
 
 %% metatarsophalangeal (mtp) joint
 if strcmp(S.Foot.Model(1:3),'mtp')
@@ -133,9 +136,9 @@ else
     S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
     S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 end
-% S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
-% S.Foot.kMTP = 25;            % additional stiffness of the joint (Nm/rad)
-% S.Foot.dMTP = 2;          % additional damping of the joint (Nms/rad)
+S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+S.Foot.kMTP = 25;           % additional stiffness of the joint (Nm/rad)
+S.Foot.dMTP = 2;            % additional damping of the joint (Nms/rad)
 
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
@@ -143,15 +146,15 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 
 %% midtarsal joint 
 % (only used if Model = mtj)
-S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
+S.Foot.mtj_muscles = 0;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
 S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
-S.Foot.mtj_stiffness = 'MG_exp5_table';%'MG_exp5_table'
+S.Foot.mtj_stiffness = 'lig';%'MG_exp5_table'
 S.Foot.mtj_sf = 1; 
 
 S.Foot.kMT_li = 400;        % angular stiffness in case of linear
 S.Foot.kMT_li2 = 50;        % angular stiffness in case of signed linear
-S.Foot.dMT = 0.1;                % (Nms/rad) damping
+S.Foot.dMT = 0.1;           % (Nms/rad) damping
 
 % plantar fascia
 S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Cheng2008''Natali2010''Song2011'
@@ -165,11 +168,11 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
 % optimal fibre length
-S.Foot.FDB_lMo = 19.7e-3; % 19.7e-3 23e-3
+S.Foot.FDB_lMo = 23e-3;
 % Tendon slack length
-S.Foot.FDB_lTs = 0.125; %round(142.9 -0.9091*S.Foot.FDB_lMo*1e3)*1e-3; % 125mm at lMo=19.7mm, and 122 at 23
+S.Foot.FDB_lTs = 0.123;
 % Shift fiber passive force-length curve
 S.Foot.FDB_shift = -0.1;
 % scale FMo
@@ -177,22 +180,34 @@ S.Foot.FDB_sf_FMo = 1;
 % apply nerve block (activation constrained to baseline)
 S.Foot.FDB_nerveBlock = 0;
 
+% carbonfibre insole (Takahashi et al., 2016)
+S.Foot.insole_Takahashi_kMTP = 0; % 18 83 221
+% insole to reduce arch compression (Stearne et al., 2016)
+S.Foot.insole_Stearne = []; %'FAI'; 
+
 %% Initial guess
 %-------------------------------------------------------------------------%
 
 
 % initial guess identifier                  
-S.IGsel         = 2;   % (1: quasi random, 2: data-based)
+S.IGsel         = 1;   % (1: quasi random, 2: data-based)
 % initial guess mode identifier
 S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
 
 if S.IGmodeID == 4
     S.savename_ig   = 'NoExo';
 elseif S.IGmodeID == 3
-    S.ResultsF_ig   = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\different_speeds';
-    S.savename_ig   = 'Fal_s1_mtp_FK_sc_cspx10_oy3_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_vel24_ig1';
+    S.ResultsF_ig   = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\model_tuning';
+    S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100';
 end
 
+if S.N ~= 50
+    if isfield(S,'suffixName')
+        S.suffixName = ['N' num2str(S.N) '_' S.suffixName];
+    else
+        S.suffixName = ['N' num2str(S.N)];
+    end
+end
 
 %% run simulation
 PredSim(S,run_simulation,post_process_results,add_to_batch_queue);

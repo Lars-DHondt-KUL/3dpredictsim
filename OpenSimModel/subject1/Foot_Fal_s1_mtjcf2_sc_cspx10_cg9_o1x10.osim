@@ -84,9 +84,9 @@
 							<!--Path to a Component that satisfies the Socket 'frame' of type Frame.-->
 							<socket_frame>..</socket_frame>
 							<!--Scale factors in X, Y, Z directions respectively.-->
-							<scale_factors>0.90118143106433313 1.4293941749999999 0.99789000000000005</scale_factors>
+							<scale_factors>1 1 1</scale_factors>
 							<!--Name of geometry file.-->
-							<mesh_file>talus_rv.vtp</mesh_file>
+							<mesh_file>model_r_talus.stl</mesh_file>
 						</Mesh>
 					</attached_geometry>
 					<!--Set of wrap objects fixed to this body that GeometryPaths can wrap over.This property used to be a member of Body but was moved up with the introduction of Frames.-->

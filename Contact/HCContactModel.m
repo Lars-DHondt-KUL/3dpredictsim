@@ -52,7 +52,7 @@ vnormal = v(1)*normal(1) + v(2)*normal(2) + v(3)*normal(3);
 vtangent = v - vnormal*normal;
 indentationVel = -vnormal;
 % Constant values
-eps1 = 1e-8;
+eps1 = 1e-10;
 eps2 = 1e-16;
 bv = 50;
 bd = 300; 

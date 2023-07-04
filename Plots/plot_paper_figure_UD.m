@@ -10,7 +10,9 @@ clc
 [pathRepo,~,~] = fileparts(pathHere);
 
 FigRepo = fullfile(pathRepo,'Figures');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
 ResultsRepo = fullfile(pathRepo,'Results');
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 % Digitised graph from DOI:10.1038/s41598-017-15218-7 not included
 if exist(fullfile(pathRepo,'Figures','Takahashi_et_al_2017.csv'),'file')
@@ -31,7 +33,7 @@ end
 %% figure 
 
 resultFiles = {
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     };
 LegNames = {'3-segment foot model'};
 

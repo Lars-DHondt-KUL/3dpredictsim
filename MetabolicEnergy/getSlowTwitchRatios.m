@@ -53,6 +53,7 @@ function pctst = getSlowTwitchRatios(muscleNames)
     pctst_data.extobl_r = 0.58;    
     pctst_data.add_long_r = 0.50;
     pctst_data.add_brev_r = 0.50;
+    pctst_data.FDB_r = 0.5;
     
     pctst = zeros(length(muscleNames),1);
     for i = 1:length(muscleNames)

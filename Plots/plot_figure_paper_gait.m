@@ -9,12 +9,13 @@ clc
 [pathRepo,~,~] = fileparts(pathHere);
 
 FigRepo = fullfile(pathRepo,'Figures');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
 ResultsRepo = fullfile(pathRepo,'Results');
 ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
-RefData = 'Fal_s1_mtjc4_FK_custom_right';
+RefData = 'Fal_s1_mtjcf3_FK_custom_right';
 
 data_field = ['IK_' RefData(8:end)];
 Qref = Data.(data_field);
@@ -31,12 +32,11 @@ stance_ref_std = 0.8233;
 %% figure 2
 
 resultFiles = {
-%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
-%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
+    fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     };
-LegNames = {'Predictive simulation with 3-segment foot model'};
-% LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
+LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
 
 
 joints_sim = {'hip_flexion_r','hip_adduction_r','knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
@@ -45,7 +45,7 @@ joints_ref = {'hip_flexion','hip_adduction','knee_angle','ankle_angle','subtalar
 muscles_sim = {'vas_med_r','soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
 muscles_ref = {'Vastus-medialis','Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
 muscles_title = {'Vastus medialis','Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
-m_scale = [10 3.33, 2.94, 8/1.38, 6.40, 3,1];
+m_scale = [10, 3.33, 2.94, 8/1.38, 3.35, 3,1];
 
 joints_tit = {'Hip flexion','Hip adduction','Knee','Ankle','Subtalar','Midtarsal','MTP'};
 GRF_title = {'Forward','Vertical','Lateral'};
@@ -58,7 +58,7 @@ title_fontsize = 11;
 
 % CsV = {[0.4660 0.6740 0.1880],'k','k'};
 CsV = {[0.8500 0.3250 0.0980],'k','k'};
-CsV = {'k','k','k'};
+% CsV = {'k','k','k'};
 mrk = {'-','-.','-','--'};
 lw = [1,1,2];
 
@@ -309,7 +309,7 @@ for i_res=1:length(resultFiles)
             if sum(idx_jref) == 1 && i<7
                 meanPlusSTD = (Data.lowEMG_mean(:,imus) + 2*Data.lowEMG_std(:,imus))*m_scale(i);
                 meanMinusSTD = (Data.lowEMG_mean(:,imus) - 2*Data.lowEMG_std(:,imus))*m_scale(i);
-
+                
                 stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
                 intervalQ = 1:stepQ:size(R.Qs,1);
                 sampleQ = 1:size(R.Qs,1);
@@ -382,7 +382,7 @@ annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait2.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
 
 
 

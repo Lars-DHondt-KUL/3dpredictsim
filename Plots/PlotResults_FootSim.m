@@ -1,5 +1,5 @@
 function [varargout] = PlotResults_FootSim(R,varargin)
-fig2 = 1;
+fig2 = 0;
 
 % if ~isfield(R,'legname')
 %     if ~isfield(R.S,'mtj_stiffness')
@@ -383,6 +383,7 @@ if numFig <1 || numFig==4
     Fs_tib = R.Fs_tib(js);
     l_fa = R.l_fa_ext(j,js);
     h_fa = R.h_fa_ext(j,js);
+    L0 = min([R.L0, l_fa]);
 
     if BoolFirst
         % load reference graph images
@@ -403,14 +404,38 @@ if numFig <1 || numFig==4
 
     subplot(3,5,[1,2,6,7])
 %     if R.F_PF(j,js(end))<1
-        plot((l_fa-R.L0)*1000,Fs_tib/1000,'-o','color',CsV,'DisplayName',R.legname)
+        plot((l_fa-L0)*1000,Fs_tib/1000,'-o','color',CsV,'DisplayName',R.legname)
 %     else
 %         plot((l_fa-l_fa(1))*1000,Fs_tib/1000,'-o','color',CsV,'DisplayName',R.legname)
 %     end
     hold on
     if BoolFirst
-        hi1 = image([1,9.65]*0.9-1,flip([0,4]*0.9^2),img_Ker);
-        uistack(hi1,'bottom')
+%         hi1 = image([1,9.65]*sqrt(65/85)-1,flip([0,4]*65/85),img_Ker);
+%         uistack(hi1,'bottom')
+
+        CsVk = hsv(7);
+
+        [pathHere,~,~] = fileparts(mfilename('fullpath'));
+        [pathRepo,~,~] = fileparts(pathHere);
+
+        % Ker RF, Alexander RM, Kester RC, Bibby SR, Bennett MB. The spring in the 
+        % arch of the human foot. Nat Lond. 1987;325(6100):147–9. 
+        if exist(fullfile(pathRepo,'Figures','Ker_et_al_1987.csv'),'file')
+            Ker87_dat = importdata(fullfile(pathRepo,'Figures','Ker_et_al_1987.csv'));
+            Ker87.a = [Ker87_dat.data(:,1:2); flip(Ker87_dat.data(:,3:4))];
+            Ker87.c = [Ker87_dat.data(:,5:6); flip(Ker87_dat.data(:,7:8))];
+            Ker87.d = [Ker87_dat.data(:,9:10); flip(Ker87_dat.data(:,11:12))];
+            Ker87.e = Ker87_dat.data(:,13:14);
+            Ker87.f = Ker87_dat.data(:,15:16);
+            
+            plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'Color',CsVk(1,:),'LineWidth',1)
+            plot(Ker87.a(:,1)*sqrt(65/85)-1,Ker87.a(:,2)*65/85,'--','Color',CsVk(2,:),'LineWidth',1)
+            plot(Ker87.c(:,1)*sqrt(65/85)-1,Ker87.c(:,2)*65/85,'Color',CsVk(3,:),'LineWidth',1)
+            plot(Ker87.d(:,1)*sqrt(65/85)-1,Ker87.d(:,2)*65/85,'Color',CsVk(5,:),'LineWidth',1)
+            plot(Ker87.e(:,1)*sqrt(65/85)-1,Ker87.e(:,2)*65/85,'Color',CsVk(6,:),'LineWidth',1)
+            plot(Ker87.f(:,1)*sqrt(65/85)-1,Ker87.f(:,2)*65/85,'Color',CsVk(7,:),'LineWidth',1)
+        end
+
     end
     xlabel('Horizontal elongation (mm)')
     ylabel('Vertical force (kN)')
@@ -669,7 +694,7 @@ if numFig <1 || numFig==7
 
     idx0 = find(R.Qs_mtp(:) == 0);
     js = find(R.failed(idx0,:)==0);
-    dH0 = min(R.talus_or(idx0,js))*1e3;
+    dH0 = max(R.talus_or(idx0,js,2))*1e3;
 
     j1 = find(R.Qs_mtp(:)==0*pi/180);
     j2 = find(R.Qs_mtp(:)==15*pi/180);
@@ -690,8 +715,8 @@ if numFig <1 || numFig==7
 
         subplot(2,2,2)
         hold on
-        dH = R.talus_or(i,js)*1e3;
-        dH = dH - dH0;
+        dH = R.talus_or(i,js,2)*1e3;
+        dH = dH0 - dH;
         ddH = dH(2:end) - dH(1:end-1);
         idxH = find(ddH>=0);
         plot(dH(idxH),Fs_tib(idxH)/BW,mrk{i},'Color',CsV,'DisplayName',...

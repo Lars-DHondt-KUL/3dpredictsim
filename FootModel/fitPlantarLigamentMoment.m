@@ -11,8 +11,8 @@ pathmain = pwd;
 % ModelPath = [pathRepo '\OpenSimModel\subject1\Fal_s1_mtjcf_FK_sc_FDB2_MTc5_cspx10_oy3.osim'];
 % pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf_FK_sc_FDB2_MTc5'];
 
-ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjcf2_sc.osim'];
-pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf2_FK_sc_MTc5'];
+ModelPath = [pathRepo '\OpenSimModel\subject1\DetailedFootModel_mtjcf3_sc.osim'];
+pathPoly = [pathRepo '\Polynomials\Fal_s1_mtjcf3_FK_sc_MTc5'];
 save_lookup_table = 1;
 
 % if ~isfolder(pathPoly)

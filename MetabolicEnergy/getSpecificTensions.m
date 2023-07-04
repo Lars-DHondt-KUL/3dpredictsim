@@ -52,6 +52,7 @@ function sigma = getSpecificTensions(muscleNames)
     sigma_data.extobl_r = 0.25;    
     sigma_data.add_long_r = 0.74643;
     sigma_data.add_brev_r = 0.75263;
+    sigma_data.FDB_r = 0.25;
     
     sigma = zeros(length(muscleNames),1);
     for i = 1:length(muscleNames)

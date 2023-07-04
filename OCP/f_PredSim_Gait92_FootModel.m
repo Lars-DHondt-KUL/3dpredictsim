@@ -178,6 +178,10 @@ toesOr.r   = double(IO.origin.toes_r([1,3])); % x and z coordinate
 toesOr.l   = double(IO.origin.toes_l([1,3])); % x and z coordinate
 toesOr.all = [toesOr.r,toesOr.l];
 
+% individual sphere GRFs
+GRFi.toes.r = double([IO.GRFs.contact_sphere_5]);
+GRFi.toes.l = double([IO.GRFs.contact_sphere_10]);
+
 %% Get tracking information
 if S.TrackSim
     load([pathRepo '\Data\Fal_s1.mat'],'Data');
@@ -608,8 +612,8 @@ for j=1:d
     % Get plantar fascia and plantar intrinsic muscles force
     if mtj
         % lumped ligament torque
-        T_passj.mtj.l = f_passiveMoment_mtj(Qskj_nsc(jointi.mtj.l),Qdotskj_nsc(jointi.mtj.l));
-        T_passj.mtj.r = f_passiveMoment_mtj(Qskj_nsc(jointi.mtj.r),Qdotskj_nsc(jointi.mtj.r));
+        T_passj.mtj.l = f_passiveMoment_mtj(Qskj_nsc(jointi.mtj.l,j+1),Qdotskj_nsc(jointi.mtj.l,j+1));
+        T_passj.mtj.r = f_passiveMoment_mtj(Qskj_nsc(jointi.mtj.r,j+1),Qdotskj_nsc(jointi.mtj.r,j+1));
 
         if strcmp(S.Foot.PF_stiffness,'none')
             if S.Foot.PIM == 2
@@ -851,6 +855,10 @@ for j=1:d
             T_mtjPF_l       = MA_PFj.mtj.l*F_PF_PIMj.l;
             T_mtj_tmp_l     = T_mtj_tmp_l + T_mtjPF_l;
         end
+        if ~isempty(S.Foot.insole_Stearne) && strcmp(S.Foot.insole_Stearne,'FAI')
+            T_FAI_l = -100*(tanh((Qskj_nsc(jointi.mtj.l,j+1)*400-1)*pi)+1)/2;
+            T_mtj_tmp_l     = T_mtj_tmp_l + T_FAI_l;
+        end
         eq_constr{end+1} = Tj(jointi.mtj.l,1)-(T_mtj_tmp_l);
         % mtj right
         T_mtj_tmp_r = Tau_passj.mtj.r + T_passj.mtj.r;
@@ -862,6 +870,10 @@ for j=1:d
         if ~strcmp(S.Foot.PF_stiffness,'none') || S.Foot.PIM
             T_mtjPF_r       = MA_PFj.mtj.r*F_PF_PIMj.r;
             T_mtj_tmp_r     = T_mtj_tmp_r + T_mtjPF_r;
+        end
+        if ~isempty(S.Foot.insole_Stearne) && strcmp(S.Foot.insole_Stearne,'FAI')
+            T_FAI_r = -100*(tanh((Qskj_nsc(jointi.mtj.r,j+1)*400-1)*pi)+1)/2;
+            T_mtj_tmp_r     = T_mtj_tmp_r + T_FAI_r;
         end
         eq_constr{end+1} = Tj(jointi.mtj.r,1)-(T_mtj_tmp_r);
         mai_i = mai_i+1;
@@ -881,6 +893,11 @@ for j=1:d
     if S.Foot.mtp_actuator
         T_mtp_tmp_l     = T_mtp_tmp_l + a_mtpkj(1,j+1)*scaling.MtpTau;
     end
+    if S.Foot.insole_Takahashi_kMTP~=0
+        y1 = (tanh((Tj(GRFi.toes.l,1)/5-3)*pi)+1)/2; % =0 if GRF<10 and =1 if GRF>20
+        T_insole_l = -S.Foot.insole_Takahashi_kMTP*y1*Qskj_nsc(jointi.mtp.l,j+1);
+        T_mtp_tmp_l     = T_mtp_tmp_l + T_insole_l;
+    end
     eq_constr{end+1} = Tj(jointi.mtp.l,1)-(T_mtp_tmp_l);
     % mtp right
     T_mtp_tmp_r = Tau_passj.mtp.r;
@@ -895,6 +912,11 @@ for j=1:d
     end
     if S.Foot.mtp_actuator
         T_mtp_tmp_r     = T_mtp_tmp_r + a_mtpkj(2,j+1)*scaling.MtpTau;
+    end
+    if S.Foot.insole_Takahashi_kMTP~=0
+        y1 = (tanh((Tj(GRFi.toes.r,1)/5-3)*pi)+1)/2; % =0 if GRF<10 and =1 if GRF>20
+        T_insole_r = -S.Foot.insole_Takahashi_kMTP*y1*Qskj_nsc(jointi.mtp.r,j+1);
+        T_mtp_tmp_r     = T_mtp_tmp_r + T_insole_r;
     end
     eq_constr{end+1} = Tj(jointi.mtp.r,1)-(T_mtp_tmp_r);
     mai_i = mai_i+1;

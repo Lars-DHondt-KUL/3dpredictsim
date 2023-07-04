@@ -109,7 +109,8 @@ end
 IndexGastroc = find(contains(muscleNames,'_gas'));
 MTparameters(3,IndexGastroc) = MTparameters(3,IndexGastroc) - S.GastrocTendonShorter;
 
-
+IndexTA = find(contains(muscleNames,'tib_ant'));
+MTparameters(3,IndexTA) = MTparameters(3,IndexTA) - S.TATendonShorter;
 
 % By default, the tendon stiffness is 35 and the shift is 0.
 aTendon = 35*ones(NMuscle,1);
@@ -466,7 +467,7 @@ if mtj
     if strcmp(S.Foot.mtj_stiffness,'MG_exp_table') && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
-    elseif strcmp(S.Foot.mtj_stiffness,'MG_exp5_table') && S.Foot.MT_li_nonl
+    elseif (strcmp(S.Foot.mtj_stiffness,'lig') || strcmp(S.Foot.mtj_stiffness,'MG_exp5_table')) && S.Foot.MT_li_nonl
         f_getMtjLigamentMoment = Function.load((fullfile(pathpolynomial,'f_getMtjLigamentMoment_exp5')));
         M_mtj = f_getMtjLigamentMoment(qin1) - (S.Foot.dMT-0.1)*qdotin1; % compensate damping from passive torques
     elseif strcmp(S.Foot.mtj_stiffness,'MG_exp_v2_table') && S.Foot.MT_li_nonl

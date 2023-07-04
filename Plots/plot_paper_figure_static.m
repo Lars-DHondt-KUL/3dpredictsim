@@ -5,16 +5,19 @@ clc
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
 FigRepo = fullfile(pathRepo,'Figures');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
 addpath('../FootModel')
 
 %%
 S.subject = 'Fal_s1';
-S.Foot.Model = 'mtjc4';
+S.Foot.Model = 'mtjcf3';
 S.Foot.Scaling = 'custom';
 S.MTparams = 'MTc5';
 
+S.Foot.contactGeometryVersion = 9;
+S.Foot.contactSphereOffset1X = 0.010;
 S.Foot.contactStiffnessFactor = 10;
-S.Foot.contactSphereOffsetY = 3;
+S.Foot.contactSphereOffsetY = 0;
 S.passiveFiberForceShift = -0.1;
 S.AchillesTendonScaleFactor = 0.5;
 S.TricepsFMoScale = 1.2;
@@ -29,9 +32,9 @@ S.Foot.MT_li_nonl = 1;
 S.Foot.mtj_stiffness = 'MG_exp5_table';
 S.Foot.mtj_sf = 1; 
 
-% S.Foot.FDB = 0;
 S.Foot.FDB = 2;
-S.Foot.FDB_lTs = 0.125;
+S.Foot.FDB_lMo = 23e-3;
+S.Foot.FDB_lTs = 0.123;
 S.Foot.FDB_shift = -0.1;
 S.Foot.FDB_sf_FMo = 1;
 
@@ -80,19 +83,31 @@ Results1{end+1} = R;
 
 S.Foot.PF_stiffness = 'none';
 S.Foot.mtj_stiffness = 'MG_exp5_e_table';
-Fs_tib = [0:20:200];
+Fs_tib = [0:50:600];
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 Results1{end+1} = R;
 
 S.Foot.PF_stiffness = 'none';
 S.Foot.mtj_stiffness = 'MG_exp5_f_table';
-Fs_tib = [0:20:200];
+Fs_tib = [0:50:300];
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 Results1{end+1} = R;
 
 %%
 
+Results3 = {};
+S.Foot.PF_stiffness = 'Natali2010';
+S.Foot.PF_sf = 1; 
+S.Foot.PF_slack_length = 0.146;
+S.Foot.mtj_stiffness = 'MG_exp5_table';
+% Fs_tib = [0,10,30,50:300,400:100:1000,1200:200:2400];
+Fs_tib = [10,50,100:100:1000,1200:200:2400];
+Qs_mtp = [0,15]*pi/180;
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results3{end+1} = R;
 
+
+%%
 
 Results2 = {};
 S.Foot.PF_stiffness = 'Natali2010';
@@ -100,10 +115,11 @@ S.Foot.PF_sf = 1;
 S.Foot.PF_slack_length = 0.146;
 S.Foot.mtj_stiffness = 'MG_exp5_table';
 S.Foot.FDB = 2;
-S.Foot.FDB_lTs = 0.125;
+S.Foot.FDB_lMo = 23e-3;
+S.Foot.FDB_lTs = 0.123;
 S.Foot.FDB_shift = -0.1;
 S.Foot.FDB_sf_FMo = 1;
-Fs_tib = [0:10:120,140:20:180,200:50:700];
+Fs_tib = [10:2:20,30:10:100,120:20:500,550:50:1000];
 Qs_mtp = [-30,30]*pi/180;
 S.activity = 0.01;
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
@@ -111,17 +127,6 @@ Results2{end+1} = R;
 S.activity = 0;
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 Results2{end+1} = R;
-
-
-Results3 = {};
-S.Foot.PF_stiffness = 'Natali2010';
-S.Foot.PF_sf = 1; 
-S.Foot.PF_slack_length = 0.146;
-S.Foot.mtj_stiffness = 'MG_exp5_table';
-Fs_tib = [0:50:300,400:100:1000,1200:200:2400];
-Qs_mtp = [0,15]*pi/180;
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results3{end+1} = R;
 
 
 %%
@@ -290,7 +295,7 @@ for j=1:length(Results3)
 
     idx0 = find(R.Qs_mtp(:) == 0);
     js = find(R.failed(idx0,:)==0);
-    [dH0,idH0] = min(R.talus_or(idx0,js));
+    [dH0,idH0] = max(R.talus_or(idx0,js,2));
     dH0 = dH0*1e3;
     Ft0 = R.Fs_tib(idH0);
 
@@ -303,8 +308,8 @@ for j=1:length(Results3)
         Fs_tib = R.Fs_tib(js);
 
         hold on
-        dH = R.talus_or(i,js)*1e3;
-        dH = dH - dH0;
+        dH = R.talus_or(i,js,2)*1e3;
+        dH = dH0 - dH;
         ddH = dH(2:end) - dH(1:end-1);
         idxH = find(ddH>=0);
         if R.Qs_mtp(i)~=0
@@ -325,6 +330,8 @@ for j=1:length(Results3)
         dHs(:,i) = dH;
         dHs(:,i) = nan;
         dHs(idxH,i) = dH(idxH);
+
+
     end
 
 end
@@ -335,7 +342,7 @@ set(gca,'Fontsize',label_fontsize);
 title('Midfoot stiffness','Fontsize',title_fontsize);
 % title('Yawar et al., 2021','Fontsize',title_fontsize);
 
-xlim([-1.5,13])
+xlim([-1.5,25])
 ylim([0,3.7])
 
 lh3 = legend('Location','northwest','Fontsize',legend_fontsize);

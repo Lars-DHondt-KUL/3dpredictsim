@@ -93,6 +93,12 @@ if isfield(S,'GastrocTendonShorter') && S.GastrocTendonShorter
 elseif isfield(S,'GastrocTendonShorter')
     not{end+1} = 'not_GT';
 end
+if isfield(S,'TATendonShorter') && S.TATendonShorter
+    savenameparts{end+1} = ['TAT' num2str(S.TATendonShorter*1000)];
+    casfuncfolparts{end+1} = ['TAT' num2str(S.TATendonShorter*1000)];
+elseif isfield(S,'TATendonShorter')
+    not{end+1} = 'not_TAT';
+end
 if isfield(S,'passiveFiberForceShift') && S.passiveFiberForceShift
     savenameparts{end+1} = ['Fpsl' num2str(-S.passiveFiberForceShift*100)];
     casfuncfolparts{end+1} = ['Fpsl' num2str(-S.passiveFiberForceShift*100)];
@@ -274,6 +280,8 @@ if isfield(S,'Foot')
         if S.Foot.FDB
             if isfield(S.Foot,'FDB_nerveBlock') && S.Foot.FDB_nerveBlock
                 savenameparts{end+1} = 'nb';
+            elseif isfield(S.Foot,'FDB_nerveBlock') && ~S.Foot.FDB_nerveBlock
+                not{end+1} = 'not_nb';
             end
             if isfield(S.Foot,'FDB_lMo') && S.Foot.FDB_lMo ~= 19.7e-3
                 savenameparts{end+1} = ['lMo' num2str(round(S.Foot.FDB_lMo*1000))];
@@ -294,7 +302,23 @@ if isfield(S,'Foot')
         end
     end
 
+    if isfield(S.Foot,'insole_Takahashi_kMTP') 
+        if S.Foot.insole_Takahashi_kMTP~=0
+            savenameparts{end+1} = ['isT' num2str(S.Foot.insole_Takahashi_kMTP)];
+        else
+            not{end+1} = 'not_isT';
+        end
+    end
+    if isfield(S.Foot,'insole_Stearne')
+        if ~isempty(S.Foot.insole_Stearne)
+            savenameparts{end+1} = S.Foot.insole_Stearne;
+        else
+            not{end+1} = 'not_FAI';
+        end
+    end
+
 end
+
 
 % velocity
 if isfield(S,'v_tgt')

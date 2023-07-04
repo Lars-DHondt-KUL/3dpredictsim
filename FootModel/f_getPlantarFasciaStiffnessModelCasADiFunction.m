@@ -124,6 +124,17 @@ elseif strcmp(modelType,'Natali2010')
     F_PF = sigma*A;
     F = F_PF*(tanh(dl*4e3-1.1)+1)/2;
     
+elseif strcmp(modelType,'KN')
+    % model from Natali et al (https://doi.org/10.3109/03008200903389127)
+    % fit on data from Kiaoka et al (10.1177/107110079401501007)
+    % assuming A0 = 42 mm^2 (Chen et al., 2014; Fessel et al., 2014)
+    mu = 0; % (MPa)
+    k = 208.8167; % (MPa)
+    alpha = 17.9632; % (-)
+    sigma = mu*(lambda^2 - 1/lambda) + k/(2*alpha) *(exp(alpha*(lambda^2-1))-1)*lambda^2; % Cauchy stress
+    F_PF = sigma*A;
+    F = F_PF*(tanh(dl*4e3-1.1)+1)/2;
+
 elseif strcmp(modelType,'Ker1987')
     % see ligament_torques_Ker87.m
     F_PF = 1190429209.9 + -6723339025.14*lambda^1 + 15825461895.6*lambda^2 + -19872782816.5*lambda^3 +...

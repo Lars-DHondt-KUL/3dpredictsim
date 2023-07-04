@@ -2482,29 +2482,35 @@ for inr=1:nr
                     idx_jref = strcmp(Qref.colheaders,joints_ref{i});
                     if rmse_stance_only
                         Q_jref0 = Qref.Qall_mean(istance0_ref,idx_jref);
+                        Q_jref1 = Qref.Qall_std(istance0_ref,idx_jref);
                         stepQ = (size(istance0,2)-1)/(size(Q_jref0,1)-1);
                         intervalQ = 1:stepQ:size(istance0,2);
                         sampleQ = 1:size(istance0,2);
                         Q_jref = interp1(intervalQ,Q_jref0,sampleQ);
-                        Q_j_rmse = rms( Q_jref(:) - R.Qs(istance0,idx_Qs(j)) );
+                        Q_jrefw = interp1(intervalQ,Q_jref1,sampleQ);
+                        Q_j_rmse = rms( ( Q_jref(:) - R.Qs(istance0,idx_Qs(j)) )./Q_jrefw' );
                         Q_j_R2 = corrcoef( Q_jref(:), R.Qs(istance0,idx_Qs(j)) );
 
                     elseif rmse_swing_only
                         Q_jref0 = Qref.Qall_mean((istance0_ref(end)+1):end,idx_jref);
+                        Q_jref1 = Qref.Qall_std((istance0_ref(end)+1):end,idx_jref);
                         stepQ = (size(iswing,2)-1)/(size(Q_jref0,1)-1);
                         intervalQ = 1:stepQ:size(iswing,2);
                         sampleQ = 1:size(iswing,2);
                         Q_jref = interp1(intervalQ,Q_jref0,sampleQ);
-                        Q_j_rmse = rms( Q_jref(:) - R.Qs(iswing,idx_Qs(j)) );
+                        Q_jrefw = interp1(intervalQ,Q_jref1,sampleQ);
+                        Q_j_rmse = rms( ( Q_jref(:) - R.Qs(iswing,idx_Qs(j)) )./Q_jrefw' );
                         Q_j_R2 = corrcoef( Q_jref(:), R.Qs(iswing,idx_Qs(j)) );
 
                     else
                         Q_jref0 = Qref.Qall_mean(:,idx_jref);
+                        Q_jref1 = Qref.Qall_std(:,idx_jref);
                         stepQ = (size(R.Qs,1)-1)/(size(Q_jref0,1)-1);
                         intervalQ = 1:stepQ:size(R.Qs,1);
                         sampleQ = 1:size(R.Qs,1);
                         Q_jref = interp1(intervalQ,Q_jref0,sampleQ);
-                        Q_j_rmse = rms( Q_jref(:) - R.Qs(:,idx_Qs(j)) );
+                        Q_jrefw = interp1(intervalQ,Q_jref1,sampleQ);
+                        Q_j_rmse = rms( ( Q_jref(:) - R.Qs(:,idx_Qs(j)) )./Q_jrefw' );
                         Q_j_R2 = corrcoef( Q_jref(:),R.Qs(:,idx_Qs(j)) );
                     end
                     Q_range(i) = max(Q_jref)-min(Q_jref);
@@ -2617,29 +2623,35 @@ for inr=1:nr
                     if sum(idx_jref) == 1
                         if rmse_stance_only
                             T_jref0 = Tref.Tall_mean(istance0_ref,idx_jref);
+                            T_jref1 = Tref.Tall_std(istance0_ref,idx_jref);
                             stepID = (size(istance0,2)-1)/(size(T_jref0,1)-1);
                             intervalID = 1:stepID:size(istance0,2);
                             sampleID = 1:size(istance0,2);
                             T_jref = interp1(intervalID,T_jref0,sampleID);
-                            T_j_rmse = rms( T_jref(:) - R.Tid(istance0,idx_Qs(j)) );
+                            T_jrefw = interp1(intervalID,T_jref1,sampleID);
+                            T_j_rmse = rms( ( T_jref(:) - R.Tid(istance0,idx_Qs(j)) )./T_jrefw' );
                             T_j_R2 = corrcoef( T_jref(:),R.Tid(istance0,idx_Qs(j)) );
 
                         elseif rmse_swing_only
                             T_jref0 = Tref.Tall_mean((istance0_ref(end)+1):end,idx_jref);
+                            T_jref1 = Tref.Tall_std((istance0_ref(end)+1):end,idx_jref);
                             stepID = (size(iswing,2)-1)/(size(T_jref0,1)-1);
                             intervalID = 1:stepID:size(iswing,2);
                             sampleID = 1:size(iswing,2);
                             T_jref = interp1(intervalID,T_jref0,sampleID);
-                            T_j_rmse = rms( T_jref(:) - R.Tid(iswing,idx_Qs(j)) );
+                            T_jrefw = interp1(intervalID,T_jref1,sampleID);
+                            T_j_rmse = rms( ( T_jref(:) - R.Tid(iswing,idx_Qs(j)) )./T_jrefw' );
                             T_j_R2 = corrcoef( T_jref(:),R.Tid(iswing,idx_Qs(j)) );
 
                         else
                             T_jref0 = Tref.Tall_mean(:,idx_jref);
+                            T_jref1 = Tref.Tall_std(:,idx_jref);
                             stepID = (size(R.Qs,1)-1)/(size(T_jref0,1)-1);
                             intervalID = 1:stepID:size(R.Qs,1);
                             sampleID = 1:size(R.Qs,1);
                             T_jref = interp1(intervalID,T_jref0,sampleID);
-                            T_j_rmse = rms( T_jref(:) - R.Tid(:,idx_Qs(j)) );
+                            T_jrefw = interp1(intervalID,T_jref1,sampleID);
+                            T_j_rmse = rms( ( T_jref(:) - R.Tid(:,idx_Qs(j)) )./T_jrefw' );
                             T_j_R2 = corrcoef( T_jref(:),R.Tid(:,idx_Qs(j)) );
                         end
                         T_range(i) = max(T_jref)-min(T_jref);
@@ -2993,32 +3005,38 @@ for inr=1:nr
                     if sum(idx_jref) == 1
                         if rmse_stance_only
                             P_jref0 = Pref.Pall_mean(istance0_ref,idx_jref);
+                            P_jref1 = Pref.Pall_std(istance0_ref,idx_jref);
                             stepID = (size(istance0,2)-1)/(size(P_jref0,1)-1);
                             intervalID = 1:stepID:size(istance0,2);
                             sampleID = 1:size(istance0,2);
                             P_jref = interp1(intervalID,P_jref0,sampleID);
+                            P_jrefw = interp1(intervalID,P_jref1,sampleID);
                             Pji = R.Qdots(istance0,idx_Qs(j)).*R.Tid(istance0,idx_Qs(j))*pi/180;
-                            P_j_rmse = rms( P_jref(:) - R.Qdots(istance0,idx_Qs(j)).*R.Tid(istance0,idx_Qs(j))*pi/180 );
+                            P_j_rmse = rms( ( P_jref(:) - R.Qdots(istance0,idx_Qs(j)).*R.Tid(istance0,idx_Qs(j))*pi/180 )./P_jrefw' );
                             P_j_R2 = corrcoef( P_jref, Pji);
 
                         elseif rmse_swing_only
                             P_jref0 = Pref.Pall_mean((istance0_ref(end)+1):end,idx_jref);
+                            P_jref1 = Pref.Pall_std((istance0_ref(end)+1):end,idx_jref);
                             stepID = (size(iswing,2)-1)/(size(P_jref0,1)-1);
                             intervalID = 1:stepID:size(iswing,2);
                             sampleID = 1:size(iswing,2);
                             P_jref = interp1(intervalID,P_jref0,sampleID);
+                            P_jrefw = interp1(intervalID,P_jref1,sampleID);
                             Pji = R.Qdots(iswing,idx_Qs(j)).*R.Tid(iswing,idx_Qs(j))*pi/180;
-                            P_j_rmse = rms( P_jref(:) - R.Qdots(iswing,idx_Qs(j)).*R.Tid(iswing,idx_Qs(j))*pi/180 );
+                            P_j_rmse = rms( ( P_jref(:) - R.Qdots(iswing,idx_Qs(j)).*R.Tid(iswing,idx_Qs(j))*pi/180 )./P_jrefw' );
                             P_j_R2 = corrcoef( P_jref, Pji);
 
                         else
                             P_jref0 = Pref.Pall_mean(:,idx_jref);
+                            P_jref1 = Pref.Pall_std(:,idx_jref);
                             stepID = (size(R.Qs,1)-1)/(size(P_jref0,1)-1);
                             intervalID = 1:stepID:size(R.Qs,1);
                             sampleID = 1:size(R.Qs,1);
                             P_jref = interp1(intervalID,P_jref0,sampleID);
+                            P_jrefw = interp1(intervalID,P_jref1,sampleID);
                             Pji = R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180;
-                            P_j_rmse = rms( P_jref(:) - R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180 );
+                            P_j_rmse = rms( ( P_jref(:) - R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180 )./P_jrefw' );
                             P_j_R2 = corrcoef( P_jref(:), Pji);
                         end
                         P_range(i) = max(P_jref)-min(P_jref);

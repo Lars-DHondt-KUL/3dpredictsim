@@ -258,12 +258,12 @@ if ~isfield(S,'MTparams') || isempty(S.MTparams)
     end
 end
 
-% Print the settings to the screen
-% disp(S);
-
-
-
-
-
+if ~isfield(S.Foot,'insole_Takahashi_kMTP')
+    S.Foot.insole_Takahashi_kMTP = 0;
 end
 
+if ~isfield(S.Foot,'insole_Stearne')
+    S.Foot.insole_Stearne = [];
+end
+
+end
