@@ -41,6 +41,7 @@ ResultsFolder = {'results_paper_v2'};
 %% General information
 S.subject = 'Fal_s1';
 
+S.v_tgt     = 1.33;     % average speed
 % S.suffixCasName = 'v3';     % suffix for name of folder with casadifunctions
 % S.suffixName = 'v4';        % suffix for name of file with results
 
@@ -66,7 +67,7 @@ S.Foot.Scaling = 'custom'; % default, custom, personalised
 S.fixed_knee = 1;
 
 % Achilles tendon stiffness
-S.AchillesTendonScaleFactor = 0.5;
+% S.AchillesTendonScaleFactor = 0.5;
 
 % Triceps surae optimal force scale
 S.TricepsFMoScale = 1.2;
@@ -101,13 +102,13 @@ S.Foot.contactSphereOffset1X = 0.01;   % heel contact sphere offset in x-directi
 
 
 %% metatarsophalangeal (mtp) joint
-S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
+% S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 % S.Foot.mtp_muscles = 1;     % extrinsic toe flexors and extensors act on mtp joint
 % S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
 % S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 
 %% midtarsal joint 
-% S.Foot.mtj_muscles = 0;  % joint interacts with extrinsic foot muscles
+% S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 % S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
 % S.Foot.mtj_stiffness = 'MG_exp5_table';
 % S.Foot.mtj_sf = 1; 
@@ -117,8 +118,8 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 % S.dMT = 0.1;                % (Nms/rad) damping
 
 % plantar fascia
-S.Foot.PF_stiffness = 'Natali2010'; % 'none''linear''Gefen2002''Natali2010''Song2011'
-S.Foot.PF_sf = 1;
+% S.Foot.PF_stiffness = 'Gefen2002'; % 'none''linear''Gefen2002''Natali2010''Song2011'
+% S.Foot.PF_sf = 1;
 % S.Foot.PF_sf_isvar = 0; 
 % S.Foot.PF_slack_length = 0.146; % (m) slack length
 
@@ -137,9 +138,9 @@ S.Foot.PF_sf = 1;
 % % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
 S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
 % Optimal fibre length
-S.Foot.FDB_lMo = 23e-3;
+% S.Foot.FDB_lMo = 23e-3;
 % Tendon slack length
-S.Foot.FDB_lTs = 0.123;
+% S.Foot.FDB_lTs = 0.123;
 % Shift fiber passive force-length curve
 % S.Foot.FDB_shift = -0.1;
 % scale FMo
@@ -149,9 +150,9 @@ S.Foot.FDB_nerveBlock = 0;
 
 
 % carbonfibre insole (Takahashi et al., 2016)
-S.Foot.insole_Takahashi_kMTP = 0; % 18 83 221
+S.Foot.insole_Takahashi_kMTP = 83; % 18 83 221
 % insole to reduce arch compression (Stearne et al., 2016)
-S.Foot.insole_Stearne = []; %'FAI'; 
+% S.Foot.insole_Stearne = 'FAI'; 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,18 +164,69 @@ results = {
     fullfile(['\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     };
 LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
-
+% results = flip(results);
+% LegNames = flip(LegNames);
 
 % results = {
 %     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
 %     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'])
 %     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
-%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_ig1_N100_pp.mat'])
 %     fullfile([ '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'])
 %     };
-% LegNames = {'Nominal 3-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia',...
-%     'Compliant plantar fascia, without intrinsic muscle','Reduced arch height'};
+% LegNames = {'Nominal 3-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia','Reduced arch height'};
 
+
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_nb_lMo23_lTs123_Fpsl10_ig21_N100_pp.mat'
+%     };
+% LegNames = {'Nominal 3-segment foot model', 'w/o PIM', 'Intrinsic foot muscle nerve block'};
+
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+%     };
+% LegNames = {'Nominal 3-segment foot model', 'Compliant contact'};
+
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FAI_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_vel27_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FAI_vel27_ig23_N100_pp.mat'
+%     };
+% LegNames = {'Walking 1.33 m/s','Walking 1.33 m/s with insole','Running 2.7 m/s','Running 2.7 m/s with insole'};
+
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT83_ig1_N100_v2'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT221_ig1_N100_v2'
+%     };
+% LegNames = {'k = 0 (v = 1.33)','k = 81 (v = 1.33)','k = 221 (v = 1.33)'};
+
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT18_vel17.5_ig1_N100_v2'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT83_vel17.5_ig1_N100_v2'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT221_vel17.5_ig1_N100_v2'
+%     };
+% LegNames = {'k = 18 (v = 1.75)','k = 81 (v = 1.75)','k = 221 (v = 1.75)'};
+
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT18_vel20_ig1_N100_v2'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT83_vel20_ig1_N100_v2'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_isT221_vel20_ig1_N100_v2'
+%     };
+% LegNames = {'k = 18 (v = 2)','k = 81 (v = 2)','k = 221 (v = 2)'};
+
+% % extrinsic foot muscles
+% results = {
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100_pp.mat'
+% };
+% LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
+%     'Passive midtarsal and MTP (3-segment)','Muscle-driven MTP (2-segment)'};
 
 %%
 if exist('results','var') && ~isempty(results)
@@ -224,14 +276,14 @@ else
     criteria{end+1} = 'cg';
 %     criteria{end+1} = 'not_cg4';
 %     criteria{end+1} = 'not_cg9';
-    criteria{end+1} = 'not_vel';
+%     criteria{end+1} = 'not_vel';
 %     criteria{end+1} = 'pelvis_bounds';
 %     criteria{end+1} = 'old_bounds';
-    criteria{end+1} = 'N100';
+%     criteria{end+1} = 'N100';
 %     criteria{end+1} = 'not_1_N';
     criteria{end+1} = 'not_tol';
 %     criteria{end+1} = 'not_FK';
-    criteria{end+1} = 'not_isT';
+%     criteria{end+1} = 'not_isT';
     
     % filter filenames
     [filteredResults] = filterResultfolderByParameters(pathResult,criteria);
@@ -293,6 +345,7 @@ figNamePrefix = 'none';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\midfoot_stiffness';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\meetings\Optimisation_Meeting/mesh';
 % figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft/supplement/figure_nerveblock';
+% figNamePrefix = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1/figures\plantar_stiffness'; % figure_nominal
 
 %%% select figures to make
 makeplot.kinematics_Qs                  = 0; % selected joint angles
@@ -314,7 +367,7 @@ makeplot.compareZelik15b                = 0; % leg joint powers
 makeplot.allQsTs                        = 1; % all joint angles and torques
 makeplot.allQdots                       = 0; % all joint velocities
 makeplot.allQddots                      = 0; % all joint accelerations
-makeplot.allPs                          = 1; % all joint powers
+makeplot.allPs                          = 0; % all joint powers
 makeplot.plot_bounds                    = 0; % adds the bounds to the 3 figs above
 makeplot.windlass                       = 0; % plantar fascia and foot arch info
 makeplot.windlass_mtp                   = 0; % interaction windlass and mtp
@@ -356,8 +409,6 @@ if ~exist('experimental_reference','var')
     experimental_reference = 'Fal_s1_mtjcf3_FK_custom_right';
 end
 
-ResultsFile = ResultsFile([3,1,2]);
-LegNames = LegNames([3,1,2]);
 
 PlotResults_3DSim_Report(ResultsFile,LegNames,experimental_reference,mtj,makeplot,figNamePrefix);
 

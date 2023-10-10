@@ -59,7 +59,7 @@ S.NThreads  = 6;        % number of threads for parallel computing
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'results_paper_v2'; % 'with_better_knee' 'results_paper'
 % S.suffixCasName = 'test';     % suffix for name of folder with casadifunctions
-% S.suffixName = '';        % suffix for name of file with results
+% S.suffixName = 'v2';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -91,7 +91,7 @@ S.fixed_knee = 1;
 S.AchillesTendonScaleFactor = 0.5;
 
 % Triceps surae optimal force scale
-S.TricepsFMoScale = 1.2; %round(1.2*0.8,2);
+S.TricepsFMoScale = 1.2;
 
 % Reduce tendon slack length of Soleus
 S.SoleusTendonShorter = 0;
@@ -136,9 +136,9 @@ else
     S.Foot.kMTP = 1;            % additional stiffness of the joint (Nm/rad)
     S.Foot.dMTP = 0.1;          % additional damping of the joint (Nms/rad)
 end
-S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
-S.Foot.kMTP = 25;           % additional stiffness of the joint (Nm/rad)
-S.Foot.dMTP = 2;            % additional damping of the joint (Nms/rad)
+% S.Foot.mtp_muscles = 0;     % extrinsic toe flexors and extensors act on mtp joint
+% S.Foot.kMTP = 25;           % additional stiffness of the joint (Nm/rad)
+% S.Foot.dMTP = 2;            % additional damping of the joint (Nms/rad)
 
 S.Foot.mtp_tau_pass = 1;    % use passive bushing torque
 S.Foot.mtp_M_PF = 0;        % apply plantar fascia stiffness to mtp joint only
@@ -146,7 +146,7 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 
 %% midtarsal joint 
 % (only used if Model = mtj)
-S.Foot.mtj_muscles = 0;  % joint interacts with extrinsic foot muscles
+S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
 S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
 S.Foot.mtj_stiffness = 'lig';%'MG_exp5_table'
@@ -168,7 +168,7 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
 % optimal fibre length
 S.Foot.FDB_lMo = 23e-3;
 % Tendon slack length
@@ -197,8 +197,9 @@ S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Da
 if S.IGmodeID == 4
     S.savename_ig   = 'NoExo';
 elseif S.IGmodeID == 3
-    S.ResultsF_ig   = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\model_tuning';
+    S.ResultsF_ig   = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\results_paper_v2';
     S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100';
+%     S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_vel27_ig1_N100';
 end
 
 if S.N ~= 50

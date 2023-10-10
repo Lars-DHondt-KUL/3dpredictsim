@@ -19,9 +19,20 @@
 % LegNames = {'custom scaling','isometric scaling'};
 
 nr = length(ResultsFile);
-
+lg = [];
 
 CsV = hsv(nr);
+if nr==2
+    CsV = [[0 0 0];[0.8500 0.3250 0.0980]];
+end
+if nr==3
+    CsV = [[0 0.4470 0.7410];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840]];
+%     CsV = [[0.6350 0.0780 0.1840];[0.4660 0.6740 0.1880]; [0 0.4470 0.7410]];
+end 
+if nr==4
+%     CsV = [[0 0 0];[0.9290 0.6940 0.1250]; [0.3010 0.7450 0.9330];[0.8500 0.3250 0.0980]];
+    CsV = [[0 0 0];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330]];
+end
 
 for ires = 1:nr
 
@@ -537,6 +548,7 @@ end
 if ires==1
     f1=figure;
     tiledlayout('flow')
+    f2=figure;
 end
 
 figure(f1)
@@ -547,6 +559,12 @@ x_to1 = x(R.GRFs(:,2) > 3);
 x_to2 = x(x>=R.Event.Stance);
 x_to12 = intersect(x_to1,x_to2);
 x_to = x_to12(end);
+
+iheel_contact = find((R.GRFs_separate(x<=R.Event.Stance,2)+R.GRFs_separate(x<=R.Event.Stance,5)) >1);
+% iheel_contact = iheel_contact(iheel_contact(2:end)<iheel_contact(1:end-1)+1);
+iff_contact = find((R.GRFs_separate(:,8) + R.GRFs_separate(:,11)) >1);
+x_ff = x(iff_contact(1));
+x_ho = x(iheel_contact(end));
 
 cnt=1;
 
@@ -609,7 +627,7 @@ ylabel('angle (°)')
 nexttile(cnt)
 cnt=cnt+1;
 hold on; grid on
-p1=plot(x,squeeze(jac_Ts(:,iankle,iankle)),'Color',CsV(ires,:));
+lg(end+1)=plot(x,squeeze(jac_Ts(:,iankle,iankle)),'Color',CsV(ires,:),'DisplayName',LegNames{ires});
 ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
 xlabel('% GC')
 title('ankle')
@@ -682,7 +700,53 @@ for icnt=1:cnt-1
     xline(x_to,'Color',CsV(ires,:))
 end
 
+figure(f2)
+subplot(3,1,1)
+hold on; grid on
+if ~isempty(imtj)
+    plot(x,squeeze(jac_Ts(:,imtj,imtj)),'Color',CsV(ires,:))
+    ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+    xlabel('% GC')
+    title('midtarsal')
+%     plot(x,squeeze(jac_T_mus(:,imtj)),'--','Color',CsV(ires,:))
+    xline(x_to,'Color',CsV(ires,:))
+    xline(x_ff,'Color',CsV(ires,:))
+    xline(x_ho,'Color',CsV(ires,:))
 end
+
+subplot(3,1,2)
+hold on; grid on
+
+iSol = find(strcmp(R.colheaders.muscles,'soleus_r'));
+iGas = find(strcmp(R.colheaders.muscles,'lat_gas_r'));
+iGas2 = find(strcmp(R.colheaders.muscles,'med_gas_r'));
+
+P_T_Sol = -R.FT(:,iSol).*R.vT(:,iSol)/R.body_mass;
+P_T_Gas = -R.FT(:,iGas).*R.vT(:,iGas)/R.body_mass;
+P_T_Gas2 = -R.FT(:,iGas2).*R.vT(:,iGas2)/R.body_mass;
+P_AT = P_T_Gas2 + P_T_Gas + P_T_Sol;
+
+F_AT = (R.FT(:,iSol) + R.FT(:,iGas) + R.FT(:,iGas2))/R.body_mass;
+
+plot(x,F_AT,'Color',CsV(ires,:))
+ylabel({'F AT (N/kg)'},Rotation=0,HorizontalAlignment='right')
+xlabel('% GC')
+xline(x_to,'Color',CsV(ires,:))
+xline(x_ff,'Color',CsV(ires,:))
+xline(x_ho,'Color',CsV(ires,:))
+
+subplot(3,1,3)
+hold on; grid on
+plot(x,P_AT,'Color',CsV(ires,:))
+ylabel({'P AT (W/kg)'},Rotation=0,HorizontalAlignment='right')
+xlabel('% GC')
+xline(x_to,'Color',CsV(ires,:))
+xline(x_ff,'Color',CsV(ires,:))
+xline(x_ho,'Color',CsV(ires,:))
+
+end
+
+legend(lg)
 % figure(f1)
 % nexttile(5)
 % lg=legend;

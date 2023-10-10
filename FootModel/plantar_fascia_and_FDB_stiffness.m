@@ -9,7 +9,7 @@ addpath([pathRepo '/Musclemodel']);
 
 %%
 N = 100;
-ls = 0.141;
+ls = 0.146;
 l = linspace(ls,ls*1.04,N);
 lambda = l/ls;
 
@@ -86,7 +86,7 @@ legend('Location','northwest')
 %% Solve for tendon force
 a = 0.5; % activity
 % lTs_vec = 0.12:0.0025:0.13;
-lTs_vec = 0.115:0.001:0.125;
+lTs_vec = 0.115:0.001:0.130;
 N1 = length(lTs_vec);
 
 % allocate result matrices
@@ -148,8 +148,13 @@ subplot(2,2,3)
 hold on
 for j=1:N1
     plot(lambda,lMtilde(:,j),'DisplayName',['FDB lTs = ' num2str(lTs_vec(j))])
-    disp(['FDB lTs = ' num2str(lTs_vec(j)) '      ' num2str(mean(lMtilde(:,j)))]);
+%     disp(['FDB lTs = ' num2str(lTs_vec(j)) '      ' num2str(mean(lMtilde(:,j)))]);
 end
+
+[~, idx_min] = min(abs(mean(lMtilde,1)-1));
+lTs_sel = lTs_vec(idx_min);
+disp(['FDB lTs = ' num2str(lTs_sel) ' mm']);
+
 xlabel('\lambda (-)')
 ylabel('lMtilde (-)')
 title('Fiber length')

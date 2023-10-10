@@ -179,8 +179,10 @@ toesOr.l   = double(IO.origin.toes_l([1,3])); % x and z coordinate
 toesOr.all = [toesOr.r,toesOr.l];
 
 % individual sphere GRFs
-GRFi.toes.r = double([IO.GRFs.contact_sphere_5]);
-GRFi.toes.l = double([IO.GRFs.contact_sphere_10]);
+GRFi.forefoot.r = double([IO.GRFs.contact_sphere_3(2),IO.GRFs.contact_sphere_4(2),IO.GRFs.contact_sphere_5(2)]);
+GRFi.forefoot.l = double([IO.GRFs.contact_sphere_8(2),IO.GRFs.contact_sphere_9(2),IO.GRFs.contact_sphere_10(2)]);
+GRFi.toes.r = double([IO.GRFs.contact_sphere_5(2)]);
+GRFi.toes.l = double([IO.GRFs.contact_sphere_10(2)]);
 
 %% Get tracking information
 if S.TrackSim
@@ -894,7 +896,9 @@ for j=1:d
         T_mtp_tmp_l     = T_mtp_tmp_l + a_mtpkj(1,j+1)*scaling.MtpTau;
     end
     if S.Foot.insole_Takahashi_kMTP~=0
-        y1 = (tanh((Tj(GRFi.toes.l,1)/5-3)*pi)+1)/2; % =0 if GRF<10 and =1 if GRF>20
+%         GRF_l = Tj(GRFi.toes.l,1);
+        GRF_l = sum(Tj(GRFi.forefoot.l,1));
+        y1 = (tanh((GRF_l/5-3)*pi)+1)/2; % =0 if GRF<10 and =1 if GRF>20
         T_insole_l = -S.Foot.insole_Takahashi_kMTP*y1*Qskj_nsc(jointi.mtp.l,j+1);
         T_mtp_tmp_l     = T_mtp_tmp_l + T_insole_l;
     end
@@ -914,7 +918,9 @@ for j=1:d
         T_mtp_tmp_r     = T_mtp_tmp_r + a_mtpkj(2,j+1)*scaling.MtpTau;
     end
     if S.Foot.insole_Takahashi_kMTP~=0
-        y1 = (tanh((Tj(GRFi.toes.r,1)/5-3)*pi)+1)/2; % =0 if GRF<10 and =1 if GRF>20
+%         GRF_r = Tj(GRFi.toes.r,1);
+        GRF_r = sum(Tj(GRFi.forefoot.r,1));
+        y1 = (tanh((GRF_r/5-3)*pi)+1)/2; % =0 if GRF<10 and =1 if GRF>20
         T_insole_r = -S.Foot.insole_Takahashi_kMTP*y1*Qskj_nsc(jointi.mtp.r,j+1);
         T_mtp_tmp_r     = T_mtp_tmp_r + T_insole_r;
     end

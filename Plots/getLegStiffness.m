@@ -20,7 +20,7 @@ xlabel('gait cycle (%)')
 ylabel('COM height (m)')
 
 CsV = hsv(length(ResultsFile));
-for i=1:length(ResultsFile)
+for i=2:length(ResultsFile)
 
 %     disp(LegNames{i})
 
