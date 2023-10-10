@@ -4,11 +4,11 @@ function [S] = getSettingsNominalModel(Nsegments)
 [pathRepo,~,~] = fileparts(pathRepo);
 
 S.ResultsRepo = fullfile(pathRepo,'Results');
-S.ResultsFolder = 'results_paper';
+
 
 %% settings for optimization
-S.N         = 100;       % number of mesh intervals
-S.suffixName = 'N100';        % suffix for name of file with results
+S.N = 100; % number of mesh intervals
+S.suffixName = 'N100'; % suffix for name of file with results
 
 
 %% Foot model
@@ -17,9 +17,12 @@ S.suffixName = 'N100';        % suffix for name of file with results
 %% General
 if Nsegments == 2 % foot with mtp joint
    S.Foot.Model = 'mtp';
+   S.ResultsFolder = 'results_paper';
 
 elseif Nsegments == 3 % foot with mtp and midtarsal joint
-    S.Foot.Model = 'mtjc4'; % axis orientation 4
+    S.Foot.Model = 'mtjcf3';
+    S.ResultsFolder = 'results_paper_v2';
+
 else
     error('number of foot segments should be 2 or 3')
 end
@@ -68,7 +71,7 @@ S.Foot.mtp_actuator = 0;    % use an ideal torque actuator
 S.Foot.mtj_muscles = 1;  % joint interacts with extrinsic foot muscles
 % lumped ligaments (long, short planter ligament, etc)
 S.Foot.MT_li_nonl = 1;       % 1: nonlinear torque-angle characteristic
-S.Foot.mtj_stiffness = 'MG_exp5_table';
+S.Foot.mtj_stiffness = 'lig';
 S.Foot.mtj_sf = 1; 
 
 S.Foot.kMT_li = 400;        % angular stiffness in case of linear
@@ -86,9 +89,9 @@ if strcmp(S.Foot.Model(1:3),'mtj')
     % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
     S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
     % optimal fibre length
-    S.Foot.FDB_lMo = 19.7e-3; % 19.7e-3 23e-3
+    S.Foot.FDB_lMo = 23e-3;
     % Tendon slack length
-    S.Foot.FDB_lTs = 0.125; %round(142.9 -0.9091*S.Foot.FDB_lMo*1e3)*1e-3; % 125mm at lMo=19.7mm, and 122 at 23
+    S.Foot.FDB_lTs = 0.123; 
     % Shift fiber passive force-length curve
     S.Foot.FDB_shift = -0.1;
     % scale FMo
@@ -97,13 +100,12 @@ if strcmp(S.Foot.Model(1:3),'mtj')
     S.Foot.FDB_nerveBlock = 0;
 else
     S.Foot.FDB = 0;
-    S.Foot.FDB_lMo = 19.7e-3;
-    S.Foot.FDB_lTs = 0.125;
+    S.Foot.FDB_lMo = 23e-3;
+    S.Foot.FDB_lTs = 0.123;
     S.Foot.FDB_shift = -0.1;
     S.Foot.FDB_sf_FMo = 1;
     S.Foot.FDB_nerveBlock = 0;
 end
-
 
 
 

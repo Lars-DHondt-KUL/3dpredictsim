@@ -8,7 +8,7 @@
 % Do note that each simulation takes 3 hours or more.
 %
 % Author: Lars D'Hondt
-% Date: March 2023
+% Date: October 2023
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -78,28 +78,6 @@ S.Foot.contactSphereOffset1X = 0;
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
-%% Reduced contact stiffness (3-segment)
-% get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
-
-% Changes w.r.t. nominal model
-% Contact stiffness 1 MPa
-S.Foot.contactStiffnessFactor = 1;
-
-% start simulation
-PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
-
-%% Reduced contact stiffness (2-segment)
-% get settings struct for nominal model
-[S] = getSettingsNominalModel(2);
-
-% Changes w.r.t. nominal model
-% Contact stiffness 1 MPa
-S.Foot.contactStiffnessFactor = 1;
-
-% start simulation
-PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
-
 %% Stiffer Achilles tendon (3-segment)
 % get settings struct for nominal model
 [S] = getSettingsNominalModel(3);
@@ -144,19 +122,6 @@ S.Foot.PF_stiffness = 'Gefen2002';
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
-%% Compliant plantar fascia and without intrinsic foot muscle
-% get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
-
-% Changes w.r.t. nominal model
-% Plantar fascia stress-strain according to Gefen (2002)
-S.Foot.PF_stiffness = 'Gefen2002';
-% No plantar intrinsic foot muscle (represented by Flexor Digitorum Brevis)
-S.Foot.FDB = 0;
-
-% start simulation
-PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
-
 %% Reduced arch height (3-segment)
 % get settings struct for nominal model
 [S] = getSettingsNominalModel(3);
@@ -170,20 +135,45 @@ S.Foot.Model = 'mtjc3';
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
-
-%% Conceptual chimpanzee
+%% Walking with insole that prevents arch compression
 % get settings struct for nominal model
 [S] = getSettingsNominalModel(3);
 
 % Changes w.r.t. nominal model
-% Default (i.e. uniform) scaling of foot
-S.Foot.Scaling = 'default';
-% No plantar fascia
-S.Foot.PF_stiffness = 'none';
+% insole to reduce arch compression (Stearne et al., 2016)
+S.Foot.insole_Stearne = 'FAI'; 
 
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
+%% Running
+% get settings struct for nominal model
+[S] = getSettingsNominalModel(3);
+
+% Changes w.r.t. nominal model
+% 2.7 m/s
+S.v_tgt = 2.7;
+
+% start simulation
+PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
+
+%% Running with insole that prevents arch compression
+% get settings struct for nominal model
+[S] = getSettingsNominalModel(3);
+
+% Changes w.r.t. nominal model
+% 2.7 m/s
+S.v_tgt = 2.7;
+% insole to reduce arch compression (Stearne et al., 2016)
+S.Foot.insole_Stearne = 'FAI'; 
+% warm-start initial guess
+S.IGsel = 2;
+S.IGmodeID = 3;
+S.ResultsF_ig = fullfile(S.ResultsRepo,S.ResultsFolder);
+S.savename_ig = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_vel27_ig1_N100';
+
+% start simulation
+PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
 %% Intrinsic foot muscle nerve block
 % get settings struct for nominal model
@@ -220,7 +210,7 @@ plot_figure_paper_ATStiffness;
 plot_figure_paper_plantar_stiffness;
 
 % figure 6
-plot_figure_paper_chimp;
+plot_paper_figure_mtj_mtp_power;
 
 
 
