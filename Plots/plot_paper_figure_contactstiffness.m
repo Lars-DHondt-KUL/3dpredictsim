@@ -3,16 +3,20 @@ clear
 close all
 clc
 
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\figures\draft';
-ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
-
 %% load rference data
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
+
+FigRepo = fullfile(pathRepo,'Figures');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
+ResultsRepo = fullfile(pathRepo,'Results');
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+
+
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
-RefData = 'Fal_s1_mtjc4_FK_custom_right';
+RefData = 'Fal_s1_mtjcf3_FK_custom_right';
 
 data_field = ['IK_' RefData(8:end)];
 Qref = Data.(data_field);
@@ -29,13 +33,14 @@ stance_ref_std = 0.8233;
 %% figure 
 
 resultFiles = {
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
     };
 LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
     'Compliant contact (3-segment)','Compliant contact (2-segment)'};
+LegNames = {'Nominal 3-segment foot model', 'Compliant contact'};
 
 
 joints_ref = {'knee_angle'};
@@ -48,6 +53,10 @@ title_fontsize = 12;
 CsV = {'k','k',[0.4660 0.6740 0.1880],[0,0.4,0],[85, 186, 70]/256,[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
 mrk = {'-','-.','-','-.'};
 lw = [2,1,2,1];
+
+CsV = {'k',[0.4660 0.6740 0.1880],[0,0.4,0],[85, 186, 70]/256,[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330]};
+mrk = {'-','-','-','-.'};
+lw = [2,2,1];
 
 set(0,'defaultFigureColor','w')
 
@@ -288,7 +297,7 @@ for i_res=1:length(resultFiles)
 
 end
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_contact_stiffness.jpeg'),'Resolution',300);
+exportgraphics(fig2,fullfile(FigRepo,'figure_contact_stiffness_2.jpeg'),'Resolution',300);
 
 
 

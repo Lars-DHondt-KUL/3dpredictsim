@@ -9,9 +9,8 @@ clc
 [pathRepo,~,~] = fileparts(pathHere);
 
 FigRepo = fullfile(pathRepo,'Figures');
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
 ResultsRepo = fullfile(pathRepo,'Results');
-ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+% ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
@@ -58,6 +57,7 @@ title_fontsize = 12;
 CsV = {'k','k',[149, 117, 205]/256,[0.4940 0.1840 0.5560],[115, 45, 217]/256};
 mrk = {'-','-.','-','-.'};
 lw = [2,1,2,1];
+
 
 set(0,'defaultFigureColor','w')
 

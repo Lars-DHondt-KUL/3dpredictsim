@@ -5,7 +5,6 @@ clc
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
 FigRepo = fullfile(pathRepo,'Figures');
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
 addpath('../FootModel')
 
 %%
@@ -142,7 +141,8 @@ set(fig1,'Color','w');
 
 % Ker et al., 1987
 
-subplot(3,4,[2,6])
+% subplot(3,4,[2,6])
+subplot(3,3,[1,4])
 hold on
 CsV = hsv(length(Results1));
 
@@ -195,7 +195,8 @@ ylim([0,3.3])
 colours = {[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0 0.4470 0.7410]};
 mrk = {'o','d','p','.','x','s','h','+','<','^'};
 
-subplot(3,4,[4,8])
+% subplot(3,4,[4,8])
+subplot(3,3,[3,6])
 hold on
 
 % Welte L, Kelly LA, Lichtwark GA, Rainbow MJ. Influence of the windlass 
@@ -276,7 +277,8 @@ lh2.Box = 'off';
 
 % Yawar et al., 2021
 
-subplot(3,4,[3,7])
+% subplot(3,4,[3,7])
+subplot(3,3,[2,5])
 hold on
 
 % Yawar A, Eng MC, Tommasini S, Venkadesan M. Stiffness and work contributions 
@@ -336,6 +338,10 @@ for j=1:length(Results3)
 
 end
 
+offset = rms(dHs(1:end-1,1)-dHs(1:end-1,2))
+rmse = rms(dHs(1:end-1,1)-(dHs(1:end-1,2)+offset))
+
+
 xlabel('Vertical displacement ankle (mm)','Fontsize',label_fontsize);
 ylabel('Vertical force (BW)','Fontsize',label_fontsize);
 set(gca,'Fontsize',label_fontsize);
@@ -351,24 +357,22 @@ lh3.Position(1) = lh3.Position(1) - 0.02;
 lh3.Box = 'off';
 
 
-%
+%%
 
 str = '(a)';
-annotation(gcf,'textbox',[0.0,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.08,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(b)';
-annotation(gcf,'textbox',[0.29,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.36,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(c)';
-annotation(gcf,'textbox',[0.5,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
-str = '(d)';
-annotation(gcf,'textbox',[0.7,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 %%
 
-exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
+exportgraphics(fig1,fullfile(FigRepo,'figure_static2.jpeg'),'Resolution',300);
 
 
 
