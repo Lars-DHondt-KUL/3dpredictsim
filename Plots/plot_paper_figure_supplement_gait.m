@@ -283,6 +283,19 @@ stance_ref_std = 0.8233;
 % LegNames = {'Nominal 3-segment foot model','Intrinsic foot muscle nerve block'};
 % figName = 'PIM_nerve_block';
 
+results = {
+    '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat'
+    '\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_spx10_pp.mat'
+%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+    };
+LegNames = {'Falisse 2022 (2-seg)','D''Hondt 2021 (3-seg)','D''Hondt 2023 (2-seg)','D''Hondt 2023 (3-seg)'};
+figName = 'r_sem_thesis';
+CsV = [[0.8500 0.3250 0.0980];[0.3010 0.7450 0.9330];[0,0,0];[0,0,0]];
+mrk = {'-','-','-.','-'};
+lw = [1,1,1,1,1];
+
+
 
 resultFiles = results;
 
@@ -300,10 +313,10 @@ muscles_ref = {'Vastus-medialis','Soleus','Gastrocnemius-medialis','Tibialis-ant
 muscles_title = {'Vastus medialis','Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
 m_scale = [10 3.33, 2.94, 8/1.38, 3.35, 3,1];
 
-muscles_sim = {'soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
-muscles_ref = {'Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
-muscles_title = {'Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
-m_scale = [3.33, 2.94, 8/1.38, 3.35, 3,1];
+% muscles_sim = {'soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
+% muscles_ref = {'Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
+% muscles_title = {'Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
+% m_scale = [3.33, 2.94, 8/1.38, 3.35, 3,1];
 
 joints_tit = {'Hip flexion','Hip adduction','Knee','Ankle','Subtalar','Midtarsal','MTP'};
 GRF_title = {'Forward','Vertical','Lateral'};

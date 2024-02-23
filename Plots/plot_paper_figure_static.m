@@ -123,9 +123,9 @@ Qs_mtp = [-30,30]*pi/180;
 S.activity = 0.01;
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 Results2{end+1} = R;
-S.activity = 0;
-R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-Results2{end+1} = R;
+% S.activity = 0;
+% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+% Results2{end+1} = R;
 
 
 %%
@@ -372,7 +372,7 @@ annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig1,fullfile(FigRepo,'figure_static2.jpeg'),'Resolution',300);
+exportgraphics(fig1,fullfile(FigRepo,'figure_static2a.jpeg'),'Resolution',300);
 
 
 

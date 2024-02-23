@@ -46,7 +46,7 @@ post_process_results = 0;   % postproces
 add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
-S.v_tgt     = 1.33;     % average speed
+S.v_tgt     = 2.7;     % average speed
 S.N         = 100;      % number of mesh intervals
 S.NThreads  = 6;        % number of threads for parallel computing
 % S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
@@ -183,23 +183,23 @@ S.Foot.FDB_nerveBlock = 0;
 % carbonfibre insole (Takahashi et al., 2016)
 S.Foot.insole_Takahashi_kMTP = 0; % 18 83 221
 % insole to reduce arch compression (Stearne et al., 2016)
-S.Foot.insole_Stearne = []; %'FAI'; 
+S.Foot.insole_Stearne = 'FAI80'; 
 
 %% Initial guess
 %-------------------------------------------------------------------------%
 
 
 % initial guess identifier                  
-S.IGsel         = 1;   % (1: quasi random, 2: data-based)
+S.IGsel         = 2;   % (1: quasi random, 2: data-based)
 % initial guess mode identifier
-S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
+S.IGmodeID      = 3;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
 
 if S.IGmodeID == 4
     S.savename_ig   = 'NoExo';
 elseif S.IGmodeID == 3
     S.ResultsF_ig   = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results\results_paper_v2';
-    S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100';
-%     S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_vel27_ig1_N100';
+%     S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100';
+    S.savename_ig   = 'Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_vel27_ig1_N100';
 end
 
 if S.N ~= 50

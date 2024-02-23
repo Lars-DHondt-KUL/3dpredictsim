@@ -2,8 +2,8 @@ function [] = PlotResults_3DSim_Report(ResultsFile,LegNames,RefData,mtj,makeplot
 
 
 makeplot.sol_all = 1;
-rmse_stance_only = 1;
-rmse_swing_only = 0;
+rmse_stance_only = 0;
+rmse_swing_only = 1;
 
 div_by_dist_trav = 1;
 
@@ -58,7 +58,7 @@ fpos = [1,scs(4)/2+20;
         0,40;];
 
 label_fontsize  = 12;
-line_linewidth  = 1;
+line_linewidth  = 2;
 NumTicks = 6;
 CsV = hsv(nr);
 mrk = {'-',':','-',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
@@ -71,6 +71,7 @@ if nr==3
 % %     CsV = [[0.6350 0.0780 0.1840];[0.4660 0.6740 0.1880]; [0 0.4470 0.7410]];
     CsV = [[0.8500 0.3250 0.0980];[0.2 0.2 0.2];[0 0 0]];
     CsV = [[0 0 0];[0.2 0.2 0.2];[0.8500 0.3250 0.0980]];
+    CsV = [[0.8500 0.3250 0.0980];[0 0 0];[0 0.4470 0.7410]];
     mrk = {'-','-.','-'};
 end
 
@@ -515,7 +516,7 @@ for inr=1:nr
 
         j = 0;
         label_fontsize  = 12;
-        line_linewidth  = 0.5;
+        line_linewidth  = 1;
         NumTicks = 6;
         for i = 1:length(idx_title)
             subplot(2,4,idx_sp(i))
@@ -537,8 +538,9 @@ for inr=1:nr
                     meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
 
                     hold on
-                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
-                    alpha(.25);
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
+                        'LineStyle','none','DisplayName',['MoCap ' refName]);
+%                     alpha(.25);
                 end
             end
 
@@ -2500,7 +2502,7 @@ for inr=1:nr
                         Q_jref = interp1(intervalQ,Q_jref0,sampleQ);
                         Q_jrefw = interp1(intervalQ,Q_jref1,sampleQ);
                         Q_j_rmse = rms( ( Q_jref(:) - R.Qs(istance0,idx_Qs(j)) )./Q_jrefw' );
-                        Q_j_R2 = corrcoef( Q_jref(:), R.Qs(istance0,idx_Qs(j)) );
+                        Q_j_R2 = xcorr( Q_jref(:), R.Qs(istance0,idx_Qs(j)), 0, 'normalized');
 
                         if isnan(Q_j_rmse)
                             Q_j_rmse = rms( ( Q_jref(2:end) - R.Qs(istance0(2:end),idx_Qs(j))' )./Q_jrefw(2:end) );
@@ -2515,7 +2517,7 @@ for inr=1:nr
                         Q_jref = interp1(intervalQ,Q_jref0,sampleQ);
                         Q_jrefw = interp1(intervalQ,Q_jref1,sampleQ);
                         Q_j_rmse = rms( ( Q_jref(:) - R.Qs(iswing,idx_Qs(j)) )./Q_jrefw' );
-                        Q_j_R2 = corrcoef( Q_jref(:), R.Qs(iswing,idx_Qs(j)) );
+                        Q_j_R2 = xcorr( Q_jref(:), R.Qs(iswing,idx_Qs(j)), 0, 'normalized' );
 
                     else
                         Q_jref0 = Qref.Qall_mean(:,idx_jref);
@@ -2526,7 +2528,7 @@ for inr=1:nr
                         Q_jref = interp1(intervalQ,Q_jref0,sampleQ);
                         Q_jrefw = interp1(intervalQ,Q_jref1,sampleQ);
                         Q_j_rmse = rms( ( Q_jref(:) - R.Qs(:,idx_Qs(j)) )./Q_jrefw' );
-                        Q_j_R2 = corrcoef( Q_jref(:),R.Qs(:,idx_Qs(j)) );
+                        Q_j_R2 = xcorr( Q_jref(:),R.Qs(:,idx_Qs(j)), 0, 'normalized' );
                     end
                     Q_range(i) = max(Q_jref)-min(Q_jref);
 %                     Q_j_rmse = Q_j_rmse/(max(Q_jref)-min(Q_jref));
@@ -2535,7 +2537,7 @@ for inr=1:nr
                         table_Q_R2(inr,1).Name = LegName;
                     end
                     table_Q_rmse(inr,1).(joints_ref{i}) = Q_j_rmse;
-                    table_Q_R2(inr,1).(joints_ref{i}) = Q_j_R2(1,2);
+                    table_Q_R2(inr,1).(joints_ref{i}) = Q_j_R2;
                 end
 
             end
@@ -2645,7 +2647,7 @@ for inr=1:nr
                             T_jref = interp1(intervalID,T_jref0,sampleID);
                             T_jrefw = interp1(intervalID,T_jref1,sampleID);
                             T_j_rmse = rms( ( T_jref(:) - R.Tid(istance0,idx_Qs(j)) )./T_jrefw' );
-                            T_j_R2 = corrcoef( T_jref(:),R.Tid(istance0,idx_Qs(j)) );
+                            T_j_R2 = xcorr( T_jref(:),R.Tid(istance0,idx_Qs(j)), 0, 'normalized' );
 
                         elseif rmse_swing_only
                             T_jref0 = Tref.Tall_mean((istance0_ref(end)+1):end,idx_jref);
@@ -2656,7 +2658,7 @@ for inr=1:nr
                             T_jref = interp1(intervalID,T_jref0,sampleID);
                             T_jrefw = interp1(intervalID,T_jref1,sampleID);
                             T_j_rmse = rms( ( T_jref(:) - R.Tid(iswing,idx_Qs(j)) )./T_jrefw' );
-                            T_j_R2 = corrcoef( T_jref(:),R.Tid(iswing,idx_Qs(j)) );
+                            T_j_R2 = xcorr( T_jref(:),R.Tid(iswing,idx_Qs(j)), 0, 'normalized' );
 
                         else
                             T_jref0 = Tref.Tall_mean(:,idx_jref);
@@ -2667,7 +2669,7 @@ for inr=1:nr
                             T_jref = interp1(intervalID,T_jref0,sampleID);
                             T_jrefw = interp1(intervalID,T_jref1,sampleID);
                             T_j_rmse = rms( ( T_jref(:) - R.Tid(:,idx_Qs(j)) )./T_jrefw' );
-                            T_j_R2 = corrcoef( T_jref(:),R.Tid(:,idx_Qs(j)) );
+                            T_j_R2 = xcorr( T_jref(:),R.Tid(:,idx_Qs(j)), 0, 'normalized' );
                         end
                         T_range(i) = max(T_jref)-min(T_jref);
 %                         T_j_rmse = T_j_rmse/(max(T_jref)-min(T_jref));
@@ -2679,7 +2681,7 @@ for inr=1:nr
                         table_T_rR2(inr,1).Name = LegName;
                     end
                     table_T_rmse(inr,1).(joints_ref{i}) = T_j_rmse;
-                    table_T_R2(inr,1).(joints_ref{i}) = T_j_R2(1,2);
+                    table_T_R2(inr,1).(joints_ref{i}) = T_j_R2;
                 end
             end
             % Plot settings
@@ -3028,7 +3030,7 @@ for inr=1:nr
                             P_jrefw = interp1(intervalID,P_jref1,sampleID);
                             Pji = R.Qdots(istance0,idx_Qs(j)).*R.Tid(istance0,idx_Qs(j))*pi/180;
                             P_j_rmse = rms( ( P_jref(:) - R.Qdots(istance0,idx_Qs(j)).*R.Tid(istance0,idx_Qs(j))*pi/180 )./P_jrefw' );
-                            P_j_R2 = corrcoef( P_jref, Pji);
+                            P_j_R2 = xcorr( P_jref, Pji, 0, 'normalized');
 
                         elseif rmse_swing_only
                             P_jref0 = Pref.Pall_mean((istance0_ref(end)+1):end,idx_jref);
@@ -3040,7 +3042,7 @@ for inr=1:nr
                             P_jrefw = interp1(intervalID,P_jref1,sampleID);
                             Pji = R.Qdots(iswing,idx_Qs(j)).*R.Tid(iswing,idx_Qs(j))*pi/180;
                             P_j_rmse = rms( ( P_jref(:) - R.Qdots(iswing,idx_Qs(j)).*R.Tid(iswing,idx_Qs(j))*pi/180 )./P_jrefw' );
-                            P_j_R2 = corrcoef( P_jref, Pji);
+                            P_j_R2 = xcorr( P_jref, Pji, 0, 'normalized');
 
                         else
                             P_jref0 = Pref.Pall_mean(:,idx_jref);
@@ -3052,7 +3054,7 @@ for inr=1:nr
                             P_jrefw = interp1(intervalID,P_jref1,sampleID);
                             Pji = R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180;
                             P_j_rmse = rms( ( P_jref(:) - R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180 )./P_jrefw' );
-                            P_j_R2 = corrcoef( P_jref(:), Pji);
+                            P_j_R2 = xcorr( P_jref(:), Pji, 0, 'normalized');
                         end
                         P_range(i) = max(P_jref)-min(P_jref);
 %                         P_j_rmse = P_j_rmse/(max(P_jref)-min(P_jref));
@@ -3064,7 +3066,7 @@ for inr=1:nr
                         table_P_R2(inr,1).Name = LegName;
                     end
                     table_P_rmse(inr,1).(joints_ref{i}) = P_j_rmse;
-                    table_P_R2(inr,1).(joints_ref{i}) = P_j_R2(1,2);
+                    table_P_R2(inr,1).(joints_ref{i}) = P_j_R2;
                 end
             end
 
@@ -5655,8 +5657,8 @@ for inr=1:nr
             lg34a(5)=plot(R.Qs(itoe_contact(1),imtj),-R.Tid(itoe_contact(1),imtj),'<','Color',p1.Color,'MarkerSize',15,'DisplayName','first toe contact');
             lg34a(6)=plot(R.Qs(itoe_contact(end),imtj),-R.Tid(itoe_contact(end),imtj),'d','Color',p1.Color,'MarkerSize',15,'DisplayName','last toe contact');
             if inr==nr
-                lh34a=legend(lg34a);
-                lh34a.Layout.Tile = 6;
+                lh34a=legend(lg34a,'Orientation','horizontal');
+                lh34a.Layout.Tile = 'south';
             end
             
             nexttile(3)
@@ -5718,11 +5720,24 @@ for inr=1:nr
             
 
 
-            if inr==nr
-                nexttile(3)
-                lh34 = legend(lg34,'Location','north');
-%                 annotation('textbox',[0.15,0.6,0.2,0.27],'String',{'o  first heel contact','*   last heel contact','+  first forefoot contact','x  last forefoot contact','<  first toe contact','d  last toe contact'})
-            end
+            nexttile(6)
+            plot(R.Qs(:,iankle),-R.Tid(:,iankle),'.','color',Cs,'DisplayName',LegName);
+            hold on
+            xlabel('ankle angle (°)')
+            ylabel('ankle torque (Nm)')
+
+            plot(R.Qs(iheel_contact(1),iankle),-R.Tid(iheel_contact(1),iankle),'o','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(iheel_contact(end),iankle),-R.Tid(iheel_contact(end),iankle),'*','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(iff_contact(1),iankle),-R.Tid(iff_contact(1),iankle),'+','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(iff_contact(end),iankle),-R.Tid(iff_contact(end),iankle),'x','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(itoe_contact(1),iankle),-R.Tid(itoe_contact(1),iankle),'<','Color',p1.Color,'MarkerSize',15)
+            plot(R.Qs(itoe_contact(end),iankle),-R.Tid(itoe_contact(end),iankle),'d','Color',p1.Color,'MarkerSize',15)
+
+%             if inr==nr
+%                 nexttile(3)
+%                 lh34 = legend(lg34,'Location','north');
+% %                 annotation('textbox',[0.15,0.6,0.2,0.27],'String',{'o  first heel contact','*   last heel contact','+  first forefoot contact','x  last forefoot contact','<  first toe contact','d  last toe contact'})
+%             end
             
         end
 

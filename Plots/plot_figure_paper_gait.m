@@ -10,7 +10,7 @@ clc
 
 FigRepo = fullfile(pathRepo,'Figures');
 ResultsRepo = fullfile(pathRepo,'Results');
-% ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
@@ -37,7 +37,8 @@ resultFiles = {
     };
 LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
 % LegNames = {'2-segment foot model Falisse et al.','3-segment foot model'};
-
+resultFiles = resultFiles(3);
+LegNames = {'Simulated'};
 
 joints_sim = {'hip_flexion_r','hip_adduction_r','knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
 joints_ref = {'hip_flexion','hip_adduction','knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle'};
@@ -62,6 +63,7 @@ CsV = {[0.8500 0.3250 0.0980],'k','k'};
 mrk = {'-','-.','-','--'};
 lw = [1,1,2];
 
+CsV = {'k'}; lw = 2;
 
 set(0,'defaultFigureColor','w')
 
@@ -383,9 +385,9 @@ annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
 
-
+exportgraphics(fig2,fullfile(FigRepo,'simulated_gait.svg'),'ContentType','vector');
 
 
 

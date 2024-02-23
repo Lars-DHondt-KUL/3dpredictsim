@@ -857,8 +857,20 @@ for j=1:d
             T_mtjPF_l       = MA_PFj.mtj.l*F_PF_PIMj.l;
             T_mtj_tmp_l     = T_mtj_tmp_l + T_mtjPF_l;
         end
-        if ~isempty(S.Foot.insole_Stearne) && strcmp(S.Foot.insole_Stearne,'FAI')
-            T_FAI_l = -100*(tanh((Qskj_nsc(jointi.mtj.l,j+1)*400-1)*pi)+1)/2;
+        if ~isempty(S.Foot.insole_Stearne) 
+            if strcmp(S.Foot.insole_Stearne,'FAI')
+                T_FAI_l = -100*(tanh((Qskj_nsc(jointi.mtj.l,j+1)*400-1)*pi)+1)/2;
+
+            elseif strcmp(S.Foot.insole_Stearne,'FAI30')
+                T_FAI_l = -30*(tanh((Qskj_nsc(jointi.mtj.l,j+1)*400-1)*pi)+1)/2;
+
+            elseif strcmp(S.Foot.insole_Stearne,'FAI50')
+                T_FAI_l = -50*(tanh((Qskj_nsc(jointi.mtj.l,j+1)*400-1)*pi)+1)/2;
+
+            elseif strcmp(S.Foot.insole_Stearne,'FAI80')
+                T_FAI_l = -80*(tanh((Qskj_nsc(jointi.mtj.l,j+1)*400-1)*pi)+1)/2;
+
+            end
             T_mtj_tmp_l     = T_mtj_tmp_l + T_FAI_l;
         end
         eq_constr{end+1} = Tj(jointi.mtj.l,1)-(T_mtj_tmp_l);
@@ -873,8 +885,20 @@ for j=1:d
             T_mtjPF_r       = MA_PFj.mtj.r*F_PF_PIMj.r;
             T_mtj_tmp_r     = T_mtj_tmp_r + T_mtjPF_r;
         end
-        if ~isempty(S.Foot.insole_Stearne) && strcmp(S.Foot.insole_Stearne,'FAI')
-            T_FAI_r = -100*(tanh((Qskj_nsc(jointi.mtj.r,j+1)*400-1)*pi)+1)/2;
+        if ~isempty(S.Foot.insole_Stearne)
+            if strcmp(S.Foot.insole_Stearne,'FAI')
+                T_FAI_r = -100*(tanh((Qskj_nsc(jointi.mtj.r,j+1)*400-1)*pi)+1)/2;
+
+            elseif strcmp(S.Foot.insole_Stearne,'FAI30')
+                T_FAI_r = -30*(tanh((Qskj_nsc(jointi.mtj.r,j+1)*400-1)*pi)+1)/2;
+
+            elseif strcmp(S.Foot.insole_Stearne,'FAI50')
+                T_FAI_r = -50*(tanh((Qskj_nsc(jointi.mtj.r,j+1)*400-1)*pi)+1)/2;
+
+            elseif strcmp(S.Foot.insole_Stearne,'FAI80')
+                T_FAI_r = -80*(tanh((Qskj_nsc(jointi.mtj.r,j+1)*400-1)*pi)+1)/2;
+
+            end
             T_mtj_tmp_r     = T_mtj_tmp_r + T_FAI_r;
         end
         eq_constr{end+1} = Tj(jointi.mtj.r,1)-(T_mtj_tmp_r);

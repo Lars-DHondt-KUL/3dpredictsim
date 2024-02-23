@@ -640,7 +640,7 @@ if ~isempty(imtj)
     ylabel({'$\frac{\partial M}{\partial q}$ $(\frac{Nm}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
     xlabel('% GC')
     title('midtarsal')
-%     plot(squeeze(jac_T_mus(:,imtj)),'--','Color',p1.Color)
+    plot(x,squeeze(jac_T_mus(:,imtj)),'--','Color',CsV(ires,:))
 end
 
 nexttile(cnt)
