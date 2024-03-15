@@ -2,8 +2,8 @@ function [] = PlotResults_3DSim_Report(ResultsFile,LegNames,RefData,mtj,makeplot
 
 
 makeplot.sol_all = 1;
-rmse_stance_only = 0;
-rmse_swing_only = 1;
+rmse_stance_only = 1;
+rmse_swing_only = 0;
 
 div_by_dist_trav = 1;
 
@@ -61,7 +61,7 @@ label_fontsize  = 12;
 line_linewidth  = 2;
 NumTicks = 6;
 CsV = hsv(nr);
-mrk = {'-',':','-',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
+mrk = {'-','-','-',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
 
 if nr==2
     CsV = [[0 0 0];[0.8500 0.3250 0.0980]];
@@ -70,15 +70,15 @@ if nr==3
 %     CsV = [[0 0.4470 0.7410];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840]];
 % %     CsV = [[0.6350 0.0780 0.1840];[0.4660 0.6740 0.1880]; [0 0.4470 0.7410]];
     CsV = [[0.8500 0.3250 0.0980];[0.2 0.2 0.2];[0 0 0]];
-    CsV = [[0 0 0];[0.2 0.2 0.2];[0.8500 0.3250 0.0980]];
-    CsV = [[0.8500 0.3250 0.0980];[0 0 0];[0 0.4470 0.7410]];
+%     CsV = [[0 0 0];[0.2 0.2 0.2];[0.8500 0.3250 0.0980]];
+%     CsV = [[0.8500 0.3250 0.0980];[0 0 0];[0 0.4470 0.7410]];
     mrk = {'-','-.','-'};
 end
 
   
 if nr==4
 % %     CsV = [[0 0 0];[0.9290 0.6940 0.1250]; [0.3010 0.7450 0.9330];[0.8500 0.3250 0.0980]];
-    CsV = [[0 0 0];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330]];
+    CsV = [[0,0,0];[0 0.4470 0.7410];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330];[0.8500 0.3250 0.0980]];
 %     CsV = [[0 0 0];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330];[0.4660 0.6740 0.1880]];
     mrk = {'-','-.','-.',':'}; % 'LineStyle',mrk{rem(inr,length(mrk))+1}
 end
@@ -516,7 +516,7 @@ for inr=1:nr
 
         j = 0;
         label_fontsize  = 12;
-        line_linewidth  = 1;
+        line_linewidth  = 2;
         NumTicks = 6;
         for i = 1:length(idx_title)
             subplot(2,4,idx_sp(i))
@@ -539,7 +539,7 @@ for inr=1:nr
 
                     hold on
                     fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
-                        'LineStyle','none','DisplayName',['MoCap ' refName]);
+                        'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
 %                     alpha(.25);
                 end
             end
@@ -1470,7 +1470,8 @@ for inr=1:nr
                 sampleQ = 1:size(R.Qs,1);
                 meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
                 meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
-                fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Measured');
+                fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k',...
+                    'DisplayName','Experimental data (mean \pm 2 SD)');
                 alpha(.25);
 
 
@@ -1482,7 +1483,8 @@ for inr=1:nr
             nexttile(i)
             hold on
             grid on
-            l = plot(x,R.GRFs(:,i),'-','Color',CsV(inr,:));
+            l = plot(x,R.GRFs(:,i),mrk{rem(inr-1,length(mrk))+1},'Color',CsV(inr,:),...
+                'linewidth',line_linewidth);
             title(GRF_title{i});
             axis tight
             yl = get(gca, 'ylim');
@@ -2955,17 +2957,17 @@ for inr=1:nr
             h9d = figure('Position',[fpos(3,:),fhigh1]);
         end
         
-        if has_no_tmt && has_no_mtj
-            idx_Qs = [1,2,3,10,11,12,14,16,18,20,21,22,23,27,28,29,31];
-        else
-            idx_Qs = [1,2,3,10,11,12,14,16,18,20,22,23,24,25,29,30,31,33];
-        end
-        idx_title = [1,2,3,10,11,12,14,16,18,20,24,25,26,27,31,32,33,35];
-        joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
-                'hip_flexion','hip_adduction','hip_rotation',...
-                'knee_angle','ankle_angle','subtalar_angle','mtj_angle0','mtp_angle0',...
-                'lumbar_extension','lumbar_bending','lumbar_rotation',...
-                'arm_flex','arm_add','arm_rot','elbow_flex'};
+%         if has_no_tmt && has_no_mtj
+%             idx_Qs = [1,2,3,10,11,12,14,16,18,20,21,22,23,27,28,29,31];
+%         else
+%             idx_Qs = [1,2,3,10,11,12,14,16,18,20,22,23,24,25,29,30,31,33];
+%         end
+%         idx_title = [1,2,3,10,11,12,14,16,18,20,24,25,26,27,31,32,33,35];
+%         joints_ref = {'pelvis_tilt','pelvis_list','pelvis_rotation',...
+%                 'hip_flexion','hip_adduction','hip_rotation',...
+%                 'knee_angle','ankle_angle','subtalar_angle','mtj_angle0','mtp_angle0',...
+%                 'lumbar_extension','lumbar_bending','lumbar_rotation',...
+%                 'arm_flex','arm_add','arm_rot','elbow_flex'};
         
         joints_tit = {'Pelvis tilt','Pelvis list','Pelvis rotation','Pelvis tx',...
                 'Pelvis ty','Pelvis tz','Hip flexion L','Hip adduction L',...
@@ -2978,17 +2980,35 @@ for inr=1:nr
                 'Arm flexion R','Arm adduction R','Arm rotation R',...
                 'Elbow flexion L','Elbow flexion R'};
     
+        if has_no_tmt && has_no_mtj
+            idx_Qs = [10,11,12,14,16,18,20,21,22,23];
+        else
+            idx_Qs = [10,11,12,14,16,18,20,22,23,24,25];
+        end
+        idx_title = [10,11,12,14,16,18,20,24,25,26,27];
+        joints_ref = {'hip_flexion','hip_adduction','hip_rotation',...
+                'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle',...
+                'lumbar_extension','lumbar_bending','lumbar_rotation'};
+
+
         figure(h9d)
         
         j = 0;
         label_fontsize  = 12;
-        line_linewidth  = 0.5;
+        line_linewidth  = 1;
         for i = 1:length(idx_title)
-            subplot(6,3,i)
+            if i>8
+                subplot(6,3,i+1)
+            else
+                subplot(6,3,i)
+            end
             x = 1:(100-1)/(size(R.Qs,1)-1):100;
             % Experimental data
             if  inr == 1 && md
                 idx_jref = strcmp(Pref.colheaders,joints_ref{i});
+                if contains(joints_ref{i},'mtj') || contains(joints_ref{i},'mtp')
+                    idx_jref = 0;
+                end
                 if sum(idx_jref) == 1
                     meanPlusSTD = (Pref.Pall_mean(:,idx_jref) + 2*Pref.Pall_std(:,idx_jref));
                     meanMinusSTD = (Pref.Pall_mean(:,idx_jref) - 2*Pref.Pall_std(:,idx_jref));
@@ -3000,7 +3020,7 @@ for inr=1:nr
                     meanMinusSTD = interp1(intervalQddot,meanMinusSTD,sampleQddot)/R.body_mass;
 
                     hold on
-                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName',['MoCap ' refName]);
+                    fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],'k','DisplayName','Experimental data (mean \pm 2 SD)');
                     alpha(.25);
                 end
             end
@@ -3015,7 +3035,8 @@ for inr=1:nr
                 % skip this plot
             else
                 j=j+1;
-                plot(x,R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180/R.body_mass,'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
+                plot(x,R.Qdots(:,idx_Qs(j)).*R.Tid(:,idx_Qs(j))*pi/180/R.body_mass,mrk{rem(inr-1,length(mrk))+1},...
+                    'color',Cs,'linewidth',line_linewidth,'DisplayName',LegName);
                 
                 if md
                     idx_jref = strcmp(Pref.colheaders,joints_ref{i});
@@ -3082,7 +3103,7 @@ for inr=1:nr
                 L = get(gca,'XLim');
                 NumTicks = 3;
                 set(gca,'XTick',linspace(L(1),L(2),NumTicks))
-                if i > 15
+                if i > 8
                     xlabel('Gait cycle (%)','Fontsize',label_fontsize);
                 end
             end
@@ -3230,7 +3251,7 @@ for inr=1:nr
             if isfield(R.windlass,'foot_arch_height')
                 h_fa = R.windlass.foot_arch_height;
             else
-                h_fa = zeros(size(l_PF)); % to do: add this to prost-processing
+                h_fa = zeros(size(l_PF)); % to do: add this to post-processing
             end
             if isfield(R.windlass,'sf_PF')
                 PF_sf_var = R.windlass.sf_PF;
@@ -4500,7 +4521,7 @@ for inr=1:nr
         subplot(3,2,[2,4])
         hold on
 %         plot(x,q_ankle_sim_ofs,'linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',LegName);
-        plot(x,q_matched_ofs,'-','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
+        plot(linspace(1,100,length(q_matched_ofs)),q_matched_ofs,'-','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
 %         plot(x,q_matched_ofs_sc,'-.','linewidth',line_linewidth,'Color',CsV(inr,:),'DisplayName',['toe-off matched']);
         if inr==nr
            subplot(3,2,[2,4])
@@ -5474,75 +5495,90 @@ for inr=1:nr
     if makeplot.Objective_cost
         if inr==1
             h32 = figure('Position',[fpos(3,:),fsq]);
+            tiledlayout('flow')
         end
         
         figure(h32)
-        subplot(2,6,1)
-        plot(inr,R.Obj.J,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+        nexttile(1)
+        plot(inr,R.Obj.J,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
         hold on
         title('Objective')
+        xlim([0.5,nr+0.5])
 %         disp(R.Obj.J)
 %         disp(R.COT)
 
-        subplot(2,6,2)
+        lh32=legend('location','northeast','Interpreter',lgInt);
+        lh32.Layout.Tile = 'south';
+
+        nexttile(2)
         plot(inr,R.Obj.E/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('E_{metabolic}')
+        xlim([0.5,nr+0.5])
 
-        subplot(2,6,3)
+        nexttile(3)
         plot(inr,R.Obj.A/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('activity')
+        xlim([0.5,nr+0.5])
 
-        subplot(2,6,4)
+        nexttile(4)
         plot(inr,R.Obj.Arm/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('arms e')
-
-        subplot(2,6,5)
-        plot(inr,R.Obj.Mtp/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
-        hold on
-        title('mtp e')
+        xlim([0.5,nr+0.5])
+    
+        if R.Obj.Mtp >0
+            nexttile(5)
+            plot(inr,R.Obj.Mtp/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
+            hold on
+            title('mtp e')
+            xlim([0.5,nr+0.5])
+        end
 
         if isfield(R.Obj,'PIM') && R.Obj.PIM >0
-            subplot(2,6,6)
+            nexttile(6)
             plot(inr,R.Obj.PIM/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
             hold on
             title('PIM e')
+            xlim([0.5,nr+0.5])
         end
 
         if isfield(R.Obj,'P_PIM')  && R.Obj.P_PIM >0
-            subplot(2,6,7)
+            nexttile(7)
             plot(inr,R.Obj.P_PIM/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
             hold on
             title('PIM Work')
+            xlim([0.5,nr+0.5])
         end
 
-        subplot(2,6,8)
+        nexttile(8)
         plot(inr,R.Obj.qdd/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('accelerations')
+        xlim([0.5,nr+0.5])
 
-        subplot(2,6,9)
+        nexttile(9)
         plot(inr,R.Obj.Pass/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:))
         hold on
         title('passive torques')
+        xlim([0.5,nr+0.5])
 
-        subplot(2,6,10)
+        nexttile(10)
         plot(inr,R.Obj.vA/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
         hold on
         title('da/dt')
+        xlim([0.5,nr+0.5])
 
-        lh32=legend('location','northeast','Interpreter',lgInt);
+        
 
         if isfield(R.Obj,'Track')  && R.Obj.Track >0
-            subplot(2,6,11)
+            nexttile(11)
             plot(inr,R.Obj.Track/dist_trav*2,'o','Color',CsV(inr,:),'MarkerFaceColor',CsV(inr,:),'DisplayName',LegName)
             hold on
             title('Tracking')
+            xlim([0.5,nr+0.5])
         end
-
-       
 
     end
 
@@ -6106,7 +6142,7 @@ for inr=1:nr
                if ~has_no_mtj && R.S.Foot.mtj_muscles
                    T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
                    if norm(T_mus)>0
-                       plot(x,T_mus.*qdot_mtj/R.body_mass,'Color',CsV(inr,:),'DisplayName',LegName);
+                       plot(x,T_mus.*qdot_mtj/R.body_mass,'Color',CsV(inr,:),'linewidth',line_linewidth,'DisplayName',LegName);
                    end
                elseif ~has_no_mtj
                    T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
@@ -6428,7 +6464,7 @@ for inr=1:nr
                    T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
                    if norm(T_mus)>0
                        P_mtj_mtp(:,3+i) = T_mus.*qdot_mtj/R.body_mass;
-                       plot(x,T_mus.*qdot_mtj/R.body_mass,'Color',CsV(inr,:),'DisplayName',LegName);
+                       plot(x,T_mus.*qdot_mtj/R.body_mass,'Color',CsV(inr,:),'linewidth',line_linewidth,'DisplayName',LegName);
                    end
                elseif ~has_no_mtj
                    T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
@@ -6463,7 +6499,7 @@ for inr=1:nr
                    T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),8);
                    if norm(T_mus)>0
                        P_mtj_mtp(:,3+i) = P_mtj_mtp(:,3+i) + T_mus.*qdot_mtp/R.body_mass;
-                       plot(x,T_mus.*qdot_mtp/R.body_mass,'Color',CsV(inr,:),'DisplayName',LegName);
+                       plot(x,T_mus.*qdot_mtp/R.body_mass,'Color',CsV(inr,:),'linewidth',line_linewidth,'DisplayName',LegName);
                    end
                elseif ~has_no_mtp
                    T_mus = R.FT(:,musi_mtj(i)) .* R.dM(:,musi_mtj(i),7);
@@ -6485,7 +6521,7 @@ for inr=1:nr
         for i=1:13
             nexttile(3*i)
                hold on
-               plot(x,P_mtj_mtp(:,i),'Color',CsV(inr,:),'DisplayName',LegName);
+               plot(x,P_mtj_mtp(:,i),'Color',CsV(inr,:),'linewidth',line_linewidth,'DisplayName',LegName);
 
         end
         for i_pl=1:13*3

@@ -10,6 +10,7 @@ clc
 
 FigRepo = fullfile(pathRepo,'Figures');
 ResultsRepo = fullfile(pathRepo,'Results');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 2\figures';
 ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
@@ -35,43 +36,42 @@ resultFiles = {
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     };
-LegNames = {'2-segment foot model Falisse et al.','new 2-segment foot model','3-segment foot model'};
-% LegNames = {'2-segment foot model Falisse et al.','3-segment foot model'};
-resultFiles = resultFiles(3);
-LegNames = {'Simulated'};
+LegNames = {'3-segment foot model Falisse et al.','Nominal 3-segment foot model','Nominal 4-segment foot model'};
 
-joints_sim = {'hip_flexion_r','hip_adduction_r','knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
-joints_ref = {'hip_flexion','hip_adduction','knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle'};
 
-muscles_sim = {'vas_med_r','soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
-muscles_ref = {'Vastus-medialis','Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
-muscles_title = {'Vastus medialis','Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
-m_scale = [10, 3.33, 2.94, 8/1.38, 3.35, 3,1];
 
-joints_tit = {'Hip flexion','Hip adduction','Knee','Ankle','Subtalar','Midtarsal','MTP'};
-GRF_title = {'Forward','Vertical','Lateral'};
+joints_sim = {'knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
+joints_ref = {'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle'};
+
+muscles_sim = {'soleus_r','FDB_r'};
+muscles_ref = {'Soleus','Plantar-intrinsic'};
+muscles_title = {'Soleus','Plantar intrinsic'};
+m_scale = [3.33,1];
+
+joints_tit = {'Knee','Ankle','Subtalar','Midtarsal','MTP'};
+
 
 %
 
-label_fontsize = 10;
-legend_fontsize = 12;
-title_fontsize = 11;
+label_fontsize = 12;
+legend_fontsize = 14;
+title_fontsize = 14;
 
 % CsV = {[0.4660 0.6740 0.1880],'k','k'};
 CsV = {[0.8500 0.3250 0.0980],'k','k'};
 % CsV = {'k','k','k'};
 mrk = {'-','-.','-','--'};
-lw = [1,1,2];
+lw = [2,2,2];
 
-CsV = {'k'}; lw = 2;
 
 set(0,'defaultFigureColor','w')
 
 %
 fig2 = figure();
-fig2.Position = [269 136 1200 600];
-tl2 = tiledlayout(4,7);
+fig2.Position = [269 136 1200 500];
+tl2 = tiledlayout(2,5);
 tl2.TileSpacing = 'tight';
+tl2.Padding = 'compact';
 
 for i_res=1:length(resultFiles)
     load(resultFiles{i_res},'R')
@@ -83,9 +83,11 @@ for i_res=1:length(resultFiles)
 
     line_linewidth = lw(i_res);
 
+    tlct = 1;
+
     %% kinematics
     for i=1:length(joints_sim)
-        nexttile(i)
+        nexttile(tlct); tlct=tlct+1;
         % plot reference data
         if i_res==1
             idx_jref = strcmp(Qref.colheaders,joints_ref{i});
@@ -129,21 +131,23 @@ for i_res=1:length(resultFiles)
                     lg = legend(leg,'Orientation','Horizontal','Fontsize',legend_fontsize);
                     lg.Layout.Tile = 'South';
                     lg.Box = 'off';
+                    lg.NumColumns = 2;
                 end
             end
         end
 
         % layout
         if i_res==length(resultFiles)
-            if i == 1
-                ylb = ylabel('Angle (°)','Fontsize',label_fontsize);
-                ylb.Position(1) = -28;
-            end
+%             if i == 1
+%                 ylb = ylabel('Angle (°)','Fontsize',label_fontsize);
+%                 ylb.Position(1) = -28;
+%             end
+            ylabel('Angle (°)','Fontsize',label_fontsize);
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
@@ -152,8 +156,8 @@ for i_res=1:length(resultFiles)
     end % end of kinematics
 
     %% kinetics
-    for i=1:length(joints_sim)
-        nexttile(i+length(joints_sim))
+    for i=1:2 %length(joints_sim)
+        nexttile(tlct); tlct=tlct+1;
         % plot reference data
         if i_res==1 && i<6
             idx_jref = strcmp(Tref.colheaders,joints_ref{i});
@@ -189,24 +193,26 @@ for i_res=1:length(resultFiles)
 
         % layout
         if i_res==length(resultFiles)
-            if i == 1
-                ylb = ylabel('Moment (Nm/kg)','Fontsize',label_fontsize);
-                ylb.Position(1) = -28;
-            end
+%             if i == 1
+%                 ylb = ylabel('Moment (Nm/kg)','Fontsize',label_fontsize);
+%                 ylb.Position(1) = -28;
+%             end
+            ylabel('Moment (Nm/kg)','Fontsize',label_fontsize);
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
+            title(joints_tit{i},'Fontsize',title_fontsize);
         end
     end % end of kinetics
 
 
     %% powers
-    for i=1:4
-        nexttile(i+2*length(joints_sim))
+    for i=2
+        nexttile(tlct); tlct=tlct+1;
         % plot reference data
         if i_res==1 && i<5
             idx_jref = strcmp(Pref.colheaders,joints_ref{i});
@@ -241,75 +247,30 @@ for i_res=1:length(resultFiles)
 
         % layout
         if i_res==length(resultFiles)
-            if i == 1
-                ylb = ylabel('Power (W/kg)','Fontsize',label_fontsize);
-                ylb.Position(1) = -28;
-            end
+%             if i == 1
+%                 ylb = ylabel('Power (W/kg)','Fontsize',label_fontsize);
+%                 ylb.Position(1) = -28;
+%             end
+            ylabel('Power (W/kg)','Fontsize',label_fontsize);
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
+            title(joints_tit{i},'Fontsize',title_fontsize);
         end
     end % end of powers
 
 
-    %% GRFs
-    for i=1:3
-        nexttile(i+2*length(joints_sim)+4)
-        % plot reference data
-        if i_res==1
-            meanPlusSTD = Data.GRF.Fmean(:,i) + 2*Data.GRF.Fstd(:,i);
-            meanMinusSTD = Data.GRF.Fmean(:,i) - 2*Data.GRF.Fstd(:,i);
-
-            stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
-            intervalQ = 1:stepQ:size(R.Qs,1);
-            sampleQ = 1:size(R.Qs,1);
-            meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
-            meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
-
-            hold on
-            fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
-
-            xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
-
-        end % end plot ref data
-
-        % plot sim result
-        hold on
-        plot(x,R.GRFs(:,i),'linewidth',line_linewidth,'Color',CsV{i_res},...
-            'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
-        hold on
-        px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-                    'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-        uistack(px,"bottom");
-
-        % layout
-        if i_res==length(resultFiles)
-            if i == 1
-                ylabel('GRF (% BW)','Fontsize',label_fontsize);
-            end
-            axis tight
-            yl = get(gca, 'ylim');
-            ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
-            xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
-            set(gca,'Fontsize',label_fontsize);
-            set(gca,'XTickLabelRotation',0)
-            title(GRF_title{i},'Fontsize',title_fontsize);
-
-        end
-    end % end of GRFs
-
     %% muscle activity
     for i=1:length(muscles_sim)
-        nexttile(i+3*length(joints_sim))
+        nexttile(tlct); tlct=tlct+1;
         % plot reference data
         if i_res==1
             imus = strcmp(Data.EMGheaders,muscles_ref{i});
-            if sum(idx_jref) == 1 && i<7
+            if sum(idx_jref) == 1 && i<2
                 meanPlusSTD = (Data.lowEMG_mean(:,imus) + 2*Data.lowEMG_std(:,imus))*m_scale(i);
                 meanMinusSTD = (Data.lowEMG_mean(:,imus) - 2*Data.lowEMG_std(:,imus))*m_scale(i);
                 
@@ -341,19 +302,20 @@ for i_res=1:length(resultFiles)
 
         % layout
         if i_res==length(resultFiles)
-            if i == 1
-                ylb = ylabel('Activation (-)','Fontsize',label_fontsize);
-                ylb.Position(1) = -28;
-            end
+%             if i == 1
+%                 ylb = ylabel('Activation (-)','Fontsize',label_fontsize);
+%                 ylb.Position(1) = -28;
+%             end
+            ylabel('Activation (-)','Fontsize',label_fontsize);
             axis tight
             yl = get(gca, 'ylim');
             ylim([-0.02,yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(muscles_title{i},'Fontsize',title_fontsize);
-            xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
+%             xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
 
         end
     end % end of activity
@@ -361,33 +323,34 @@ for i_res=1:length(resultFiles)
 
 end
 
+for i=6:10
+    nexttile(i)
+    hold on
+    xlabel('Gait cycle (%)','Fontsize',label_fontsize+1)
+end
 
 %%
 
 str = '(a)';
-annotation(gcf,'textbox',[0.05,0.93,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.01,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(b)';
-annotation(gcf,'textbox',[0.05,0.7,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.01,0.55,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(c)';
-annotation(gcf,'textbox',[0.05,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
-
+annotation(gcf,'textbox',[0.40,0.55,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(d)';
-annotation(gcf,'textbox',[0.54,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.58,0.55,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
-
-str = '(e)';
-annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 
 %%
 
-% exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
+exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
 
-exportgraphics(fig2,fullfile(FigRepo,'simulated_gait.svg'),'ContentType','vector');
+% exportgraphics(fig2,fullfile(FigRepo,'simulated_gait.svg'),'ContentType','vector');
 
 
 

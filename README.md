@@ -33,9 +33,9 @@ You can use a script based on `./ReproduceResultsPaper.m` (or simply add more co
 
 a. Get the settings for the nominal model. 
 ```matlab
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 ```
-Input argument `3` will return settings for 3-segment foot model, `2` for 2-segment.
+Input argument `4` will return settings for 4-segment foot model, `3` for 3-segment.
 
 b. Overwrite settings you want to change. See [list of settings](SettingsOverview.md).
 

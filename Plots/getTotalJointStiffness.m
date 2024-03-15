@@ -411,6 +411,22 @@ if mtj
         T_mtjPF_l       = MA_PFj.mtj.l*F_PF_PIMj.l;
         T_mtj_tmp_l     = T_mtj_tmp_l + T_mtjPF_l;
     end
+    if isfield(S.Foot,'insole_Stearne') && ~isempty(S.Foot.insole_Stearne) 
+        if strcmp(S.Foot.insole_Stearne,'FAI')
+            T_FAI_l = -100*(tanh((Qskj_nsc(jointi.mtj.l,1)*400-1)*pi)+1)/2;
+
+        elseif strcmp(S.Foot.insole_Stearne,'FAI30')
+            T_FAI_l = -30*(tanh((Qskj_nsc(jointi.mtj.l,1)*400-1)*pi)+1)/2;
+
+        elseif strcmp(S.Foot.insole_Stearne,'FAI50')
+            T_FAI_l = -50*(tanh((Qskj_nsc(jointi.mtj.l,1)*400-1)*pi)+1)/2;
+
+        elseif strcmp(S.Foot.insole_Stearne,'FAI80')
+            T_FAI_l = -80*(tanh((Qskj_nsc(jointi.mtj.l,1)*400-1)*pi)+1)/2;
+
+        end
+        T_mtj_tmp_l     = T_mtj_tmp_l + T_FAI_l;
+    end
     Tj(jointi.mtj.l,1) = (T_mtj_tmp_l);
     % mtj right
     T_mtj_tmp_r = Tau_passj.mtj.r + T_passj.mtj.r;
@@ -424,6 +440,22 @@ if mtj
     if ~strcmp(S.Foot.PF_stiffness,'none') || S.Foot.PIM
         T_mtjPF_r       = MA_PFj.mtj.r*F_PF_PIMj.r;
         T_mtj_tmp_r     = T_mtj_tmp_r + T_mtjPF_r;
+    end
+    if isfield(S.Foot,'insole_Stearne') && ~isempty(S.Foot.insole_Stearne)
+        if strcmp(S.Foot.insole_Stearne,'FAI')
+            T_FAI_r = -100*(tanh((Qskj_nsc(jointi.mtj.r,1)*400-1)*pi)+1)/2;
+
+        elseif strcmp(S.Foot.insole_Stearne,'FAI30')
+            T_FAI_r = -30*(tanh((Qskj_nsc(jointi.mtj.r,1)*400-1)*pi)+1)/2;
+
+        elseif strcmp(S.Foot.insole_Stearne,'FAI50')
+            T_FAI_r = -50*(tanh((Qskj_nsc(jointi.mtj.r,1)*400-1)*pi)+1)/2;
+
+        elseif strcmp(S.Foot.insole_Stearne,'FAI80')
+            T_FAI_r = -80*(tanh((Qskj_nsc(jointi.mtj.r,1)*400-1)*pi)+1)/2;
+
+        end
+        T_mtj_tmp_r     = T_mtj_tmp_r + T_FAI_r;
     end
     Tj(jointi.mtj.r,1) = (T_mtj_tmp_r);
     mai_i = mai_i+1;
@@ -701,7 +733,7 @@ for icnt=1:cnt-1
 end
 
 figure(f2)
-subplot(3,1,1)
+subplot(4,1,1)
 hold on; grid on
 if ~isempty(imtj)
     plot(x,squeeze(jac_Ts(:,imtj,imtj)),'Color',CsV(ires,:))
@@ -714,7 +746,20 @@ if ~isempty(imtj)
     xline(x_ho,'Color',CsV(ires,:))
 end
 
-subplot(3,1,2)
+subplot(4,1,2)
+hold on; grid on
+if ~isempty(imtj)
+    plot(x,squeeze(jac_Ts2(:,imtp,imtp)),'Color',CsV(ires,:))
+    ylabel({'$\frac{\partial M}{\partial \dot{q}}$ $(\frac{Nms}{rad})$'},Interpreter='latex',FontSize=16,Rotation=0,HorizontalAlignment='right')
+    xlabel('% GC')
+    title('MTP')
+%     plot(x,squeeze(jac_T_mus(:,imtj)),'--','Color',CsV(ires,:))
+    xline(x_to,'Color',CsV(ires,:))
+    xline(x_ff,'Color',CsV(ires,:))
+    xline(x_ho,'Color',CsV(ires,:))
+end
+
+subplot(4,1,3)
 hold on; grid on
 
 iSol = find(strcmp(R.colheaders.muscles,'soleus_r'));
@@ -735,7 +780,7 @@ xline(x_to,'Color',CsV(ires,:))
 xline(x_ff,'Color',CsV(ires,:))
 xline(x_ho,'Color',CsV(ires,:))
 
-subplot(3,1,3)
+subplot(4,1,4)
 hold on; grid on
 plot(x,P_AT,'Color',CsV(ires,:))
 ylabel({'P AT (W/kg)'},Rotation=0,HorizontalAlignment='right')

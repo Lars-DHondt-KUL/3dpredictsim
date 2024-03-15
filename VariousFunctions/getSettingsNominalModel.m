@@ -15,16 +15,16 @@ S.suffixName = 'N100'; % suffix for name of file with results
 %-------------------------------------------------------------------------%
 %
 %% General
-if Nsegments == 2 % foot with mtp joint
+if Nsegments == 3 % foot with mtp joint
    S.Foot.Model = 'mtp';
    S.ResultsFolder = 'results_paper';
 
-elseif Nsegments == 3 % foot with mtp and midtarsal joint
+elseif Nsegments == 4 % foot with mtp and midtarsal joint
     S.Foot.Model = 'mtjcf3';
     S.ResultsFolder = 'results_paper_v2';
 
 else
-    error('number of foot segments should be 2 or 3')
+    error('number of foot segments should be 3 or 4')
 end
 
 S.Foot.Scaling = 'custom'; % default, custom

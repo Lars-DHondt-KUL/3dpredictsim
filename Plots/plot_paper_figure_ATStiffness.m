@@ -10,7 +10,8 @@ clc
 
 FigRepo = fullfile(pathRepo,'Figures');
 ResultsRepo = fullfile(pathRepo,'Results');
-% ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 2\figures';
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
@@ -36,8 +37,8 @@ resultFiles = {
     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
     };
-LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
-    'Stiffer Achilles tendon (3-segment)','Stiffer Achilles tendon (2-segment)'};
+LegNames = {'Nominal 4-segment foot model','Nominal 3-segment foot model',...
+    'Stiffer Achilles tendon (4-segment)','Stiffer Achilles tendon (3-segment)'};
 
 
 joints_ref = {'ankle_angle'};
@@ -50,22 +51,24 @@ m_scale = [3.33, 2.94];
 
 
 label_fontsize = 12;
-legend_fontsize = 12;
-title_fontsize = 12;
+legend_fontsize = 14;
+title_fontsize = 14;
 
 
 CsV = {'k','k',[149, 117, 205]/256,[0.4940 0.1840 0.5560],[115, 45, 217]/256};
 mrk = {'-','-.','-','-.'};
-lw = [2,1,2,1];
+lw = [2,2,2,2];
 
 
 set(0,'defaultFigureColor','w')
 
 %
 fig2 = figure();
-fig2.Position = [269 136 1200/2 270];
+fig2.Position = [269 136 1200 270];
 tl2 = tiledlayout(1,3);
 tl2.TileSpacing = 'tight';
+tl2.Padding = 'compact';
+
 
 for i_res=1:length(resultFiles)
     load(resultFiles{i_res},'R')
@@ -97,7 +100,7 @@ for i_res=1:length(resultFiles)
                 p1=fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
                     'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
                 if i==1
                     leg = p1;
@@ -113,16 +116,16 @@ for i_res=1:length(resultFiles)
             p1=plot(x,R.Qs(:,idx_jsim),'linewidth',line_linewidth,'Color',CsV{i_res},...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',LegNames{i_res});
             hold on
-            px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-            uistack(px,"bottom");
+%             px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
+%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%             uistack(px,"bottom");
 
             if i==1
                 leg = [leg,p1];
                 if i_res==length(resultFiles)
-                    lg = legend(leg,'numcolumns',2,'Fontsize',legend_fontsize);
+                    lg = legend(leg,'numcolumns',1,'Fontsize',legend_fontsize);
 %                     lg.Position(2) = lg.Position(2)-0.5;
-                    lg.Layout.Tile = 'South';
+                    lg.Layout.Tile = 'east';
                     lg.Box = 'off';
                 end
             end
@@ -138,7 +141,7 @@ for i_res=1:length(resultFiles)
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(joints_tit{i},'Fontsize',title_fontsize);
@@ -171,7 +174,7 @@ for i_res=1:length(resultFiles)
                 hold on
                 fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],  0.8*[1,1,1],'LineStyle','none');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
             end
         end % end plot ref data
@@ -183,9 +186,9 @@ for i_res=1:length(resultFiles)
         plot(x,Pji,'linewidth',line_linewidth,'Color',CsV{i_res},...
             'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
         hold on
-        px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-                    'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-        uistack(px,"bottom");
+%         px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
+%                     'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%         uistack(px,"bottom");
 
         % layout
         if i_res==length(resultFiles)
@@ -198,7 +201,7 @@ for i_res=1:length(resultFiles)
             ylim([yl(1)-0.1*norm(yl),yl(2)+0.1*norm(yl)])
 %             ylim([-1.7,3.4])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
 %             set(gca,'YTick',[-1,0,1.5,3]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
@@ -228,7 +231,7 @@ for i_res=1:length(resultFiles)
                 hold on
                 fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
             end
         end % end plot ref data
@@ -240,9 +243,9 @@ for i_res=1:length(resultFiles)
             plot(x,R.a(:,idx_jsim),'linewidth',line_linewidth,'Color',CsV{i_res},...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
             hold on
-            px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-            uistack(px,"bottom");
+%             px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
+%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%             uistack(px,"bottom");
         end
 
         % layout
@@ -256,7 +259,7 @@ for i_res=1:length(resultFiles)
             yl = get(gca, 'ylim');
             ylim([-0.02,yl(2)+0.1*norm(yl)])
             xlim([0,100])
-            set(gca,'XTick',[0:50:100]);
+            set(gca,'XTick',[0:20:100]);
             set(gca,'Fontsize',label_fontsize);
             set(gca,'XTickLabelRotation',0)
             title(replace(muscles_title{i},'-',' '),'Fontsize',title_fontsize);

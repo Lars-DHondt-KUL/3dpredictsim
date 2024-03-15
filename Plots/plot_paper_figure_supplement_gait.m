@@ -8,11 +8,13 @@ clc
 
 
 FigRepo = fullfile(pathRepo,'Figures');
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
 ResultsRepo = fullfile(pathRepo,'Results');
+
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 2\figures/supplement';
 ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 legCol = 10;
+lM_PIM = 0;
 
 %% load reference data
 
@@ -34,50 +36,37 @@ stance_ref_std = 0.8233;
 
 %% figure 2
 
-% % reduced stiffness
-% results = {
-%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
-%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'])
-%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
-%     fullfile([ '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'])
-% };
-% LegNames = {'Nominal 3-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia','Reduced arch height'};
-% figName = 'plantar_stiffness';
-% CsV = [[0,0,0];[0.4660 0.6740 0.1880];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330];[0.8500 0.3250 0.0980]];
-% mrk = {'-','-','-',':','--'};
-% lw = [2,1,1,2,2];
-% legCol = 3;
-
-% % Achilles tendon stiffness - 3-segment
+% % Achilles tendon stiffness - 4-segment
 % results = {
 %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx30_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx40_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx60_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx70_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+% %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx70_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx80_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx90_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+% %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx90_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     'results_paper_v2/Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 % };
-% LegNames = {'30%','40%','50%','60%','70%','80%','90%','100%'};
+% LegNames = {'30%','40%','50%','60%','80%','100%'};
 % figName = 'AT_stiffness';
 % CsV = parula(length(results)+1);
 % CsV(3,:) = 0;
 % mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
-% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]/2;
+% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
 
 % results = {
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+% %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+% %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
 %     };
-% LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
-%     'Stiffer Achilles tendon (3-segment)','Stiffer Achilles tendon (2-segment)'};
+% % LegNames = {'Nominal 4-segment foot model','Nominal 3-segment foot model',...
+% %     'Stiffer Achilles tendon (4-segment)','Stiffer Achilles tendon (3-segment)'};
+% LegNames = {'Nominal 3-segment foot model', 'Stiffer Achilles tendon (3-segment)'};
 % figName = 'AT_stiffness2';
-% CsV = [[0 0 0];[0 0 0];[149, 117, 205]/256;[0.4940 0.1840 0.5560]];
-% mrk = {'-','-.','-','-.'};
-% lw = [2,1,2,1];
+% CsV = [[0 0 0];[0.4940 0.1840 0.5560]];
+% mrk = {'-','-','-','-.'};
+% lw = [2,2,2,2];
 % legCol = 3;
 
 % % Ankle passive stiffness parameters
@@ -118,22 +107,10 @@ stance_ref_std = 0.8233;
 % figName = 'mtj_axis';
 % CsV = [[0 0 0]; hsv(6)];
 % mrk = {'-','-','-','-','-','-','-'};
-% lw = [2,1,1,1,1,1,1,1];
+% lw = [1,1,1,1,1,1,1,1]*2;
+% lM_PIM = 1;
 
-% % mtj axis orientation w/ PF Gefen
-% results = {
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtj_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls145_FDB2_lTs124_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc1_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls145_FDB2_lTs124_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc2_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper\Fal_s1_mtjc5_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls147_FDB2_lTs126_Fpsl10_ig1_N100_pp.mat'
-%     };
-% LegNames = {'MFHA','Sagittal','Orientation 1','Orientation 2','Orientation 3','Orientation 4','Orientation 5'};
-% figName = 'mtj_axis_PF_Gefen';
-
-% % PIM FMo
+% PIM FMo
 % results = {
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox200_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox150_ig1_N100_pp.mat'
@@ -142,15 +119,19 @@ stance_ref_std = 0.8233;
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox76_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox50_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox20_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox10_ig1_N100_pp.mat'
+%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox5_ig1_N100_pp.mat'
 %     };
-% LegNames = {'FMo = 1200 N', 'FMo = 900 N', 'FMo = 720 N','FMo = 600 N','FMo = 456 N','FMo = 300 N','FMo = 120 N'};
-% % LegNames = {'200% FMo', '150% FMo', '100% FMo','70% FMo','50% FMo','30% FMo','20% FMo'};
+% LegNames = {'FMo = 1200 N', 'FMo = 900 N', 'FMo = 720 N','FMo = 600 N','FMo = 456 N','FMo = 300 N','FMo = 120 N','FMo = 60 N','FMo = 30 N'};
+% idx = [1,3,4,5,6,9];
+% results = results(idx);
+% LegNames = LegNames(idx);
 % figName = 'PIM_FMo';
 % CsV = parula(length(results)+1);
-% CsV(4,:) = 0;
+% CsV(3,:) = 0;
 % mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
-% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]/2;
-% legCol = 4;
+% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
+% lM_PIM = 1;
 
 % % PIM lMo
 % results = {
@@ -166,7 +147,8 @@ stance_ref_std = 0.8233;
 % CsV = parula(length(results)+1);
 % CsV(3,:) = 0;
 % mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
-% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]/2;
+% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
+% lM_PIM = 1;
 
 % % PIM lTs
 % results = {
@@ -175,16 +157,16 @@ stance_ref_std = 0.8233;
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs124_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs125_Fpsl10_ig1_N100_pp.mat'
-% 
 %     };
 % LegNames = {'lTs = 121 mm', 'lTs = 122 mm', 'lTs = 123 mm', 'lTs = 124 mm', 'lTs = 125 mm'};
 % figName = 'PIM_lTs';
 % CsV = parula(length(results)+1);
 % CsV(3,:) = 0;
 % mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
-% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]/2;
+% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
+% lM_PIM = 1;
 
-% % contact stiffness - 3-segment
+% % contact stiffness - 4-segment
 % results = {
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 % %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx3_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
@@ -194,16 +176,20 @@ stance_ref_std = 0.8233;
 %     };
 % LegNames = {'1 MPa', '5 MPa', '10 MPa', '20 MPa'};
 % figName = 'contact_stiffness';
+% CsV = parula(length(results)+1);
+% CsV(3,:) = 0;
+% mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
+% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
 
-% % contact stiffness - 2-segment
+% % contact stiffness - 3-segment
 % results = {
 %     '\results_paper\Fal_s1_mtp_FK_sc_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
 %     };
 % LegNames = {'1 MPa','10 MPa'};
-% figName = 'contact_stiffness_2seg';
+% figName = 'contact_stiffness_3seg';
 % CsV = [[0 0.4470 0.7410];[0 0 0]];
-% mrk = {'-','-.'};
+% mrk = {'-','-'};
 % lw = [2,2];
 
 % % heel sphere x-position
@@ -215,6 +201,10 @@ stance_ref_std = 0.8233;
 %     };
 % LegNames = {'x = 0 mm', 'x = 10 mm', 'x = 15 mm', 'x = 20 mm'};
 % figName = 'contact_x';
+% CsV = parula(length(results)+1);
+% CsV(2,:) = 0;
+% mrk = {'-','-','-','-','-','-','-','-','-','-','-','-','-'};
+% lw = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
 
 % % contact sphere configuration
 % results = {
@@ -235,12 +225,12 @@ stance_ref_std = 0.8233;
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_MTJp_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_ig1_N100_pp.mat'
 % };
-% LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
-%     'Passive midtarsal and MTP (3-segment)','Muscle-driven MTP (2-segment)'};
+% LegNames = {'Nominal 4-segment foot model','Nominal 3-segment foot model',...
+%     'Passive midtarsal and MTP (4-segment)','Muscle-driven MTP (3-segment)'};
 % figName = 'extrinsic_large';
 % CsV = [[0 0 0];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330];[0.4660 0.6740 0.1880]];
-% mrk = {'-','-','-','-.','--'};
-% lw = [2,1,1,1];
+% mrk = {'-','-','-.','-.'};
+% lw = [2,2,2,2];
 % legCol = 3;
 
 % % plantar fascia stiffness
@@ -253,47 +243,66 @@ stance_ref_std = 0.8233;
 %     };
 % LegNames = {'A = 210 mm^2','A = 140 mm^2','A = 70 mm^2','A = 42 mm^2','A = 70 mm^2 (Gefen)'};
 % figName = 'PF_stiffness';
-% CsV = [[0 0 0];[0.8500 0.3250 0.0980]];
 % CsV = parula(length(results)+1);
 % CsV(end-1,:) = [0.8500 0.3250 0.0980];
 % CsV(3,:) = 0;
 % mrk = {'-','-','-','-','-.'};
-% lw = [1,1,1,1,1,1];
-% legCol = 4;
+% lw = [1,1,1,1,1,1]*2;
 
 % % arch height
 % results = {
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+% %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
-%     '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'
+% %     '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper\Fal_s1_mtp_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPp_k25_d020_tau_ig21_N100_pp.mat'
 %     };
-% LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
-%     'Low arch height (3-segment)','Low arch height (2-segment)'};
+% % LegNames = {'Nominal 4-segment foot model','Nominal 3-segment foot model',...
+% %     'Low arch height (4-segment)','Low arch height (3-segment)'};
+% LegNames = {'Nominal 3-segment foot model', 'Low arch height (3-segment)'};
 % figName = 'arch_height';
-% CsV = [[0 0 0];[0 0 0];[0.8500 0.3250 0.0980];[0.3010 0.7450 0.9330]];
+% CsV = [[0 0 0];[0.8500 0.3250 0.0980];[0.3010 0.7450 0.9330]];
 % mrk = {'-','-.','-','-.'};
-% lw = [2,2,1,1];
+% lw = [2,2,2,2];
 % legCol = 3;
 
+% % reduced stiffness
+% results = {
+%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'])
+%     fullfile([ '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+%     fullfile([ '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'])
+% };
+% LegNames = {'Nominal 4-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia','Reduced arch height'};
+% figName = 'plantar_stiffness';
+% CsV = [[0,0,0];[0 0.4470 0.7410];[0.6350 0.0780 0.1840];[0.3010 0.7450 0.9330];[0.8500 0.3250 0.0980]];
+% mrk = {'-','-','-','-.','--'};
+% lw = [2,2,2,2,2];
+% legCol = 3;
+
+
+% % PIM nerve block
 % results = {
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_nb_lMo23_lTs123_Fpsl10_ig21_N100_pp.mat'
 %     };
-% LegNames = {'Nominal 3-segment foot model','Intrinsic foot muscle nerve block'};
+% LegNames = {'Nominal 4-segment foot model','Intrinsic foot muscle nerve block'};
 % figName = 'PIM_nerve_block';
+% CsV = [[0 0 0];[0.8500 0.3250 0.0980]];
+% mrk = {'-','-.','-','-.'};
+% lw = [2,2,2,2];
+% lM_PIM = 1;
 
-results = {
-    '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat'
-    '\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_spx10_pp.mat'
-%     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-    };
-LegNames = {'Falisse 2022 (2-seg)','D''Hondt 2021 (3-seg)','D''Hondt 2023 (2-seg)','D''Hondt 2023 (3-seg)'};
-figName = 'r_sem_thesis';
-CsV = [[0.8500 0.3250 0.0980];[0.3010 0.7450 0.9330];[0,0,0];[0,0,0]];
-mrk = {'-','-','-.','-'};
-lw = [1,1,1,1,1];
+% results = {
+%     '\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat'
+%     '\MidTarsalJoint\Fal_s1_bCst_PF_Natali2010_ls150_MT_k300_MTP_T1_spx10_ig23_PFx10_spx10_pp.mat'
+% %     '\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'
+% %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+%     };
+% LegNames = {'Falisse 2022 (2-seg)','D''Hondt 2021 (3-seg)','D''Hondt 2023 (2-seg)','D''Hondt 2023 (3-seg)'};
+% figName = 'r_sem_thesis';
+% CsV = [[0.8500 0.3250 0.0980];[0.3010 0.7450 0.9330];[0,0,0];[0,0,0]];
+% mrk = {'-','-','-.','-'};
+% lw = [1,1,1,1,1];
 
 
 
@@ -303,27 +312,25 @@ label_fontsize = 10;
 legend_fontsize = 12;
 title_fontsize = 11;
 
-
-
 joints_sim = {'hip_flexion_r','hip_adduction_r','knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
 joints_ref = {'hip_flexion','hip_adduction','knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle'};
 
-muscles_sim = {'vas_med_r','soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
-muscles_ref = {'Vastus-medialis','Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
-muscles_title = {'Vastus medialis','Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
-m_scale = [10 3.33, 2.94, 8/1.38, 3.35, 3,1];
 
-% muscles_sim = {'soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
-% muscles_ref = {'Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
-% muscles_title = {'Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
-% m_scale = [3.33, 2.94, 8/1.38, 3.35, 3,1];
+if ~lM_PIM
+    muscles_sim = {'vas_med_r','soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
+    muscles_ref = {'Vastus-medialis','Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
+    muscles_title = {'Vastus medialis','Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
+    m_scale = [10 3.33, 2.94, 8/1.38, 3.35, 3,1];
+
+else
+    muscles_sim = {'soleus_r','med_gas_r','tib_ant_r','per_long_r','per_brev_r','FDB_r'};
+    muscles_ref = {'Soleus','Gastrocnemius-medialis','Tibialis-anterior','Peroneus-longus','Peroneus-brevis','Plantar-intrinsic'};
+    muscles_title = {'Soleus','Gastrocnemius','Tibialis anterior','Peroneus longus','Peroneus brevis','Plantar intrinsic'};
+    m_scale = [3.33, 2.94, 8/1.38, 3.35, 3,1];
+end
 
 joints_tit = {'Hip flexion','Hip adduction','Knee','Ankle','Subtalar','Midtarsal','MTP'};
 GRF_title = {'Forward','Vertical','Lateral'};
-
-%
-
-
 
 
 
@@ -334,6 +341,8 @@ fig2 = figure();
 fig2.Position = [269 136 1200 600];
 tl2 = tiledlayout(4,7);
 tl2.TileSpacing = 'tight';
+tl2.Padding = 'compact';
+
 
 for i_res=1:length(resultFiles)
     load(fullfile(ResultsRepo, resultFiles{i_res}),'R')
@@ -366,7 +375,7 @@ for i_res=1:length(resultFiles)
                 p1=fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
                     'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
                 if i==1
                     leg = p1;
@@ -382,9 +391,9 @@ for i_res=1:length(resultFiles)
             p1=plot(x,R.Qs(:,idx_jsim),'linewidth',line_linewidth,'Color',CsV(i_res,:),...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',LegNames{i_res});
             hold on
-            px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
-                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-            uistack(px,"bottom");
+%             px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
+%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%             uistack(px,"bottom");
 
             if i==1
                 leg = [leg,p1];
@@ -433,7 +442,7 @@ for i_res=1:length(resultFiles)
                 hold on
                 fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
             end
         end % end plot ref data
@@ -445,9 +454,9 @@ for i_res=1:length(resultFiles)
             plot(x,R.Tid(:,idx_jsim)/R.body_mass,'linewidth',line_linewidth,'Color',CsV(i_res,:),...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
             hold on
-            px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
-                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-            uistack(px,"bottom");
+%             px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
+%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%             uistack(px,"bottom");
         end
 
         % layout
@@ -486,7 +495,7 @@ for i_res=1:length(resultFiles)
                 hold on
                 fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],  0.8*[1,1,1],'LineStyle','none');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
             end
         end % end plot ref data
@@ -498,9 +507,9 @@ for i_res=1:length(resultFiles)
         plot(x,Pji,'linewidth',line_linewidth,'Color',CsV(i_res,:),...
             'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
         hold on
-        px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
-                    'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-        uistack(px,"bottom");
+%         px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
+%                     'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%         uistack(px,"bottom");
 
         % layout
         if i_res==length(resultFiles)
@@ -536,7 +545,7 @@ for i_res=1:length(resultFiles)
             hold on
             fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
 
-            xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%             xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
         end % end plot ref data
 
@@ -545,14 +554,15 @@ for i_res=1:length(resultFiles)
         plot(x,R.GRFs(:,i),'linewidth',line_linewidth,'Color',CsV(i_res,:),...
             'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
         hold on
-        px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
-                    'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-        uistack(px,"bottom");
+%         px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
+%                     'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%         uistack(px,"bottom");
 
         % layout
         if i_res==length(resultFiles)
             if i == 1
-                ylabel('GRF (% BW)','Fontsize',label_fontsize);
+                text(-30,2,'GRF (% BW)','Fontsize',label_fontsize,'Rotation',90,'HorizontalAlignment','center','VerticalAlignment','middle')
+%                 ylabel('GRF (% BW)','Fontsize',label_fontsize);
             end
             axis tight
             yl = get(gca, 'ylim');
@@ -563,6 +573,7 @@ for i_res=1:length(resultFiles)
             set(gca,'XTickLabelRotation',0)
             title(GRF_title{i},'Fontsize',title_fontsize);
 
+%             set(gca,'YAxisLocation','right')
         end
     end % end of GRFs
 
@@ -585,7 +596,7 @@ for i_res=1:length(resultFiles)
                 hold on
                 fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],'LineStyle','none');
 
-                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
 
             end
         end % end plot ref data
@@ -597,9 +608,9 @@ for i_res=1:length(resultFiles)
             plot(x,R.a(:,idx_jsim),'linewidth',line_linewidth,'Color',CsV(i_res,:),...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
             hold on
-            px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
-                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-            uistack(px,"bottom");
+%             px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
+%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%             uistack(px,"bottom");
         end
 
         % layout
@@ -634,17 +645,18 @@ for i_res=1:length(resultFiles)
             plot(x,R.lMtilde(:,idx_jsim),'linewidth',line_linewidth,'Color',CsV(i_res,:),...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',' ');
             hold on
-            px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
-                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-            uistack(px,"bottom");
+%             px=xline(x_to,'Color',CsV(i_res,:),'linewidth',line_linewidth/2,...
+%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+%             uistack(px,"bottom");
         end
 
         % layout
         if i_res==length(resultFiles)
 %             if i == 1
-                ylb = ylabel('lM (-)','Fontsize',label_fontsize);
+%                 ylb = ylabel('Fibre length (-)','Fontsize',label_fontsize);
 %                 ylb.Position(1) = -28;
 %             end
+            text(-30,1.1,'Fibre length (-)','Fontsize',label_fontsize,'Rotation',90,'HorizontalAlignment','center','VerticalAlignment','middle')
             axis tight
             yl = get(gca, 'ylim');
             ylim([yl(1)-0.05*norm(yl),yl(2)+0.05*norm(yl)])
@@ -657,10 +669,10 @@ for i_res=1:length(resultFiles)
 
         end
     
-        if i_res==length(resultFiles)
-            str = '(f)';
-            annotation(gcf,'textbox',[0.79,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
-        end
+%         if i_res==length(resultFiles)
+%             str = '(f)';
+%             annotation(gcf,'textbox',[0.79,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+%         end
     end
 
 end
@@ -668,22 +680,22 @@ end
 
 %%
 
-str = '(a)';
-annotation(gcf,'textbox',[0.05,0.93,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
-
-str = '(b)';
-annotation(gcf,'textbox',[0.05,0.7,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
-
-str = '(c)';
-annotation(gcf,'textbox',[0.05,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
-
-
-str = '(d)';
-annotation(gcf,'textbox',[0.54,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
-
-
-str = '(e)';
-annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+% str = '(a)';
+% annotation(gcf,'textbox',[0.05,0.93,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+% 
+% str = '(b)';
+% annotation(gcf,'textbox',[0.05,0.7,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+% 
+% str = '(c)';
+% annotation(gcf,'textbox',[0.05,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+% 
+% 
+% str = '(d)';
+% annotation(gcf,'textbox',[0.54,0.5,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+% 
+% 
+% str = '(e)';
+% annotation(gcf,'textbox',[0.05,0.27,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 
 

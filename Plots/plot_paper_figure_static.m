@@ -4,8 +4,11 @@ clc
 
 [pathHere,~,~] = fileparts(mfilename('fullpath'));
 [pathRepo,~,~] = fileparts(pathHere);
-FigRepo = fullfile(pathRepo,'Figures');
 addpath('../FootModel')
+
+FigRepo = fullfile(pathRepo,'Figures');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 2\figures';
+
 
 %%
 S.subject = 'Fal_s1';
@@ -123,16 +126,16 @@ Qs_mtp = [-30,30]*pi/180;
 S.activity = 0.01;
 R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
 Results2{end+1} = R;
-% S.activity = 0;
-% R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
-% Results2{end+1} = R;
+S.activity = 0;
+R = f_staticFootCompression_v6(S,Qs_mtp,Fs_tib,subtR);
+Results2{end+1} = R;
 
 
 %%
 
-label_fontsize = 10;
+label_fontsize = 11;
 legend_fontsize = 12;
-title_fontsize = 11;
+title_fontsize = 12;
 
 %
 
@@ -174,7 +177,6 @@ for i=1:length(Results1)
     l_fa = R.l_fa_ext(j,js);
     h_fa = R.h_fa_ext(j,js);
 
-
     plot((l_fa-R.L0)*1000,Fs_tib/1000,'o','color',CsV(i,:),'DisplayName',R.legname)
 
     hold on
@@ -184,9 +186,9 @@ end
 xlabel('Horizontal elongation (mm)','Fontsize',label_fontsize);
 ylabel('Vertical force (kN)','Fontsize',label_fontsize);
 set(gca,'Fontsize',label_fontsize);
-title('Foot arch stiffness','Fontsize',title_fontsize);
+title({'Contribution of ligaments','\rm(Ker et al, 1987)'},'Fontsize',title_fontsize);
 
-xlim([-0.3,7])
+% xlim([-0.3,7])
 ylim([0,3.3])
 
 
@@ -266,9 +268,10 @@ end
 xlabel('Arch compression (-)','Fontsize',label_fontsize);
 ylabel('Vertical force (BW)','Fontsize',label_fontsize);
 set(gca,'Fontsize',label_fontsize);
-title('Foot arch stiffness','Fontsize',title_fontsize);
+ttl=title({'Effect of toe dorsiflexion','\rm(Welte et al, 2018)'},'Fontsize',title_fontsize);
 % title('Welte et al., 2018','Fontsize',title_fontsize);
 xlim([0,1])
+% ttl.VerticalAlignment = 'middle';
 
 lh2 = legend('Location','northwest','Fontsize',legend_fontsize);
 lh2.Position(2) = lh2.Position(2) - 0.63;
@@ -345,7 +348,7 @@ rmse = rms(dHs(1:end-1,1)-(dHs(1:end-1,2)+offset))
 xlabel('Vertical displacement ankle (mm)','Fontsize',label_fontsize);
 ylabel('Vertical force (BW)','Fontsize',label_fontsize);
 set(gca,'Fontsize',label_fontsize);
-title('Midfoot stiffness','Fontsize',title_fontsize);
+title({'Effect of toe dorsiflexion','\rm(Yawar et al, 2021)'},'Fontsize',title_fontsize);
 % title('Yawar et al., 2021','Fontsize',title_fontsize);
 
 xlim([-1.5,25])
@@ -356,8 +359,46 @@ lh3.Position(2) = lh3.Position(2) - 0.63;
 lh3.Position(1) = lh3.Position(1) - 0.02;
 lh3.Box = 'off';
 
+%
+subplot(3,3,7)
+hold on
 
-%%
+ylim([0.5,7])
+str = 'Plantar fascia (Nominal)';
+text(0, 6, str, 'FontSize',12,'Horiz','left');
+str = 'Plantar fascia (Compliant)';
+text(0, 5, str,'FontSize',12,'Horiz','left');
+str = 'Plantar intrinsic muscle';
+text(0, 4, str,'FontSize',12,'Horiz','left');
+str = 'Long plantar ligament';
+text(0, 3, str,'FontSize',12,'Horiz','left');
+str = 'Short plantar ligament';
+text(0, 2, str,'FontSize',12,'Horiz','left');
+str = 'Spring ligament';
+text(0, 1, str,'FontSize',12,'Horiz','left');
+
+
+c=6;
+
+xlim([3.5,12+c])
+
+for ii=1:7
+    fill([ii-0.49,ii+0.49,ii+0.49,ii-0.49]+4+c,[0.5,0.5,6.5,6.5],CsV(ii,:))
+end
+
+plot(5+c,[1:4,6],'xk')
+plot(6+c,[1:5],'xk')
+plot(7+c,[1:4],'xk')
+plot(8+c,[1:3],'xk')
+plot(9+c,[1:2],'xk')
+plot(10+c,[1],'xk')
+
+tmp = gca;
+tmp.XAxis.Color = 'w';
+tmp.YAxis.Visible = 'off';
+
+title(' ')
+%
 
 str = '(a)';
 annotation(gcf,'textbox',[0.08,0.95,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
@@ -372,7 +413,7 @@ annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig1,fullfile(FigRepo,'figure_static2a.jpeg'),'Resolution',300);
+% exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
 
 
 

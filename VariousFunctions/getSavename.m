@@ -68,6 +68,9 @@ if isfield(S,'TrackSim') && S.TrackSim
     if isfield(S,'Track') && S.Track.Q_subt
         savenameparts{end} = [savenameparts{end} 'SubtQ'];
     end
+    if isfield(S,'W') && isfield(S.W,'Q_track')
+        savenameparts{end} = [savenameparts{end} num2str(S.W.Q_track)];
+    end
 end
 if isfield(S,'AchillesTendonScaleFactor') && S.AchillesTendonScaleFactor~=1
     savenameparts{end+1} = ['ATx' num2str(S.AchillesTendonScaleFactor*100)];

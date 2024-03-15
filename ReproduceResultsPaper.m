@@ -41,21 +41,21 @@ addpath([pathRepo '/RunSim']);
 addpath(genpath(casadiPath))
 
 
+%% Nominal 4-segment foot model
+% get settings struct for nominal model
+[S] = getSettingsNominalModel(4);
+% start simulation
+PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
+
 %% Nominal 3-segment foot model
 % get settings struct for nominal model
 [S] = getSettingsNominalModel(3);
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
-%% Nominal 2-segment foot model
+%% Falisse's 3-segment foot model
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(2);
-% start simulation
-PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
-
-%% Falisse's 2-segment foot model
-% get settings struct for nominal model
-[S] = getSettingsNominalModel(2);
+[S] = getSettingsNominalModel(3);
 
 % Changes w.r.t. nominal model
 % MTP axis normal to sagittal plane
@@ -78,6 +78,17 @@ S.Foot.contactSphereOffset1X = 0;
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
+%% Stiffer Achilles tendon (4-segment)
+% get settings struct for nominal model
+[S] = getSettingsNominalModel(4);
+
+% Changes w.r.t. nominal model
+% Default Achilles tendon stiffness
+S.AchillesTendonScaleFactor = 1;
+
+% start simulation
+PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
+
 %% Stiffer Achilles tendon (3-segment)
 % get settings struct for nominal model
 [S] = getSettingsNominalModel(3);
@@ -89,20 +100,9 @@ S.AchillesTendonScaleFactor = 1;
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
-%% Stiffer Achilles tendon (2-segment)
-% get settings struct for nominal model
-[S] = getSettingsNominalModel(2);
-
-% Changes w.r.t. nominal model
-% Default Achilles tendon stiffness
-S.AchillesTendonScaleFactor = 1;
-
-% start simulation
-PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
-
 %% Without intrinsic foot muscle
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % No plantar intrinsic foot muscle (represented by Flexor Digitorum Brevis)
@@ -113,7 +113,7 @@ PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
 %% Compliant plantar fascia
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % Plantar fascia stress-strain according to Gefen (2002)
@@ -122,9 +122,9 @@ S.Foot.PF_stiffness = 'Gefen2002';
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
-%% Reduced arch height (3-segment)
+%% Reduced arch height (4-segment)
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % Default (i.e. uniform) scaling of foot
@@ -137,18 +137,18 @@ PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
 %% Walking with insole that prevents arch compression
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % insole to reduce arch compression (Stearne et al., 2016)
-S.Foot.insole_Stearne = 'FAI'; 
+S.Foot.insole_Stearne = 'FAI50'; 
 
 % start simulation
 PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
 %% Running
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % 2.7 m/s
@@ -159,13 +159,13 @@ PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
 %% Running with insole that prevents arch compression
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % 2.7 m/s
 S.v_tgt = 2.7;
 % insole to reduce arch compression (Stearne et al., 2016)
-S.Foot.insole_Stearne = 'FAI'; 
+S.Foot.insole_Stearne = 'FAI50'; 
 % warm-start initial guess
 S.IGsel = 2;
 S.IGmodeID = 3;
@@ -177,7 +177,7 @@ PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 
 %% Intrinsic foot muscle nerve block
 % get settings struct for nominal model
-[S] = getSettingsNominalModel(3);
+[S] = getSettingsNominalModel(4);
 
 % Changes w.r.t. nominal model
 % Constrain activity of intrinsic foot muscle equal to its lower bound
@@ -194,22 +194,25 @@ PredSim(S,1,1,0); % (solve, post-process, do not add to batch)
 %%-----------------------------------------------------------------------%%
 % Reference data from literature is not included
 
-% figure 1
+% figure 2
 plot_paper_figure_static; % note: this will run the static simulations, but they are very fast
 
-% figure 2
-plot_figure_paper_gait;
-
 % figure 3
-plot_figure_paper_UD;
+plot_paper_figure_gait;
 
 % figure 4
-plot_figure_paper_ATStiffness;
+plot_paper_figure_UD;
 
 % figure 5
-plot_figure_paper_plantar_stiffness;
+plot_paper_figure_ATStiffness;
 
 % figure 6
+plot_paper_figure_plantar_stiffness;
+
+% figure 7
+plot_paper_figure_PIM
+
+% figure 8
 plot_paper_figure_mtj_mtp_power;
 
 

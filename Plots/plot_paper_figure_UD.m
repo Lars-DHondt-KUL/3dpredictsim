@@ -11,7 +11,8 @@ clc
 
 FigRepo = fullfile(pathRepo,'Figures');
 ResultsRepo = fullfile(pathRepo,'Results');
-% ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 2\figures';
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 % Digitised graph from DOI:10.1038/s41598-017-15218-7 not included
 if exist(fullfile(pathRepo,'Figures','Takahashi_et_al_2017.csv'),'file')
@@ -72,17 +73,20 @@ P_tot = P_HC + P_joints;
 %%
 
 label_fontsize = 12;
-legend_fontsize = 12;
-title_fontsize = 12;
+legend_fontsize = 14;
+title_fontsize = 14;
 
 
 line_linewidth = 2;
 
-fig2 = figure();
-fig2.Position = [269 136 1200 300];
+set(0,'defaultFigureColor','w')
 
-tl2 = tiledlayout(1,6);
+fig2 = figure();
+fig2.Position = [269 136 1200 500];
+
+tl2 = tiledlayout(2,4);
 tl2.TileSpacing = 'tight';
+tl2.Padding = 'compact';
 
 nexttile(1)
 hold on
@@ -94,7 +98,7 @@ plot(xst,P_tot(istance),'-','Color',[0.3, 0.3, 0.3],'linewidth',line_linewidth,'
 ylim([-2.5,3.])
 xlim([0,100])
 ylabel('Power (W/kg)','Fontsize',label_fontsize);
-xlabel('Stance phase (%)','Fontsize',label_fontsize);
+% xlabel('Stance phase (%)','Fontsize',label_fontsize);
 title('Distal to shank','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
@@ -107,24 +111,26 @@ plot(xst,P_dist_hindfoot(istance),'-','Color',[0, 0.4470, 0.7410],'linewidth',li
 ylim([-2.5,3.])
 xlim([0,100])
 ylabel(' ','Fontsize',1);
-xlabel('Stance phase (%)','Fontsize',label_fontsize);
+% xlabel('Stance phase (%)','Fontsize',label_fontsize);
 title('Distal to hindfoot','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
-nexttile(3)
+nexttile(5)
 hold on
 yline(0,'-k')
-p2=plot(TKH17.forefoot(:,1),TKH17.forefoot(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4,'DisplayName','Power (Experimental, Takahashi et al., 2017)');
-p1=plot(xst,P_dist_forefoot(istance),'-','Color',[0.7, 0.1, 0.1],'linewidth',line_linewidth,'DisplayName','Power (Simulated)');
+p2=plot(TKH17.forefoot(:,1),TKH17.forefoot(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4,...
+    'DisplayName','Power (Experimental mean, Takahashi et al, 2017) \color{white}space');
+p1=plot(xst,P_dist_forefoot(istance),'-','Color',[0.7, 0.1, 0.1],'linewidth',line_linewidth,'DisplayName','Power (Simulated, Nominal 4-segment foot model)');
 leg = [p2,p1];
 
 ylim([-2.5,3.])
 xlim([0,100])
+ylabel('Power (W/kg)','Fontsize',label_fontsize);
 xlabel('Stance phase (%)','Fontsize',label_fontsize);
 title('Distal to forefoot','Fontsize',title_fontsize);
 set(gca,'Fontsize',label_fontsize);
 
-nexttile(4)
+nexttile(6)
 hold on
 yline(0,'-k')
 plot(TKH17.hallux(:,1),TKH17.hallux(:,2),'-','Color',[1,1,1]*0.6,'linewidth',4)
@@ -177,7 +183,7 @@ W_ankles = trapz(R.t(istance),P_ankle(istance)+P_subt(istance));
 [W_mtjff_pos,W_mtjff_neg] = getWork(P_mtj(istance)+P_dist_forefoot(istance),R.t(istance));
 [W_ankle_pos,W_ankle_neg] = getWork(P_ankle(istance)+P_subt(istance),R.t(istance));
 
-nexttile(5)
+nexttile([2,1])
 hold on
 W_pos = [W_dist_hallux_pos,W_dist_forefoot_pos,W_dist_hindfoot_pos,W_dist_shank_pos]';
 W_neg = [W_dist_hallux_neg,W_dist_forefoot_neg,W_dist_hindfoot_neg,W_dist_shank_neg]';
@@ -190,7 +196,7 @@ br.CData(2,:) = [0, 0.4470, 0.7410];
 br.CData(1,:) = [0.3, 0.3, 0.3];
 br.CData(3,:) = [0.7, 0.1, 0.1];
 hold on
-br.DisplayName = 'Work (simulated)';
+br.DisplayName = 'Work (simulated, Nominal 4-segment foot model)';
 leg(4) = br;
 
 ebr=errorbar([4:-1:1],ref_pos_m,-ref_pos_std,ref_pos_std);
@@ -206,7 +212,7 @@ title('Work')
 yl_1 = tmp.YLim;
 
 
-yyaxis right
+% yyaxis right
 br=bar(flip(W_neg));
 br.FaceColor = 'flat';
 br.CData(4,:) = [0, 0.5, 0];
@@ -223,21 +229,21 @@ ebr.LineWidth = 1.5;
 tmp2 = gca;
 yl_2 = tmp2.YLim;
         
-tmp2.YAxis(2).Color = 'k';
-tmp2.YAxis(1).Color = 'none';
+% tmp2.YAxis(2).Color = 'k';
+% tmp2.YAxis(1).Color = 'none';
 % tmp2.YTickLabel = '';
 
 yl_12 = [min([yl_1,yl_2]), max([yl_1,yl_2])];
 ylim(yl_12)
 set(gca,'Fontsize',label_fontsize);
 
-yyaxis left
+% yyaxis left
 ylim(yl_12)
 set(gca,'Fontsize',label_fontsize);
 
+ylabel({'\color{white}space','\color{black}Work (J/kg)'},'Fontsize',label_fontsize);
 
-
-nexttile(6)
+nexttile([2,1])
 hold on
 W_net = [W_dist_hallux,W_dist_forefoot,W_dist_hindfoot,W_dist_shank]';
 
@@ -254,31 +260,59 @@ ebr.Color = [0 0 0];
 ebr.LineStyle = 'none';
 ebr.LineWidth = 1.5;
 
-ebr.DisplayName = 'Work (Experimental, Takahashi et al., 2017)';
+ebr.DisplayName = 'Work (Experimental, Takahashi et al, 2017)';
 leg(3) = ebr;
 
-ylabel('Work (J/kg)','Fontsize',label_fontsize);
+% ylabel('Work (J/kg)','Fontsize',label_fontsize);
 
 tmp=gca;
 tmp.XTick = [0:4];
 tmp.XTickLabel = {'Distal to...','...shank','...hindfoot','...forefoot','...hallux'};
 tmp.XTickLabelRotation = 90;
-tmp.YAxisLocation = 'right';
+% tmp.YAxisLocation = 'right';
 title('Net work')
 ylim(yl_12)
 set(gca,'Fontsize',label_fontsize);
 
-lg = legend(leg,'Fontsize',legend_fontsize,'NumColumns',4);
+lg = legend(leg,'Fontsize',legend_fontsize,'NumColumns',2); %,'Orientation','Horizontal');
 lg.Color = 'none';
 lg.Box = 'off';
 lg.Layout.Tile = 'South';
 
 
+
+%%
+
+ax1 = axes('Position',[0.102 0.024 0.035 0.03]);
+ax1.XAxis.Visible = false;
+ax1.YAxis.Visible = false;
+hold on
+plot([0,1],[1,1]*4,'-','Color',[0.3, 0.3, 0.3],'linewidth',line_linewidth)
+plot([0,1],[1,1]*3,'-','Color',[0, 0.4470, 0.7410],'linewidth',line_linewidth)
+plot([0,1],[1,1]*2,'-','Color',[0.7, 0.1, 0.1],'linewidth',line_linewidth)
+plot([0,1],[1,1]*1,'-','Color',[0, 0.5, 0],'linewidth',line_linewidth)
+
+
+ax1 = axes('Position',[0.541 0.02 0.035 0.038]);
+ax1.XAxis.Visible = false;
+ax1.YAxis.Visible = false;
+hold on
+br=bar([1,1,1,1]);
+br.FaceColor = 'flat';
+br.CData(4,:) = [0, 0.5, 0];
+br.CData(3,:) = [0.7, 0.1, 0.1];
+br.CData(2,:) = [0, 0.4470, 0.7410];
+br.CData(1,:) = [0.3, 0.3, 0.3];
+br.BarWidth = 1;
+axis tight
+
+%%
 str = '(a)';
-annotation(gcf,'textbox',[0.06,0.96,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.01,0.94,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
 
 str = '(b)';
-annotation(gcf,'textbox',[0.66,0.96,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+annotation(gcf,'textbox',[0.48,0.94,0.05,0.05],'String',str,'EdgeColor','none','FontSize',14);
+
 
 
 exportgraphics(fig2,fullfile(FigRepo,'figure_UD.jpeg'),'Resolution',300);

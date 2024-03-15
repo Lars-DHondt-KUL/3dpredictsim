@@ -46,8 +46,8 @@ post_process_results = 0;   % postproces
 add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
-S.v_tgt     = 2.7;     % average speed
-S.N         = 100;      % number of mesh intervals
+S.v_tgt     = 1.33;     % average speed
+S.N         = 50;      % number of mesh intervals
 S.NThreads  = 6;        % number of threads for parallel computing
 % S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.linear_solver = 'ma86';
@@ -69,10 +69,10 @@ S.W.A       = 2000;     % weight muscle activations
 
 
 %% Tracking term
-S.TrackSim = 0;
+S.TrackSim = 1;
 S.Track.Q_ankle = 1;
-S.Track.Q_subt = 1;
-S.Track.Q_ref = 'mtjc4_custom';
+S.Track.Q_subt = 0;
+S.Track.Q_ref = 'mtjcf3_FK_custom_right';
 S.W.Q_track = 1e4;
 
 
@@ -183,7 +183,7 @@ S.Foot.FDB_nerveBlock = 0;
 % carbonfibre insole (Takahashi et al., 2016)
 S.Foot.insole_Takahashi_kMTP = 0; % 18 83 221
 % insole to reduce arch compression (Stearne et al., 2016)
-S.Foot.insole_Stearne = 'FAI80'; 
+S.Foot.insole_Stearne = ''; %FAI80
 
 %% Initial guess
 %-------------------------------------------------------------------------%
@@ -192,7 +192,7 @@ S.Foot.insole_Stearne = 'FAI80';
 % initial guess identifier                  
 S.IGsel         = 2;   % (1: quasi random, 2: data-based)
 % initial guess mode identifier
-S.IGmodeID      = 3;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
+S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
 
 if S.IGmodeID == 4
     S.savename_ig   = 'NoExo';
