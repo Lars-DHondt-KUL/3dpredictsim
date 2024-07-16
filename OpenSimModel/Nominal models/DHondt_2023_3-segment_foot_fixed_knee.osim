@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <OpenSimDocument Version="40000">
-	<Model name="2-segment_foot_model_fixed_knee_axis">
+	<Model name="3-segment_foot_model_fixed_knee_axis">
 		<!--The model's ground reference frame.-->
 		<Ground name="ground">
 			<!--The geometry used to display the axes of this Frame.-->
@@ -23,7 +23,7 @@
 		<!--Credits (e.g., model author names) associated with the model.-->
 		<credits>Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A., Hamner S.R., D'Hondt L.</credits>
 		<!--Publications and references associated with the model.-->
-		<publications>Notes: 3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Samuel Hamner, Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth removed the patella to avoid kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame. Hamner added arms adapted from Holzbaur et al., 2005. D'Hondt updated foot model, and added midtarsal and tarsometatarsal joints, foot ligaments and FDB muscle; foot joints and ligaments adapted from Malaquias et al. (2017). D’Hondt, L., Groote, F.D., Afschrift, M.: A dynamic foot model for predictive simulations of gait reveals causal relations between foot structure and whole body mechanics. preprint (bioRxiv), 2023. Malaquias, T.M., Silveira, C., Aerts, W., De Groote, F., Dereymaeker, G., Vander Sloten, J., Jonkers, I: Extended foot-ankle musculoskeletal models for application in movement analysis. Comput. Methods Biomech. Biomed. Engin., 2017. Hamner, S.R., Seth, A, Delp, S.L.: Muscle contributions to propulsion and support during running. Journal of Biomechanics, 2010. Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990. Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism." J . Biomech. vol. 21. pp. 1-10. 1989. Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001. Holzbaur, KR, WM Murray and SL Delp, 2005. A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control. Ann Biomed Eng 33(6): 829-840.</publications>
+		<publications>Notes: 3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Samuel Hamner, Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth removed the patella to avoid kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame. Hamner added arms adapted from Holzbaur et al., 2005. D'Hondt updated foot model, and added midtarsal and tarsometatarsal joints, foot ligaments and FDB muscle; foot joints and ligaments adapted from Malaquias et al. (2017). D’Hondt, L., Groote, F.D., Afschrift, M.: A dynamic foot model for predictive simulations of gait reveals causal relations between foot structure and whole body mechanics. PLOS Computational Biology, 2024. Malaquias, T.M., Silveira, C., Aerts, W., De Groote, F., Dereymaeker, G., Vander Sloten, J., Jonkers, I: Extended foot-ankle musculoskeletal models for application in movement analysis. Comput. Methods Biomech. Biomed. Engin., 2017. Hamner, S.R., Seth, A, Delp, S.L.: Muscle contributions to propulsion and support during running. Journal of Biomechanics, 2010. Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990. Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism." J . Biomech. vol. 21. pp. 1-10. 1989. Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001. Holzbaur, KR, WM Murray and SL Delp, 2005. A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control. Ann Biomed Eng 33(6): 829-840.</publications>
 		<!--Units for all lengths.-->
 		<length_units>meters</length_units>
 		<!--Units for all forces.-->
@@ -10674,9 +10674,9 @@
 					<!--Deactivation time constant, in seconds-->
 					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
 				</Thelen2003Muscle>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s1_r">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_heel_r">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s1_r</socket_sphere>
+					<socket_sphere>/contactgeometryset/heel_r</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10692,9 +10692,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s2_r">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_hindfoot_lat_r">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s2_r</socket_sphere>
+					<socket_sphere>/contactgeometryset/hindfoot_lat_r</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10710,9 +10710,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s3_r">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_forefoot_lat_r">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s3_r</socket_sphere>
+					<socket_sphere>/contactgeometryset/forefoot_lat_r</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10728,9 +10728,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s4_r">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_forefoot_med_r">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s4_r</socket_sphere>
+					<socket_sphere>/contactgeometryset/forefoot_med_r</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10746,9 +10746,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s5_r">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_hallux_r">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s5_r</socket_sphere>
+					<socket_sphere>/contactgeometryset/hallux_r</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10764,9 +10764,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s1_l">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_heel_l">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s1_l</socket_sphere>
+					<socket_sphere>/contactgeometryset/heel_l</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10782,9 +10782,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s2_l">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_hindfoot_lat_l">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s2_l</socket_sphere>
+					<socket_sphere>/contactgeometryset/hindfoot_lat_l</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10800,9 +10800,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s3_l">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_forefoot_lat_l">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s3_l</socket_sphere>
+					<socket_sphere>/contactgeometryset/forefoot_lat_l</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10818,9 +10818,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s4_l">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_forefoot_med_l">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s4_l</socket_sphere>
+					<socket_sphere>/contactgeometryset/forefoot_med_l</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -10836,9 +10836,9 @@
 					<!--The transition velocity, default is 0.01 (m/s).-->
 					<transition_velocity>0.20000000000000001</transition_velocity>
 				</SmoothSphereHalfSpaceForce>
-				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_s5_l">
+				<SmoothSphereHalfSpaceForce name="SmoothSphereHalfSpaceForce_hallux_l">
 					<!--Path to a Component that satisfies the Socket 'sphere' of type ContactSphere (description: The sphere participating in this contact.).-->
-					<socket_sphere>/contactgeometryset/s5_l</socket_sphere>
+					<socket_sphere>/contactgeometryset/hallux_l</socket_sphere>
 					<!--Path to a Component that satisfies the Socket 'half_space' of type ContactHalfSpace (description: The half-space participating in this contact.).-->
 					<socket_half_space>/contactgeometryset/floor</socket_half_space>
 					<!--The stiffness constant (i.e., plain strain modulus), default is 1 (N/m^2)-->
@@ -11556,7 +11556,7 @@
 						<color>0.50196081399917603 0.50196081399917603 0.50196081399917603</color>
 					</Appearance>
 				</ContactHalfSpace>
-				<ContactSphere name="s1_r">
+				<ContactSphere name="heel_r">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/calcn_r</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11578,7 +11578,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.032000000000000001</radius>
 				</ContactSphere>
-				<ContactSphere name="s2_r">
+				<ContactSphere name="hindfoot_lat_r">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/calcn_r</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11600,7 +11600,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.032000000000000001</radius>
 				</ContactSphere>
-				<ContactSphere name="s3_r">
+				<ContactSphere name="forefoot_lat_r">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/forefoot_r</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11622,7 +11622,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.023</radius>
 				</ContactSphere>
-				<ContactSphere name="s4_r">
+				<ContactSphere name="forefoot_med_r">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/forefoot_r</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11644,7 +11644,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.021000000000000001</radius>
 				</ContactSphere>
-				<ContactSphere name="s5_r">
+				<ContactSphere name="hallux_r">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/toes_r</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11666,7 +11666,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.016</radius>
 				</ContactSphere>
-				<ContactSphere name="s1_l">
+				<ContactSphere name="heel_l">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/calcn_l</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11688,7 +11688,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.032000000000000001</radius>
 				</ContactSphere>
-				<ContactSphere name="s2_l">
+				<ContactSphere name="hindfoot_lat_l">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/calcn_l</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11710,7 +11710,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.032000000000000001</radius>
 				</ContactSphere>
-				<ContactSphere name="s3_l">
+				<ContactSphere name="forefoot_lat_l">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/forefoot_l</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11732,7 +11732,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.023</radius>
 				</ContactSphere>
-				<ContactSphere name="s4_l">
+				<ContactSphere name="forefoot_med_l">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/forefoot_l</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->
@@ -11754,7 +11754,7 @@
 					<!--Radius of the sphere (default: 0).-->
 					<radius>0.021000000000000001</radius>
 				</ContactSphere>
-				<ContactSphere name="s5_l">
+				<ContactSphere name="hallux_l">
 					<!--Path to a Component that satisfies the Socket 'frame' of type PhysicalFrame (description: The frame to which this geometry is attached.).-->
 					<socket_frame>/bodyset/toes_l</socket_frame>
 					<!--Location of geometry center in the PhysicalFrame.-->

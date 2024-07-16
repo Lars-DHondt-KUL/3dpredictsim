@@ -1,7 +1,8 @@
 Predictive simulations of human gait
 ============
 
-This repository contains all code and models used to generate the simulations discussed in: L. D’Hondt, F. D. Groote, and M. Afschrift, “A dynamic foot model for predictive simulations of gait reveals causal relations between foot structure and whole body mechanics.” bioRxiv, p. 2023.03.22.533790, Mar. 24, 2023. https://doi.org/10.1101/2023.03.22.533790.
+This repository contains all code and models used to generate the simulations discussed in: L. D’Hondt, F. D. Groote, and M. Afschrift, “A dynamic foot model for predictive simulations of human gait reveals causal relations between foot structure and whole-body mechanics,” PLOS Computational Biology, vol. 20, no. 6, p. e1012219, Jun. 2024, doi: 10.1371/journal.pcbi.1012219.
+
 
 
 ## Running predictive simulations

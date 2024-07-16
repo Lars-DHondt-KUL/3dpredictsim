@@ -7,7 +7,7 @@ The models use geometry files distributed with OpenSim, [foot bone geometry file
 
 ## References
 
-1. L. D’Hondt, F. D. Groote, and M. Afschrift, “A dynamic foot model for predictive simulations of gait reveals causal relations between foot structure and whole body mechanics.” bioRxiv, p. 2023.03.22.533790, Mar. 24, 2023. doi: 10.1101/2023.03.22.533790.
+1. L. D’Hondt, F. D. Groote, and M. Afschrift, “A dynamic foot model for predictive simulations of human gait reveals causal relations between foot structure and whole-body mechanics,” PLOS Computational Biology, vol. 20, no. 6, p. e1012219, Jun. 2024, doi: 10.1371/journal.pcbi.1012219.
 
 2. A. Falisse, M. Afschrift, and F. D. Groote, “Modeling toes contributes to realistic stance knee mechanics in three-dimensional predictive simulations of walking,” PLOS ONE, vol. 17, no. 1, p. e0256311, Jan. 2022, doi: 10.1371/journal.pone.0256311.
 
