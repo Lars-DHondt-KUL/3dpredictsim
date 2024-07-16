@@ -47,7 +47,7 @@ add_to_batch_queue = 1;     % save settings to run later
 
 % settings for optimization
 S.v_tgt     = 1.33;     % average speed
-S.N         = 50;      % number of mesh intervals
+S.N         = 100;      % number of mesh intervals
 S.NThreads  = 6;        % number of threads for parallel computing
 % S.max_iter  = 5;       % maximum number of iterations (comment -> 10000)
 % S.linear_solver = 'ma86';
@@ -59,7 +59,7 @@ S.NThreads  = 6;        % number of threads for parallel computing
 S.ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 S.ResultsFolder = 'results_paper_v2'; % 'with_better_knee' 'results_paper'
 % S.suffixCasName = 'test';     % suffix for name of folder with casadifunctions
-% S.suffixName = 'v2';        % suffix for name of file with results
+S.suffixName = 'v2';        % suffix for name of file with results
 
 % Cost function weights
 S.W.Ak      = 50000;    % weight joint accelerations
@@ -69,9 +69,9 @@ S.W.A       = 2000;     % weight muscle activations
 
 
 %% Tracking term
-S.TrackSim = 1;
+S.TrackSim = 0;
 S.Track.Q_ankle = 1;
-S.Track.Q_subt = 0;
+S.Track.Q_subt = 1;
 S.Track.Q_ref = 'mtjcf3_FK_custom_right';
 S.W.Q_track = 1e4;
 
@@ -79,19 +79,19 @@ S.W.Q_track = 1e4;
 %% Foot model
 %-------------------------------------------------------------------------%
 % General
-S.Foot.Model = 'mtjcf3';
+S.Foot.Model = 'mtppin';
    % 'mtp': foot with mtp joint
    % 'mtj': foot with mtp and midtarsal joint
-S.Foot.Scaling = 'custom'; % default, custom
+S.Foot.Scaling = 'default'; % default, custom
 
 % fixed knee axis
 S.fixed_knee = 1;
 
 % Achilles tendon stiffness
-S.AchillesTendonScaleFactor = 0.5;
+S.AchillesTendonScaleFactor = 1;
 
 % Triceps surae optimal force scale
-S.TricepsFMoScale = 1.2;
+S.TricepsFMoScale = 1;
 
 % Reduce tendon slack length of Soleus
 S.SoleusTendonShorter = 0;
@@ -103,7 +103,7 @@ S.GastrocTendonShorter = 0;
 S.TATendonShorter = 0;
 
 % Shift passive force-length curve of ankle muscle fibers
-S.passiveFiberForceShift = -0.1;
+S.passiveFiberForceShift = 0; %-0.1;
 
 % Tibialis anterior according to Rajagopal et al. (2015)
 S.tib_ant_Rajagopal2015 = 0;
@@ -115,14 +115,14 @@ S.useMtpPinPoly = 0;
 S.useMtpPinExtF = 0;
 
 % use custom muscle-tendon parameters
-S.MTparams = 'MTc5';    % MTc5
+S.MTparams = '';    % MTc5
 
 % Contact spheres
-S.Foot.contactStiffnessFactor = 10;  % 1 or 10, 10: contact spheres are 10x stiffer
-S.Foot.contactGeometryVersion = 9; %(-1)
+S.Foot.contactStiffnessFactor = 1;  % 1 or 10, 10: contact spheres are 10x stiffer
+S.Foot.contactGeometryVersion = 1; %(-1)
 S.Foot.contactSphereOffsetY = 0; %(3)    % contact spheres are offset in y-direction to match static trial IK
 S.Foot.contactSphereOffset45Z = 0; % contact spheres 4 and 5 are offset to give wider contact area
-S.Foot.contactSphereOffset1X = 0.01; % heel contact sphere offset in x-direction (0.010)
+S.Foot.contactSphereOffset1X = 0; % heel contact sphere offset in x-direction (0.010)
 
 %% metatarsophalangeal (mtp) joint
 if strcmp(S.Foot.Model(1:3),'mtp')
@@ -168,7 +168,7 @@ S.W.PIM = 5e4;              % weight on the excitations for cost function
 S.W.P_PIM = 1e4;            % weight on the net Work for cost function
 
 % Plantar Intrinsic Muscles represented by Flexor Digitorum Brevis
-S.Foot.FDB = 2;             % include Flexor Digitorum Brevis
+S.Foot.FDB = 0;             % include Flexor Digitorum Brevis
 % optimal fibre length
 S.Foot.FDB_lMo = 23e-3;
 % Tendon slack length
@@ -190,7 +190,7 @@ S.Foot.insole_Stearne = ''; %FAI80
 
 
 % initial guess identifier                  
-S.IGsel         = 2;   % (1: quasi random, 2: data-based)
+S.IGsel         = 1;   % (1: quasi random, 2: data-based)
 % initial guess mode identifier
 S.IGmodeID      = 1;   % (1 walk, 2 run, 3 prev.solution, 4 solution from /IG/Data folder)
 

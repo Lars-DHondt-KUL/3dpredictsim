@@ -1,6 +1,6 @@
 
 clear
-% close all
+close all
 clc
 
 

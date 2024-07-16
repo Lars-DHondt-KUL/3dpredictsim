@@ -414,6 +414,7 @@ annotation(gcf,'textbox',[0.64,0.95,0.05,0.05],'String',str,'EdgeColor','none','
 %%
 
 % exportgraphics(fig1,fullfile(FigRepo,'figure_static.jpeg'),'Resolution',300);
+exportgraphics(fig1,fullfile(FigRepo,'figure_static.tiff'),'Resolution',300);
 
 
 

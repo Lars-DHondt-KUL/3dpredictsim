@@ -8,10 +8,10 @@ pos = SX.sym('pos',1);
 vel = SX.sym('vel',1);
 
 radius = 0.032;
-radius = 0.0116;
+% radius = 0.01365;
 
 stiffness_SX = SX.sym('stiffness',1); %10e6; %*sqrt(0.03/radius);
-dissipation = 1; %2;
+dissipation = 2; %2;
 transitionVelocity = 0.2;
 staticFriction = 0.8;
 dynamicFriction = 0.8;
@@ -76,12 +76,12 @@ f_HC = Function('f_HC',{pos,vel,stiffness_SX},{forceSX(2)});
 %%
 f = 0.22; % Hz
 f = 2.2;
-f = 10;
+% f = 10;
 
-ampl = 5e-3; % m
-stiffness = 10e6;
-stiffness0 = 89000; %41312; %1e6;
-stiffness0 = 4.1312e+04;
+ampl = 4e-3; % m
+stiffness = 1e5;
+stiffness0 = 3e6; %89000; %41312; %1e6;
+% stiffness0 = 4.1312e+04;
 
 t = SX.sym('t',1);
 rds = SX.sym('radius',1);
@@ -94,20 +94,20 @@ f_get_y_ydot = Function('f_get_y_ydot',{t,rds},{y,ydot,compr});
 
 %% plot ref data
 
-% pathmain = pwd;
-% [pathRepo,~,~]  = fileparts(pathmain);
-% folder = '\Figures';
-% file = 'heelpad_Ker90.png';
-% pathRefImg = fullfile(pathRepo,folder,file);
-% img_ref = imread(pathRefImg);
-% 
-% figure(1)
-% hold on
+pathmain = pwd;
+[pathRepo,~,~]  = fileparts(pathmain);
+folder = '\Figures';
+file = 'heelpad_Ker90.png';
+pathRefImg = fullfile(pathRepo,folder,file);
+img_ref = imread(pathRefImg);
+
+figure(1)
+hold on
 % hi = image([-0.03,3.85],[1.575,-0.04],img_ref);
 % uistack(hi,'bottom')
-% axis tight
-% ax = gca;
-% ax.XLim(2) = ampl*1e3*1.01;
+axis tight
+ax = gca;
+ax.XLim(2) = ampl*1e3*1.01;
 
 %%
 N = 500;

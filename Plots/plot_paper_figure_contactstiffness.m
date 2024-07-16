@@ -9,7 +9,7 @@ clc
 [pathRepo,~,~] = fileparts(pathHere);
 
 FigRepo = fullfile(pathRepo,'Figures');
-FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 1\figures';
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl';
 ResultsRepo = fullfile(pathRepo,'Results');
 ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
@@ -40,7 +40,7 @@ resultFiles = {
     };
 LegNames = {'Nominal 3-segment foot model','Nominal 2-segment foot model',...
     'Compliant contact (3-segment)','Compliant contact (2-segment)'};
-LegNames = {'Nominal 3-segment foot model', 'Compliant contact'};
+LegNames = {'Nominal 4-segment foot model', 'Compliant contact'};
 
 
 joints_ref = {'knee_angle'};
@@ -297,10 +297,10 @@ for i_res=1:length(resultFiles)
 
 end
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_contact_stiffness_2.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_contact_stiffness_2.jpeg'),'Resolution',300);
 
-
-
+% savefig(fig2, fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl', 'contact_stiffness.fig'))
+% 
 
 
 

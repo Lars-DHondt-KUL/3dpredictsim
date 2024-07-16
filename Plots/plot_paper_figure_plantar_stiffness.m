@@ -37,7 +37,7 @@ resultFiles = {
     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'])
     };
-LegNames = {'Nominal 3-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia','Reduced arch height'};
+LegNames = {'Nominal 4-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia','Reduced arch height'};
 
 
 
@@ -335,10 +335,13 @@ annotation(gcf,'textbox',[0.60,0.55,0.05,0.05],'String',str,'EdgeColor','none','
 
 
 %%
-exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness3.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness3.jpeg'),'Resolution',300);
+
+% exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness.tiff'),'Resolution',300);
 
 
 
+savefig(fig2, fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl', 'fig6.fig'))
 
 
 

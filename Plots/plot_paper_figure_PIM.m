@@ -506,8 +506,9 @@ annotation(gcf,'textbox',[0.01,0.52,0.05,0.05],'String',str,'EdgeColor','none','
 
 
 %%
-exportgraphics(fig2,fullfile(FigRepo,'figure_wo_PIM.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_wo_PIM.jpeg'),'Resolution',300);
 
+% exportgraphics(fig2,fullfile(FigRepo,'figure_wo_PIM.tiff'),'Resolution',300);
 
 
 

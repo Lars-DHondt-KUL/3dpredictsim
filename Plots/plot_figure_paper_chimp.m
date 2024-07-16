@@ -10,6 +10,8 @@ clc
 
 FigRepo = fullfile(pathRepo,'Figures');
 ResultsRepo = fullfile(pathRepo,'Results');
+FigRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\paper\revision 2\figures';
+ResultsRepo = 'C:\Users\u0150099\OneDrive - KU Leuven\3dpredictsim_results';
 
 load([pathRepo '\Data\Fal_s1.mat'],'Data');
 
@@ -30,10 +32,11 @@ stance_ref_std = 0.8233;
 %% figure 
 
 resultFiles = {
-    fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
+%     fullfile([ResultsRepo '\results_paper\Fal_s1_mtjc4_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_Natali2010_ls146_FDB2_lTs125_Fpsl10_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
     fullfile([ResultsRepo '\with_better_knee\Fal_s1_mtjc4_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_MG_exp5_table_d01_PF_none_ls141_FDB2_lTs120_Fpsl10_ig21_pp.mat'])
     };
-LegNames = {'Nominal 3-segment foot model','Low-arched foot without plantar fascia'};
+LegNames = {'Nominal 4-segment foot model','Low-arched foot without plantar fascia'};
 
 
 joints_ref = {'knee_angle','ankle_angle'};
@@ -323,11 +326,13 @@ annotation(gcf,'textbox',[0.62,0.95,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_chimp.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_chimp.jpeg'),'Resolution',300);
 
 
 
 
+
+savefig(fig2, fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl', 'fig_chimp.fig'))
 
 
 

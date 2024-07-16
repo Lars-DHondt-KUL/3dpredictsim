@@ -62,6 +62,10 @@ lw = [2,2,2,2];
 
 set(0,'defaultFigureColor','w')
 
+resultFiles = resultFiles([1,3]);
+LegNames = LegNames([1,3]);
+CsV = CsV([1,3]);
+
 %
 fig2 = figure();
 fig2.Position = [269 136 1200 270];
@@ -273,10 +277,12 @@ for i_res=1:length(resultFiles)
 
 end
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_Atendon_stiffness.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_Atendon_stiffness.jpeg'),'Resolution',300);
+
+% exportgraphics(fig2,fullfile(FigRepo,'figure_Atendon_stiffness.tiff'),'Resolution',300);
 
 
-
+savefig(fig2, fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl', 'fig5_4seg_only.fig'))
 
 
 

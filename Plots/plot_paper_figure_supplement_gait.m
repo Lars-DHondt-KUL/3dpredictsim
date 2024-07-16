@@ -110,7 +110,7 @@ stance_ref_std = 0.8233;
 % lw = [1,1,1,1,1,1,1,1]*2;
 % lM_PIM = 1;
 
-% PIM FMo
+% % PIM FMo
 % results = {
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox200_ig1_N100_pp.mat'
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_FMox150_ig1_N100_pp.mat'
@@ -701,7 +701,7 @@ end
 
 %%
 
-exportgraphics(fig2,fullfile(FigRepo,['figure_' figName '.jpeg']),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,['figure_' figName '.jpeg']),'Resolution',300);
 
 
 

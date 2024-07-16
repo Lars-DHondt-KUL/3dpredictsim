@@ -34,13 +34,13 @@ stance_ref_std = 0.8233;
 resultFiles = {
     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
 %     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_ig1_N100_pp.mat'])
-%     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
-    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'])
+    fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Gefen2002_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+%     fullfile([ResultsRepo '\results_paper_v2\Fal_s1_mtjc3_FK_sd_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls141_FDB2_lMo23_lTs118_Fpsl10_ig1_N100_pp.mat'])
     };
-LegNames = {'Nominal 3-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia',...
-    'Reduced arch height'};
-LegNames = {'high arch', 'low arch'};
-
+% LegNames = {'Nominal 3-segment foot model', 'Without intrinsic muscle','Compliant plantar fascia',...
+%     'Reduced arch height'};
+% LegNames = {'high arch', 'low arch'};
+LegNames = {'Nominal 4-segment foot model','Compliant plantar fascia'};
 
 joints_ref = {'knee_angle','ankle_angle','mtj_angle'};
 joints_tit = {'Knee','Ankle','Midtarsal',};
@@ -58,6 +58,7 @@ legend_fontsize = 12;
 title_fontsize = 12;
 
 CsV = {'k',[0.4660 0.6740 0.1880],[0.6350 0.0780 0.1840],[0.3010 0.7450 0.9330],[0.8500 0.3250 0.0980]};
+CsV = {[0.6350 0.0780 0.1840],'k',[0.3010 0.7450 0.9330],[0.8500 0.3250 0.0980]};
 mrk = {'-','-','-',':','--'};
 lw = [2,2,2,2,2];
 
@@ -86,28 +87,28 @@ for i_res=1:length(resultFiles)
         % plot reference data
         if i_res==1
             leg = [];
-%             idx_jref = strcmp(Qref.colheaders,joints_ref{i});
-%             if sum(idx_jref) == 1
-%                 meanPlusSTD = (Qref.Qall_mean(:,idx_jref) + 2*Qref.Qall_std(:,idx_jref));
-%                 meanMinusSTD = (Qref.Qall_mean(:,idx_jref) - 2*Qref.Qall_std(:,idx_jref));
-% 
-%                 stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
-%                 intervalQ = 1:stepQ:size(R.Qs,1);
-%                 sampleQ = 1:size(R.Qs,1);
-%                 meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
-%                 meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
-% 
-%                 hold on
-%                 p1=fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
-%                     'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
-% 
-%                 xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
-% 
-%                 if i==3
-%                     leg = p1;
-%                 end
-% 
-%             end
+            idx_jref = strcmp(Qref.colheaders,joints_ref{i});
+            if sum(idx_jref) == 1
+                meanPlusSTD = (Qref.Qall_mean(:,idx_jref) + 2*Qref.Qall_std(:,idx_jref));
+                meanMinusSTD = (Qref.Qall_mean(:,idx_jref) - 2*Qref.Qall_std(:,idx_jref));
+
+                stepQ = (size(R.Qs,1)-1)/(size(meanPlusSTD,1)-1);
+                intervalQ = 1:stepQ:size(R.Qs,1);
+                sampleQ = 1:size(R.Qs,1);
+                meanPlusSTD = interp1(intervalQ,meanPlusSTD,sampleQ);
+                meanMinusSTD = interp1(intervalQ,meanMinusSTD,sampleQ);
+
+                hold on
+                p1=fill([x fliplr(x)],[meanPlusSTD fliplr(meanMinusSTD)],0.8*[1,1,1],...
+                    'LineStyle','none','DisplayName','Experimental data (mean \pm 2 SD)');
+
+                xline(stance_ref_mean,'Color',[1,1,1]*0.5,'linewidth',line_linewidth/2)
+
+                if i==3
+                    leg = p1;
+                end
+
+            end
         end % end plot ref data
 
         % plot sim result
@@ -117,14 +118,14 @@ for i_res=1:length(resultFiles)
             p1=plot(x,R.Qs(:,idx_jsim),'linewidth',line_linewidth,'Color',CsV{i_res},...
                 'LineStyle',mrk{rem(i_res-1,length(mrk))+1},'DisplayName',LegNames{i_res});
             hold on
-%             px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
-%                         'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
-%             uistack(px,"bottom");
+            px=xline(x_to,'Color',CsV{i_res},'linewidth',line_linewidth/2,...
+                        'LineStyle',mrk{rem(i_res-1,length(mrk))+1});
+            uistack(px,"bottom");
 
             if i==3
                 leg = [leg,p1];
                 if i_res==length(resultFiles)
-                    lg = legend(leg,'Fontsize',legend_fontsize,'Location','northwest','NumColumns',2);
+                    lg = legend(leg,'Fontsize',legend_fontsize,'Location','northwest','NumColumns',3);
                     lg.Position(2) = lg.Position(2)-0.45;
                     lg.Position(1) = lg.Position(1)-0.24;
                     lg.Box = 'off';
@@ -568,6 +569,7 @@ end
 %%
 % exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness_ISB.jpeg'),'Resolution',300);
 
+exportgraphics(fig2,fullfile(FigRepo,'figure_plantar_stiffness_new2.tiff'),'Resolution',300);
 
 
 

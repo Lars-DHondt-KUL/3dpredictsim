@@ -51,7 +51,7 @@ S.v_tgt     = 1.33;     % average speed
 % S.W.A       = 2000;     % weight muscle activations
 
 %% Tracking term
-S.TrackSim = 1;
+S.TrackSim = 0;
 S.Track.Q_ankle = 1;
 S.Track.Q_subt = 1;
 
@@ -158,12 +158,12 @@ S.Track.Q_subt = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%
-results = {
-    fullfile(['\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
-    fullfile(['\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
-    fullfile(['\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
-    };
-LegNames = {'3-segment foot model Falisse et al.','Nominal 3-segment foot model','Nominal 4-segment foot model'};
+% results = {
+%     fullfile(['\results_paper\Fal_s1_mtppin_FK_sd_cg1_MTPp_k25_d020_tau_ig1_N100_pp.mat']);
+%     fullfile(['\results_paper\Fal_s1_mtp_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPp_k25_d020_tau_ig1_N100_pp.mat'])
+%     fullfile(['\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+%     };
+% LegNames = {'3-segment foot model Falisse et al.','Nominal 3-segment foot model','Nominal 4-segment foot model'};
 % results = flip(results);
 % LegNames = flip(LegNames);
 % results = results([3,1]);
@@ -191,11 +191,11 @@ LegNames = {'3-segment foot model Falisse et al.','Nominal 3-segment foot model'
 % LegNames = {'A = 210 mm^2','A = 140 mm^2','A = 70 mm^2','A = 42 mm^2','A = 70 mm^2 (Gefen)'};
 
 
-% results = {
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
-%     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_nb_lMo23_lTs123_Fpsl10_ig21_N100_pp.mat'
-%     };
-% LegNames = {'Nominal 4-segment foot model', 'Intrinsic foot muscle nerve block'};
+results = {
+    '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
+    '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_nb_lMo23_lTs123_Fpsl10_ig21_N100_pp.mat'
+    };
+LegNames = {'Nominal 4-segment foot model', 'Intrinsic foot muscle nerve block'};
 
 % results = {
 %     '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'
@@ -287,9 +287,13 @@ LegNames = {'3-segment foot model Falisse et al.','Nominal 3-segment foot model'
 
 results = {
     fullfile(['\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig1_N100_pp.mat'])
+    '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_ST8_GT9_TAT19_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig21'
+    '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_ATx50_TFMox120_ST8_GT9_TAT19_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig21'
     fullfile(['\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TrackAnkleQSubtQ10000_ATx50_TFMox120_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig21_pp.mat'])
-    };
-LegNames = {'predictive','tracking ankle and subtalar'};
+    '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TrackAnkleQSubtQ10000_ATx50_TFMox120_ST7.8_GT8.7_TAT18.8_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig21'
+    '\results_paper_v2\Fal_s1_mtjcf3_FK_sc_cspx10_cg9_o1x10_TrackAnkleQSubtQ10000_ATx50_TFMox120_ST8_GT9_TAT19_Fpsl10_MTc5_MTPm_k1_d01_tau_MTJm_nl_lig_d01_PF_Natali2010_ls146_FDB2_lMo23_lTs123_Fpsl10_ig21'
+};
+LegNames = {'predictive', 'predictive, shorter tendons', 'predictive, shorter tendons & passive shif', 'tracking', 'tracking, w/ shorter tendons', 'tracking, w/ shorter tendons & passive shift'};
 
 %%
 if exist('results','var') && ~isempty(results)
@@ -443,7 +447,7 @@ makeplot.E_muscle_bar_small             = 0; % metabolic energy and work by sele
 makeplot.Edot_all                       = 0; % summed metabolic energy rate
 makeplot.Energy_cost                    = 0; % decompose metabolic cost components
 makeplot.Energy_smoothing               = 0; % effect of smoothing energy model
-makeplot.muscle_act                     = 0; % muscle activity
+makeplot.muscle_act                     = 1; % muscle activity
 makeplot.muscle_act_exc                 = 0; % muscle activity and excitation   
 makeplot.muscle_joint_moment            = 0; % moments of muscles around ankle-foot joints
 makeplot.muscle_joint_power             = 0; % powers of muscles around ankle-foot joints

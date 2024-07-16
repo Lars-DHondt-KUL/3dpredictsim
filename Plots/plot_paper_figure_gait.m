@@ -38,7 +38,8 @@ resultFiles = {
     };
 LegNames = {'3-segment foot model Falisse et al.','Nominal 3-segment foot model','Nominal 4-segment foot model'};
 
-
+resultFiles = resultFiles(3);
+LegNames = LegNames(3);
 
 joints_sim = {'knee_angle_r','ankle_angle_r','subtalar_angle_r','mtj_angle_r','mtp_angle_r'};
 joints_ref = {'knee_angle','ankle_angle','subtalar_angle','mtj_angle','mtp_angle'};
@@ -62,7 +63,7 @@ CsV = {[0.8500 0.3250 0.0980],'k','k'};
 % CsV = {'k','k','k'};
 mrk = {'-','-.','-','--'};
 lw = [2,2,2];
-
+CsV = CsV(3);
 
 set(0,'defaultFigureColor','w')
 
@@ -348,10 +349,10 @@ annotation(gcf,'textbox',[0.58,0.55,0.05,0.05],'String',str,'EdgeColor','none','
 
 %%
 
-exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait.jpeg'),'Resolution',300);
 
-% exportgraphics(fig2,fullfile(FigRepo,'simulated_gait.svg'),'ContentType','vector');
+% exportgraphics(fig2,fullfile(FigRepo,'figure_validation_gait_test.tiff'),'Resolution',300);
 
+savefig(fig2, fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl', 'fig3_4seg_only.fig'))
 
 
 

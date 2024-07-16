@@ -213,9 +213,13 @@ annotation(gcf,'textbox',[0.02,0.61,0.05,0.05],'String',str,'EdgeColor','none','
 
 
 %%
-exportgraphics(fig2,fullfile(FigRepo,'figure_mtp_mtj_power.jpeg'),'Resolution',300);
+% exportgraphics(fig2,fullfile(FigRepo,'figure_mtp_mtj_power.jpeg'),'Resolution',300);
+
+% exportgraphics(fig2,fullfile(FigRepo,'figure_mtp_mtj_power.tiff'),'Resolution',300);
 
 
+
+savefig(fig2, fullfile('C:\Users\u0150099\OneDrive - KU Leuven\PhD\foot_modelling\dynamic walking 2024 Friedl', 'fig8.fig'))
 
 
 
